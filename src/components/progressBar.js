@@ -1,24 +1,29 @@
 import React from 'react'
 
-export default function ProgressBar() {
+export default function ProgressBar({ currentStep, totalSteps }) {
+
     return (
         <>
-            <main class="main-wrapper">
-                <div class="steps-wrapper">
-                    <div class="steps">
-                        <span class="step active"></span>
-                        <span class="step"></span>
-                        <span class="step"></span>
-                        <div class="progress-bar">
-                            <span class="progress"></span>
+            <div className="main-wrapper mb-4">
+                <div className="steps-wrapper">
+                    <div className="steps">
+                        {[...Array(totalSteps)].map((_, index) => (
+                            <span
+                                key={index}
+                                className={`step ${index < currentStep ? "active" : ""}`}>
+                            </span>
+                        ))}
+                        <div className="progress-bar">
+                            <span
+                                className="progress"
+                                style={{
+                                    width: `${((currentStep - 1) / (totalSteps - 1)) * 100}%`,
+                                }}>
+                            </span>
                         </div>
                     </div>
-                    <div class="buttons">
-                        <button class="btn btn-prev" id="btn-prev" disabled>Previous</button>
-                        <button class="btn btn-next" id="btn-next">Next</button>
-                    </div>
                 </div>
-            </main>
+            </div>
         </>
     )
 }
