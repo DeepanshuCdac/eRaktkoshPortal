@@ -20,7 +20,7 @@ export default function Footer() {
   };
   return (
     <>
-      <section className="footer pt-4 mt-3">
+      <section className="footer pt-4">
         <div className="container">
           <div className="row row-border">
             <div className="col-12 col-md-4 col-xl-3 mb-3">

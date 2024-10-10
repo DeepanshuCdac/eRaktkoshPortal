@@ -23,8 +23,7 @@ function App() {
         <Navbar />
 
         <Switch>
-          {/* Grouped all "pages" routes under a single route */}
-          <Route path="/pages">
+          <Route>
             <Switch>
               <Route path="/pages/portalDonorLogin">
                 <DonorLogin />

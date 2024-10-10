@@ -38,12 +38,12 @@ export default function DonorRegister() {
         if (/^\d$/.test(value)) {
             otpRefs.current[index].value = value; // Update value to ensure only a single digit
 
-            // Move to the next input if there's a next input
+            // Move to next input if there is next input
             if (index < otpRefs.current.length - 1) {
                 otpRefs.current[index + 1].focus();
             }
         } else if (value === '') {
-            // If the value is empty, move to the previous input if there's a previous input
+            // If value is empty move to previous input if there is previous input
             if (index > 0) {
                 otpRefs.current[index - 1].focus();
             }
@@ -235,28 +235,29 @@ export default function DonorRegister() {
                             <div>
                                 <div className="row flex-column align-items-center justify-content-center mb-3 mt-4">
                                     <div className="col-xl-4">
-                                        <div className="row align-items-center mb-3">
+                                        <div className="row align-items-center mb-3 justify-content-center">
                                             <div className="col-xl-2">
                                                 <img className='' style={{ cursor: 'pointer' }} src="assets/images/refresh.png" alt="" />
                                             </div>
                                             <div className="col-xl-2">
-                                                captcha
+                                                <p className='mb-0'>captcha</p>
                                             </div>
                                             <div className="col-xl-6">
-                                                <div className="input-group mb-1">
+                                                <div className="input-group">
                                                     <input
                                                         type="text"
                                                         className="form-control p-0"
                                                         placeholder="Enter captcha"
                                                         id="username"
                                                         aria-label="Username"
-                                                        aria-describedby="basic-addon1" />
+                                                        aria-describedby="basic-addon1"
+                                                    />
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div className="col-xl-4 align-items-center">
-                                        <div className="text-center">
+                                        <div className="text-center px-4">
                                             <button onClick={handleSectionView} className="w-100 btn btn-primary-signIn py-1">Sign Up</button>
                                         </div>
                                     </div>
@@ -269,11 +270,11 @@ export default function DonorRegister() {
                         <div>
                             <div className="row align-items-center justify-content-center">
                                 <div className="col-xl-4">
-                                    <div className='form-box p-4'>
+                                    <div className='form-box px-5 py-4'>
                                         <div className='d-flex align-items-center justify-content-center mb-3'>
                                             <img style={{ width: '82px', height: '82px' }} src="assets/images/eraktkosh.png" alt="" />
                                         </div>
-                                        <div className="mb-">
+                                        <div className="mb-3">
                                             <label htmlFor="otpInput" className="form-label mb-1">
                                                 Enter OTP
                                             </label>
@@ -286,22 +287,52 @@ export default function DonorRegister() {
                                                         required
                                                         ref={el => otpRefs.current[index] = el}
                                                         onChange={(event) => handleOtpChange(index, event)}
-                                                        className={`otp-field ${index > 0 ? 'ms-1' : 'ms-0'}`}
-                                                        autoFocus={index === 0} />
+                                                        className={`otp-field ${index > 0 ? '' : ''}`}
+                                                        autoFocus={index === 0} 
+                                                    />
                                                 ))}
                                             </div>
                                         </div>
                                         <div className='text-center'>
                                             <p className="otpExpiry mb-1">OTP has been sent to your Mobile</p>
                                             <p className="otpExpiry">
-                                                Your OTP will expire in 01:00 min
+                                                Your OTP will expire in <span className='timer'> 01:00</span> min
                                             </p>
                                         </div>
                                         <button
                                             type="button"
-                                            className="w-100 btn btn-primary-outline py-1">
+                                            onClick={handleSectionView}
+                                            className="w-100 btn btn-primary-signIn py-1">
                                             Validate
                                         </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    {currentStep === 3 &&
+                        <div>
+                            <div className="row align-items-center justify-content-center">
+                                <div className="col-xl-4">
+                                    <div className='form-box p-4'>
+                                        <div className='d-flex align-items-center justify-content-center mb-3'>
+                                            <img style={{ width: '82px', height: '82px' }} src="assets/images/eraktkosh.png" alt="" />
+                                        </div>
+                                        <div className="mb-2">
+                                            <div className='text-center'>
+                                                <img src="assets/images/success.png" alt="" />
+                                                <p className="otpExpiry mt-3">You have been successfully registered</p>
+
+                                            </div>
+                                        </div>
+                                        <div className='d-flex align-items-center justify-content-center px-5'>
+                                            <button
+                                                type="submit"
+                                                className="btn btn-primary-signIn py-1 w-100 text-center">
+                                                Login
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

@@ -43,7 +43,7 @@ export default function DonorAdminProfile() {
             <div className="tabContent">
                 {currentStep === 1 &&
                     <div className="widget p-3 mb-3">
-                        <h4 className='widgeHeader mb-5'>Stage {currentStep}/{totalSteps} Personal Details</h4>
+                        <h4 className='widgeHeader mb-4'>Stage {currentStep}/{totalSteps} Personal Details</h4>
                         <div className="row">
                             <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                                 <div className="mb-3 form-inputs">
@@ -126,9 +126,8 @@ export default function DonorAdminProfile() {
 
                 {currentStep === 2 &&
                     <div className="widget p-3 mb-3">
-                        <h4 className='widgeHeader mb-5'>Stage {currentStep}/{totalSteps} Personal Details</h4>
+                        <h4 className='widgeHeader mb-4'>Stage {currentStep}/{totalSteps} Personal Details</h4>
                         <div className="row">
-
                             <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                                 <div className='d-flex flex-column'>
                                     <label for="exampleInputEmail1" className="form-label mb-1">Blood Group</label>
@@ -375,7 +374,7 @@ export default function DonorAdminProfile() {
 
                 {currentStep === 3 &&
                     <div className="widget p-3 mb-3">
-                        <h4 className='widgeHeader mb-5'>Stage {currentStep}/{totalSteps} Personal Details</h4>
+                        <h4 className='widgeHeader mb-4'>Stage {currentStep}/{totalSteps} Personal Details</h4>
                         <div className="row">
 
                             <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
