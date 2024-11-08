@@ -52,7 +52,7 @@ export default function Donationworking() {
                       <img
                         src="assets/images/arrow-left.png"
                         className="img-fluid"
-                        alt=""
+                        alt="..."
                       />
                     </div>
                   )}

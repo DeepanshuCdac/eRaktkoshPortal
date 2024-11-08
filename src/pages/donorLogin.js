@@ -1,40 +1,41 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
-import axios from 'axios';
+import React, { useState, useRef, useEffect } from 'react'
+import { useHistory } from 'react-router-dom'
+import axios from 'axios'
+import BaseUrl from '../utils/url'
 
 export default function DonorLogin() {
-    const [mobileno, setMobileNumber] = useState('');
-    const [showOtpField, setShowOtpField] = useState(false);
-    const [isInputDisabled, setIsInputDisabled] = useState(false);
-    const [loading, setLoading] = useState(false);
-    const [otpExpiry, setOtpExpiry] = useState(null);
-    const [captchaImage, setCaptchaImage] = useState(null);
-    const [captchaText, setCaptchaText] = useState('');
-    const otpRefs = useRef([]);
-    const history = useHistory();
-    const [timerId, setTimerId] = useState(null);
-    const [isOtpExpired, setIsOtpExpired] = useState(false);
+    const [mobileno, setMobileNumber] = useState('')
+    const [showOtpField, setShowOtpField] = useState(false)
+    const [isInputDisabled, setIsInputDisabled] = useState(false)
+    const [loading, setLoading] = useState(false)
+    const [otpExpiry, setOtpExpiry] = useState(null)
+    const [captchaImage, setCaptchaImage] = useState(null)
+    const [captchaText, setCaptchaText] = useState('')
+    const otpRefs = useRef([])
+    const history = useHistory()
+    const [timerId, setTimerId] = useState(null)
+    const [isOtpExpired, setIsOtpExpired] = useState(false)
+    const [lastOtpRequestTime, setLastOtpRequestTime] = useState(null);
 
     useEffect(() => {
-        document.title = 'e-Raktkosh Donor Login';
-    }, []);
+        document.title = 'e-Raktkosh Donor Login'
+    }, [])
 
     const handleMobileNumberChange = (event) => {
-        const value = event.target.value;
+        const value = event.target.value
         if (/^\d{0,10}$/.test(value)) {
-            setMobileNumber(value);
+            setMobileNumber(value)
         }
-    };
+    }
 
     const startOtpTimer = (expiryTime) => {
-        const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
+        const currentTime = Math.floor(Date.now() / 1000);
         const timeRemaining = expiryTime - currentTime;
 
         if (timeRemaining > 0) {
             setOtpExpiry(timeRemaining);
             setIsOtpExpired(false);
-            
-            // Clear previous timer if any
+
             if (timerId) {
                 clearInterval(timerId);
             }
@@ -58,156 +59,122 @@ export default function DonorLogin() {
 
     const handleGenerateOtp = async () => {
         const isValidNumber = /^\d{10}$/.test(mobileno);
+        const currentTime = Date.now();
 
-        if (!isValidNumber) {
-            alert('Number is invalid.');
+        if (lastOtpRequestTime && currentTime - lastOtpRequestTime < 300000) {
+            alert('Try After Some time .......!');
             return;
         }
 
-        setLoading(true);
+        if (!isValidNumber) {
+            alert('Number is invalid.')
+            return
+        }
+
+        setLoading(true)
 
         try {
-            const response = await axios.post('http://10.226.17.67:8380/eraktkosh/generateOTP', { mobileno }
-            ,
-            {
-                withCredentials: false, 
-                headers: {
-                    'Content-Type': 'application/json'
+            const response = await axios.post(`${BaseUrl}/eraktkosh/generateOTP`, { mobileno }
+                ,
+                {
+                    withCredentials: false,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
                 }
-            }
-            
-            );
+            )
 
-            console.log('Response data:', response.data);
+            console.log('Response data:', response.data.OtpData)
 
-            setCaptchaImage(response.data.captchaImage);
-            const otpData = JSON.parse(response.data.OtpData);
+            setCaptchaImage(response.data.captchaImage)
+            const otpData = JSON.parse(response.data.OtpData)
+
 
             if (otpData.isUserExists) {
-                const otp = otpData.otp;
-                const otpExpirationTime = Math.floor(otpData.otpExpirationTime / 1000); // Convert to seconds
+                const otp = otpData.otp
+                const otpExpirationTime = Math.floor(otpData.otpExpirationTime / 1000)
 
-                console.log('OTP:', otp);
-                console.log('OTP Expiration Time:', otpExpirationTime);
+                console.log('OTP:', otp)
+                console.log('OTP Expiration Time:', otpExpirationTime)
 
-                alert(`Number is valid. OTP generated: ${otp}`);
+                alert(otpData.messageSuccess);
 
-                setShowOtpField(true);
-                setIsInputDisabled(true);
+                setShowOtpField(true)
+                setIsInputDisabled(true)
 
-                // Start the timer with the expiry time from the backend
-                startOtpTimer(otpExpirationTime);
+                 setLastOtpRequestTime(currentTime)
 
-                // const expiryTime = 60; // 1 minute
-                // setOtpExpiry(expiryTime);
-                // setIsOtpExpired(false);
+                startOtpTimer(otpExpirationTime) 
 
-                // if (timerId) {
-                //     clearInterval(timerId);
-                // }
-
-                // const newTimerId = setInterval(() => {
-                //     setOtpExpiry(prev => {
-                //         if (prev <= 1) {
-                //             clearInterval(newTimerId);
-                //             setIsOtpExpired(true);
-                //             return 0;
-                //         }
-                //         return prev - 1;
-                //     });
-                // }, 1000);
-
-                // setTimerId(newTimerId);
             } else {
-                console.log('User does not exist.');
-                alert('Number is invalid.');
-                setShowOtpField(false);
-                setIsInputDisabled(false);
+                alert(otpData.messageSuccess)
+                console.log('User does not exist.')
+                setShowOtpField(true)
+                setIsInputDisabled(true)
+
             }
         } catch (error) {
-            console.error('Error validating number:', error.response || error.message || error);
-            alert('An error occurred while validating the number.');
+            console.error('Error validating number:', error.response || error.message || error)
+            alert('An error occurred while validating the number.')
         } finally {
-            setLoading(false);
+            setLoading(false)
         }
-    };
+    }
 
     const handleOtpChange = (index, event) => {
-        const { value } = event.target;
+        const { value } = event.target
 
         if (/^\d$/.test(value)) {
-            otpRefs.current[index].value = value;
+            otpRefs.current[index].value = value
 
             if (index < otpRefs.current.length - 1) {
-                otpRefs.current[index + 1].focus();
+                otpRefs.current[index + 1].focus()
             }
         } else if (value === '') {
             if (index > 0) {
-                otpRefs.current[index - 1].focus();
+                otpRefs.current[index - 1].focus()
             }
         }
-    };
+    }
 
     const handleClick = () => {
-        history.push('/pages/portaldonorRegister');
-    };
+        history.push('/pages/portaldonorRegister')
+    }
 
     const handleCaptchaChange = (event) => {
-        setCaptchaText(event.target.value);
-    };
+        setCaptchaText(event.target.value)
+    }
 
     const handleResendOtp = async () => {
         try {
-            // call regenerate OTP endpoint
-            const response = await axios.post('http://10.226.17.67:8380/eraktkosh/regenerateOtp/', { mobileno });
-            console.log('Resend OTP Response:', response.data);
+            // call regenerate OTP endpoint  
+            const response = await axios.post(`${BaseUrl}/eraktkosh/regenerateOtp`, { mobileno });
+            console.log('Resend OTP Response:', response.data)
 
-            const otpData = JSON.parse(response.data.OtpData);
-            const otpExpirationTime = Math.floor(otpData.otpExpirationTime / 1000); // Convert to seconds
+            const otpData = JSON.parse(response.data.OtpData)
+            const otpExpirationTime = Math.floor(otpData.otpExpirationTime / 1000)
 
-            alert('OTP has been resent.');
-            setIsOtpExpired(false);
+            alert('OTP has been resent.')
+            setIsOtpExpired(false)
+            startOtpTimer(otpExpirationTime)
 
-            // Restart the OTP expiry timer with the new expiry time from the backend
-            startOtpTimer(otpExpirationTime);
-
-            // const expiryTime = 60; // 1 minute
-            // setOtpExpiry(expiryTime);
-
-            // if (timerId) {
-            //     clearInterval(timerId);
-            // }
-
-            // const newTimerId = setInterval(() => {
-            //     setOtpExpiry(prev => {
-            //         if (prev <= 1) {
-            //             clearInterval(newTimerId);
-            //             setIsOtpExpired(true);
-            //             return 0;
-            //         }
-            //         return prev - 1;
-            //     });
-            // }, 1000);
-
-            // setTimerId(newTimerId);
         } catch (error) {
-            console.error('Error resending OTP:', error);
-            alert('An error occurred while resending the OTP.');
+            console.error('Error resending OTP:', error)
+            alert('An error occurred while resending the OTP.')
         }
-    };
+    }
 
     const handleRefreshCaptcha = async () => {
         try {
-            // call regenerate CAPTCHA endpoint
-            const response = await axios.post('http://10.226.17.67:8380/eraktkosh/regenerateCaptcha/');
-            console.log('Refresh CAPTCHA Response:', response.data);
-            setCaptchaImage(response.data.captchaImage);
-            setCaptchaText('');
+            const response = await axios.post(`${BaseUrl}/eraktkosh/regenerateCaptcha`)
+            console.log('Refresh CAPTCHA Response:', response.data)
+            setCaptchaImage(response.data.captchaImage)
+            setCaptchaText('')
         } catch (error) {
-            console.error('Error refreshing CAPTCHA:', error.response || error.message || error);
-            alert('An error occurred while refreshing the CAPTCHA.');
+            console.error('Error refreshing CAPTCHA:', error.response || error.message || error)
+            alert('An error occurred while refreshing the CAPTCHA.')
         }
-    };
+    }
 
     const handleValidate = async () => {
         const otpValues = otpRefs.current.map(input => input.value).join('');
@@ -217,30 +184,41 @@ export default function DonorLogin() {
             return;
         }
     
-        setLoading(true); 
+        setLoading(true);
     
         try {
-            const response = await axios.post('http://10.226.17.67:8380/eraktkosh/validate', {
+            const response = await axios.post(`${BaseUrl}/eraktkosh/validate`, {
                 captcha: captchaText,
                 mobile_no: mobileno,
                 otp: otpValues,
-                withCredentials: true 
+                withCredentials: true
             });
     
             if (response.status === 200) {
                 console.log('Validation Response:', response);
     
-                setTimeout(() => {
-                    setLoading(false); 
-                    history.push('/pages/portaldonorAdmin');  
-                }, 3000);  
+                // set mobile number in local..........
+                localStorage.setItem('mobileNo', mobileno);
+                console.log("Mobile number stored in localStorage:", localStorage.getItem("mobileNo"));
     
+                // set mobile number in sessionStorage..........
+                sessionStorage.setItem('mobileNo', mobileno);
+                console.log("Mobile number stored in sessionStorage:", sessionStorage.getItem("mobileNo"));
+    
+                // construct url for new tab...........
+                const newTabUrl = `${window.location.origin}/#/pages/portaldonorAdmin?mobileNo=${mobileno}`;
+    
+                setTimeout(() => {
+                    setLoading(false);
+                    window.open(newTabUrl, '_blank', 'noopener,noreferrer');
+                }, 2000);
             } else {
                 alert(`Validation failed with status code: ${response.status}`);
                 console.log('Validate response:', response);
-                setLoading(false); 
+                setLoading(false);
             }
         } catch (error) {
+
             if (error.response) {
                 switch (error.response.status) {
                     case 400:
@@ -260,7 +238,7 @@ export default function DonorLogin() {
                 alert('An error occurred while validating OTP and Captcha.');
                 console.error('Error during validation:', error.message || error);
             }
-            setLoading(false); 
+            setLoading(false);
         }
     };
     
@@ -375,7 +353,7 @@ export default function DonorLogin() {
                                             <button
                                                 type="button"
                                                 className="w-100 btn btn-primary-outline py-1"
-                                                onClick={handleValidate} 
+                                                onClick={handleValidate}
                                             >
                                                 Validate
                                             </button>

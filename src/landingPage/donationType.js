@@ -52,7 +52,7 @@ const TabContent = ({ tabs }) => {
               src={tabs[activeIndex].image}
               width="282px"
               height="410px"
-              alt=""
+              alt="ActivTabs"
             />
           </div>
         </div>
@@ -160,7 +160,7 @@ export default function DonationType() {
                   <img
                     className="ms-2"
                     src="assets/images/fwdRight.png"
-                    alt=""
+                    alt="Right-forward"
                   />
                 </button>
               </div>

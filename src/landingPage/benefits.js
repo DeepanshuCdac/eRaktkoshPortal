@@ -30,7 +30,7 @@ const items = [
 const Card = ({ imgSrc, copy, copyTxt, btnTxt }) => (
   <div className="card px-3  pt-4 pb-2">
     <div className="">
-      <img className="mb-3" src={imgSrc} width="62px" height="62px" alt="" />
+      <img className="mb-3" src={imgSrc} width="62px" height="62px" alt="Card-imgs" />
       <p className="card-txt mb-0">{copy}</p>
       <p className="card-txt-light mb-1">{copyTxt}</p>
     </div>

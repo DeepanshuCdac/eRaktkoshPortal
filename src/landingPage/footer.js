@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom/cjs/react-router-dom.min";
+// import { Link } from "react-router-dom/cjs/react-router-dom.min";
 
 export default function Footer() {
 
@@ -48,7 +48,7 @@ export default function Footer() {
             </div>
             <div className="col-12 col-md-4 col-xl-3 mb-3">
               <h5 className="heading mb-0">Web Information Manager</h5>
-              <h5 className="heading">Senior Director</h5>    
+              <h5 className="heading">Senior Director</h5>
               <div className="d-flex flex-column">
                 <a
                   href="/BLDAHIMS/bloodbank/campSchedule.cnt"
@@ -143,32 +143,58 @@ export default function Footer() {
             </div>
             <div className="col-12 col-md-6 col-xl-2 mb-3">
               <h5 className="heading">Download e-raktkosh App</h5>
-              <img className="mb-0 mb-xl-1 me-2 me-xl-0" src="assets/images/apple-store.png" />
-              <img className="" src="assets/images/google-store.png" />
+              <img className="mb-0 mb-xl-1 me-2 me-xl-0" src="assets/images/apple-store.png" alt="...Symbols" />
+              <img className="" src="assets/images/google-store.png" alt="...Symbols"/>
             </div>
           </div>
 
           <div className="row mb-5">
             <div className="col-12 col-md-4 col-xl-2 mb-3">
               <img
+                style={{ cursor: 'pointer' }}
                 className=""
                 width="67px"
                 height="67px"
                 src="assets/images/main-icon.png"
-                
+                alt="...Symbols"
+
               />
             </div>
             <div className="col-12 col-md-4 col-xl-3 mb-3 d-xl-flex justify-content-center">
-              <img className="" src="assets/images/ministry-icon.png" onClick={handleImageClick1}/>
+              <img className=""
+                src="assets/images/ministry-icon.png"
+                style={{ cursor: 'pointer' }}
+                onClick={handleImageClick1}
+                alt="...Symbols"
+
+              />
             </div>
             <div className="col-12 col-md-4 col-xl-2 mb-3 d-xl-flex justify-content-center">
-              <img className="" src="assets/images/umang-icon.png" onClick={handleImageClick2}/>
+              <img className=""
+                src="assets/images/umang-icon.png"
+                style={{ cursor: 'pointer' }}
+                onClick={handleImageClick2}
+                alt="...Symbols"
+
+              />
             </div>
             <div className="col-12 col-md-4 col-xl-3 mb-3 d-xl-flex justify-content-center">
-              <img className="" src="assets/images/nhp-icon.png" onClick={handleImageClick3}/>
+              <img className=""
+                src="assets/images/nhp-icon.png"
+                style={{ cursor: 'pointer' }}
+                onClick={handleImageClick3}
+                alt="...Symbols"
+              />
+
             </div>
             <div className="col-12 col-md-4 col-xl-2 mb-3 d-xl-flex justify-content-center">
-              <img className="" src="assets/images/govt-icon.png" onClick={handleImageClick4}/>
+              <img className=""
+                src="assets/images/govt-icon.png"
+                style={{ cursor: 'pointer' }}
+                onClick={handleImageClick4}
+                alt="...Symbols"
+              />
+
             </div>
           </div>
 

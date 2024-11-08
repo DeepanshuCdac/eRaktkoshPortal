@@ -727,7 +727,7 @@
 
 .App .footer {
     background: #FCFCFC;
-    margin-top: 50px;
+    /* margin-top: 50px; */
 }
 
 .footer .heading {
@@ -1245,14 +1245,38 @@
 
 /* ###################### Donor Admin ############### */
 
-.donorAdmin .header-section .key {
+.donorAdmin {
+    background: #F3F3F3;
+}
+
+.donorAdmin .key {
+    color: #353535;
+    font-size: 15px;
+    line-height: 20px;
+    letter-spacing: 0.15px;
+}
+
+.donorAdmin .value {
+    color: #353535;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 24px;
+    letter-spacing: 0.15px;
+}
+
+.donorAdmin .header-section {
+    border-radius: 5px;
+    background: #FFF;
+}
+
+.donorAdmin .header-section .greet {
     color: #353535;
     font-size: 16px;
     line-height: 20px;
     letter-spacing: 0.15px;
 }
 
-.donorAdmin .header-section .value {
+.donorAdmin .header-section .greetName {
     color: #353535;
     font-size: 16px;
     font-weight: 600;
@@ -1260,28 +1284,90 @@
     letter-spacing: 0.15px;
 }
 
-.donorAdmin .widget {
-    border-radius: 16px;
-    border: 1px solid #E8E8E8;
-    background: #FFF;
-    box-shadow: 0px 4px 24px 0px rgba(0, 0, 0, 0.08);
+
+.logout {
+    color: #FFF;
+    font-size: 15px;
+    line-height: 20px;
+    letter-spacing: 0.15px;
+    text-decoration-line: underline;
 }
 
-.donorAdmin .widget .widgeHeader {
-    color: rgba(29, 29, 29, 0.50);
+.donorAdmin .header-section .number {
+    color: #1C1C1C;
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 36px;
+}
+
+.donorAdmin .header-section .text {
+    color: #1C1C1C;
+    font-size: 15px;
+}
+
+.donorAdmin .header-section .divider {
+    height: 64px;
+    border: 1px solid #E7E7E7;
+}
+
+.donorAdmin .widget {
+    margin-bottom: 20px;
+    border-radius: 5px;
+    background: #FFF;
+}
+
+.donorAdmin .widget .newsTxt {
+    color: #1C1C1C;
+    font-size: 14px;
+    line-height: 17px;
+    letter-spacing: 0.28px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+    line-height: 1.5;
+}
+
+.donorAdmin .widget-abha {
+    margin-bottom: 20px;
+    border-radius: 5px;
+    background: rgba(24, 115, 167, 0.16);
+}
+
+.donorAdmin .widgeHeader {
+    color: #000;
     font-size: 18px;
     font-weight: 600;
     letter-spacing: 0.036px;
 }
 
+.donorAdmin .widget-abha .abha-btn {
+    border-radius: 4px;
+    border: 1px solid #043E5F;
+    box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.04);
+    color: #043E5F;
+    font-size: 16px;
+    font-weight: 600;
+}
+
 .donorAdmin .widget .widgeText {
     color: #1C1C1C;
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 600;
     letter-spacing: 0.3px;
 }
 
-.donorAdmin .widget a {
+.donorAdmin .widget .donationTxt {
+    color: #1C1C1C;
+    font-size: 14px;
+}
+
+.donorAdmin .widget .donation-date {
+    color: #969696;
+    font-size: 14px;
+}
+
+.donorAdmin .tabContainer a {
     color: #C0222B;
     font-size: 15px;
     font-weight: 600;
@@ -1297,7 +1383,7 @@
 }
 
 .donorAdmin .tabs .nav-item {
-    border-radius: 8px;
+    border-radius: 5px;
     padding: 7px 0px;
     margin-bottom: 10px;
 }
@@ -1307,26 +1393,6 @@
     font-weight: 600;
     line-height: 24px;
     letter-spacing: 0.15px;
-}
-
-.donorAdmin .widge .key {
-    color: #1C1C1C;
-    font-size: 42px;
-    font-weight: 600;
-    line-height: 36px;
-}
-
-.donorAdmin .widge {
-    border-radius: 16px;
-    border: 1px solid #E7E7E7;
-    background: #FFF;
-    box-shadow: 0px 4px 24px 0px rgba(0, 0, 0, 0.08);
-}
-
-.donorAdmin .widge .value {
-    color: #7F0210;
-    font-size: 18px;
-    letter-spacing: 0.036px;
 }
 
 .form-inputs .form-control {
@@ -1372,6 +1438,7 @@
     background: #fff;
     transition: 200ms ease;
     transition-delay: 0ms;
+    z-index: 2;
 }
 
 .steps-wrapper .steps .step.active {
@@ -1385,7 +1452,7 @@
     width: 100%;
     height: 4px;
     background: #dedede;
-    z-index: -1;
+    z-index: 1;
 }
 
 .steps-wrapper .steps .progress-bar .progress {

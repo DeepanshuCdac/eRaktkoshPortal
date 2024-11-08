@@ -36,7 +36,7 @@ export default function Aboutpage() {
                   <img
                     className="ms-2"
                     src="assets/images/arrow-right.png"
-                    alt=""
+                    alt="Arrow-right"
                   />
                 </button>
               </div>
