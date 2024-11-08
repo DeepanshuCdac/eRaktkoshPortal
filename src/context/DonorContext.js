@@ -18,9 +18,9 @@ export const DonorProvider = ({ children }) => {
             const mobileNoFromSession = sessionStorage.getItem('mobileNo')
             console.log(mobileNoFromSession)
 
-              setDonorData(null)
-              setLoading(true)
-              setError(null)
+            setDonorData(null)
+            setLoading(true)
+            setError(null)
 
             if (!mobileNoFromSession) {
                 setError('Mobile number not found in session.')
@@ -39,13 +39,13 @@ export const DonorProvider = ({ children }) => {
                     }
                 )
                 setDonorData(response.data)
-                console.log("Final response:",response.data)
+                console.log("Final response:", response.data)
                 setLoading(false)
-            }  catch (err) {
+            } catch (err) {
                 console.error('Error fetching donor data:', err)
                 setError('Error fetching donor data')
             } finally {
-                setLoading(false) 
+                setLoading(false)
             }
         };
 

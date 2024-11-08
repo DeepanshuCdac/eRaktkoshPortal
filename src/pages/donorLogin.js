@@ -84,9 +84,10 @@ export default function DonorLogin() {
                 }
             )
 
-            console.log('Response data:', response.data.OtpData)
+            console.log('Response data:', response.data)
 
             setCaptchaImage(response.data.captchaImage)
+            setCaptchaText('')
             const otpData = JSON.parse(response.data.OtpData)
 
 
@@ -102,9 +103,9 @@ export default function DonorLogin() {
                 setShowOtpField(true)
                 setIsInputDisabled(true)
 
-                 setLastOtpRequestTime(currentTime)
+                setLastOtpRequestTime(currentTime)
 
-                startOtpTimer(otpExpirationTime) 
+                startOtpTimer(otpExpirationTime)
 
             } else {
                 alert(otpData.messageSuccess)
@@ -178,14 +179,14 @@ export default function DonorLogin() {
 
     const handleValidate = async () => {
         const otpValues = otpRefs.current.map(input => input.value).join('');
-    
+
         if (otpValues.length !== 6 || !captchaText) {
             alert('Please fill in both OTP and Captcha.');
             return;
         }
-    
+
         setLoading(true);
-    
+
         try {
             const response = await axios.post(`${BaseUrl}/eraktkosh/validate`, {
                 captcha: captchaText,
@@ -193,21 +194,21 @@ export default function DonorLogin() {
                 otp: otpValues,
                 withCredentials: true
             });
-    
+
             if (response.status === 200) {
                 console.log('Validation Response:', response);
-    
+
                 // set mobile number in local..........
                 localStorage.setItem('mobileNo', mobileno);
                 console.log("Mobile number stored in localStorage:", localStorage.getItem("mobileNo"));
-    
+
                 // set mobile number in sessionStorage..........
                 sessionStorage.setItem('mobileNo', mobileno);
                 console.log("Mobile number stored in sessionStorage:", sessionStorage.getItem("mobileNo"));
-    
+
                 // construct url for new tab...........
                 const newTabUrl = `${window.location.origin}/#/pages/portaldonorAdmin?mobileNo=${mobileno}`;
-    
+
                 setTimeout(() => {
                     setLoading(false);
                     window.open(newTabUrl, '_blank', 'noopener,noreferrer');
@@ -222,7 +223,7 @@ export default function DonorLogin() {
             if (error.response) {
                 switch (error.response.status) {
                     case 400:
-                        alert('Bad request. Please check the inputs and try again.');
+                        alert('Invalid OTP or CAPTCHA. Please try again.');
                         break;
                     case 401:
                         alert('Invalid OTP or CAPTCHA. Please try again.');
@@ -241,7 +242,7 @@ export default function DonorLogin() {
             setLoading(false);
         }
     };
-    
+
 
 
     return (

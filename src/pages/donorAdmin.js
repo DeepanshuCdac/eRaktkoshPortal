@@ -9,7 +9,7 @@ export default function DonorAdmin() {
 
     const handleTabClick = (index) => {
         setActiveTab(index);
-        localStorage.setItem('activeTab', index);
+        localStorage.setItem('ActiveTab', index);
     };
 
     useEffect(() => {
@@ -26,7 +26,7 @@ export default function DonorAdmin() {
     }, []);
 
     useEffect(() => {
-        const savedTab = localStorage.getItem('activeTab');
+        const savedTab = localStorage.getItem('ActiveTab');
         if (savedTab !== null) {
             setActiveTab(parseInt(savedTab, 10));
         }
