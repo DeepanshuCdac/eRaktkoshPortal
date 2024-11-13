@@ -1375,6 +1375,14 @@
     text-decoration-line: underline;
 }
 
+.donorAdmin .tabContainer .btn-link {
+    color: #C0222B;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    text-decoration-line: underline;
+}
+
 .donorAdmin .widget .dropdown-item {
     color: #212529;
     font-size: 16px;

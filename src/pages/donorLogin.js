@@ -15,7 +15,7 @@ export default function DonorLogin() {
     const history = useHistory()
     const [timerId, setTimerId] = useState(null)
     const [isOtpExpired, setIsOtpExpired] = useState(false)
-    const [lastOtpRequestTime, setLastOtpRequestTime] = useState(null);
+    // const [lastOtpRequestTime, setLastOtpRequestTime] = useState(null);
 
     useEffect(() => {
         document.title = 'e-Raktkosh Donor Login'
@@ -60,68 +60,81 @@ export default function DonorLogin() {
     const handleGenerateOtp = async () => {
         const isValidNumber = /^\d{10}$/.test(mobileno);
         const currentTime = Date.now();
-
-        if (lastOtpRequestTime && currentTime - lastOtpRequestTime < 300000) {
-            alert('Try After Some time .......!');
+        const lastOtpRequestTime = localStorage.getItem('lastOtpRequestTime');
+        
+        // Validate mobile number format
+        if (!isValidNumber) {
             return;
         }
-
-        if (!isValidNumber) {
-            alert('Number is invalid.')
-            return
-        }
-
-        setLoading(true)
-
+    
+        setLoading(true);
+    
         try {
-            const response = await axios.post(`${BaseUrl}/eraktkosh/generateOTP`, { mobileno }
-                ,
+            // Make API call to generate OTP
+            const response = await axios.post(
+                `${BaseUrl}/eraktkosh/generateOTP`,
+                { mobileno },
                 {
                     withCredentials: false,
                     headers: {
-                        'Content-Type': 'application/json'
-                    }
+                        'Content-Type': 'application/json',
+                    },
                 }
-            )
+            );
+    
+            console.log('Response data:', response.data);
+    
+            setCaptchaImage(response.data.captchaImage);
+            setCaptchaText('');
+    
+            const otpData = JSON.parse(response.data.OtpData);
+            const isUserExists = otpData.isUserExists;
+    
+            // if (lastOtpRequestTime && !isNaN(lastOtpRequestTime) && currentTime - parseInt(lastOtpRequestTime) < 300000) {
+            //     alert('Try After Some time ......!');
+            //     setShowOtpField(false);
+            //     return;
+            // }
+    
+            // check whether user exist or not
+            if (isUserExists) {
 
-            console.log('Response data:', response.data)
-
-            setCaptchaImage(response.data.captchaImage)
-            setCaptchaText('')
-            const otpData = JSON.parse(response.data.OtpData)
-
-
-            if (otpData.isUserExists) {
-                const otp = otpData.otp
-                const otpExpirationTime = Math.floor(otpData.otpExpirationTime / 1000)
-
-                console.log('OTP:', otp)
-                console.log('OTP Expiration Time:', otpExpirationTime)
-
-                alert(otpData.messageSuccess);
-
-                setShowOtpField(true)
-                setIsInputDisabled(true)
-
-                setLastOtpRequestTime(currentTime)
-
-                startOtpTimer(otpExpirationTime)
-
+                // check the time whether less than 5 mins...
+                if (lastOtpRequestTime && !isNaN(lastOtpRequestTime) && currentTime - parseInt(lastOtpRequestTime) < 300000) {
+                    console.log("inside timing ")
+                    alert('Try After Some time ......!');
+                    setShowOtpField(false);
+                    return;
+                }
+                const otp = otpData.otp;
+                const otpExpirationTime = Math.floor(otpData.otpExpirationTime / 1000);
+    
+                console.log('OTP:', otp);
+                console.log('OTP Expiration Time:', otpExpirationTime);
+    
+                alert('If you are a Registered User, you will get an OTP.');
+    
+                setShowOtpField(true);
+                setIsInputDisabled(true);
+    
+                // Update last OTP request time in localStorage
+                localStorage.setItem('lastOtpRequestTime', currentTime);
+    
+                startOtpTimer(otpExpirationTime);
             } else {
-                alert(otpData.messageSuccess)
-                console.log('User does not exist.')
-                setShowOtpField(true)
-                setIsInputDisabled(true)
-
+                alert('If you are a Registered User, you will get an OTP.');
+                setShowOtpField(true);
+                setIsInputDisabled(true);
             }
         } catch (error) {
-            console.error('Error validating number:', error.response || error.message || error)
-            alert('An error occurred while validating the number.')
+            console.error('Error validating number:', error.response || error.message || error);
+            alert('An error occurred while validating the number.');
         } finally {
-            setLoading(false)
+            setLoading(false);
         }
-    }
-
+    };
+    
+    
     const handleOtpChange = (index, event) => {
         const { value } = event.target
 
@@ -197,6 +210,9 @@ export default function DonorLogin() {
 
             if (response.status === 200) {
                 console.log('Validation Response:', response);
+
+                setShowOtpField(false)
+                setIsInputDisabled(false)
 
                 // set mobile number in local..........
                 localStorage.setItem('mobileNo', mobileno);
