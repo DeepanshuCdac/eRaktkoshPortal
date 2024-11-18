@@ -15,13 +15,16 @@ import DonorLogin from "./pages/donorLogin.js";
 import DonorRegister from "./pages/donorRegister.js";
 import DonorAdmin from "./pages/donorAdmin";
 import { DonorProvider } from "./context/DonorContext.js";
+import { CertificateProvider } from "./context/CertificateContext.js";
 
 function App() {
   return (
     <div className="App">
       <HashRouter basename="/">
         <DonorProvider>
-          <AppContent />
+          <CertificateProvider>
+            <AppContent />
+          </CertificateProvider>
         </DonorProvider>
       </HashRouter>
     </div>

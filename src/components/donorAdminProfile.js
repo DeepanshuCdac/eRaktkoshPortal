@@ -170,7 +170,6 @@ export default function DonorAdminProfile() {
                                         value={donorData.body?.edonorEmail || ''}
                                         onChange={(e) => handleInputChange('edonorEmail', e.target.value)}
                                     />
-                                    {/* <div id="emailHelp" className="form-text" style={{ color: '#C0222B' }}>Please Enter Your Email</div> */}
                                     {errors.edonorEmail && <div className="form-text" style={{ color: '#C0222B' }}>{errors.edonorEmail}</div>}
                                 </div>
                             </div>

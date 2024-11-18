@@ -1352,7 +1352,7 @@
 
 .donorAdmin .widget .widgeText {
     color: #1C1C1C;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 600;
     letter-spacing: 0.3px;
 }
@@ -1368,6 +1368,14 @@
 }
 
 .donorAdmin .tabContainer a {
+    color: #C0222B;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    text-decoration-line: underline;
+}
+
+.donorAdmin .tabContainer .btn-link {
     color: #C0222B;
     font-size: 15px;
     font-weight: 600;
