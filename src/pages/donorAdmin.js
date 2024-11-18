@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import DonorAdminHome from '../components/donorAdminHome';
 import DonorAdminProfile from '../components/donorAdminProfile';
 import { useDonor } from '../context/DonorContext';
+import DonationCertificate from '../components/donationCertificate';
 
 export default function DonorAdmin() {
     const { donorData, loading, error } = useDonor();
@@ -11,6 +12,10 @@ export default function DonorAdmin() {
         setActiveTab(index);
         localStorage.setItem('ActiveTab', index);
     };
+
+    const setDonationCertificateTab = () => {
+        handleTabClick(2);
+    }
 
     useEffect(() => {
 
@@ -119,20 +124,9 @@ export default function DonorAdmin() {
                                     </div>
                                 </div>
                                 <div className="col-xl-9 col-lg-9 col-md-9">
-                                    {activeTab === 0 && <DonorAdminHome />}
+                                    {activeTab === 0 && <DonorAdminHome onViewAllClick={setDonationCertificateTab} />}
                                     {activeTab === 1 && <DonorAdminProfile />}
-                                    {activeTab === 2 && (
-                                        <div className="tabContent mb-3 p-3">
-                                            <div className='row'>
-                                                <div className="col-xl-8 col-lg-8 col-12">
-                                                    <div className="tabContainer">
-                                                        <p className="ques mb-2">rohit</p>
-                                                        <p className="ans">gghfg</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    )}
+                                    {activeTab === 2 && <DonationCertificate />}
                                     {activeTab === 3 && (
                                         <div className="tabContent p-3 mb-3">
                                             <div className='row'>
