@@ -1375,6 +1375,14 @@
     text-decoration-line: underline;
 }
 
+.widget .btn-link {
+    color: #C0222B;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    text-decoration-line: underline;
+}
+
 .donorAdmin .tabContainer .btn-link {
     color: #C0222B;
     font-size: 15px;
@@ -1484,3 +1492,114 @@
 .ant-select-single {
     height: 38px;
 }
+
+
+/* donation certificate ############### */
+
+.back .back_btn {
+    color: #154989;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.028px;
+    border: none;
+    text-decoration-line: underline;
+    background: transparent;
+}
+
+.toggle .toggle-list {
+    border-radius: 8px 0px 0px 8px;
+    border: 0.2px solid #e9e7e7;
+    border-right: none;
+    width: 48px;
+    height: 34px;
+}
+
+.toggle .toggle-table {
+    width: 48px;
+    height: 34px;
+    border-radius: 0px 8px 8px 0px;
+    border: 0.2px solid #e9e7e7;
+    border-left: none;
+    background: #FFF;
+}
+
+.search .search-input {
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid #ECECEC;
+    background: #FFF;
+}
+
+.search .search-input .form-control {
+    border: none;
+    padding: 0;
+}
+
+.search .search-input .form-control:focus {
+    box-shadow: none;
+}
+
+.css-19qnlrw-MuiFormLabel-root-MuiInputLabel-root {
+    color: #707070 !important;
+    font-size: 14px !important;
+    font-family: "Source Sans 3", sans-serif !important;
+    margin: -5px 5px !important;
+    left: 60px !important;
+}
+
+.css-1q045n3-MuiTypography-root-MuiMultiInputDateRangeField-separator {
+    display: none;
+}
+
+.css-1blp12k-MuiInputBase-root-MuiOutlinedInput-root {
+    border-radius: 8px !important;
+    border: 1px solid #ECECEC;
+    background: #FFF;
+    width: 70% !important;
+}
+
+.css-16wblaj-MuiInputBase-input-MuiOutlinedInput-input {
+    padding: 2px 14px !important;
+    height: 34px !important;
+}
+
+.css-cmpglg-MuiFormControl-root-MuiTextField-root {
+    display: flex !important;
+    align-items: end !important;
+}
+
+.css-113d811-MuiFormLabel-root-MuiInputLabel-root {
+    left: 65px !important;
+}
+
+.pagination-container .ant-pagination {
+    justify-content: end;
+}
+
+.pagination-container .ant-pagination-total-text {
+    color: #888;
+    font-size: 13px;
+}
+
+.pagination-container .ant-pagination .ant-pagination-item{
+    background-color: transparent;
+    color: #888;
+    font-size: 13px;
+}
+
+.pagination-container .ant-pagination .ant-pagination-item-active {
+    color: #C0222B;
+    font-size: 14px;
+    border-radius: 4px;
+    background: rgba(192, 34, 43, 0.14);
+    border-color: transparent;
+}
+
+
+
+/* #format {
+    padding-bottom: 15px;
+    width: 200px;
+    left: 80px;
+    top: 40px;
+} */
