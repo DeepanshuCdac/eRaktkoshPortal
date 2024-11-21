@@ -126,7 +126,7 @@ export default function DonorAdmin() {
                                 <div className="col-xl-9 col-lg-9 col-md-9">
                                     {activeTab === 0 && <DonorAdminHome onViewAllClick={setDonationCertificateTab} />}
                                     {activeTab === 1 && <DonorAdminProfile />}
-                                    {activeTab === 2 && <DonationCertificate />}
+                                    {activeTab === 2 && <DonationCertificate onBack={() => handleTabClick(0)} />}
                                     {activeTab === 3 && (
                                         <div className="tabContent p-3 mb-3">
                                             <div className='row'>

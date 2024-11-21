@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useCertificate } from '../context/CertificateContext';
+import { generateCertificate } from '../utils/generateCertificate';
 
-export default function DonorAdminHome({onViewAllClick}) {
+export default function DonorAdminHome({ onViewAllClick }) {
   const { certificateData, loading, error } = useCertificate();
 
   // Check if the certificateData is an array and contains data
@@ -17,130 +18,6 @@ export default function DonorAdminHome({onViewAllClick}) {
     // else truncate and add ellipsis
     return `${text.slice(0, maxLength - 3)}...`;
   }
-
-  const handleDownloadClick = (certificateData) => {
-    // Create a new window
-    const newWindow = window.open("", "_blank", "width=1000,height=700");
-
-    // Generate the certificate content
-    const certificateContent = `
-        <html>
-          <head>
-            <title>Donation Certificate</title>
-            <link href="http://fonts.cdnfonts.com/css/aleo-2" rel="stylesheet" />
-            <style>
-              #t1 { border-collapse: collapse; }
-              .tr { border: solid; border-width: 0px 0; height: 6%; }
-              @media print { .noprint { display: none; } }
-              @page { size: auto; margin: 0; }
-              .certificate-name td {
-                font-family: 'Aleo', sans-serif !important;
-                font-size: 46px !important;
-                color: #A47D00 !important;
-                font-weight: 700 !important;
-                text-transform: uppercase !important;
-              }
-              table {
-                border: none !important;
-                font-family: 'Aleo', sans-serif;
-                font-size: 13px;
-              }
-              @page { size: A4 landscape; }
-              /* Center the content on the screen */
-              .certificate-container {
-                border: 3px solid #A47D00;
-                padding: 10px;
-              }
-            </style>
-          </head>
-          <body>
-
-          <div style="margin: 0 auto;  width: 800px;">  
-          <div class="" style = "margin-bottom: 6px; display: flex; align-items: center; justify-content: end;">
-          <button class="noprint" onClick="window.print()">Save</button>
-          </div>
-            <div class="certificate-container">
-              <br>
-              <br>
-              <br>
-                <table style="width: 100%; margin-top: -50px;">
-                  <tbody>
-                    <tr class="tr" style="display: grid; grid-template-columns: 150px 500px 100px;">
-                      <td align="left" style="grid-column:1">
-                        <img src="assets/images/mohfw-gov.png" width="150px" alt="MOHFW" />
-                      </td>
-                      <td align="left" style="grid-column:2">
-                        <img src="assets/images/certificate-header.png" width="500px" alt="Header" />
-                      </td>
-                      <td align="left" style="grid-column:3">
-                        <img src="assets/images/certificate-state.png" width="100px" height="100px" alt="State Logo" />
-                      </td>
-                    </tr>
-                    <tr class="tr">
-                      <td align="center" colspan="3">
-                        <strong>Proudly Presented To</strong>
-                      </td>
-                    </tr>
-                    <tr class="tr certificate-name">
-                      <td align="center" colspan="3">
-                        ${certificateData.username || 'N|A'}
-                      </td>
-                    </tr>
-                    <tr class="tr">
-                      <td align="center" colspan="3">
-                        <b>in camp organized by</b>
-                      </td>
-                    </tr>
-                    <tr class="tr">
-                      <td align="center" colspan="3">
-                        with <b>${certificateData.bloodbank || 'N|A'}, ${certificateData.districtName || 'N|A'}, ${certificateData.stateName || 'N|A'}</b>
-                      </td>
-                    </tr>
-                    <tr class="tr">
-                      <td align="center" colspan="3">
-                        <br />
-                        On <b>${certificateData.date || 'N/A'}</b> for this benevolent gesture of donating blood which helped in saving precious human life.
-                      </td>
-                    </tr>
-                    <tr class="tr">
-                      <td align="center" colspan="3" style="width: 100%;">
-                        <br />
-                        We compliment you and thank you on the behalf of ${certificateData.bloodbank || 'N|A'} for this noble deed, which we are sure will be emulated by many other public-spirited persons like you.
-                      </td>
-                    </tr>
-                    <tr style="font-size: 15px;">
-                      <td align="left" colspan="2" style="width: 40%;">
-                        <br /><br />
-                        <b>Donor No:&nbsp; </b>${certificateData.bagNo || 'N|A'}
-                      </td>
-                      <td></td>
-                    </tr>
-                    <tr style="font-size: 15px;">
-                      <td align="left" style="width: 60%;">
-                        <b>Blood Group:</b>&nbsp;${certificateData.bloodGroupName || 'N/A'}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td align="center" colspan="3" style="width: 100%;">
-                        <img src="assets/images/certificate-footer.png" width="320px" alt="Footer" />
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-            </div>
-            </div>
-          </body>
-        </html>
-      `;
-
-
-    // Write the content to the new window
-    newWindow.document.write(certificateContent);
-
-    // Close the document to apply styles
-    newWindow.document.close();
-  };
-
 
   return (
     <>
@@ -169,8 +46,8 @@ export default function DonorAdminHome({onViewAllClick}) {
                 {!loading && !error && isDataValid ? (
                   <div className="row">
                     {/* Loop through certificateData array */}
-                    {certificateData.map((item, index) => (
-                      <div key={index} className="col-xl-4 mb-2">
+                    {certificateData.slice(0, 3).map((item, index) => (
+                      <div key={index} className="col-xl-4">
                         <div className='d-flex align-items-start'>
                           <img style={{ height: '30px' }} src="assets/images/pdf.png" alt="Pdf" />
                           <div style={{ marginLeft: '12px' }}>
@@ -180,7 +57,7 @@ export default function DonorAdminHome({onViewAllClick}) {
                             </p>
                             <button
                               className="btn btn-link p-0"
-                              onClick={() => handleDownloadClick(item)}
+                              onClick={() => generateCertificate(item)}
                             >
                               Download
                             </button>
