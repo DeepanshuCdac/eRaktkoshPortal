@@ -1572,6 +1572,12 @@
     left: 65px !important;
 }
 
+.widgetTable{
+    margin-bottom: 20px;
+    border-radius: 5px;
+    background: #FFF;
+}
+
 .pagination-container .ant-pagination {
     justify-content: end;
 }
@@ -1594,12 +1600,3 @@
     background: rgba(192, 34, 43, 0.14);
     border-color: transparent;
 }
-
-
-
-/* #format {
-    padding-bottom: 15px;
-    width: 200px;
-    left: 80px;
-    top: 40px;
-} */
