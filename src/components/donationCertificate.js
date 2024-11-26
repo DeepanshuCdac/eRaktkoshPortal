@@ -3,6 +3,7 @@ import { useCertificate } from "../context/CertificateContext";
 import { generateCertificate } from "../utils/generateCertificate";
 
 import { Pagination } from "antd";
+import dayjs from "dayjs";
 
 const DonationCertificate = ({ onBack }) => {
   const { certificateData, loading, error } = useCertificate();
@@ -16,9 +17,15 @@ const DonationCertificate = ({ onBack }) => {
   const isDataValid = Array.isArray(certificateData) && certificateData.length > 0;
 
   const filteredData = isDataValid
-    ? certificateData.filter((item) =>
-      item.bloodbank?.toLowerCase().includes(searchTerm.toLowerCase())
-    )
+    ? certificateData.filter((item) => {
+      const bloodbankMatches = item.bloodbank?.toLowerCase().includes(searchTerm.toLowerCase());
+      const donationDateMatches = item.date
+        ? dayjs(item.date, "DD-MMM-YY").format("DD-MMM-YY").includes(searchTerm)
+        : false
+
+      // Match either bloodbank name or donation date
+      return bloodbankMatches || donationDateMatches;
+    })
     : [];
 
   // Paginate data
@@ -154,7 +161,37 @@ const DonationCertificate = ({ onBack }) => {
         </div>
       )}
 
-      {view === "table" && <div className="widgetTable">This is tabular view</div>}
+      {view === "table" && <div className="widgetTable p-4">
+       <div className="">
+       <table className="table">
+          <thead>
+            <tr>
+              <th scope="col">Donation Date</th>
+              <th scope="col">Blood Bank Name</th>
+              <th scope="col">Appreciation Certificate</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">11th Oct 2024</th>
+              <td>AIIMS Delhi</td>
+              <td>Download</td>
+            </tr>
+            <tr>
+            <th scope="row">11th Oct 2024</th>
+              <td>AIIMS Delhi</td>
+              <td>Download</td>
+            </tr>
+            <tr>
+            <th scope="row">11th Oct 2024</th>
+              <td>AIIMS Delhi</td>
+              <td>Download</td>
+            </tr>
+          </tbody>
+        </table>
+
+       </div>
+      </div>}
 
       {/* Ant Design Pagination */}
       <div className="pagination-container mt-4 mb-3">
