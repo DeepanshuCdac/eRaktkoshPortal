@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useCertificate } from "../context/CertificateContext";
 import { generateCertificate } from "../utils/generateCertificate";
+import '../../src/scss/donationCertificate.scss';
 
 import { Pagination } from "antd";
 import dayjs from "dayjs";
@@ -11,7 +12,7 @@ const DonationCertificate = ({ onBack }) => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const [currentPage, setCurrentPage] = useState(1); // State for current page
-  const pageSize = 9; // Number of items per page
+  const pageSize = view === "list" ? 9 : 4;  // Number of items per page
 
   // Check if the certificateData is an array and contains data
   const isDataValid = Array.isArray(certificateData) && certificateData.length > 0;
@@ -23,12 +24,12 @@ const DonationCertificate = ({ onBack }) => {
         ? dayjs(item.date, "DD-MMM-YY").format("DD-MMM-YY").includes(searchTerm)
         : false
 
-      // Match either bloodbank name or donation date
+      // matching blood bank name or donation date....
       return bloodbankMatches || donationDateMatches;
     })
     : [];
 
-  // Paginate data
+  // pagination data ...
   const paginatedData = filteredData.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
   const handlePageChange = (page) => {
@@ -161,46 +162,76 @@ const DonationCertificate = ({ onBack }) => {
         </div>
       )}
 
-      {view === "table" && <div className="widgetTable p-4">
-       <div className="">
-       <table className="table">
-          <thead>
-            <tr>
-              <th scope="col">Donation Date</th>
-              <th scope="col">Blood Bank Name</th>
-              <th scope="col">Appreciation Certificate</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th scope="row">11th Oct 2024</th>
-              <td>AIIMS Delhi</td>
-              <td>Download</td>
-            </tr>
-            <tr>
-            <th scope="row">11th Oct 2024</th>
-              <td>AIIMS Delhi</td>
-              <td>Download</td>
-            </tr>
-            <tr>
-            <th scope="row">11th Oct 2024</th>
-              <td>AIIMS Delhi</td>
-              <td>Download</td>
-            </tr>
-          </tbody>
-        </table>
+      {view === "table" && (
+        <div className="widgetTable p-3">
+          <div>
+            <table className="table mb-0">
+              <thead>
+                <tr>
+                  <th scope="col">Donation Date</th>
+                  <th scope="col">Blood Bank Name</th>
+                  <th scope="col">Appreciation Certificate</th>
+                </tr>
+              </thead>
+              <tbody>
+                {loading && (
+                  <tr>
+                    <td colSpan="3" className="text-center">
+                      Loading certificate data...
+                    </td>
+                  </tr>
+                )}
+                {error && (
+                  <tr>
+                    <td colSpan="3" className="text-danger text-center">
+                      Error loading certificate data: {error}
+                    </td>
+                  </tr>
+                )}
+                {!loading && !error && paginatedData.length > 0 ? (
+                  paginatedData.map((item, index) => (
+                    <tr key={index}>
+                      <td>{item.date || "N/A"}</td>
+                      <td>
+                        <img src="assets/images/pdf.png" alt="PDF Icon" />
+                        <span className="ms-2">{item.bloodbank || "Unknown Hospital"}</span>
+                      </td>
+                      <td>
+                        <button
+                          className="btn btn-link p-0"
+                          onClick={() => generateCertificate(item)}
+                        >
+                          Download
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  !loading && !error && (
+                    <tr>
+                      <td colSpan="3" className="text-center">
+                        No donation records found.
+                      </td>
+                    </tr>
+                  )
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
 
-       </div>
-      </div>}
 
       {/* Ant Design Pagination */}
       <div className="pagination-container mt-4 mb-3">
-        <Pagination
+      <Pagination
           total={filteredData.length}
           pageSize={pageSize}
           current={currentPage}
           onChange={handlePageChange}
-          showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
+          showTotal={(total, range) =>
+            `${range[0]}-${range[1]} of ${total} items`
+          }
         />
       </div>
     </>

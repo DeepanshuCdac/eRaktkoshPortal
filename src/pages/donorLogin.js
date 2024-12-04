@@ -60,15 +60,18 @@ export default function DonorLogin() {
     const handleGenerateOtp = async () => {
         const isValidNumber = /^\d{10}$/.test(mobileno);
         const currentTime = Date.now();
-        const lastOtpRequestTime = localStorage.getItem('lastOtpRequestTime');
-        
+        // Retrieve last OTP request time for the specific mobile number
+        const lastOtpRequestTime = localStorage.getItem(`lastOtpRequestTime_${mobileno}`);
+
+
         // Validate mobile number format
         if (!isValidNumber) {
+            alert('Please enter a valid 10-digit mobile number.');
             return;
         }
-    
+
         setLoading(true);
-    
+
         try {
             // Make API call to generate OTP
             const response = await axios.post(
@@ -81,60 +84,76 @@ export default function DonorLogin() {
                     },
                 }
             );
-    
+
             console.log('Response data:', response.data);
-    
+
             setCaptchaImage(response.data.captchaImage);
             setCaptchaText('');
-    
+
             const otpData = JSON.parse(response.data.OtpData);
             const isUserExists = otpData.isUserExists;
-    
-            // if (lastOtpRequestTime && !isNaN(lastOtpRequestTime) && currentTime - parseInt(lastOtpRequestTime) < 300000) {
-            //     alert('Try After Some time ......!');
-            //     setShowOtpField(false);
-            //     return;
-            // }
-    
-            // check whether user exist or not
-            if (isUserExists) {
 
-                // check the time whether less than 5 mins...
-                if (lastOtpRequestTime && !isNaN(lastOtpRequestTime) && currentTime - parseInt(lastOtpRequestTime) < 300000) {
-                    console.log("inside timing ")
-                    alert('Try After Some time ......!');
-                    setShowOtpField(false);
-                    return;
-                }
-                const otp = otpData.otp;
-                const otpExpirationTime = Math.floor(otpData.otpExpirationTime / 1000);
-    
-                console.log('OTP:', otp);
-                console.log('OTP Expiration Time:', otpExpirationTime);
-    
-                alert('If you are a Registered User, you will get an OTP.');
-    
-                setShowOtpField(true);
+            // check whether user exist or not
+            console.log('user ?? :: ', isUserExists)
+
+            // If user doesn't exist, display the message and return
+            if (!isUserExists && otpData.notRegisteredMessage) {
+                alert(otpData.notRegisteredMessage);
+                setShowOtpField(true);  // Hide OTP input field
                 setIsInputDisabled(true);
-    
-                // Update last OTP request time in localStorage
-                localStorage.setItem('lastOtpRequestTime', currentTime);
-    
-                startOtpTimer(otpExpirationTime);
-            } else {
-                alert('If you are a Registered User, you will get an OTP.');
-                setShowOtpField(true);
-                setIsInputDisabled(true);
+                console.log('notRegisteredMessage:', otpData.notRegisteredMessage);
+                return;
             }
+
+            // If the daily OTP limit has been exceeded
+            if (isUserExists && otpData.limitExceedMessage) {
+                alert(otpData.limitExceedMessage);
+                setShowOtpField(false);  // Hide OTP input field
+                setIsInputDisabled(true);
+                console.log('limitExceedMessage:', otpData.limitExceedMessage);
+                return;
+            }
+
+            // If last OTP request was made in the last 5 minutes
+            console.log('lastOtpRequestTime:', lastOtpRequestTime);
+            console.log('currentTime:', currentTime);
+            console.log('timeDifference:', currentTime - parseInt(lastOtpRequestTime));
+            if (isUserExists && lastOtpRequestTime && !isNaN(lastOtpRequestTime) && currentTime - parseInt(lastOtpRequestTime) < 300000) {
+                alert(otpData.errorMessage);
+                setShowOtpField(false);
+                setIsInputDisabled(true);
+                console.log('errorMessage:', otpData.errorMessage);
+                return;
+            }
+            console.log('messageSuccess:', otpData.messageSuccess);
+
+            // If OTP generation is allowed, handle the OTP data
+            const otp = otpData.otp;
+            const otpExpirationTime = Math.floor(otpData.otpExpirationTime / 1000);
+
+            console.log('OTP:', otp);
+            console.log('OTP Expiration Time:', otpExpirationTime);
+
+            alert(otpData.messageSuccess);
+            console.log("success message : ", otpData.messageSuccess)
+
+            setShowOtpField(true);
+            setIsInputDisabled(false);
+
+            // Update last OTP request time for the new mobile number in localStorage
+            localStorage.setItem(`lastOtpRequestTime_${mobileno}`, currentTime);
+
+            // Start OTP timer based on expiration time
+            startOtpTimer(otpExpirationTime);
         } catch (error) {
-            console.error('Error validating number:', error.response || error.message || error);
-            alert('An error occurred while validating the number.');
+            console.error('Error generating OTP:', error.response || error.message || error);
+            alert('An error occurred while generating OTP.');
         } finally {
             setLoading(false);
         }
     };
-    
-    
+ 
+
     const handleOtpChange = (index, event) => {
         const { value } = event.target
 
@@ -367,13 +386,15 @@ export default function DonorLogin() {
                                                     </div>
                                                 )}
                                             </div>
-                                            <button
-                                                type="button"
-                                                className="w-100 btn btn-primary-outline py-1"
-                                                onClick={handleValidate}
-                                            >
-                                                Validate
-                                            </button>
+                                            {!isOtpExpired && (
+                                                <button
+                                                    type="button"
+                                                    className="w-100 btn btn-primary-outline py-1"
+                                                    onClick={handleValidate}
+                                                >
+                                                    Validate
+                                                </button>
+                                            )}
 
                                         </div>
                                     )}

@@ -20,7 +20,7 @@ export default function DonorAdmin() {
     useEffect(() => {
 
         const mobileNoFromLocalStorage = localStorage.getItem('mobileNo');
-    
+
         if (mobileNoFromLocalStorage) {
 
             sessionStorage.setItem('mobileNo', mobileNoFromLocalStorage);

@@ -1,0 +1,137 @@
+.back .back_btn {
+    color: #154989;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.028px;
+    border: none;
+    text-decoration-line: underline;
+    background: transparent;
+}
+
+.toggle {
+    .toggle-list {
+        border-radius: 8px 0px 0px 8px;
+        border: 0.2px solid #e9e7e7;
+        border-right: none;
+        width: 48px;
+        height: 34px;
+    }
+
+    .toggle-table {
+        width: 48px;
+        height: 34px;
+        border-radius: 0px 8px 8px 0px;
+        border: 0.2px solid #e9e7e7;
+        border-left: none;
+        background: #FFF;
+    }
+}
+
+
+.search {
+
+    .search-input {
+        padding: 8px;
+        border-radius: 8px;
+        border: 1px solid #ECECEC;
+        background: #FFF;
+
+        .form-control {
+            border: none;
+            padding: 0;
+        }
+
+        .form-control:focus {
+            box-shadow: none;
+        }
+    }
+}
+
+// pagination............
+.pagination-container {
+
+    .ant-pagination {
+        justify-content: end;
+
+        .ant-pagination-item {
+            background-color: transparent;
+            color: #888;
+            font-size: 13px;
+        }
+
+        .ant-pagination-item-active {
+            color: #C0222B;
+            font-size: 14px;
+            border-radius: 4px;
+            background: rgba(192, 34, 43, 0.14);
+            border-color: transparent;
+        }
+    }
+
+    .ant-pagination-total-text {
+        color: #888;
+        font-size: 13px;
+    }
+}
+
+// donor certificate donor view..........
+
+.widgetTable {
+    margin-bottom: 20px;
+    border-radius: 5px;
+    background: #FFF;
+    .table {
+        thead {
+            tr th {
+                border-bottom: 1px solid #CECECE;
+                background: #E2E2E2;
+                padding: 0.425rem 1rem;
+                color: #1C1C1C;
+                font-size: 14px;
+                font-weight: 600;
+                border: 1px solid #CECECE;
+            }
+        }
+
+        tbody {
+            tr {
+                vertical-align: middle;
+
+                th {
+                    border-bottom: 1px solid #CECECE;
+                    background: #F8F8F8;
+                    color: #757575;
+                    font-size: 14px;
+                    padding: .7rem 1rem;
+                    font-weight: 400;
+                    color: #757575;
+                    font-size: 14px;
+                    border: 1px solid #CECECE;
+                }
+
+                td {
+                    border-bottom: 1px solid #CECECE;
+                    background: #F8F8F8;
+                    color: #757575;
+                    font-size: 14px;
+                    padding: .7rem 1rem;
+                    border: 1px solid #CECECE;
+
+                    span {
+                        color: #1C1C1C;
+                        font-size: 16px;
+                        font-weight: 600;
+                    }
+
+                    .btn-link {
+                        color: #C0222B;
+                        font-size: 15px;
+                        font-weight: 600;
+                        letter-spacing: 0.3px;
+                        text-decoration-line: underline;
+                    }
+                }
+            }
+        }
+    }
+}
