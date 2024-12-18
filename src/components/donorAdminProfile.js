@@ -51,45 +51,104 @@ export default function DonorAdminProfile() {
         console.log("step:", currentStep - 1)
     }
 
-    const handleSave = async () => {
-        try {
-            if (!validateFields()) {
-                alert("Please fix the errors in the form before saving.");
-                return;
-            }
+    // const handleSave = async () => {
+    //     try {
+    //         if (!validateFields()) {
+    //             alert("Please fix the errors in the form before saving.");
+    //             return;
+    //         }
 
-            // Make the API call
+    //         // Make the API call
+    //         const response = await axios.post(
+    //             `${BaseUrl}/eraktkosh/updateOrInsertDonorDetails`,
+    //             donorData.body,
+    //             {
+    //                 headers: {
+    //                     'Content-Type': 'application/json',
+    //                     // Include authorization token if needed
+    //                     // 'Authorization': `Bearer ${token}`,
+    //                 },
+    //             }
+    //         );
+
+    //         // Check the response
+    //         if (response.status === 200) {
+    //             alert('Data saved successfully!');
+    //         } else {
+    //             alert('Something went wrong. Please try again.');
+    //         }
+    //     } catch (error) {
+    //         // errors
+    //         console.error('Error saving data:', error);
+
+    //         if (error.response) {
+    //             alert(`Server error: ${error.response.data?.message || 'Failed to save data'}`);
+    //         } else if (error.request) {
+    //             alert('No response from server. Please check your connection.');
+    //         } else {
+    //             alert('An unexpected error occurred. Please try again.');
+    //         }
+    //     }
+    // };
+
+    const handleSave = async () => {
+        if (!validateFields()) {
+            alert("Please fix the errors in the form before saving.");
+            return;
+        }
+    
+        if (!donorData) {
+            console.error("Donor data is not set in state:", donorData);
+            alert("Donor data is missing. Unable to save.");
+            return;
+        }
+    
+        // Safely access fields
+        const portalDonorId = donorData.body?.mobileno;
+        const edonorPass = donorData.body?.donorPass;
+    
+        if (!portalDonorId || !edonorPass) {
+            alert(
+                `Missing fields:\n${!portalDonorId ? "- Mobile number\n" : ""}${
+                    !edonorPass ? "- Donor password" : ""
+                }`
+            );
+            console.error("Missing fields in donorData:", { portalDonorId, edonorPass });
+            return;
+        }
+    
+        try {
+            const completeDonorData = {
+                ...donorData.body,
+                portalDonorId,
+                edonorPass,
+            };
+    
+            console.log("Payload for API:", completeDonorData);
+    
             const response = await axios.post(
                 `${BaseUrl}/eraktkosh/updateOrInsertDonorDetails`,
-                donorData.body,
+                completeDonorData,
                 {
                     headers: {
-                        'Content-Type': 'application/json',
-                        // Include authorization token if needed
-                        // 'Authorization': `Bearer ${token}`,
+                        "Content-Type": "application/json",
                     },
                 }
             );
-
-            // Check the response
+    
             if (response.status === 200) {
-                alert('Data saved successfully!');
+                console.log("API response:", response.data);
+                alert("Data saved successfully!");
             } else {
-                alert('Something went wrong. Please try again.');
+                console.error("Unexpected response:", response.status, response.data);
+                alert("Something went wrong. Please try again.");
             }
         } catch (error) {
-            // errors
-            console.error('Error saving data:', error);
-
-            if (error.response) {
-                alert(`Server error: ${error.response.data?.message || 'Failed to save data'}`);
-            } else if (error.request) {
-                alert('No response from server. Please check your connection.');
-            } else {
-                alert('An unexpected error occurred. Please try again.');
-            }
+            console.error("Error saving data:", error);
+            alert("Failed to save data. Please try again later.");
         }
     };
+    
 
     const validateFields = () => {
         const newErrors = {}
@@ -260,7 +319,7 @@ export default function DonorAdminProfile() {
                                     <label htmlFor="exampleInputEmail1" className="form-label mb-1">Blood Group</label>
                                     <Space wrap>
                                         <Select
-                                            value={donorData.body?.bloodGroup || undefined}
+                                            value={donorData.body?.bloodGroupName || undefined}
                                             style={{ width: '100%' }}
                                             onChange={value => {
                                                 console.log('Selected Blood group:', value);
@@ -268,7 +327,7 @@ export default function DonorAdminProfile() {
                                                     ...prevData,
                                                     body: { 
                                                         ...prevData.body,
-                                                        bloodGroup: value,
+                                                        bloodGroupName: value,
                                                     },
                                                 }));
                                             }}
@@ -519,13 +578,13 @@ export default function DonorAdminProfile() {
                                             placeholder='Enter Your City/ Village'
                                             className="form-control"
                                             id="donorCity"
-                                            value={donorData.body?.donorCity || ''}
+                                            value={donorData.body?.edonorCity || ''}
                                             onChange={e =>
                                                 setDonorData({
                                                     ...donorData,
                                                     body: {
                                                         ...donorData.body,
-                                                        donorCity: e.target.value,
+                                                        edonorCity: e.target.value,
                                                     },
                                                 })
                                             }
