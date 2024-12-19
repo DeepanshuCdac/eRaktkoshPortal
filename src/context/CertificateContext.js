@@ -10,6 +10,7 @@ export const useCertificate = () => {
 
 export const CertificateProvider = ({ children }) => {
     const [certificateData, setCertificateData] = useState(null);
+    const [certificateDataLength, setCertificateDataLength] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -19,6 +20,7 @@ export const CertificateProvider = ({ children }) => {
             console.log("Mobile number from session:", mobileNoFromSession);
 
             setCertificateData(null);
+            setCertificateDataLength(0);
             setLoading(true);
             setError(null);
 
@@ -39,8 +41,14 @@ export const CertificateProvider = ({ children }) => {
                     }
                 );
 
-                console.log("API response:", response.data);
+                console.log("Length:", response.data.length, "&",  "API response:", response.data);
+
                 setCertificateData(response.data);
+                if (Array.isArray(response.data)) {
+                    setCertificateDataLength(response.data.length); 
+                } else {
+                    setCertificateDataLength(0); 
+                }
             } catch (err) {
                 console.error('Error fetching certificate data:', err);
                 setError('Error fetching certificate data');
@@ -54,6 +62,7 @@ export const CertificateProvider = ({ children }) => {
 
     const value = {
         certificateData,
+        certificateDataLength,
         setCertificateData,
         loading,
         error,

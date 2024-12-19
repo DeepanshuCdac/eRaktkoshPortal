@@ -47,8 +47,8 @@ export default function Footer() {
               </div>
             </div>
             <div className="col-12 col-md-4 col-xl-3 mb-3">
-              <h5 className="heading mb-0">Web Information Manager</h5>
-              <h5 className="heading">Senior Director</h5>
+              <h5 className="heading mb-0">Want to Donate Blood</h5>
+              <h5 className="heading"></h5>
               <div className="d-flex flex-column">
                 <a
                   href="/BLDAHIMS/bloodbank/campSchedule.cnt"

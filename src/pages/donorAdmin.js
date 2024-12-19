@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 import DonorAdminHome from '../components/donorAdminHome';
 import DonorAdminProfile from '../components/donorAdminProfile';
 import { useDonor } from '../context/DonorContext';
+import { useCertificate } from '../context/CertificateContext';
 import DonationCertificate from '../components/donationCertificate';
 
 export default function DonorAdmin() {
+    const { certificateDataLength } = useCertificate();
     const { donorData, loading, error } = useDonor();
     const [activeTab, setActiveTab] = useState(0);
 
@@ -68,16 +70,16 @@ export default function DonorAdmin() {
                                 </div>
                                 <div className='d-flex'>
                                     <div className='d-flex flex-column align-items-center mx-5'>
-                                        <p className='mb-0 number'>{donorData.body?.isEraktKosh || 'N/A'}</p>
+                                        <p className='mb-0 number'>{ certificateDataLength || 'N/A'}</p>
                                         <p className='mb-0 text'>Rakt Score</p>
                                     </div>
                                     <div className='d-flex flex-column align-items-center mx-5'>
-                                        <p className='mb-0 number'>{donorData.body?.edonorbloodgroupName || 'N/A'}</p>
+                                        <p className='mb-0 number'>{donorData.body?.bloodGroupName || 'N/A'}</p>
                                         <p className='mb-0 text'>Blood Group</p>
                                     </div>
                                     <div className="divider"></div>
                                     <div className='d-flex flex-column align-items-center mx-5'>
-                                        <p className='mb-0 number'>{donorData.body?.totalDonations || 'N/A'}</p>
+                                        <p className='mb-0 number'>{certificateDataLength || 'N/A'}</p>
                                         <p className='mb-0 text'>Total Donations</p>
                                     </div>
                                     <div className='d-flex flex-column align-items-center mx-5'>

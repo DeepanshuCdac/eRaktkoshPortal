@@ -51,46 +51,6 @@ export default function DonorAdminProfile() {
         console.log("step:", currentStep - 1)
     }
 
-    // const handleSave = async () => {
-    //     try {
-    //         if (!validateFields()) {
-    //             alert("Please fix the errors in the form before saving.");
-    //             return;
-    //         }
-
-    //         // Make the API call
-    //         const response = await axios.post(
-    //             `${BaseUrl}/eraktkosh/updateOrInsertDonorDetails`,
-    //             donorData.body,
-    //             {
-    //                 headers: {
-    //                     'Content-Type': 'application/json',
-    //                     // Include authorization token if needed
-    //                     // 'Authorization': `Bearer ${token}`,
-    //                 },
-    //             }
-    //         );
-
-    //         // Check the response
-    //         if (response.status === 200) {
-    //             alert('Data saved successfully!');
-    //         } else {
-    //             alert('Something went wrong. Please try again.');
-    //         }
-    //     } catch (error) {
-    //         // errors
-    //         console.error('Error saving data:', error);
-
-    //         if (error.response) {
-    //             alert(`Server error: ${error.response.data?.message || 'Failed to save data'}`);
-    //         } else if (error.request) {
-    //             alert('No response from server. Please check your connection.');
-    //         } else {
-    //             alert('An unexpected error occurred. Please try again.');
-    //         }
-    //     }
-    // };
-
     const handleSave = async () => {
         if (!validateFields()) {
             alert("Please fix the errors in the form before saving.");
@@ -103,7 +63,7 @@ export default function DonorAdminProfile() {
             return;
         }
     
-        // Safely access fields
+        // access fields
         const portalDonorId = donorData.body?.mobileno;
         const edonorPass = donorData.body?.donorPass;
     
@@ -126,6 +86,7 @@ export default function DonorAdminProfile() {
     
             console.log("Payload for API:", completeDonorData);
     
+            // api call
             const response = await axios.post(
                 `${BaseUrl}/eraktkosh/updateOrInsertDonorDetails`,
                 completeDonorData,
@@ -373,28 +334,6 @@ export default function DonorAdminProfile() {
                                 <div className='d-flex flex-column'>
                                     <label htmlFor="exampleInputEmail1" className="form-label mb-1">Marital Status</label>
                                     <Space wrap >
-                                        {/* <Select
-                                            value={donorData.body?.maritalStatus || "Select it"}
-                                            style={{ width: '100%' }}
-                                            allowClear
-                                            onChange={value => {
-                                                console.log('Selected Marital Status:', value);
-                                                setDonorData(prevData => ({
-                                                    ...prevData,
-                                                    body: {
-                                                        ...prevData.body,
-                                                        maritalStatus: value,
-                                                    },
-                                                }));
-                                            }}
-                                            options={[
-                                                { value: 'Single', label: 'Single' },
-                                                { value: 'Married', label: 'Married' },
-                                            ]}
-                                            placeholder="Select it"
-                                        /> */}
-
-
                                         <Select
                                             value={donorData.body?.maritalStatus !== undefined ? donorData.body.maritalStatus : undefined}
                                             style={{ width: '100%' }}
@@ -578,13 +517,13 @@ export default function DonorAdminProfile() {
                                             placeholder='Enter Your City/ Village'
                                             className="form-control"
                                             id="donorCity"
-                                            value={donorData.body?.edonorCity || ''}
+                                            value={donorData.body?.donorCity || ''}
                                             onChange={e =>
                                                 setDonorData({
                                                     ...donorData,
                                                     body: {
                                                         ...donorData.body,
-                                                        edonorCity: e.target.value,
+                                                        donorCity: e.target.value,
                                                     },
                                                 })
                                             }
