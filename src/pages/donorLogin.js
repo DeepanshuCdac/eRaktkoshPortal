@@ -15,7 +15,6 @@ export default function DonorLogin() {
     const history = useHistory()
     const [timerId, setTimerId] = useState(null)
     const [isOtpExpired, setIsOtpExpired] = useState(false)
-    // const [lastOtpRequestTime, setLastOtpRequestTime] = useState(null);
 
     useEffect(() => {
         document.title = 'e-Raktkosh Donor Login'
@@ -170,9 +169,10 @@ export default function DonorLogin() {
         }
     }
 
-    const handleClick = () => {
-        history.push('/pages/portaldonorRegister')
-    }
+    const handleClick = async () => {
+       // Redirect to the registration page
+       history.push('/pages/portaldonorRegister');
+    };
 
     const handleCaptchaChange = (event) => {
         setCaptchaText(event.target.value)

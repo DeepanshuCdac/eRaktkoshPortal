@@ -1,19 +1,29 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Select, Space } from 'antd';
+import BaseUrl from '../utils/url';
+import axios from 'axios'
 
 export default function DonorRegister() {
 
     // -----------------------------------------
-    const [mobile, setMobile] = useState('+91 ');
+    const [mobile, setMobile] = useState('');
+    const [captchaImage, setCaptchaImage] = useState('');
+    const [captchaText, setCaptchaText] = useState('');
+    const [currentStep, setCurrentStep] = useState(1);
+    const [gender, setGender] = useState('');
+    const [state, setState] = useState('');
+    const [district, setdistrict] = useState('');
+
+
+    // ------------------------
 
     const handleInputChange = (e) => {
         const value = e.target.value;
 
-        if (value.startsWith('+91 ')) {
-            setMobile(value);
-        }
-        else if (!value.startsWith('+91')) {
-            setMobile('+91 ');
+        const numericValue = value.replace(/[^\d]/g, '');
+
+        if (numericValue.length <= 10) {
+            setMobile(numericValue);
         }
     };
 
@@ -21,14 +31,156 @@ export default function DonorRegister() {
 
     const totalSteps = 3;
 
-    const [currentStep, setCurrentStep] = useState(1);
+    // const handleSectionView = () => {
+    //     const nameInput = document.getElementById('nameInput').value.trim();
+    //     const ageInput = document.getElementById('ageInput').value.trim();
+    //     const mobileNoInput = mobile.trim();
+    //     const fatherInput = document.getElementById('fatherInput').value.trim();
+    //     const pincodeInput = document.getElementById('pincodeInput').value.trim();
+    //     const captchaInput = document.getElementById('username').value.trim();
 
-    const handleSectionView = () => {
-        setCurrentStep((prevStep) => Math.min(prevStep + 1, totalSteps))
-        console.log("step:", currentStep + 1);
-    }
+    //     if (!nameInput) {
+    //         alert("Please enter your name.");
+    //         return;
+    //     }
+    //     if (!ageInput) {
+    //         alert("Please enter your age.");
+    //         return;
+    //     }
+    //     if (!gender) {
+    //         alert("Please select your gender.");
+    //         return;
+    //     }
+    //     if (!mobileNoInput || !/^(\+91\s)?[1-9]{1}[0-9]{9}$/.test(mobileNoInput)) {
+    //         alert("Please enter a valid mobile number.");
+    //         return;
+    //     }
+    //     if (!fatherInput) {
+    //         alert("Please enter your father name.");
+    //         return;
+    //     }
+    //     if (!state) {
+    //         alert("Please select your state.");
+    //         return;
+    //     }
+    //     if (!district) {
+    //         alert("Please select your district.");
+    //         return;
+    //     }
+    //     if (!pincodeInput) {
+    //         alert("Please select your pin code.");
+    //         return;
+    //     }
+
+    //     if (!captchaInput) {
+    //         alert("Please enter the CAPTCHA.");
+    //         return;
+    //     }
+    //     if (captchaInput !== captchaText) {
+    //         alert("CAPTCHA does not match. Please try again.");
+    //         return;
+    //     }
+    //     // Move to the next step
+    //     setCurrentStep((prevStep) => Math.min(prevStep + 1, totalSteps));
+    //     console.log("Step:", currentStep + 1);
+    // };
 
     // --------------------------------------------
+
+
+    const handleSectionView = async () => {
+        const nameInput = document.getElementById('nameInput').value.trim();
+        const ageInput = document.getElementById('ageInput').value.trim();
+        const mobileNoInput = mobile.trim();
+        const fatherInput = document.getElementById('fatherInput').value.trim();
+        const pincodeInput = document.getElementById('pincodeInput').value.trim();
+        const captchaInput = document.getElementById('username').value.trim();
+
+        // Validation checks
+        if (!nameInput) {
+            alert("Please enter your name.");
+            return;
+        }
+        if (!ageInput) {
+            alert("Please enter your age.");
+            return;
+        }
+        if (!gender) {
+            alert("Please select your gender.");
+            return;
+        }
+        if (!mobileNoInput || !/^[1-9]{1}[0-9]{9}$/.test(mobileNoInput)) {
+            alert("Please enter a valid mobile number.");
+            return;
+        }
+        if (!fatherInput) {
+            alert("Please enter your father's name.");
+            return;
+        }
+        if (!state) {
+            alert("Please select your state.");
+            return;
+        }
+        if (!district) {
+            alert("Please select your district.");
+            return;
+        }
+        if (!pincodeInput) {
+            alert("Please select your pin code.");
+            return;
+        }
+        if (!captchaInput) {
+            alert("Please enter the CAPTCHA.");
+            return;
+        }
+        if (captchaInput !== captchaText) {
+            alert("CAPTCHA does not match. Please try again.");
+            return;
+        }
+
+        try {
+            const response = await generateOtp(mobileNoInput);
+            
+            if (response.status === 200) {
+                // OTP successfully generated
+                alert("OTP sent successfully!");
+            } else {
+                // Handle error if OTP generation fails based on the response data
+                alert("Failed to generate OTP. Please try again.");
+            }
+        } catch (error) {
+            console.error("Error generating OTP:", error);
+            alert("An error occurred. Please try again.");
+        }
+        // Move to the next step
+        setCurrentStep((prevStep) => Math.min(prevStep + 1, totalSteps));
+        console.log("Step:", currentStep + 1);
+    };
+
+    // The generateOtp function using axios
+    const generateOtp = async (mobileNo) => {
+        try {
+            const response = await axios.post(
+                `${BaseUrl}/eraktkosh/generateOtp`,
+                {
+                    mobileNumber: mobileNo, // Send mobile number in JSON body
+                },
+                {
+                    headers: {
+                        'Content-Type': 'application/json', // Explicitly set the content type
+                    },
+                }
+            );
+            return response;
+        } catch (error) {
+            console.error("Error generating OTP:", error);
+            throw new Error("Error generating OTP");
+        }
+    };
+
+
+
+
 
     const otpRefs = useRef([]);
 
@@ -36,19 +188,36 @@ export default function DonorRegister() {
         const { value } = event.target;
 
         if (/^\d$/.test(value)) {
-            otpRefs.current[index].value = value; // Update value to ensure only a single digit
+            otpRefs.current[index].value = value;
 
-            // Move to next input if there is next input
             if (index < otpRefs.current.length - 1) {
                 otpRefs.current[index + 1].focus();
             }
         } else if (value === '') {
-            // If value is empty move to previous input if there is previous input
             if (index > 0) {
                 otpRefs.current[index - 1].focus();
             }
         }
     };
+
+    // Fetch Captcha data
+    const fetchCaptcha = async () => {
+        try {
+            const response = await axios.get(`${BaseUrl}/eraktkosh/generateCaptchaforRegistration`);
+            const data = response.data;
+
+            setCaptchaImage(data.captchaImage);
+            setCaptchaText(data.captchaText);
+
+            console.log('CAPTCHA fetched:', data);
+        } catch (error) {
+            console.error('Error fetching CAPTCHA:', error);
+        }
+    };
+
+    useEffect(() => {
+        fetchCaptcha();
+    }, []);
 
     // --------------------------------------------
 
@@ -74,7 +243,6 @@ export default function DonorRegister() {
                                                     </div>
                                                 </div>
                                             </div>
-
                                             <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                                                 <div className="mb-3">
                                                     <div>
@@ -86,13 +254,13 @@ export default function DonorRegister() {
                                                     </div>
                                                 </div>
                                             </div>
-
                                             <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                                                 <div className='d-flex flex-column'>
-                                                    <label for="exampleInputEmail1" className="form-label mb-1">Gender</label>
+                                                    <label htmlFor="genderInput" className="form-label mb-1">Gender</label>
                                                     <Space wrap >
                                                         <Select
-                                                            defaultValue="select it"
+                                                            value={gender}
+                                                            onChange={setGender}
                                                             style={{
                                                                 width: '100%',
                                                             }}
@@ -107,68 +275,62 @@ export default function DonorRegister() {
                                                                     label: 'Female',
                                                                 },
                                                                 {
-                                                                    value: 'Others',
-                                                                    label: 'Others',
+                                                                    value: 'Other',
+                                                                    label: 'Other',
                                                                 },
                                                             ]}
-                                                            placeholder="select it"
+                                                            placeholder="Select Gender"
                                                         />
                                                     </Space>
                                                 </div>
                                             </div>
-
                                             <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                                                 <div className="mb-3">
                                                     <label htmlFor="mobileNoInput" className="form-label mb-1">Mobile No.</label>
                                                     <img src="assets/images/mendate.png" alt="" />
                                                     <div className="input-group p-0">
-                                                        <input type="text" value={mobile} onChange={handleInputChange} className="form-control" placeholder='+91' id="mobileNoInput" />
+                                                        <input type="text" value={mobile} onChange={handleInputChange} className="form-control" placeholder='Enter Your Number' id="mobileNoInput" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+                                                <div className="mb-3">
+                                                    <div>
+                                                        <label htmlFor="fatherInput" className="form-label mb-1">Father Name</label>
+                                                        <img src="assets/images/mendate.png" alt="" />
+                                                    </div>
+                                                    <div className="input-group p-0">
+                                                        <input type="text" className="form-control" placeholder='Type Your Father Name' id="fatherInput" />
                                                     </div>
                                                 </div>
                                             </div>
 
                                             <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                                                 <div className="mb-3">
-                                                    <label htmlFor="mobileNoInput" className="form-label mb-1">Father Name</label>
-                                                    <img src="assets/images/mendate.png" alt="" />
+                                                    <div>
+                                                        <label htmlFor="emailInput" className="form-label mb-1">Email</label>
+                                                        {/* <img src="assets/images/mendate.png" alt="" /> */}
+                                                    </div>
                                                     <div className="input-group p-0">
-                                                        <input type="text" className="form-control" placeholder='Type Your Father Name' id="mobileNoInput" />
+                                                        <input type="text" className="form-control" placeholder='Enter Your Email' id="emailInput" />
                                                     </div>
                                                 </div>
                                             </div>
-
-                                            <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
-                                                <div className="mb-3">
-                                                    <label htmlFor="mobileNoInput" className="form-label mb-1">Email</label>
-                                                    <img src="assets/images/mendate.png" alt="" />
-                                                    <div className="input-group p-0">
-                                                        <input type="text" className="form-control" placeholder='Enter Your Email ID' id="mobileNoInput" />
-                                                    </div>
-                                                </div>
-                                            </div>
-
                                             <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                                                 <div className='d-flex flex-column'>
-                                                    <label for="exampleInputEmail1" className="form-label mb-1">State</label>
+                                                    <label htmlFor="stateInput" className="form-label mb-1">State</label>
                                                     <Space wrap >
                                                         <Select
-                                                            defaultValue="Select State"
+                                                            value={state}
+                                                            onChange={setState}
                                                             style={{
                                                                 width: '100%',
                                                             }}
-
+                                                            allowClear
                                                             options={[
                                                                 {
-                                                                    value: 'Maharashtra',
-                                                                    label: 'Maharashtra',
-                                                                },
-                                                                {
-                                                                    value: 'Goa',
-                                                                    label: 'Goa',
-                                                                },
-                                                                {
-                                                                    value: 'Haryana',
-                                                                    label: 'Haryana',
+                                                                    value: 'haryana',
+                                                                    label: 'haryana',
                                                                 },
                                                             ]}
                                                             placeholder="Select State"
@@ -179,50 +341,45 @@ export default function DonorRegister() {
 
                                             <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                                                 <div className='d-flex flex-column'>
-                                                    <label for="exampleInputEmail1" className="form-label mb-1">District</label>
+                                                    <label htmlFor="districtInput" className="form-label mb-1">District</label>
                                                     <Space wrap >
                                                         <Select
-                                                            defaultValue="Select District"
+                                                            value={district}
+                                                            onChange={setdistrict}
                                                             style={{
                                                                 width: '100%',
                                                             }}
-
+                                                            allowClear
                                                             options={[
                                                                 {
-                                                                    value: 'Ghaziabad',
-                                                                    label: 'Ghaziabad',
-                                                                },
-                                                                {
-                                                                    value: 'Faridabad',
-                                                                    label: 'Faridabad',
-                                                                },
-                                                                {
-                                                                    value: 'Noida',
-                                                                    label: 'Noida',
+                                                                    value: 'noida',
+                                                                    label: 'noida',
                                                                 },
                                                             ]}
-                                                            placeholder="Select District"
+                                                            placeholder="Select district"
                                                         />
                                                     </Space>
                                                 </div>
                                             </div>
-
                                             <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                                                 <div className="mb-3">
-                                                    <label htmlFor="mobileNoInput" className="form-label mb-1">Pincode</label>
-                                                    <img src="assets/images/mendate.png" alt="" />
+                                                    {/* <div> */}
+                                                    <label htmlFor="addressInput" className="form-label mb-1">Address</label>
+                                                    {/* <img src="assets/images/mendate.png" alt="" /> */}
+                                                    {/* </div> */}
                                                     <div className="input-group p-0">
-                                                        <input type="text" className="form-control" placeholder='Enter Your Pincode' id="mobileNoInput" />
+                                                        <input type="text" className="form-control" placeholder='Type Your Address' id="addressInput" />
                                                     </div>
                                                 </div>
                                             </div>
-
                                             <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                                                 <div className="mb-3">
-                                                    <label htmlFor="mobileNoInput" className="form-label mb-1">Address</label>
-                                                    <img src="assets/images/mendate.png" alt="" />
+                                                    <div>
+                                                        <label htmlFor="pincodeInput" className="form-label mb-1">Pin Code</label>
+                                                        <img src="assets/images/mendate.png" alt="" />
+                                                    </div>
                                                     <div className="input-group p-0">
-                                                        <input type="text" className="form-control" placeholder='Enter Your Address' id="mobileNoInput" />
+                                                        <input type="number" className="form-control" placeholder='Type Your Pin Code' id="pincodeInput" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -236,11 +393,19 @@ export default function DonorRegister() {
                                 <div className="row flex-column align-items-center justify-content-center mb-3 mt-4">
                                     <div className="col-xl-4">
                                         <div className="row align-items-center mb-3 justify-content-center">
-                                            <div className="col-xl-2">
+                                            {/* <div className="col-xl-2">
                                                 <img className='' style={{ cursor: 'pointer' }} src="assets/images/refresh.png" alt="" />
-                                            </div>
-                                            <div className="col-xl-2">
-                                                <p className='mb-0'>captcha</p>
+                                            </div> */}
+                                            <div className="col-xl-4 text-center">
+                                                {/* captcha Image */}
+                                                {captchaImage && (
+                                                    <img
+                                                        src={captchaImage}
+                                                        alt="CAPTCHA"
+                                                        style={{ cursor: 'pointer' }}
+                                                        onClick={fetchCaptcha}
+                                                    />
+                                                )}
                                             </div>
                                             <div className="col-xl-6">
                                                 <div className="input-group">
@@ -288,7 +453,7 @@ export default function DonorRegister() {
                                                         ref={el => otpRefs.current[index] = el}
                                                         onChange={(event) => handleOtpChange(index, event)}
                                                         className={`otp-field ${index > 0 ? '' : ''}`}
-                                                        autoFocus={index === 0} 
+                                                        autoFocus={index === 0}
                                                     />
                                                 ))}
                                             </div>

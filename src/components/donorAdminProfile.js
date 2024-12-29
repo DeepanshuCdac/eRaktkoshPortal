@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import ProgressBar from './progressBar'
 import { Select, Space } from 'antd'
 import { useDonor } from '../context/DonorContext'
@@ -8,11 +8,14 @@ import BaseUrl from '../utils/url.js';
 export default function DonorAdminProfile() {
 
     const { donorData, setDonorData } = useDonor()
-
-    const totalSteps = 3
-
     const [currentStep, setCurrentStep] = useState(1)
     const [errors, setErrors] = useState({})
+
+    useEffect(() => {
+        document.title = 'e-Raktkosh Manage Donor Details'
+    }, [])
+
+    const totalSteps = 3
 
     const genderMap = {
         M: 'Male',
