@@ -4,11 +4,37 @@ import DonorAdminProfile from '../components/donorAdminProfile';
 import { useDonor } from '../context/DonorContext';
 import { useCertificate } from '../context/CertificateContext';
 import DonationCertificate from '../components/donationCertificate';
+import BloodAvailabiltySearch from '../publicPages/bloodAvailabilitySearch';
 
 export default function DonorAdmin() {
-    const { certificateDataLength } = useCertificate();
-    const { donorData, loading, error } = useDonor();
+    const { certificateDataLength, fetchCertificateData } = useCertificate();
+    const { donorData, loading, error, fetchDonorData } = useDonor();
     const [activeTab, setActiveTab] = useState(0);
+
+    const isTokenValid = (token) => {
+        if (!token) return false;
+
+        try {
+            const payload = JSON.parse(atob(token.split('.')[1])); 
+            const currentTime = Math.floor(Date.now() / 1000); 
+            return payload.exp > currentTime; 
+        } catch (e) {
+            console.error('Invalid token format:', e);
+            return false;
+        }
+    };
+
+    useEffect(() => {
+        const token = sessionStorage.getItem('authToken');
+        if (!isTokenValid(token)) {
+            sessionStorage.clear();
+            alert('Session expired. Please log in again.');
+             window.location.href = '/#/pages/portalDonorLogin'
+        } else {
+            fetchDonorData();
+            fetchCertificateData();
+        }
+    }, []);
 
     const handleTabClick = (index) => {
         setActiveTab(index);
@@ -17,20 +43,7 @@ export default function DonorAdmin() {
 
     const setDonationCertificateTab = () => {
         handleTabClick(2);
-    }
-
-    useEffect(() => {
-
-        const mobileNoFromLocalStorage = localStorage.getItem('mobileNo');
-
-        if (mobileNoFromLocalStorage) {
-
-            sessionStorage.setItem('mobileNo', mobileNoFromLocalStorage);
-            console.log("Mobile number transferred from localStorage to sessionStorage:", mobileNoFromLocalStorage);
-        } else {
-            console.log("No mobile number found in localStorage.");
-        }
-    }, []);
+    };
 
     useEffect(() => {
         const savedTab = localStorage.getItem('ActiveTab');
@@ -38,6 +51,11 @@ export default function DonorAdmin() {
             setActiveTab(parseInt(savedTab, 10));
         }
     }, []);
+
+    const handleLogout = () => {
+        sessionStorage.clear();
+        window.location.href = '/#/pages/portalDonorLogin'
+    };
 
     return (
         <>
@@ -47,7 +65,7 @@ export default function DonorAdmin() {
                         <a href="javascript:void(0)">
                             <img src="assets/images/main-icon1.png" className="img-fluid" alt="mainIcon" />
                         </a>
-                        <a href='javascript:void(0)' className='mb-0 logout'>Logout</a>
+                        <a onClick={handleLogout} href='javascript:void(0)' className='mb-0 logout'>Logout</a>
                     </div>
                 </div>
             </header>
@@ -70,7 +88,7 @@ export default function DonorAdmin() {
                                 </div>
                                 <div className='d-flex'>
                                     <div className='d-flex flex-column align-items-center mx-5'>
-                                        <p className='mb-0 number'>{ certificateDataLength || 'N/A'}</p>
+                                        <p className='mb-0 number'>{certificateDataLength || 'N/A'}</p>
                                         <p className='mb-0 text'>Rakt Score</p>
                                     </div>
                                     <div className='d-flex flex-column align-items-center mx-5'>
@@ -129,18 +147,7 @@ export default function DonorAdmin() {
                                     {activeTab === 0 && <DonorAdminHome onViewAllClick={setDonationCertificateTab} />}
                                     {activeTab === 1 && <DonorAdminProfile />}
                                     {activeTab === 2 && <DonationCertificate onBack={() => handleTabClick(0)} />}
-                                    {activeTab === 3 && (
-                                        <div className="tabContent p-3 mb-3">
-                                            <div className='row'>
-                                                <div className="col-xl-8 col-lg-8 col-12">
-                                                    <div className="tabContainer">
-                                                        <p className="ques mb-2">ameya</p>
-                                                        <p className="ans">gghfg</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    )}
+                                    {activeTab === 3 &&  <BloodAvailabiltySearch/>}
                                 </div>
                             </div>
                         </div>

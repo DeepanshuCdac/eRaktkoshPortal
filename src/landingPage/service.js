@@ -17,7 +17,7 @@ export default function Service() {
       imgSrc: "assets/images/blood-search.png",
       altText: "Blood Availability Search",
       cardText: "Blood Availability Search",
-      url: '/BLDAHIMS/bloodbank/stockAvailability.cnt'
+      url: '#/publicPages/bloodAvailabilitySearch'
     },
     {
       imgSrc: "assets/images/blood-directory.png",
@@ -35,7 +35,7 @@ export default function Service() {
       imgSrc: "assets/images/donor-login.png",
       altText: "Donor Login",
       cardText: "Donor Login",
-      url: '/BLDAHIMS/bloodbank/portalDonorLogin.cnt'
+      url: '#/pages/portalDonorLogin'
     },
     {
       imgSrc: "assets/images/register-camp.png",

@@ -17,6 +17,11 @@ export default function DonorAdminProfile() {
 
     const totalSteps = 3
 
+    const mobileNoFromSession = sessionStorage.getItem('mobileNo');
+    const tokenFromSession = sessionStorage.getItem('authToken');
+    console.log("Mobile number inside profile : ", mobileNoFromSession);
+    console.log("Token inside profile:", tokenFromSession);
+
     const genderMap = {
         M: 'Male',
         F: 'Female',
@@ -41,7 +46,6 @@ export default function DonorAdminProfile() {
         return `${year}-${month}-${day}`;
     };
 
-
     const handleNextStep = () => {
         if (validateFields()) {
             setCurrentStep((prevStep) => Math.min(prevStep + 1, totalSteps))
@@ -59,36 +63,35 @@ export default function DonorAdminProfile() {
             alert("Please fix the errors in the form before saving.");
             return;
         }
-    
+
         if (!donorData) {
             console.error("Donor data is not set in state:", donorData);
             alert("Donor data is missing. Unable to save.");
             return;
         }
-    
+
         // access fields
         const portalDonorId = donorData.body?.mobileno;
         const edonorPass = donorData.body?.donorPass;
-    
+
         if (!portalDonorId || !edonorPass) {
             alert(
-                `Missing fields:\n${!portalDonorId ? "- Mobile number\n" : ""}${
-                    !edonorPass ? "- Donor password" : ""
+                `Missing fields:\n${!portalDonorId ? "- Mobile number\n" : ""}${!edonorPass ? "- Donor password" : ""
                 }`
             );
             console.error("Missing fields in donorData:", { portalDonorId, edonorPass });
             return;
         }
-    
+
         try {
             const completeDonorData = {
                 ...donorData.body,
                 portalDonorId,
                 edonorPass,
             };
-    
+
             console.log("Payload for API:", completeDonorData);
-    
+
             // api call
             const response = await axios.post(
                 `${BaseUrl}/eraktkosh/updateOrInsertDonorDetails`,
@@ -96,10 +99,11 @@ export default function DonorAdminProfile() {
                 {
                     headers: {
                         "Content-Type": "application/json",
+                        Authorization: `Bearer ${tokenFromSession}`
                     },
                 }
             );
-    
+
             if (response.status === 200) {
                 console.log("API response:", response.data);
                 alert("Data saved successfully!");
@@ -112,7 +116,7 @@ export default function DonorAdminProfile() {
             alert("Failed to save data. Please try again later.");
         }
     };
-    
+
 
     const validateFields = () => {
         const newErrors = {}
@@ -289,7 +293,7 @@ export default function DonorAdminProfile() {
                                                 console.log('Selected Blood group:', value);
                                                 setDonorData(prevData => ({
                                                     ...prevData,
-                                                    body: { 
+                                                    body: {
                                                         ...prevData.body,
                                                         bloodGroupName: value,
                                                     },
@@ -641,7 +645,6 @@ export default function DonorAdminProfile() {
                                         />
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>
@@ -658,7 +661,6 @@ export default function DonorAdminProfile() {
                             Next
                         </button>
                     )}
-
                     {currentStep === 3 && (
                         <button onClick={handleSave} className="btn btn-primary-signIn" style={{ padding: '7px 136px' }}>
                             Save

@@ -16,6 +16,8 @@ import DonorRegister from "./pages/donorRegister.js";
 import DonorAdmin from "./pages/donorAdmin";
 import { DonorProvider } from "./context/DonorContext.js";
 import { CertificateProvider } from "./context/CertificateContext.js";
+import ProtectedRoute from "./ProtectedRoute/ProtectedRoute.js";
+import BloodAvailabiltySearch from "./publicPages/bloodAvailabilitySearch.js";
 
 function App() {
   return (
@@ -36,11 +38,13 @@ function AppContent() {
 
   return (
     <>
-      {/* Hide Navbar only on the specific admin page */}
       {location.pathname !== '/pages/portaldonorAdmin' && <Navbar />}
 
       <Switch>
-        {/* Donor portal routes */}
+        <Route path="/publicPages/bloodAvailabilitySearch">
+          <BloodAvailabiltySearch />
+        </Route>
+
         <Route path="/pages/portalDonorLogin">
           <DonorLogin />
         </Route>
@@ -50,10 +54,11 @@ function AppContent() {
         </Route>
 
         <Route path="/pages/portaldonorAdmin">
+        <ProtectedRoute>
           <DonorAdmin />
+          </ProtectedRoute>
         </Route>
 
-        {/* Main landing page routes */}
         <Route path="/">
           <HeroComponent />
           <DonorCount />

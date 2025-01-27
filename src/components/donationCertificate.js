@@ -11,10 +11,9 @@ const DonationCertificate = ({ onBack }) => {
   const [view, setView] = useState("list");
   const [searchTerm, setSearchTerm] = useState("");
 
-  const [currentPage, setCurrentPage] = useState(1); // State for current page
-  const pageSize = view === "list" ? 9 : 4;  // Number of items per page
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = view === "list" ? 9 : 4;
 
-  // Check if the certificateData is an array and contains data
   const isDataValid = Array.isArray(certificateData) && certificateData.length > 0;
 
   const filteredData = isDataValid
@@ -24,12 +23,10 @@ const DonationCertificate = ({ onBack }) => {
         ? dayjs(item.date, "DD-MMM-YY").format("DD-MMM-YY").includes(searchTerm)
         : false
 
-      // matching blood bank name or donation date....
       return bloodbankMatches || donationDateMatches;
     })
     : [];
 
-  // pagination data ...
   const paginatedData = filteredData.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
   const handlePageChange = (page) => {
@@ -39,24 +36,20 @@ const DonationCertificate = ({ onBack }) => {
   function abbreviateText(text) {
     const maxLength = 24;
 
-    // if the text is in limit return same
     if (text.length <= maxLength) {
       return text;
     }
-    // else truncate and add ellipsis
     return `${text.slice(0, maxLength - 3)}...`;
   }
 
   return (
     <>
-
       <div className="back mb-3">
         <button className="back_btn" onClick={onBack}>
           <img src="assets/images/backBtn.png" alt="" />
           Back
         </button>
       </div>
-
       <div className="certificate-functions mb-2 d-flex align-items-center justify-content-between">
         <h4 className="widgeHeader mb-0">Donor Certificate</h4>
         <div className="d-flex">
@@ -93,27 +86,11 @@ const DonationCertificate = ({ onBack }) => {
             {/* tabular view */}
             <div className={`toggle-table d-flex align-items-center justify-content-center ${view === "table" ? "active" : ""}`}
               onClick={() => setView("table")}
-              style={{
-                cursor: "pointer",
-                backgroundColor: view === "table" ? "#C0222B" : "#fff"
-              }}
-            >
-              <img
-                className="me-2"
-                src="assets/images/toggle-inactive.png"
-                alt="Active Toggle"
-                style={{
-                  display: view === "table" ? "block" : "none",
-                  filter: "invert(100%) brightness(200%)"
-                }}
-              />
-              <img
-                src="assets/images/toggle-table.png"
-                alt="Table Icon"
-                style={{
-                  filter: view === "table" ? "invert(100%) brightness(200%)" : "none"
-                }}
-              />
+              style={{ cursor: "pointer", backgroundColor: view === "table" ? "#C0222B" : "#fff" }}>
+              <img className="me-2" src="assets/images/toggle-inactive.png" alt="Active Toggle"
+                style={{ display: view === "table" ? "block" : "none", filter: "invert(100%) brightness(200%)" }} />
+              <img src="assets/images/toggle-table.png" alt="Table Icon"
+                style={{ filter: view === "table" ? "invert(100%) brightness(200%)" : "none" }} />
             </div>
           </div>
           <div className="ms-1 search d-flex align-items-center">
@@ -221,10 +198,9 @@ const DonationCertificate = ({ onBack }) => {
         </div>
       )}
 
-
       {/* Ant Design Pagination */}
       <div className="pagination-container mt-4 mb-3">
-      <Pagination
+        <Pagination
           total={filteredData.length}
           pageSize={pageSize}
           current={currentPage}
@@ -237,6 +213,5 @@ const DonationCertificate = ({ onBack }) => {
     </>
   )
 }
-
 
 export default DonationCertificate;

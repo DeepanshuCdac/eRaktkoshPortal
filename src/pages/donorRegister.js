@@ -13,6 +13,17 @@ export default function DonorRegister() {
     const [gender, setGender] = useState('');
     const [state, setState] = useState('');
     const [district, setdistrict] = useState('');
+    const [otpExpiry, setOtpExpiry] = useState(5 * 60); // Initial OTP expiry time in seconds
+
+    useEffect(() => {
+        if (otpExpiry <= 0) return; // Stop the timer when it reaches 0
+
+        const timer = setInterval(() => {
+            setOtpExpiry((prev) => prev - 1);
+        }, 1000);
+
+        return () => clearInterval(timer); // Cleanup on unmount or when timer stops
+    }, [otpExpiry]);
 
 
     // ------------------------
@@ -27,66 +38,43 @@ export default function DonorRegister() {
         }
     };
 
+
+    // -------------------------------------
+
+    // const startOtpTimer = (expiryTime) => {
+    //     const currentTime = Math.floor(Date.now() / 1000);
+    //     const timeRemaining = expiryTime - currentTime;
+
+    //     if (timeRemaining > 0) {
+    //         setOtpExpiry(timeRemaining);
+    //         setIsOtpExpired(false);
+
+    //         if (timerId) {
+    //             clearInterval(timerId);
+    //         }
+
+    //         const newTimerId = setInterval(() => {
+    //             setOtpExpiry(prev => {
+    //                 if (prev <= 1) {
+    //                     clearInterval(newTimerId);
+    //                     setIsOtpExpired(true);
+    //                     return 0;
+    //                 }
+    //                 return prev - 1;
+    //             });
+    //         }, 1000);
+
+    //         setTimerId(newTimerId);
+    //     } else {
+    //         setIsOtpExpired(true);
+    //     }
+    // };
+
     // -----------------------------------------
 
     const totalSteps = 3;
 
-    // const handleSectionView = () => {
-    //     const nameInput = document.getElementById('nameInput').value.trim();
-    //     const ageInput = document.getElementById('ageInput').value.trim();
-    //     const mobileNoInput = mobile.trim();
-    //     const fatherInput = document.getElementById('fatherInput').value.trim();
-    //     const pincodeInput = document.getElementById('pincodeInput').value.trim();
-    //     const captchaInput = document.getElementById('username').value.trim();
-
-    //     if (!nameInput) {
-    //         alert("Please enter your name.");
-    //         return;
-    //     }
-    //     if (!ageInput) {
-    //         alert("Please enter your age.");
-    //         return;
-    //     }
-    //     if (!gender) {
-    //         alert("Please select your gender.");
-    //         return;
-    //     }
-    //     if (!mobileNoInput || !/^(\+91\s)?[1-9]{1}[0-9]{9}$/.test(mobileNoInput)) {
-    //         alert("Please enter a valid mobile number.");
-    //         return;
-    //     }
-    //     if (!fatherInput) {
-    //         alert("Please enter your father name.");
-    //         return;
-    //     }
-    //     if (!state) {
-    //         alert("Please select your state.");
-    //         return;
-    //     }
-    //     if (!district) {
-    //         alert("Please select your district.");
-    //         return;
-    //     }
-    //     if (!pincodeInput) {
-    //         alert("Please select your pin code.");
-    //         return;
-    //     }
-
-    //     if (!captchaInput) {
-    //         alert("Please enter the CAPTCHA.");
-    //         return;
-    //     }
-    //     if (captchaInput !== captchaText) {
-    //         alert("CAPTCHA does not match. Please try again.");
-    //         return;
-    //     }
-    //     // Move to the next step
-    //     setCurrentStep((prevStep) => Math.min(prevStep + 1, totalSteps));
-    //     console.log("Step:", currentStep + 1);
-    // };
-
     // --------------------------------------------
-
 
     const handleSectionView = async () => {
         const nameInput = document.getElementById('nameInput').value.trim();
@@ -140,12 +128,13 @@ export default function DonorRegister() {
 
         try {
             const response = await generateOtp(mobileNoInput);
-            
+
             if (response.status === 200) {
-                // OTP successfully generated
-                alert("OTP sent successfully!");
+                // OTP generated
+                console.log(response.data.message)
+                alert(response.data.message, "OTP sent successfully!");
             } else {
-                // Handle error if OTP generation fails based on the response data
+                // if OTP generation fails 
                 alert("Failed to generate OTP. Please try again.");
             }
         } catch (error) {
@@ -157,17 +146,17 @@ export default function DonorRegister() {
         console.log("Step:", currentStep + 1);
     };
 
-    // The generateOtp function using axios
+    // generateOtp function 
     const generateOtp = async (mobileNo) => {
         try {
             const response = await axios.post(
-                `${BaseUrl}/eraktkosh/generateOtp`,
+                `${BaseUrl}/eraktkosh/generateOtpDonorRegistration`,
                 {
-                    mobileNumber: mobileNo, // Send mobile number in JSON body
+                    mobileNumber: mobileNo,
                 },
                 {
                     headers: {
-                        'Content-Type': 'application/json', // Explicitly set the content type
+                        'Content-Type': 'application/json', // set the content type
                     },
                 }
             );
@@ -177,10 +166,6 @@ export default function DonorRegister() {
             throw new Error("Error generating OTP");
         }
     };
-
-
-
-
 
     const otpRefs = useRef([]);
 
@@ -458,11 +443,23 @@ export default function DonorRegister() {
                                                 ))}
                                             </div>
                                         </div>
-                                        <div className='text-center'>
+                                        <div className="text-center">
                                             <p className="otpExpiry mb-1">OTP has been sent to your Mobile</p>
-                                            <p className="otpExpiry">
-                                                Your OTP will expire in <span className='timer'> 01:00</span> min
-                                            </p>
+                                            {otpExpiry > 0 ? (
+                                                <p className="otpExpiry">
+                                                    Your OTP will expire in{" "}
+                                                    <span className="timer">
+                                                        {Math.floor(otpExpiry / 60)
+                                                            .toString()
+                                                            .padStart(2, "0")}
+                                                        :
+                                                        {String(otpExpiry % 60).padStart(2, "0")}
+                                                    </span>{" "}
+                                                    min
+                                                </p>
+                                            ) : (
+                                                <p className="otpExpiry">Your OTP has expired. Please request a new one.</p>
+                                            )}
                                         </div>
                                         <button
                                             type="button"

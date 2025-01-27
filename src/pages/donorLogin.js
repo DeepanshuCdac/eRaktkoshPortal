@@ -92,13 +92,12 @@ export default function DonorLogin() {
             const otpData = JSON.parse(response.data.OtpData);
             const isUserExists = otpData.isUserExists;
 
-            // check whether user exist or not
             console.log('user ?? :: ', isUserExists)
 
             // If user doesn't exist, display the message and return
             if (!isUserExists && otpData.notRegisteredMessage) {
                 alert(otpData.notRegisteredMessage);
-                setShowOtpField(true);  // Hide OTP input field
+                setShowOtpField(true);
                 setIsInputDisabled(true);
                 console.log('notRegisteredMessage:', otpData.notRegisteredMessage);
                 return;
@@ -107,7 +106,7 @@ export default function DonorLogin() {
             // If the daily OTP limit has been exceeded
             if (isUserExists && otpData.limitExceedMessage) {
                 alert(otpData.limitExceedMessage);
-                setShowOtpField(false);  // Hide OTP input field
+                setShowOtpField(false);
                 setIsInputDisabled(true);
                 console.log('limitExceedMessage:', otpData.limitExceedMessage);
                 return;
@@ -126,7 +125,6 @@ export default function DonorLogin() {
             }
             console.log('messageSuccess:', otpData.messageSuccess);
 
-            // If OTP generation is allowed, handle the OTP data
             const otp = otpData.otp;
             const otpExpirationTime = Math.floor(otpData.otpExpirationTime / 1000);
 
@@ -139,10 +137,8 @@ export default function DonorLogin() {
             setShowOtpField(true);
             setIsInputDisabled(false);
 
-            // Update last OTP request time for the new mobile number in localStorage
             localStorage.setItem(`lastOtpRequestTime_${mobileno}`, currentTime);
 
-            // Start OTP timer based on expiration time
             startOtpTimer(otpExpirationTime);
         } catch (error) {
             console.error('Error generating OTP:', error.response || error.message || error);
@@ -151,7 +147,6 @@ export default function DonorLogin() {
             setLoading(false);
         }
     };
- 
 
     const handleOtpChange = (index, event) => {
         const { value } = event.target
@@ -170,8 +165,7 @@ export default function DonorLogin() {
     }
 
     const handleClick = async () => {
-       // Redirect to the registration page
-       history.push('/pages/portaldonorRegister');
+        history.push('/pages/portaldonorRegister');
     };
 
     const handleCaptchaChange = (event) => {
@@ -180,7 +174,6 @@ export default function DonorLogin() {
 
     const handleResendOtp = async () => {
         try {
-            // call regenerate OTP endpoint  
             const response = await axios.post(`${BaseUrl}/eraktkosh/regenerateOtp`, { mobileno });
             console.log('Resend OTP Response:', response.data)
 
@@ -230,36 +223,43 @@ export default function DonorLogin() {
             if (response.status === 200) {
                 console.log('Validation Response:', response);
 
-                setShowOtpField(false)
-                setIsInputDisabled(false)
+                const mobileNo = response.data?.userDetails?.body?.mobileno;
+                const token = response.data?.token;
 
-                // set mobile number in local..........
-                localStorage.setItem('mobileNo', mobileno);
-                console.log("Mobile number stored in localStorage:", localStorage.getItem("mobileNo"));
+                if (mobileNo && token) {
+                    console.log('Mobile No:', mobileNo);
+                    console.log('Token:', token);
 
-                // set mobile number in sessionStorage..........
-                sessionStorage.setItem('mobileNo', mobileno);
-                console.log("Mobile number stored in sessionStorage:", sessionStorage.getItem("mobileNo"));
+                    await new Promise((resolve) => {
+                        sessionStorage.setItem('mobileNo', mobileNo);
+                        sessionStorage.setItem('authToken', token);
+                        resolve();
+                    });
 
-                // construct url for new tab...........
-                const newTabUrl = `${window.location.origin}/#/pages/portaldonorAdmin?mobileNo=${mobileno}`;
+                    setShowOtpField(false);
+                    setIsInputDisabled(false);
 
-                setTimeout(() => {
+                    setTimeout(() => {
+                        setLoading(false);
+                        const newTabUrl = `${window.location.origin}/#/pages/portaldonorAdmin`;
+                        window.location.assign(newTabUrl);
+                    }, 1000);
+                } else {
+                    alert('Failed to fetch mobile number or token from response.');
                     setLoading(false);
-                    window.open(newTabUrl, '_blank', 'noopener,noreferrer');
-                }, 2000);
+                }
+            } else if (response.status === 401) {
+                sessionStorage.clear();
+                alert('Unauthorized access. Please try again.');
             } else {
                 alert(`Validation failed with status code: ${response.status}`);
                 console.log('Validate response:', response);
                 setLoading(false);
             }
         } catch (error) {
-
             if (error.response) {
                 switch (error.response.status) {
                     case 400:
-                        alert('Invalid OTP or CAPTCHA. Please try again.');
-                        break;
                     case 401:
                         alert('Invalid OTP or CAPTCHA. Please try again.');
                         break;
@@ -395,10 +395,8 @@ export default function DonorLogin() {
                                                     Validate
                                                 </button>
                                             )}
-
                                         </div>
                                     )}
-
                                     {!showOtpField && !loading && (
                                         <button
                                             type="button"
