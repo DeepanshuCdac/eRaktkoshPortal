@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState } from 'react';
 import axios from 'axios';
-import BaseUrl from '../utils/url.js';
+import {BaseUrl} from '../utils/url.js';
 
 const DonorContext = createContext();
 

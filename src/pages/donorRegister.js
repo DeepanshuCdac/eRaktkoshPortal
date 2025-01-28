@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Select, Space } from 'antd';
-import BaseUrl from '../utils/url';
+import {BaseUrl} from '../utils/url';
 import axios from 'axios'
 
 export default function DonorRegister() {

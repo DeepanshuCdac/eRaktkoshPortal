@@ -3,7 +3,7 @@ import ProgressBar from './progressBar'
 import { Select, Space } from 'antd'
 import { useDonor } from '../context/DonorContext'
 import axios from 'axios';
-import BaseUrl from '../utils/url.js';
+import {BaseUrl} from '../utils/url.js';
 
 export default function DonorAdminProfile() {
 
@@ -117,7 +117,6 @@ export default function DonorAdminProfile() {
         }
     };
 
-
     const validateFields = () => {
         const newErrors = {}
 
@@ -170,7 +169,6 @@ export default function DonorAdminProfile() {
                                         value={donorData.body?.edonorFName || ''}
                                         onChange={(e) => handleInputChange('edonorFName', e.target.value)}
                                     />
-
                                     {errors.edonorFName && <div className="form-text" style={{ color: '#C0222B' }}>{errors.edonorFName}</div>}
                                 </div>
                             </div>
@@ -345,12 +343,12 @@ export default function DonorAdminProfile() {
                                             value={donorData.body?.maritalStatus !== undefined ? donorData.body.maritalStatus : undefined}
                                             style={{ width: '100%' }}
                                             onChange={value => {
-                                                console.log('Selected Marital Status:', value); // Logs numeric value
+                                                console.log('Selected Marital Status:', value); 
                                                 setDonorData(prevData => ({
                                                     ...prevData,
                                                     body: {
                                                         ...prevData.body,
-                                                        maritalStatus: value, // Saves numeric value
+                                                        maritalStatus: value, 
                                                     },
                                                 }));
                                             }}
@@ -360,7 +358,6 @@ export default function DonorAdminProfile() {
                                             ]}
                                             placeholder="Select it"
                                         />
-
                                     </Space>
                                 </div>
                             </div>
@@ -574,7 +571,6 @@ export default function DonorAdminProfile() {
                                                 ]}
                                                 placeholder="Select Your State"
                                             />
-
                                         </Space>
                                     </div>
                                 </div>

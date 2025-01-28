@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 import axios from 'axios'
-import BaseUrl from '../utils/url'
+import {BaseUrl} from '../utils/url'
 
 export default function DonorLogin() {
     const [mobileno, setMobileNumber] = useState('')
@@ -243,7 +243,7 @@ export default function DonorLogin() {
                         setLoading(false);
                         const newTabUrl = `${window.location.origin}/#/pages/portaldonorAdmin`;
                         window.location.assign(newTabUrl);
-                    }, 1000);
+                    }, 100);
                 } else {
                     alert('Failed to fetch mobile number or token from response.');
                     setLoading(false);

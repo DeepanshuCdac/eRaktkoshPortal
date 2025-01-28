@@ -1,6 +1,6 @@
 import "./App.css";
 import React from "react";
-import { HashRouter, Switch, Route, useLocation } from 'react-router-dom';
+import { HashRouter as Router, Switch, Route, useLocation } from 'react-router-dom';
 import Navbar from "../src/landingPage/navbar.js";
 import Service from "../src/landingPage/service.js";
 import Aboutpage from "../src/landingPage/aboutPage.js";
@@ -18,17 +18,18 @@ import { DonorProvider } from "./context/DonorContext.js";
 import { CertificateProvider } from "./context/CertificateContext.js";
 import ProtectedRoute from "./ProtectedRoute/ProtectedRoute.js";
 import BloodAvailabiltySearch from "./publicPages/bloodAvailabilitySearch.js";
+import CampSchedule from "./publicPages/CampSchedule.js";
 
 function App() {
   return (
     <div className="App">
-      <HashRouter basename="/">
+      <Router basename="/">
         <DonorProvider>
           <CertificateProvider>
             <AppContent />
           </CertificateProvider>
         </DonorProvider>
-      </HashRouter>
+      </Router>
     </div>
   );
 }
@@ -45,6 +46,10 @@ function AppContent() {
           <BloodAvailabiltySearch />
         </Route>
 
+        <Route path="/publicPages/campSchedule">
+          <CampSchedule />
+        </Route>
+
         <Route path="/pages/portalDonorLogin">
           <DonorLogin />
         </Route>
@@ -54,8 +59,8 @@ function AppContent() {
         </Route>
 
         <Route path="/pages/portaldonorAdmin">
-        <ProtectedRoute>
-          <DonorAdmin />
+          <ProtectedRoute>
+            <DonorAdmin />
           </ProtectedRoute>
         </Route>
 
@@ -70,7 +75,7 @@ function AppContent() {
           <Benefits />
         </Route>
       </Switch>
-
+      {/* footer */}
       <Footer />
     </>
   );

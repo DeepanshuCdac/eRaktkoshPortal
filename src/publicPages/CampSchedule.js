@@ -4,19 +4,19 @@ import { Input } from 'antd';
 
 const { Search } = Input;
 
-const BloodAvailabiltySearch = () => {
+
+const CampSchedule = () => {
 
     useEffect(() => {
-        document.title = 'e-RaktKosh Blood Stock Availability'
+        document.title = 'e-RaktKosh Camp Schedule'
     }, [])
 
     return (
         <>
             <div className="page-wrapper">
                 <div className="container">
-                    <h2 className="header-page mb-3">Blood Stock Availability</h2>
+                    <h2 className="header-page mb-3">Nearest Blood Bank(BB)/ Blood Storage(BSU)</h2>
                     <div className="widget px-3 pt-3 pb-5 mb-3">
-                        <h4 className="widget-header text-center mb-4">Search Blood Stock</h4>
                         <div className="row">
                             <div className="col-xl-3 col-lg-3 col-md-6 col-sm-6 mb-2 mb-xl-0 mb-lg-0">
                                 <div className="">
@@ -210,4 +210,5 @@ const BloodAvailabiltySearch = () => {
         </>
     )
 }
-export default BloodAvailabiltySearch
+
+export default CampSchedule

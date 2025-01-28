@@ -79,15 +79,15 @@ export default function DonorAdmin() {
                                 <p className='mb-0 me-2 key'>Last Login:</p>
                                 <span className='mb-0 value'>{donorData.body?.isLastLogin || 'N/A'}</span>
                             </div>
-                            <div className="header-section p-4 d-flex w-100">
-                                <div className='d-flex align-items-center me-auto'>
+                            <div className="header-section p-4 d-xl-flex d-lg-flex w-100">
+                                <div className='d-xl-flex d-lg-flex d-md-flex align-items-center me-auto'>
                                     <img className='img-fluid' src="assets/images/user.png" alt="user-img" />
-                                    <div className='ms-2'>
+                                    <div className='ms-xl-2 ms-lg-2 ms-md-2 ms-0'>
                                         <p className='mb-0 greet'>Welcome <span className='greetName mb-0'>{donorData.body?.edonorFName || 'Donor'}</span>!</p>
                                     </div>
                                 </div>
-                                <div className='d-flex'>
-                                    <div className='d-flex flex-column align-items-center mx-5'>
+                                <div className='d-flex mt-xl-0 mt-lg-0 mt-2'>
+                                    <div className='d-flex flex-column align-items-center mx-xl-5 mx-lg-5 me-3'>
                                         <p className='mb-0 number'>{certificateDataLength || 'N/A'}</p>
                                         <p className='mb-0 text'>Rakt Score</p>
                                     </div>
