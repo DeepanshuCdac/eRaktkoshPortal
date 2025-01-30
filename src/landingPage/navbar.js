@@ -28,8 +28,7 @@ export default function Navbar() {
                       src="assets/images/drop-down.png"
                       width="12px"
                       height="7.4px"
-                      alt=""
-                    />
+                      alt="" />
                   </a>
                   <ul className="ps-0">
                     <li>
@@ -87,20 +86,15 @@ export default function Navbar() {
                       src="assets/images/drop-down.png"
                       width="12px"
                       height="7.4px"
-                      alt=""
-                    />
+                      alt="" />
                   </a>
 
                   <ul className="ps-0">
                     <li>
-                      <a href="/BLDAHIMS/bloodbank/stockAvailability.cnt">
-                        Blood Availability
-                      </a>
+                      <Link className="links" to="/publicPages/bloodAvailabilitySearch">Blood Availability</Link>
                     </li>
                     <li>
-                      <a href="/BLDAHIMS/bloodbank/nearbyBBRed.cnt">
-                        Blood Bank Directory
-                      </a>
+                      <Link className="links" to="/publicPages/bloodBankDirectory">Blood Bank Directory</Link>
                     </li>
                     <li>
                       <a href="/BLDAHIMS/bloodbank/portalThalassemiaLogin.cnt">
@@ -117,20 +111,14 @@ export default function Navbar() {
                       src="assets/images/drop-down.png"
                       width="12px"
                       height="7.4px"
-                      alt=""
-                    />
+                      alt="" />
                   </a>
                   <ul className="ps-0">
                     <li>
-                      <a href="/BLDAHIMS/bloodbank/campSchedule.cnt">
-                        Blood Donation Camps
-                      </a>
+                      <Link className="links" to="/publicPages/campSchedule"> Blood Donation Camps</Link>
                     </li>
                     <li>
                       <Link className="links" to="/pages/portalDonorLogin"> Donor Login</Link>
-                      {/* <a href="/BLDAHIMS/bloodbank/portalDonorLogin.cnt">
-                        Donor Login
-                      </a> */}
                     </li>
                     <li>
                       <a href="/BLDAHIMS/bloodbank/donateblood.cnt">
@@ -138,9 +126,7 @@ export default function Navbar() {
                       </a>
                     </li>
                     <li>
-                      <a href="/BLDAHIMS/bloodbank/onlineCampRequestNewBB.cnt">
-                        Register VBD Camp
-                      </a>
+                      <Link className="links" to="/publicPages/campRegistration">Register VBD Camp</Link>
                     </li>
                   </ul>
                 </li>
@@ -152,12 +138,10 @@ export default function Navbar() {
                       src="assets/images/drop-down.png"
                       width="12px"
                       height="7.4px"
-                      alt=""
-                    />
+                      alt="" />
                   </a>
                   <ul className="ps-0">
                     <li>
-                      {/* <Link className="links" to="/login"> eRaktkosh Login</Link> */}
                       <a className="links" href="/eRaktKosh/hissso/loginLogin">
                         eRaktkosh Login
                       </a>
@@ -173,18 +157,14 @@ export default function Navbar() {
                 <li className="nav-item d-flex d-xl-none d-lg-none">
                   <a
                     className="nav-link"
-                    href="https://eraktkosh.mohfw.gov.in/eRaktkoshUtilities/#/"
-                  >
-                    e-Raktkosh Dashboard
+                    href="https://eraktkosh.mohfw.gov.in/eRaktkoshUtilities/#/" > e-Raktkosh Dashboard
                   </a>
                 </li>
                 <div className="d-xl-flex d-lg-flex d-none">
                   <li className="nav-item">
                     <a
                       className="nav-link"
-                      href="https://eraktkosh.mohfw.gov.in/eRaktkoshUtilities/#/"
-                    >
-                      e-Raktkosh Dashboard
+                      href="https://eraktkosh.mohfw.gov.in/eRaktkoshUtilities/#/" > e-Raktkosh Dashboard
                     </a>
                   </li>
                 </div>

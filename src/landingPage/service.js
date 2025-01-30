@@ -23,13 +23,13 @@ export default function Service() {
       imgSrc: "assets/images/blood-directory.png",
       altText: "Blood Bank Directory",
       cardText: "Blood Bank Directory",
-      url: '/BLDAHIMS/bloodbank/nearbyBBRed.cnt'
+      url: '#/publicPages/bloodBankDirectory'
     },
     {
       imgSrc: "assets/images/blood-camp.png",
       altText: "Blood Donation Camps",
       cardText: "Blood Donation Camps",
-      url: '/BLDAHIMS/bloodbank/campSchedule.cnt'
+      url: '#/publicPages/campSchedule'
     },
     {
       imgSrc: "assets/images/donor-login.png",
@@ -41,7 +41,7 @@ export default function Service() {
       imgSrc: "assets/images/register-camp.png",
       altText: "Register Voluntary Blood Camp",
       cardText: "Register Voluntary Blood Camp",
-      url: '/BLDAHIMS/bloodbank/onlineCampRequestNewBB.cnt'
+      url: '#/publicPages/campRegistration'
     },
   ];
 

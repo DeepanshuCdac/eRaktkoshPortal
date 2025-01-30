@@ -23,7 +23,7 @@ const CampRegistration = () => {
                                 <div className='d-flex flex-column'>
                                     <div className='d-flex align-items-center'>
                                         <label htmlFor="gender" className="form-label mb-1">Organisation Type <span className="mandatory">*</span></label>
-                                     </div>
+                                    </div>
                                     <Space wrap>
                                         <Select
                                             style={{ width: '100%' }}
@@ -73,7 +73,7 @@ const CampRegistration = () => {
                             <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                                 <div className="mb-3 form-inputs">
                                     <label htmlFor="exampleInputEmail1" className="form-label mb-1">Organiser Email ID <span className="mandatory">*</span></label>
-                                  <input
+                                    <input
                                         type="text"
                                         placeholder=''
                                         className="form-control"
@@ -89,7 +89,6 @@ const CampRegistration = () => {
                             <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                                 <div className="mb-3 form-inputs">
                                     <label htmlFor="exampleInputEmail1" className="form-label mb-1">Co-Organiser Name</label>
-                                    {/* <img src="assets/images/mendate.png" alt="Mendate" /> */}
                                     <input
                                         type="text"
                                         placeholder=''
@@ -101,7 +100,6 @@ const CampRegistration = () => {
                             <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                                 <div className="mb-3 form-inputs">
                                     <label htmlFor="exampleInputEmail1" className="form-label mb-1">Co-Organiser Mobile</label>
-                                    {/* <img src="assets/images/mendate.png" alt="Mendate" /> */}
                                     <input
                                         type="text"
                                         placeholder='Enter Co-Organiser Mobile Number'
@@ -113,7 +111,6 @@ const CampRegistration = () => {
                             <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                                 <div className="mb-3 form-inputs">
                                     <label htmlFor="exampleInputEmail1" className="form-label mb-1">Camp Name</label>
-                                    {/* <img src="assets/images/mendate.png" alt="Mendate" /> */}
                                     <input
                                         type="text"
                                         placeholder=''
@@ -277,7 +274,7 @@ const CampRegistration = () => {
                             <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                                 <div className="mb-3 form-inputs">
                                     <label htmlFor="exampleInputEmail1" className="form-label mb-1">Camp Propose Date <span className="mandatory">*</span></label>
-                                     <input
+                                    <input
                                         type="text"
                                         placeholder=''
                                         className="form-control"
@@ -288,7 +285,6 @@ const CampRegistration = () => {
                             <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                                 <div className="mb-3 form-inputs">
                                     <label htmlFor="exampleInputEmail1" className="form-label mb-1">Estimated Participants</label>
-                                    {/* <img src="assets/images/mendate.png" alt="Mendate" /> */}
                                     <input
                                         type="text"
                                         placeholder=''
@@ -300,7 +296,6 @@ const CampRegistration = () => {
                             <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                                 <div className="mb-3 form-inputs">
                                     <label htmlFor="exampleInputEmail1" className="form-label mb-1">Reference/Camp Supporter(Prayojak)</label>
-                                    {/* <img src="assets/images/mendate.png" alt="Mendate" /> */}
                                     <input
                                         type="text"
                                         placeholder=''
