@@ -1,0 +1,32 @@
+.campRegistration {
+
+    .header-page {
+        color: #353535;
+        font-size: 32px;
+        font-weight: 600;
+    }
+
+    .widget {
+        border-radius: 16px;
+        border: 1px solid #E8E8E8;
+        background: #FFF;
+        box-shadow: 0px 4px 24px 0px rgba(13, 13, 13, 0.08);
+
+        .ant-select-selector {
+            border-radius: 4px;
+            border: 1px solid #BFC1C5;
+            padding: 6.729px 10.093px;
+        }
+            .mandatory {
+                color: #EF5350;
+                font-size: 15px;
+                font-weight: 600;
+        }
+
+        textarea {
+            border-radius: 4px;
+            border: 1px solid #BFC1C5;
+            padding: 6.729px 10.093px;
+        }
+    }
+}

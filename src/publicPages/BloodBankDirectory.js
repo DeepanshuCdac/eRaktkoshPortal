@@ -8,17 +8,17 @@ const onDateChange = (date, dateString) => {
 
 const { Search } = Input;
 
-const CampSchedule = () => {
+const BloodBankDirectory = () => {
 
     useEffect(() => {
-        document.title = 'e-RaktKosh Camp Schedule'
-    }, []);
+        document.title = 'e-RaktKosh Blood Bank Directory'
+    }, [])
 
     return (
         <>
             <div className="page-wrapper">
                 <div className="container">
-                    <h2 className="header-page mb-3">Camp Schedule</h2>
+                    <h2 className="header-page mb-3">Nearest Blood Bank(BB)/ Blood Storage Unit(BSU)</h2>
                     <div className="widget px-3 pt-3 pb-5 mb-3">
                         <div className="row mx-4">
                             <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 mb-2 mb-xl-0 mb-lg-0">
@@ -52,9 +52,7 @@ const CampSchedule = () => {
                             </div>
                             <div className="d-flex align-items-end justify-content-center col-xl-6 col-lg-6 col-md-6 col-sm-6 mb-2 mb-xl-0 mb-lg-0">
                                 <div className="w-100 h-100">
-                                    <Space direction="vertical">
-                                        <DatePicker className="h-100 w-100" onChange={onDateChange} />
-                                    </Space>
+                                    <Search placeholder="Search" className="me-2" />
                                 </div>
                             </div>
                         </div>
@@ -116,64 +114,65 @@ const CampSchedule = () => {
                     <table className="table table-long mt-3">
                         <thead>
                             <th className="column-1">S.No.</th>
-                            <th className="column-2">Date</th>
-                            <th className="column-3">Camp Name</th>
-                            <th className="column-4">Address</th>
-                            <th className="column-5">State</th>
-                            <th className="column-6">District</th>
-                            <th className="column-7">Contact</th>
-                            <th className="column-8">Conducted By</th>
-                            <th className="column-9">Organised By</th>
-                            <th className="column-10">Register</th>
+                            <th className="column-2">Name</th>
+                            <th className="column-3">Address</th>
+                            <th className="column-4">Phone</th>
+                            <th className="column-5">Email</th>
+                            <th className="column-6">Category</th>
+                            <th className="column-7">Distance</th>
+                            <th className="column-8">Type</th>
                         </thead>
                         <tbody>
                             <tr>
                                 <td className="column-1" data-label="S.No.">1</td>
-                                <td className="column-2" data-label="Date">10-May-2024</td>
-                                <td className="column-3" data-label="Camp Name">
-                                    <span>Blood Donation Camp</span>
+                                <td className="column-2" data-label="Name">Blood Centre Changlang</td>
+                                <td className="column-3" data-label="Address">
+                                    <span>District Hospital, Changlang, Changlang, Dist. Changlang</span>
                                 </td>
-                                <td className="column-4" data-label="Address">
-                                    <span>Societe Generale chennai, DLF, chennai</span>
+                                <td className="column-4" data-label="Phone">9863621471</td>
+                                <td className="column-5" data-label="Email">bloodcenterchanglang@gmail.com	</td>
+                                <td className="column-6" data-label="Category">Govt.</td>
+                                <td className="column-7" data-label="Distance">-</td>
+                                <td className="column-8" data-label="Type">
+                                    <div className="d-flex flex-column">
+                                        <a href="/#/publicPages/campSchedule">Camps</a>
+                                        <a href="/#/publicPages/bloodAvailabilitySearch">Stock</a>
+                                    </div>
                                 </td>
-                                <td className="column-5" data-label="State">Tamil Nadu</td>
-                                <td className="column-6" data-label="District">Chennai</td>
-                                <td className="column-7" data-label="Contact">9823783742</td>
-                                <td className="column-8" data-label="Conducted by">Institute of obstetrics & gynaecology, Governament Hospital for women & children</td>
-                                <td className="column-9" data-label="Organised by">ARManivannan</td>
-                                <td className="column-10" data-label="Register">Register as voluntary donor</td>
                             </tr>
                             <tr>
-                                <td className="column-1" data-label="S.No.">2</td>
-                                <td className="column-2" data-label="Date">10-May-2024</td>
-                                <td className="column-3" data-label="Camp Name">
-                                    <span>Blood Donation Camp</span>
+                                <td className="column-1" data-label="S.No.">1</td>
+                                <td className="column-2" data-label="Name">Blood Centre Changlang</td>
+                                <td className="column-3" data-label="Address">
+                                    <span>District Hospital, Changlang, Changlang, Dist. Changlang</span>
                                 </td>
-                                <td className="column-4" data-label="Address">
-                                    <span>Societe Generale chennai, DLF, chennai</span>
+                                <td className="column-4" data-label="Phone">9863621471</td>
+                                <td className="column-5" data-label="Email">bloodcenterchanglang@gmail.com	</td>
+                                <td className="column-6" data-label="Category">Govt.</td>
+                                <td className="column-7" data-label="Distance">-</td>
+                                <td className="column-8" data-label="Type">
+                                    <div className="d-flex flex-column">
+                                        <a href="/#/publicPages/campSchedule">Camps</a>
+                                        <a href="/#/publicPages/bloodAvailabilitySearch">Stock</a>
+                                    </div>
                                 </td>
-                                <td className="column-5" data-label="State">Tamil Nadu</td>
-                                <td className="column-6" data-label="District">Chennai</td>
-                                <td className="column-7" data-label="Contact">9823783742</td>
-                                <td className="column-8" data-label="Conducted by">Institute of obstetrics & gynaecology, Governament Hospital for women & children</td>
-                                <td className="column-9" data-label="Organised by">ARManivannan</td>
-                                <td className="column-10" data-label="Register">Register as voluntary donor</td>
                             </tr>
                             <tr>
-                                <td className="column-1" data-label="S.No.">3</td>
-                                <td className="column-2" data-label="Date">10-May-2024</td>
-                                <td className="column-3" data-label="Camp Name">
-                                    <span>Blood Donation Camp</span>
+                                <td className="column-1" data-label="S.No.">1</td>
+                                <td className="column-2" data-label="Name">Blood Centre Changlang</td>
+                                <td className="column-3" data-label="Address">
+                                    <span>District Hospital, Changlang, Changlang, Dist. Changlang</span>
                                 </td>
-                                <td className="column-4" data-label="Address">
-                                    <span>Societe Generale chennai, DLF, chennai</span>
+                                <td className="column-4" data-label="Phone">9863621471</td>
+                                <td className="column-5" data-label="Email">bloodcenterchanglang@gmail.com	</td>
+                                <td className="column-6" data-label="Category">Govt.</td>
+                                <td className="column-7" data-label="Distance">-</td>
+                                <td className="column-8" data-label="Type">
+                                    <div className="d-flex flex-column">
+                                        <a href="/#/publicPages/campSchedule">Camps</a>
+                                        <a href="/#/publicPages/bloodAvailabilitySearch">Stock</a>
+                                    </div>
                                 </td>
-                                <td className="column-5" data-label="State">Tamil Nadu</td>
-                                <td className="column-6" data-label="District">Chennai</td>
-                                <td className="column-7" data-label="Contact">9823783742</td>
-                                <td className="column-8" data-label="Conducted by">Institute of obstetrics & gynaecology, Governament Hospital for women & children</td>
-                                <td className="column-9" data-label="Organised by">ARManivannan</td>
-                                <td className="column-10" data-label="Register">Register as voluntary donor</td>
                             </tr>
                         </tbody>
                     </table>
@@ -183,4 +182,4 @@ const CampSchedule = () => {
     )
 }
 
-export default CampSchedule
+export default BloodBankDirectory

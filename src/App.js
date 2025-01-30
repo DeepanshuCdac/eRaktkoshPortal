@@ -19,6 +19,8 @@ import { CertificateProvider } from "./context/CertificateContext.js";
 import ProtectedRoute from "./ProtectedRoute/ProtectedRoute.js";
 import BloodAvailabiltySearch from "./publicPages/bloodAvailabilitySearch.js";
 import CampSchedule from "./publicPages/CampSchedule.js";
+import BloodBankDirectory from "./publicPages/BloodBankDirectory.js";
+import CampRegistration from "./publicPages/CampRegistration.js";
 
 function App() {
   return (
@@ -46,8 +48,16 @@ function AppContent() {
           <BloodAvailabiltySearch />
         </Route>
 
+        <Route path="/publicPages/bloodBankDirectory">
+          <BloodBankDirectory />
+        </Route>
+
         <Route path="/publicPages/campSchedule">
           <CampSchedule />
+        </Route>
+
+        <Route path="/publicPages/campRegistration">
+          <CampRegistration />
         </Route>
 
         <Route path="/pages/portalDonorLogin">

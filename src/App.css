@@ -1,5 +1,37 @@
 .App {
-    font-family: "Source Sans 3", sans-serif;
+    font-family: "SourceSans3", sans-serif;
+    /* src: url('../src/assets/fonts/static/SourceSans3-Bold.ttf'); */
+}
+
+@font-face{
+    font-family: 'SourceSans3';
+    src: url('../src/assets/fonts/static/SourceSans3-Bold.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face{
+    font-family: 'SourceSans3';
+    src: url('../src/assets/fonts/static/SourceSans3-Medium.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face{
+    font-family: 'SourceSans3';
+    src: url('../src/assets/fonts/static/SourceSans3-Light.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face{
+    font-family: 'SourceSans3';
+    src: url('../src/assets/fonts/static/SourceSans3-Regular.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face{
+    font-family: 'SourceSans3';
+    src: url('../src/assets/fonts/static/SourceSans3-SemiBold.ttf');
+    font-weight: normal;
+    font-style: normal;
 }
 
 .App .container {
