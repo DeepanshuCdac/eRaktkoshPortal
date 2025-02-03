@@ -1,6 +1,6 @@
-// Donor Certificate Generated using Template...
+// Donor Certificate Generated...
 export function generateCertificate(certificateData) {
-    // Create a new window
+    // new window
     const newWindow = window.open("", "_blank", "width=1000,height=700");
 
     // Generate the certificate content

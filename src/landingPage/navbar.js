@@ -153,7 +153,6 @@ export default function Navbar() {
                     </li>
                   </ul>
                 </li>
-
                 <li className="nav-item d-flex d-xl-none d-lg-none">
                   <a
                     className="nav-link"

@@ -22,15 +22,15 @@ const CampRegistration = () => {
                             <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                                 <div className='d-flex flex-column'>
                                     <div className='d-flex align-items-center'>
-                                        <label htmlFor="gender" className="form-label mb-1">Organisation Type <span className="mandatory">*</span></label>
+                                        <label htmlFor="orgType" className="form-label mb-1">Organisation Type <span className="mandatory">*</span></label>
                                     </div>
                                     <Space wrap>
                                         <Select
                                             style={{ width: '100%' }}
                                             options={[
-                                                { value: 'Male', label: 'Male' },
-                                                { value: 'Female', label: 'Female' },
-                                                { value: 'Others', label: 'Others' },
+                                                { value: 'Pvt', label: 'Pvt' },
+                                                { value: 'Govt', label: 'Govt' },
+                                                { value: 'Charitable', label: 'Charitable' },
                                             ]}
                                             placeholder="Select Value" />
                                     </Space>
@@ -39,45 +39,45 @@ const CampRegistration = () => {
 
                             <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                                 <div className="mb-3 form-inputs">
-                                    <label htmlFor="exampleInputEmail1" className="form-label mb-1">Organisation Name <span className="mandatory">*</span></label>
+                                    <label htmlFor="orgName" className="form-label mb-1">Organisation Name <span className="mandatory">*</span></label>
                                     <input
                                         type="text"
                                         placeholder=''
                                         className="form-control"
-                                        id="firstName" />
+                                        id="orgName" />
                                 </div>
                             </div>
 
                             <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                                 <div className="mb-3 form-inputs">
-                                    <label htmlFor="exampleInputEmail1" className="form-label mb-1">Organiser Name <span className="mandatory">*</span></label>
+                                    <label htmlFor="organiserName" className="form-label mb-1">Organiser Name <span className="mandatory">*</span></label>
                                     <input
                                         type="text"
                                         placeholder=''
                                         className="form-control"
-                                        id="firstName" />
+                                        id="organiserName" />
                                 </div>
                             </div>
 
                             <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                                 <div className="mb-3 form-inputs">
-                                    <label htmlFor="exampleInputEmail1" className="form-label mb-1">Organiser Mobile No. <span className="mandatory">*</span></label>
+                                    <label htmlFor="mobileNo" className="form-label mb-1">Organiser Mobile No. <span className="mandatory">*</span></label>
                                     <input
                                         type="text"
                                         placeholder=''
                                         className="form-control"
-                                        id="firstName" />
+                                        id="mobileNo" />
                                 </div>
                             </div>
 
                             <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                                 <div className="mb-3 form-inputs">
-                                    <label htmlFor="exampleInputEmail1" className="form-label mb-1">Organiser Email ID <span className="mandatory">*</span></label>
+                                    <label htmlFor="orgEmail" className="form-label mb-1">Organiser Email ID <span className="mandatory">*</span></label>
                                     <input
                                         type="text"
                                         placeholder=''
                                         className="form-control"
-                                        id="firstName" />
+                                        id="orgEmail" />
                                 </div>
                             </div>
                         </div>
@@ -88,34 +88,34 @@ const CampRegistration = () => {
                         <div className="row mx-4">
                             <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                                 <div className="mb-3 form-inputs">
-                                    <label htmlFor="exampleInputEmail1" className="form-label mb-1">Co-Organiser Name</label>
+                                    <label htmlFor="coOrgName" className="form-label mb-1">Co-Organiser Name</label>
                                     <input
                                         type="text"
                                         placeholder=''
                                         className="form-control"
-                                        id="firstName" />
+                                        id="coOrgName" />
                                 </div>
                             </div>
 
                             <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                                 <div className="mb-3 form-inputs">
-                                    <label htmlFor="exampleInputEmail1" className="form-label mb-1">Co-Organiser Mobile</label>
+                                    <label htmlFor="coOrgMobileNo" className="form-label mb-1">Co-Organiser Mobile</label>
                                     <input
                                         type="text"
                                         placeholder='Enter Co-Organiser Mobile Number'
                                         className="form-control"
-                                        id="firstName" />
+                                        id="coOrgMobileNo" />
                                 </div>
                             </div>
 
                             <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                                 <div className="mb-3 form-inputs">
-                                    <label htmlFor="exampleInputEmail1" className="form-label mb-1">Camp Name</label>
+                                    <label htmlFor="campName" className="form-label mb-1">Camp Name</label>
                                     <input
                                         type="text"
                                         placeholder=''
                                         className="form-control"
-                                        id="firstName" />
+                                        id="campName" />
                                 </div>
                             </div>
                         </div>
@@ -126,27 +126,27 @@ const CampRegistration = () => {
                         <div className="row mx-4">
                             <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                                 <div className="mb-3 form-inputs">
-                                    <label htmlFor="exampleInputEmail1" className="form-label mb-1">Camp Address <span className="mandatory">*</span></label>
+                                    <label htmlFor="campAddress" className="form-label mb-1">Camp Address <span className="mandatory">*</span></label>
                                     <input
                                         type="text"
                                         placeholder=''
                                         className="form-control"
-                                        id="firstName" />
+                                        id="campAddress" />
                                 </div>
                             </div>
 
                             <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                                 <div className='d-flex flex-column'>
                                     <div className='d-flex align-items-center'>
-                                        <label htmlFor="gender" className="form-label mb-1">State <span className="mandatory">*</span></label>
+                                        <label htmlFor="state" className="form-label mb-1">State <span className="mandatory">*</span></label>
                                     </div>
                                     <Space wrap>
                                         <Select
                                             style={{ width: '100%' }}
                                             options={[
-                                                { value: 'Male', label: 'Male' },
-                                                { value: 'Female', label: 'Female' },
-                                                { value: 'Others', label: 'Others' },
+                                                { value: 'Haryana', label: 'Haryana' },
+                                                { value: 'Goa', label: 'Goa' },
+                                                { value: 'Delhi', label: 'Delhi' }
                                             ]}
                                             placeholder="Select State" />
                                     </Space>
@@ -156,15 +156,15 @@ const CampRegistration = () => {
                             <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                                 <div className='d-flex flex-column'>
                                     <div className='d-flex align-items-center'>
-                                        <label htmlFor="gender" className="form-label mb-1">District <span className="mandatory">*</span></label>
+                                        <label htmlFor="district" className="form-label mb-1">District <span className="mandatory">*</span></label>
                                     </div>
                                     <Space wrap>
                                         <Select
                                             style={{ width: '100%' }}
                                             options={[
-                                                { value: 'Male', label: 'Male' },
-                                                { value: 'Female', label: 'Female' },
-                                                { value: 'Others', label: 'Others' },
+                                                { value: 'Ghaziabad', label: 'Ghaziabad' },
+                                                { value: 'Lucknow', label: 'Lucknow' },
+                                                { value: 'Prayagraj', label: 'Prayagraj' },
                                             ]}
                                             placeholder="Select District" />
                                     </Space>
@@ -173,27 +173,27 @@ const CampRegistration = () => {
 
                             <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                                 <div className="mb-3 form-inputs">
-                                    <label htmlFor="exampleInputEmail1" className="form-label mb-1">City Name <span className="mandatory">*</span></label>
+                                    <label htmlFor="cityName" className="form-label mb-1">City Name <span className="mandatory">*</span></label>
                                     <input
                                         type="text"
                                         placeholder=''
                                         className="form-control"
-                                        id="firstName" />
+                                        id="cityName" />
                                 </div>
                             </div>
 
                             <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                                 <div className='d-flex flex-column'>
                                     <div className='d-flex align-items-center'>
-                                        <label htmlFor="gender" className="form-label mb-1">Blood Bank <span className="mandatory">*</span></label>
+                                        <label htmlFor="bankName" className="form-label mb-1">Blood Bank <span className="mandatory">*</span></label>
                                     </div>
                                     <Space wrap>
                                         <Select
                                             style={{ width: '100%' }}
                                             options={[
-                                                { value: 'Male', label: 'Male' },
-                                                { value: 'Female', label: 'Female' },
-                                                { value: 'Others', label: 'Others' },
+                                                { value: 'Bank1', label: 'Bank1' },
+                                                { value: 'Bank2', label: 'Bank2' },
+                                                { value: 'Bank3', label: 'Bank3' },
                                             ]}
                                             placeholder="Select BloodBank" />
                                     </Space>
@@ -202,23 +202,23 @@ const CampRegistration = () => {
 
                             <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                                 <div className="mb-3 form-inputs">
-                                    <label htmlFor="exampleInputEmail1" className="form-label mb-1">Latitude</label>
+                                    <label htmlFor="latitude" className="form-label mb-1">Latitude</label>
                                     <input
                                         type="text"
                                         placeholder=''
                                         className="form-control"
-                                        id="firstName" />
+                                        id="latitude" />
                                 </div>
                             </div>
 
                             <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                                 <div className="mb-3 form-inputs">
-                                    <label htmlFor="exampleInputEmail1" className="form-label mb-1">Longitude</label>
+                                    <label htmlFor="longitude" className="form-label mb-1">Longitude</label>
                                     <input
                                         type="text"
                                         placeholder=''
                                         className="form-control"
-                                        id="firstName" />
+                                        id="longitude" />
                                 </div>
                             </div>
 
@@ -234,13 +234,13 @@ const CampRegistration = () => {
                                                 type="text"
                                                 placeholder=''
                                                 className="form-control"
-                                                id="firstName" />
+                                                id="startTime" />
                                             <input
                                                 style={{ width: "30%" }}
                                                 type="text"
                                                 placeholder=''
                                                 className="form-control"
-                                                id="firstName" />
+                                                id="startTime" />
                                         </div>
                                     </div>
                                     <div>
@@ -253,13 +253,13 @@ const CampRegistration = () => {
                                                 type="text"
                                                 placeholder=''
                                                 className="form-control"
-                                                id="firstName" />
+                                                id="endTime" />
                                             <input
                                                 style={{ width: "30%" }}
                                                 type="text"
                                                 placeholder=''
                                                 className="form-control"
-                                                id="firstName" />
+                                                id="endTime" />
                                         </div>
                                     </div>
                                 </div>
@@ -273,41 +273,41 @@ const CampRegistration = () => {
                         <div className="row mx-4">
                             <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                                 <div className="mb-3 form-inputs">
-                                    <label htmlFor="exampleInputEmail1" className="form-label mb-1">Camp Propose Date <span className="mandatory">*</span></label>
+                                    <label htmlFor="campDate" className="form-label mb-1">Camp Propose Date <span className="mandatory">*</span></label>
                                     <input
                                         type="text"
                                         placeholder=''
                                         className="form-control"
-                                        id="firstName" />
+                                        id="campDate" />
                                 </div>
                             </div>
 
                             <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                                 <div className="mb-3 form-inputs">
-                                    <label htmlFor="exampleInputEmail1" className="form-label mb-1">Estimated Participants</label>
+                                    <label htmlFor="participants" className="form-label mb-1">Estimated Participants</label>
                                     <input
                                         type="text"
                                         placeholder=''
                                         className="form-control"
-                                        id="firstName" />
+                                        id="participants" />
                                 </div>
                             </div>
 
                             <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                                 <div className="mb-3 form-inputs">
-                                    <label htmlFor="exampleInputEmail1" className="form-label mb-1">Reference/Camp Supporter(Prayojak)</label>
+                                    <label htmlFor="reference" className="form-label mb-1">Reference/Camp Supporter(Prayojak)</label>
                                     <input
                                         type="text"
                                         placeholder=''
                                         className="form-control"
-                                        id="firstName" />
+                                        id="reference" />
                                 </div>
                             </div>
 
                             <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                                 <div className="mb-3 form-inputs d-flex flex-column">
-                                    <label htmlFor="exampleInputEmail1" className="form-label mb-1">Remarks</label>
-                                    <textarea id="textarea" rows="3"></textarea>
+                                    <label htmlFor="remarks" className="form-label mb-1">Remarks</label>
+                                    <textarea id="remarks" rows="3"></textarea>
                                 </div>
                             </div>
                         </div>

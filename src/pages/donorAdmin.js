@@ -5,6 +5,7 @@ import { useDonor } from '../context/DonorContext';
 import { useCertificate } from '../context/CertificateContext';
 import DonationCertificate from '../components/donationCertificate';
 import BloodAvailabiltySearch from '../publicPages/bloodAvailabilitySearch';
+import CampSchedule from '../publicPages/CampSchedule';
 
 export default function DonorAdmin() {
     const { certificateDataLength, fetchCertificateData } = useCertificate();
@@ -15,9 +16,9 @@ export default function DonorAdmin() {
         if (!token) return false;
 
         try {
-            const payload = JSON.parse(atob(token.split('.')[1])); 
-            const currentTime = Math.floor(Date.now() / 1000); 
-            return payload.exp > currentTime; 
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            const currentTime = Math.floor(Date.now() / 1000);
+            return payload.exp > currentTime;
         } catch (e) {
             console.error('Invalid token format:', e);
             return false;
@@ -29,7 +30,7 @@ export default function DonorAdmin() {
         if (!isTokenValid(token)) {
             sessionStorage.clear();
             alert('Session expired. Please log in again.');
-             window.location.href = '/#/pages/portalDonorLogin'
+            window.location.href = '/#/pages/portalDonorLogin'
         } else {
             fetchDonorData();
             fetchCertificateData();
@@ -147,7 +148,8 @@ export default function DonorAdmin() {
                                     {activeTab === 0 && <DonorAdminHome onViewAllClick={setDonationCertificateTab} />}
                                     {activeTab === 1 && <DonorAdminProfile />}
                                     {activeTab === 2 && <DonationCertificate onBack={() => handleTabClick(0)} />}
-                                    {activeTab === 3 &&  <BloodAvailabiltySearch/>}
+                                    {activeTab === 3 && <BloodAvailabiltySearch />}
+                                    {activeTab === 4 && <CampSchedule />}
                                 </div>
                             </div>
                         </div>
