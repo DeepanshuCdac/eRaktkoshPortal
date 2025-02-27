@@ -241,7 +241,7 @@ export default function DonorLogin() {
 
                     setTimeout(() => {
                         setLoading(false);
-                        const newTabUrl = `${window.location.origin}/#/pages/portaldonorAdmin`;
+                        const newTabUrl = `${window.location.origin}/beta#/pages/portaldonorAdmin`;
                         window.location.assign(newTabUrl);
                     }, 100);
                 } else {
@@ -298,7 +298,7 @@ export default function DonorLogin() {
                         <div className="col-xl-5 col-lg-5 col-md-5 d-flex flex-column align-items-center">
                             <div className="donorlogin-right mb-3 px-5">
                                 <div className='loginBox'>
-                                    <h2 className="login-header text-center mb-5">
+                                    <h2 className="login-header text-center mb-4">
                                         Donor Login
                                     </h2>
                                     <div className="mb-4">

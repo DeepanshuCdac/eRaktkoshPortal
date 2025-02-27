@@ -7,7 +7,7 @@ export default function Navbar() {
       <header className="header">
         <div className="container">
           <div className="d-flex align-items-center justify-content-between">
-            <a href="javascript:void(0)">
+            <a href="/BLDAHIMS/bloodbank/transactions/bbpublicindex.html">
               <img
                 src="assets/images/main-icon1.png"
                 className="img-fluid"
@@ -32,9 +32,10 @@ export default function Navbar() {
                   </a>
                   <ul className="ps-0">
                     <li>
-                      <a href="/BLDAHIMS/bloodbank/transactions/bbpublicindex.html">
-                        Home
-                      </a>
+                      {/* <a href="/BLDAHIMS/bloodbank/transactions/bbpublicindex.html">
+                        Home Beta
+                      </a> */}
+                      <Link className="links" to="/">Home Beta</Link>
                     </li>
                     <li>
                       <a href="/BLDAHIMS/bloodbank/about.cnt">
@@ -52,9 +53,7 @@ export default function Navbar() {
                       </a>
                     </li>
                     <li>
-                      <a href="/BLDAHIMS/bloodbank/eraktkoshfaq.cnt">
-                        eRaktkosh FAQs
-                      </a>
+                      <Link className="links" to="/publicPages/FAQs">eRaktkosh FAQ's</Link>
                     </li>
                     <li>
                       <a href="/BLDAHIMS/bloodbank/transactions/bbpublicindexGallery.html">

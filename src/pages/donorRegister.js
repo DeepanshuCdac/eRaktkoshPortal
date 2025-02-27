@@ -1,188 +1,113 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getApiData } from '../redux/slices/dataSlice';
 import { Select, Space } from 'antd';
-import {BaseUrl} from '../utils/url';
+import { BaseUrl } from '../utils/url';
 import axios from 'axios'
-
 export default function DonorRegister() {
 
-    // -----------------------------------------
-    const [mobile, setMobile] = useState('');
+    const dispatch = useDispatch();
+    const { statesWithDistricts, genders, status } = useSelector((state) => state.data);
+    const [formData, setFormData] = useState({
+        name: "",
+        age: "",
+        gender: "",
+        mobileNo: "",
+        fatherName: "",
+        email: "",
+        state: "",
+        district: "",
+        address: "",
+        pincode: "",
+        captchaInput: "",
+    });
+
+    const generateRequestBody = (otpValue) => {
+
+        const today = new Date();
+        const birthYear = today.getFullYear() - parseInt(formData.age, 10);
+        const birthMonth = String(today.getMonth() + 1).padStart(2, '0');
+        const birthDay = String(today.getDate()).padStart(2, '0');
+        const dob = `${birthYear}-${birthMonth}-${birthDay} 00:00:00`;
+
+        return {
+            mobileNo: formData.mobileNo,
+            otp: otpValue,
+            firstName: formData.name,
+            lastName: "",
+            password: "Cdac@123",
+            emailId: formData.email,
+            genderCode: formData.gender,
+            address: formData.address,
+            fatherName: formData.fatherName,
+            dob: dob,
+            bloodGroupCode: "",
+            firstLogin: "1",
+            demographics: "1",
+            isValid: "1",
+            stateCode: formData.state,
+            districtCode: formData.district,
+            pincode: formData.pincode,
+            allBlood: "0",
+            repository: "0",
+            registrationMode: "0",
+            userId: formData.mobileNo,
+        };
+    };
+
+    const [isOtpGenerated, setIsOtpGenerated] = useState(false);
+    // const [isOtpValidated, setIsOtpValidated] = useState(false);
+    const [selectedGender, setSelectedGender] = useState(null);
+    const [selectedState, setSelectedState] = useState(null);
+    const [selectedDistrict, setSelectedDistrict] = useState(null);
     const [captchaImage, setCaptchaImage] = useState('');
-    const [captchaText, setCaptchaText] = useState('');
-    const [currentStep, setCurrentStep] = useState(1);
-    const [gender, setGender] = useState('');
-    const [state, setState] = useState('');
-    const [district, setdistrict] = useState('');
-    const [otpExpiry, setOtpExpiry] = useState(5 * 60); // Initial OTP expiry time in seconds
+    const [captchaText, setCaptchaText] = useState("");
+    const [error, setError] = useState("");
+    const otpRefs = useRef([])
+    const [timer, setTimer] = useState(300);
+    const [otp, setOtp] = useState(["", "", "", "", "", ""]);
+    const [isRegistered, setIsRegistered] = useState(false);
 
     useEffect(() => {
-        if (otpExpiry <= 0) return; // Stop the timer when it reaches 0
+        fetchCaptcha();
+        dispatch(getApiData());
+    }, [dispatch]);
 
-        const timer = setInterval(() => {
-            setOtpExpiry((prev) => prev - 1);
-        }, 1000);
-
-        return () => clearInterval(timer); // Cleanup on unmount or when timer stops
-    }, [otpExpiry]);
-
-
-    // ------------------------
-
-    const handleInputChange = (e) => {
-        const value = e.target.value;
-
-        const numericValue = value.replace(/[^\d]/g, '');
-
-        if (numericValue.length <= 10) {
-            setMobile(numericValue);
+    useEffect(() => {
+        if (isOtpGenerated && timer > 0) {
+            const interval = setInterval(() => {
+                setTimer(prevTimer => prevTimer - 1);
+            }, 1000);
+            return () => clearInterval(interval);
         }
-    };
+    }, [isOtpGenerated, timer]);
 
-
-    // -------------------------------------
-
-    // const startOtpTimer = (expiryTime) => {
-    //     const currentTime = Math.floor(Date.now() / 1000);
-    //     const timeRemaining = expiryTime - currentTime;
-
-    //     if (timeRemaining > 0) {
-    //         setOtpExpiry(timeRemaining);
-    //         setIsOtpExpired(false);
-
-    //         if (timerId) {
-    //             clearInterval(timerId);
-    //         }
-
-    //         const newTimerId = setInterval(() => {
-    //             setOtpExpiry(prev => {
-    //                 if (prev <= 1) {
-    //                     clearInterval(newTimerId);
-    //                     setIsOtpExpired(true);
-    //                     return 0;
-    //                 }
-    //                 return prev - 1;
-    //             });
-    //         }, 1000);
-
-    //         setTimerId(newTimerId);
-    //     } else {
-    //         setIsOtpExpired(true);
-    //     }
-    // };
-
-    // -----------------------------------------
-
-    const totalSteps = 3;
-
-    // --------------------------------------------
-
-    const handleSectionView = async () => {
-        const nameInput = document.getElementById('nameInput').value.trim();
-        const ageInput = document.getElementById('ageInput').value.trim();
-        const mobileNoInput = mobile.trim();
-        const fatherInput = document.getElementById('fatherInput').value.trim();
-        const pincodeInput = document.getElementById('pincodeInput').value.trim();
-        const captchaInput = document.getElementById('username').value.trim();
-
-        // Validation checks
-        if (!nameInput) {
-            alert("Please enter your name.");
+    const handleRegsiter = async () => {
+        const otpValue = otp.join("");
+        if (otpValue.length !== 6) {
+            alert("Please enter a 6-digit OTP.");
             return;
         }
-        if (!ageInput) {
-            alert("Please enter your age.");
-            return;
-        }
-        if (!gender) {
-            alert("Please select your gender.");
-            return;
-        }
-        if (!mobileNoInput || !/^[1-9]{1}[0-9]{9}$/.test(mobileNoInput)) {
-            alert("Please enter a valid mobile number.");
-            return;
-        }
-        if (!fatherInput) {
-            alert("Please enter your father's name.");
-            return;
-        }
-        if (!state) {
-            alert("Please select your state.");
-            return;
-        }
-        if (!district) {
-            alert("Please select your district.");
-            return;
-        }
-        if (!pincodeInput) {
-            alert("Please select your pin code.");
-            return;
-        }
-        if (!captchaInput) {
-            alert("Please enter the CAPTCHA.");
-            return;
-        }
-        if (captchaInput !== captchaText) {
-            alert("CAPTCHA does not match. Please try again.");
-            return;
-        }
+
+        const requestBody = generateRequestBody(otpValue);
 
         try {
-            const response = await generateOtp(mobileNoInput);
-
-            if (response.status === 200) {
-                // OTP generated
-                console.log(response.data.message)
-                alert(response.data.message, "OTP sent successfully!");
+            const response = await axios.post(`${BaseUrl}/eraktkosh/validateOtpAndRegister`, requestBody);
+            if (response.data.message === "User registered successfully") {
+                setIsRegistered(true);
             } else {
-                // if OTP generation fails 
-                alert("Failed to generate OTP. Please try again.");
+                alert(response.data.message);
             }
         } catch (error) {
-            console.error("Error generating OTP:", error);
-            alert("An error occurred. Please try again.");
-        }
-        // Move to the next step
-        setCurrentStep((prevStep) => Math.min(prevStep + 1, totalSteps));
-        console.log("Step:", currentStep + 1);
-    };
-
-    // generateOtp function 
-    const generateOtp = async (mobileNo) => {
-        try {
-            const response = await axios.post(
-                `${BaseUrl}/eraktkosh/generateOtpDonorRegistration`,
-                {
-                    mobileNumber: mobileNo,
-                },
-                {
-                    headers: {
-                        'Content-Type': 'application/json', // set the content type
-                    },
-                }
-            );
-            return response;
-        } catch (error) {
-            console.error("Error generating OTP:", error);
-            throw new Error("Error generating OTP");
+            alert("Something went wrong. Please try again.");
+            console.error("API error:", error);
         }
     };
 
-    const otpRefs = useRef([]);
-
-    const handleOtpChange = (index, event) => {
-        const { value } = event.target;
-
-        if (/^\d$/.test(value)) {
-            otpRefs.current[index].value = value;
-
-            if (index < otpRefs.current.length - 1) {
-                otpRefs.current[index + 1].focus();
-            }
-        } else if (value === '') {
-            if (index > 0) {
-                otpRefs.current[index - 1].focus();
-            }
-        }
+    const formatTime = (timeInSeconds) => {
+        const minutes = Math.floor(timeInSeconds / 60);
+        const seconds = timeInSeconds % 60;
+        return `${minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
     };
 
     // Fetch Captcha data
@@ -190,216 +115,273 @@ export default function DonorRegister() {
         try {
             const response = await axios.get(`${BaseUrl}/eraktkosh/generateCaptchaforRegistration`);
             const data = response.data;
-
             setCaptchaImage(data.captchaImage);
             setCaptchaText(data.captchaText);
-
             console.log('CAPTCHA fetched:', data);
         } catch (error) {
             console.error('Error fetching CAPTCHA:', error);
         }
     };
 
-    useEffect(() => {
-        fetchCaptcha();
-    }, []);
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            [name]: value
+        }));
+    };
 
-    // --------------------------------------------
+    const handleStateChange = (value) => {
+        setSelectedState(value);
+        setSelectedDistrict(null);
+        setFormData({ ...formData, state: value, district: "" });
+    };
+
+    const handleDistrictChange = (value) => {
+        setSelectedDistrict(value);
+        setFormData({ ...formData, district: value });
+    };
+
+    const handleGenderChange = (value) => {
+        setSelectedGender(value);
+        setFormData({ ...formData, gender: value });
+    };
+
+    const handleOtpChange = (index, event) => {
+        const value = event.target.value;
+        if (/^[0-9]?$/.test(value)) {
+            const newOtp = [...otp];
+            newOtp[index] = value;
+            setOtp(newOtp);
+            if (value && index < 5) {
+                otpRefs.current[index + 1]?.focus();
+            }
+        }
+    };
+
+    const handleSignUp = async () => {
+        let errors = {};
+
+        if (!formData.name.trim()) {
+            errors.name = "Please enter your Name.";
+        }
+        if (!formData.age.trim()) {
+            errors.age = "Please enter your Age.";
+        }
+        if (!formData.mobileNo.trim()) {
+            errors.mobileNo = "Please enter your Mobile Number.";
+        }
+        if (!formData.fatherName.trim()) {
+            errors.fatherName = "Please enter your Father's Name.";
+        }
+        if (!formData.pincode.trim()) {
+            errors.pincode = "Please enter your Pincode.";
+        }
+
+        if (Object.keys(errors).length > 0) {
+            console.log("Validation errors:", errors);
+            setError(errors);
+            return;
+        }
+
+        setError({});
+
+        if (formData.captchaInput !== captchaText) {
+            setError({ captchaInput: "CAPTCHA does not match!" });
+            return;
+        }
+
+        try {
+            const response = await axios.post(`${BaseUrl}/eraktkosh/generateOtp`, { mobileNo: formData.mobileNo });
+
+            if (response.data.otp) {
+                alert("OTP is generated! " + response.data.otp);
+                setIsOtpGenerated(true);
+                setTimer(300);
+            } else {
+                setError({ mobileNo: "Mobile number already registered." });
+            }
+        } catch (error) {
+            setError({ api: "Something went wrong. Please try again later." });
+            console.error("Error in OTP generation API", error);
+        }
+    };
+
+    const handleRedirectButton = () => {
+        window.location.href = "/beta#/pages/portalDonorLogin"
+    }
+
+    const states = statesWithDistricts || [];
+    const districts = selectedState
+        ? states.find(state => state.stateCode === selectedState)?.districts || []
+        : [];
 
     return (
         <>
             <section className="donorRegistration">
                 <div className='container-fluid'>
-                    <h2 className="login-header text-center mt-3 mb-4">
+                    <h2 className="login-header text-center mt-3 mb-3">
                         Donor Sign-Up
                     </h2>
-                    {currentStep === 1 &&
+                    {!isOtpGenerated && (
                         <div>
                             <div className="row justify-content-center">
                                 <div className="col-xl-10">
                                     <div className="form-box px-4 py-3">
                                         <div className="row">
+                                            {/* name */}
                                             <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                                                 <div className="mb-3">
-                                                    <label htmlFor="nameInput" className="form-label mb-1">Name</label>
-                                                    <img src="assets/images/mendate.png" alt="" />
-                                                    <div className="input-group p-0">
-                                                        <input type="text" className="form-control" placeholder='Enter Your Name' id="nameInput" />
-                                                    </div>
+                                                    <label htmlFor="nameInput" className="form-label mb-1">Name<span className="mandatory">*</span></label>
+                                                    <input type="text" value={formData.name} name="name" onChange={handleChange} className="form-control" placeholder="Enter Your Name" id="nameInput" />
+                                                    {error.name && <small className="text-danger">{error.name}</small>}
                                                 </div>
                                             </div>
+                                            {/* age */}
                                             <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                                                 <div className="mb-3">
-                                                    <div>
-                                                        <label htmlFor="ageInput" className="form-label mb-1">Age</label>
-                                                        <img src="assets/images/mendate.png" alt="" />
-                                                    </div>
-                                                    <div className="input-group p-0">
-                                                        <input type="number" className="form-control" placeholder='Enter Your Age' id="ageInput" />
-                                                    </div>
+                                                    <label htmlFor="ageInput" className="form-label mb-1">Age<span className="mandatory">*</span></label>
+                                                    <input type="text" value={formData.age} name="age"
+                                                        onChange={handleChange} className="form-control"
+                                                        placeholder="Enter Your Age" id="mobileInput" maxLength="3"
+                                                        onInput={(e) => {
+                                                            e.target.value = e.target.value.replace(/[^0-9]/g, "");
+                                                        }} />
+
+                                                    {error.age && <small className="text-danger">{error.age}</small>}
                                                 </div>
                                             </div>
+                                            {/* gender */}
                                             <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                                                 <div className='d-flex flex-column'>
                                                     <label htmlFor="genderInput" className="form-label mb-1">Gender</label>
                                                     <Space wrap >
                                                         <Select
-                                                            value={gender}
-                                                            onChange={setGender}
-                                                            style={{
-                                                                width: '100%',
-                                                            }}
-                                                            allowClear
-                                                            options={[
-                                                                {
-                                                                    value: 'Male',
-                                                                    label: 'Male',
-                                                                },
-                                                                {
-                                                                    value: 'Female',
-                                                                    label: 'Female',
-                                                                },
-                                                                {
-                                                                    value: 'Other',
-                                                                    label: 'Other',
-                                                                },
-                                                            ]}
-                                                            placeholder="Select Gender"
-                                                        />
+                                                            style={{ width: '100%' }} value={selectedGender}
+                                                            onChange={handleGenderChange} placeholder="Select Gender" >
+                                                            {genders.map((gender) => (
+                                                                <Select.Option key={gender.genderCode} value={gender.genderCode}>
+                                                                    {gender.genderName}
+                                                                </Select.Option>
+                                                            ))}
+                                                        </Select>
                                                     </Space>
                                                 </div>
                                             </div>
+                                            {/* mobile number */}
                                             <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                                                 <div className="mb-3">
-                                                    <label htmlFor="mobileNoInput" className="form-label mb-1">Mobile No.</label>
-                                                    <img src="assets/images/mendate.png" alt="" />
+                                                    <label htmlFor="mobileInput" className="form-label mb-1">Mobile Number<span className="mandatory">*</span></label>
+                                                    <input type="text" value={formData.mobileNo} name="mobileNo"
+                                                        onChange={handleChange} className="form-control"
+                                                        placeholder="Enter Your Mobile Number" id="mobileInput" maxLength="10"
+                                                        onInput={(e) => {
+                                                            e.target.value = e.target.value.replace(/[^0-9]/g, "");
+                                                        }} />
+                                                    {error.mobileNo && <small className="text-danger">{error.mobileNo}</small>}
+                                                </div>
+                                            </div>
+                                            {/* father name */}
+                                            <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+                                                <div className="mb-3">
+                                                    <label htmlFor="fatherInput" className="form-label mb-1">Father Name<span className="mandatory">*</span></label>
+                                                    <input type="text" value={formData.fatherName} name="fatherName" onChange={handleChange} className="form-control" placeholder="Enter Your Father Name" id="fatherInput" />
+                                                    {error.fatherName && <small className="text-danger">{error.fatherName}</small>}
+                                                </div>
+                                            </div>
+                                            {/* email */}
+                                            <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+                                                <div className="mb-3">
+                                                    <label htmlFor="emailInput" className="form-label mb-1">Email</label>
                                                     <div className="input-group p-0">
-                                                        <input type="text" value={mobile} onChange={handleInputChange} className="form-control" placeholder='Enter Your Number' id="mobileNoInput" />
+                                                        <input type="text" value={formData.email} name="email" onChange={handleChange} className="form-control" placeholder='Enter Your Email' id="emailInput" />
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
-                                                <div className="mb-3">
-                                                    <div>
-                                                        <label htmlFor="fatherInput" className="form-label mb-1">Father Name</label>
-                                                        <img src="assets/images/mendate.png" alt="" />
-                                                    </div>
-                                                    <div className="input-group p-0">
-                                                        <input type="text" className="form-control" placeholder='Type Your Father Name' id="fatherInput" />
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
-                                                <div className="mb-3">
-                                                    <div>
-                                                        <label htmlFor="emailInput" className="form-label mb-1">Email</label>
-                                                        {/* <img src="assets/images/mendate.png" alt="" /> */}
-                                                    </div>
-                                                    <div className="input-group p-0">
-                                                        <input type="text" className="form-control" placeholder='Enter Your Email' id="emailInput" />
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            {/* state */}
                                             <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                                                 <div className='d-flex flex-column'>
                                                     <label htmlFor="stateInput" className="form-label mb-1">State</label>
                                                     <Space wrap >
                                                         <Select
-                                                            value={state}
-                                                            onChange={setState}
-                                                            style={{
-                                                                width: '100%',
-                                                            }}
-                                                            allowClear
-                                                            options={[
-                                                                {
-                                                                    value: 'haryana',
-                                                                    label: 'haryana',
-                                                                },
-                                                            ]}
-                                                            placeholder="Select State"
-                                                        />
+                                                            style={{ width: '100%' }}
+                                                            value={selectedState}
+                                                            onChange={handleStateChange}
+                                                            placeholder="Select State" >
+                                                            {states.map((state) => (
+                                                                <Select.Option key={state.stateCode} value={state.stateCode}>
+                                                                    {state.stateName}
+                                                                </Select.Option>
+                                                            ))}
+                                                        </Select>
                                                     </Space>
                                                 </div>
                                             </div>
-
+                                            {/* district */}
                                             <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                                                 <div className='d-flex flex-column'>
                                                     <label htmlFor="districtInput" className="form-label mb-1">District</label>
                                                     <Space wrap >
                                                         <Select
-                                                            value={district}
-                                                            onChange={setdistrict}
-                                                            style={{
-                                                                width: '100%',
-                                                            }}
-                                                            allowClear
-                                                            options={[
-                                                                {
-                                                                    value: 'noida',
-                                                                    label: 'noida',
-                                                                },
-                                                            ]}
-                                                            placeholder="Select district"
-                                                        />
+                                                            style={{ width: '100%' }}
+                                                            value={selectedDistrict}
+                                                            onChange={handleDistrictChange}
+                                                            placeholder="Select District"
+                                                            disabled={!selectedState} >
+                                                            {districts.map((district) => (
+                                                                <Select.Option key={district.districtCode} value={district.districtCode}>
+                                                                    {district.districtName}
+                                                                </Select.Option>
+                                                            ))}
+                                                        </Select>
                                                     </Space>
                                                 </div>
                                             </div>
+                                            {/* address */}
                                             <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                                                 <div className="mb-3">
-                                                    {/* <div> */}
                                                     <label htmlFor="addressInput" className="form-label mb-1">Address</label>
-                                                    {/* <img src="assets/images/mendate.png" alt="" /> */}
-                                                    {/* </div> */}
                                                     <div className="input-group p-0">
-                                                        <input type="text" className="form-control" placeholder='Type Your Address' id="addressInput" />
+                                                        <input type="text" value={formData.address} name="address" onChange={handleChange} className="form-control" placeholder='Type Your Address' id="addressInput" />
                                                     </div>
                                                 </div>
                                             </div>
+                                            {/* pincode */}
                                             <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                                                 <div className="mb-3">
-                                                    <div>
-                                                        <label htmlFor="pincodeInput" className="form-label mb-1">Pin Code</label>
-                                                        <img src="assets/images/mendate.png" alt="" />
-                                                    </div>
-                                                    <div className="input-group p-0">
-                                                        <input type="number" className="form-control" placeholder='Type Your Pin Code' id="pincodeInput" />
-                                                    </div>
+                                                    <label htmlFor="pincodeInput" className="form-label mb-1">Pin Code<span className="mandatory">*</span></label>
+                                                    <input type="text" value={formData.pincode} name="pincode" onChange={handleChange}
+                                                        className="form-control" placeholder="Enter Your Pin Code" id="pincodeInput" maxLength="6"
+                                                        onInput={(e) => {
+                                                            e.target.value = e.target.value.replace(/[^0-9]/g, "");
+                                                        }} />
+                                                    {error.pincode && <small className="text-danger">{error.pincode}</small>}
                                                 </div>
                                             </div>
-
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
                             <div>
                                 <div className="row flex-column align-items-center justify-content-center mb-3 mt-4">
                                     <div className="col-xl-4">
                                         <div className="row align-items-center mb-3 justify-content-center">
-                                            {/* <div className="col-xl-2">
-                                                <img className='' style={{ cursor: 'pointer' }} src="assets/images/refresh.png" alt="" />
-                                            </div> */}
                                             <div className="col-xl-4 text-center">
-                                                {/* captcha Image */}
                                                 {captchaImage && (
                                                     <img
                                                         src={captchaImage}
                                                         alt="CAPTCHA"
                                                         style={{ cursor: 'pointer' }}
-                                                        onClick={fetchCaptcha}
-                                                    />
+                                                        onClick={fetchCaptcha} />
                                                 )}
                                             </div>
                                             <div className="col-xl-6">
                                                 <div className="input-group">
                                                     <input
-                                                        type="text"
-                                                        className="form-control p-0"
-                                                        placeholder="Enter captcha"
-                                                        id="username"
-                                                        aria-label="Username"
+                                                        onChange={handleChange} name='captchaInput'
+                                                        value={formData.captchaInput} type="text"
+                                                        className="form-control p-0" placeholder="Enter captcha"
+                                                        id="username" aria-label="Username"
                                                         aria-describedby="basic-addon1"
                                                     />
                                                 </div>
@@ -408,15 +390,15 @@ export default function DonorRegister() {
                                     </div>
                                     <div className="col-xl-4 align-items-center">
                                         <div className="text-center px-4">
-                                            <button onClick={handleSectionView} className="w-100 btn btn-primary-signIn py-1">Sign Up</button>
+                                            <button onClick={handleSignUp} className="w-100 btn btn-primary-signIn py-1">Sign Up</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    }
+                    )}
 
-                    {currentStep === 2 &&
+                    {isOtpGenerated && !isRegistered && (
                         <div>
                             <div className="row align-items-center justify-content-center">
                                 <div className="col-xl-4">
@@ -431,13 +413,10 @@ export default function DonorRegister() {
                                             <div className="otp-input">
                                                 {Array(6).fill('').map((_, index) => (
                                                     <input
-                                                        key={index}
-                                                        type="text"
-                                                        maxLength="1"
-                                                        required
+                                                        key={index} type="text" maxLength="1" required
                                                         ref={el => otpRefs.current[index] = el}
                                                         onChange={(event) => handleOtpChange(index, event)}
-                                                        className={`otp-field ${index > 0 ? '' : ''}`}
+                                                        className="otp-field"
                                                         autoFocus={index === 0}
                                                     />
                                                 ))}
@@ -445,35 +424,24 @@ export default function DonorRegister() {
                                         </div>
                                         <div className="text-center">
                                             <p className="otpExpiry mb-1">OTP has been sent to your Mobile</p>
-                                            {otpExpiry > 0 ? (
-                                                <p className="otpExpiry">
-                                                    Your OTP will expire in{" "}
-                                                    <span className="timer">
-                                                        {Math.floor(otpExpiry / 60)
-                                                            .toString()
-                                                            .padStart(2, "0")}
-                                                        :
-                                                        {String(otpExpiry % 60).padStart(2, "0")}
-                                                    </span>{" "}
-                                                    min
-                                                </p>
-                                            ) : (
-                                                <p className="otpExpiry">Your OTP has expired. Please request a new one.</p>
-                                            )}
+                                            <p className="otpExpiry">
+                                                Your OTP will expire in <span className="timer">{formatTime(timer)}</span> min
+                                            </p>
                                         </div>
                                         <button
                                             type="button"
-                                            onClick={handleSectionView}
-                                            className="w-100 btn btn-primary-signIn py-1">
+                                            className="w-100 btn btn-primary-signIn py-1"
+                                            onClick={handleRegsiter}
+                                            disabled={timer === 0} >
                                             Validate
                                         </button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    }
+                    )}
 
-                    {currentStep === 3 &&
+                    {isRegistered && (
                         <div>
                             <div className="row align-items-center justify-content-center">
                                 <div className="col-xl-4">
@@ -485,13 +453,13 @@ export default function DonorRegister() {
                                             <div className='text-center'>
                                                 <img src="assets/images/success.png" alt="" />
                                                 <p className="otpExpiry mt-3">You have been successfully registered</p>
-
                                             </div>
                                         </div>
                                         <div className='d-flex align-items-center justify-content-center px-5'>
                                             <button
                                                 type="submit"
-                                                className="btn btn-primary-signIn py-1 w-100 text-center">
+                                                className="btn btn-primary-signIn py-1 w-100 text-center"
+                                                onClick={handleRedirectButton}>
                                                 Login
                                             </button>
                                         </div>
@@ -499,7 +467,7 @@ export default function DonorRegister() {
                                 </div>
                             </div>
                         </div>
-                    }
+                    )}
                 </div>
             </section>
         </>

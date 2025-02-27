@@ -1,5 +1,4 @@
 import React from "react";
-// import { Link } from "react-router-dom/cjs/react-router-dom.min";
 
 export default function Footer() {
 
@@ -27,21 +26,18 @@ export default function Footer() {
               <h5 className="heading">Looking for Blood</h5>
               <div className="d-flex flex-column">
                 <a
-                  href="/BLDAHIMS/bloodbank/stockAvailability.cnt"
-                  className="footer-details mb-2"
-                >
+                  href="#/publicPages/bloodAvailabilitySearch"
+                  className="footer-details mb-2">
                   Blood Availability
                 </a>
                 <a
-                  href="/BLDAHIMS/bloodbank/nearbyBBRed.cnt"
-                  className="footer-details mb-2"
-                >
+                  href="#/publicPages/bloodBankDirectory"
+                  className="footer-details mb-2">
                   Blood Bank Directory
                 </a>
                 <a
                   href="/BLDAHIMS/bloodbank/portalThalassemiaLogin.cnt"
-                  className="footer-details mb-2"
-                >
+                  className="footer-details mb-2">
                   Thalessemia Request
                 </a>
               </div>
@@ -51,28 +47,23 @@ export default function Footer() {
               <h5 className="heading"></h5>
               <div className="d-flex flex-column">
                 <a
-                  href="/BLDAHIMS/bloodbank/campSchedule.cnt"
-                  className="footer-details mb-2"
-                >
+                  href="#/publicPages/campSchedule"
+                  className="footer-details mb-2">
                   Blood Donation Camp
                 </a>
-                {/* <Link className="footer-details mb-2" to="/donorLogin"> Donor Login</Link> */}
                 <a
-                  href="/BLDAHIMS/bloodbank/portalDonorLogin.cnt"
-                  className="footer-details mb-2"
-                >
+                  href="#/pages/portalDonorLogin"
+                  className="footer-details mb-2">
                   Donor Login
                 </a>
                 <a
                   href="/BLDAHIMS/bloodbank/donateblood.cnt"
-                  className="footer-details mb-2"
-                >
+                  className="footer-details mb-2">
                   About Blood Donation
                 </a>
                 <a
-                  href="/BLDAHIMS/bloodbank/onlineCampRequestNewBB.cnt"
-                  className="footer-details mb-2"
-                >
+                  href="#/publicPages/campRegistration"
+                  className="footer-details mb-2">
                   Register VBD Camp
                 </a>
               </div>
@@ -82,14 +73,12 @@ export default function Footer() {
               <div className="d-flex flex-column">
                 <a
                   href="/eRaktKosh/hissso/loginLogin"
-                  className="footer-details mb-2"
-                >
+                  className="footer-details mb-2">
                   e-Raktkosh Login
                 </a>
                 <a
                   href="/BLDAHIMS/bloodbank/bbOnboard.cnt?hmode=GETONBOARDFORMESSENTIAL"
-                  className="footer-details mb-2"
-                >
+                  className="footer-details mb-2" >
                   Add your Blood Bank
                 </a>
               </div>
@@ -99,44 +88,37 @@ export default function Footer() {
               <div className="d-flex flex-column">
                 <a
                   href="/BLDAHIMS/bloodbank/about.cnt"
-                  className="footer-details mb-2"
-                >
+                  className="footer-details mb-2">
                   About e-Raktkosh
                 </a>
                 <a
                   href="/BLDAHIMS/bloodbank/notification.cnt"
-                  className="footer-details mb-2"
-                >
+                  className="footer-details mb-2">
                   Notifications
                 </a>
                 <a
-                  href="/BLDAHIMS/bloodbank/eraktkoshfaq.cnt"
-                  className="footer-details mb-2"
-                >
+                  href="#/publicPages/FAQs"
+                  className="footer-details mb-2">
                   e-Raktkosh FAQs
                 </a>
                 <a
                   href="/BLDAHIMS/bloodbank/transactions/bbpublicindexGallery.html"
-                  className="footer-details mb-2"
-                >
+                  className="footer-details mb-2">
                   Gallery{" "}
                 </a>
                 <a
                   href="/BLDAHIMS/bloodbank/transactions/video.html"
-                  className="footer-details mb-2"
-                >
+                  className="footer-details mb-2">
                   Video Gallery
                 </a>
                 <a
                   href="/BLDAHIMS/bloodbank/contact.cnt"
-                  className="footer-details mb-2"
-                >
+                  className="footer-details mb-2" >
                   Contact Us
                 </a>
                 <a
                   href="/BLDAHIMS/bloodbank/downloadMobile.cnt"
-                  className="footer-details mb-2"
-                >
+                  className="footer-details mb-2">
                   Mobile Apps
                 </a>
               </div>
@@ -156,45 +138,35 @@ export default function Footer() {
                 width="67px"
                 height="67px"
                 src="assets/images/main-icon.png"
-                alt="...Symbols"
-
-              />
+                alt="...Symbols"/>
             </div>
             <div className="col-12 col-md-4 col-xl-3 mb-3 d-xl-flex justify-content-center">
               <img className=""
                 src="assets/images/ministry-icon.png"
                 style={{ cursor: 'pointer' }}
                 onClick={handleImageClick1}
-                alt="...Symbols"
-
-              />
+                alt="...Symbols" />
             </div>
             <div className="col-12 col-md-4 col-xl-2 mb-3 d-xl-flex justify-content-center">
               <img className=""
                 src="assets/images/umang-icon.png"
                 style={{ cursor: 'pointer' }}
                 onClick={handleImageClick2}
-                alt="...Symbols"
-
-              />
+                alt="...Symbols"/>
             </div>
             <div className="col-12 col-md-4 col-xl-3 mb-3 d-xl-flex justify-content-center">
               <img className=""
                 src="assets/images/nhp-icon.png"
                 style={{ cursor: 'pointer' }}
                 onClick={handleImageClick3}
-                alt="...Symbols"
-              />
-
+                alt="...Symbols" />
             </div>
             <div className="col-12 col-md-4 col-xl-2 mb-3 d-xl-flex justify-content-center">
               <img className=""
                 src="assets/images/govt-icon.png"
                 style={{ cursor: 'pointer' }}
                 onClick={handleImageClick4}
-                alt="...Symbols"
-              />
-
+                alt="...Symbols" />
             </div>
           </div>
 

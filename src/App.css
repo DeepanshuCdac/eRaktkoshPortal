@@ -1096,7 +1096,7 @@
 
 .login-header {
     color: #2C2C2C;
-    font-size: 40px;
+    font-size: 32px;
     font-weight: 600;
 }
 
@@ -1458,4 +1458,10 @@
 
 .ant-select-single {
     height: 38px;
+}
+
+.mandatory {
+    color: #EF5350;
+    font-size: 15px;
+    font-weight: 600;
 }

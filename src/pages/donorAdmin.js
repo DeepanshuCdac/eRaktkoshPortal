@@ -30,7 +30,7 @@ export default function DonorAdmin() {
         if (!isTokenValid(token)) {
             sessionStorage.clear();
             alert('Session expired. Please log in again.');
-            window.location.href = '/#/pages/portalDonorLogin'
+            window.location.href = '/beta#/pages/portalDonorLogin'
         } else {
             fetchDonorData();
             fetchCertificateData();
@@ -55,7 +55,7 @@ export default function DonorAdmin() {
 
     const handleLogout = () => {
         sessionStorage.clear();
-        window.location.href = '/#/pages/portalDonorLogin'
+        window.location.href = '/beta#/pages/portalDonorLogin'
     };
 
     return (

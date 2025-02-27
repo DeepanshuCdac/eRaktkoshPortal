@@ -11,7 +11,7 @@ const { Search } = Input;
 const CampSchedule = () => {
 
     useEffect(() => {
-        document.title = 'e-RaktKosh Camp Schedule'
+        document.title = 'e-RaktKosh Camp Registration'
     }, []);
 
     return (

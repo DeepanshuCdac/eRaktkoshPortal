@@ -1,9 +1,9 @@
-// Donor Certificate Generated...
+// Donor Certificate...
 export function generateCertificate(certificateData) {
     // new window
     const newWindow = window.open("", "_blank", "width=1000,height=700");
 
-    // Generate the certificate content
+    // generate certificate
     const certificateContent = `
       <html>
         <head>
