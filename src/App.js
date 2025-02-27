@@ -50,7 +50,7 @@ function AppContent() {
         </Route>
 
         <Route path="/publicPages/bloodAvailabilitySearch">
-          <BloodAvailabiltySearch />
+          <BloodAvailabiltySearch useContainer={true} />
         </Route>
 
         <Route path="/publicPages/bloodBankDirectory">

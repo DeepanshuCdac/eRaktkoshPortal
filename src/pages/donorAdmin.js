@@ -148,7 +148,7 @@ export default function DonorAdmin() {
                                     {activeTab === 0 && <DonorAdminHome onViewAllClick={setDonationCertificateTab} />}
                                     {activeTab === 1 && <DonorAdminProfile />}
                                     {activeTab === 2 && <DonationCertificate onBack={() => handleTabClick(0)} />}
-                                    {activeTab === 3 && <BloodAvailabiltySearch />}
+                                    {activeTab === 3 && <BloodAvailabiltySearch useContainer={false} />}
                                     {activeTab === 4 && <CampSchedule />}
                                 </div>
                             </div>

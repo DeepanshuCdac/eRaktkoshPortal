@@ -6,7 +6,7 @@ import axios from 'axios';
 import { Select, Space, Input, Table } from 'antd'
 const { Search } = Input;
 
-const BloodAvailabiltySearch = () => {
+const BloodAvailabiltySearch = ({useContainer}) => {
 
     const dispatch = useDispatch();
     const { statesWithDistricts, bloodGroups, componentList, status } = useSelector((state) => state.data);
@@ -87,10 +87,10 @@ const BloodAvailabiltySearch = () => {
     return (
         <>
             <div className="page-wrapper">
-                <div className="container">
+                <div className={useContainer ? "container" : ""}>
                     <h2 className="header-page mb-3">Blood Stock Availability</h2>
-                    <div className="widget px-3 pt-3 pb-5 mb-3">
-                        <h4 className="widget-header text-center mb-4">Search Blood Stock</h4>
+                    <div className="widget px-3 py-3 mb-3">
+                        {/* <h4 className="widget-header text-center mb-4">Search Blood Stock</h4> */}
                         <div className="row">
                             <div className="col-xl-3 col-lg-3 col-md-6 col-sm-6 mb-2 mb-xl-0 mb-lg-0">
                                 <div className='d-flex flex-column'>
@@ -166,8 +166,8 @@ const BloodAvailabiltySearch = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="btnSection text-center col-xl-2 col-lg-2 col-md-3 col-3">
-                            <button type="primary" onClick={handleSearch} className="w-100 btn btn-primary-signIn">Search</button>
+                        <div className="d-flex align-items-center justify-content-center mt-3">
+                            <button type="primary" onClick={handleSearch} className="btn btn-primary-signIn px-5">Search</button>
                         </div>
                     </div>
                     <div className="d-xl-flex d-lg-flex d-md-flex d-sm-flex align-items-center justify-content-between mt-3 mb-3">
@@ -225,7 +225,7 @@ const BloodAvailabiltySearch = () => {
                         dataSource={bloodStockData}
                         rowKey="h_code"
                         pagination={{ pageSize: 6 }}
-                        className="mt-3"
+                        className="mt-3 mb-3"
                     />
                 </div>
             </div>

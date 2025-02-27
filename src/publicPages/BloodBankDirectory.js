@@ -19,7 +19,7 @@ const BloodBankDirectory = () => {
             <div className="page-wrapper">
                 <div className="container">
                     <h2 className="header-page mb-3">Nearest Blood Bank(BB)/ Blood Storage Unit(BSU)</h2>
-                    <div className="widget px-3 pt-3 pb-5 mb-3">
+                    <div className="widget px-3 py-3 mb-3">
                         <div className="row mx-4">
                             <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 mb-2 mb-xl-0 mb-lg-0">
                                 <div className="d-flex">
@@ -56,8 +56,8 @@ const BloodBankDirectory = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="btnSection text-center col-xl-2 col-lg-2 col-md-3 col-3">
-                            <button className="w-100 btn btn-primary-signIn">Search</button>
+                        <div className="d-flex align-items-center justify-content-center mt-3">
+                            <button className="px-5 btn btn-primary-signIn">Search</button>
                         </div>
                     </div>
                     <div className="d-xl-flex d-lg-flex d-md-flex d-sm-flex align-items-center justify-content-between mt-3 mb-3">
