@@ -58,21 +58,15 @@ export default function DonorLogin() {
 
     const handleGenerateOtp = async () => {
         const isValidNumber = /^\d{10}$/.test(mobileno);
-        const currentTime = Date.now();
-        // Retrieve last OTP request time for the specific mobile number
-        const lastOtpRequestTime = localStorage.getItem(`lastOtpRequestTime_${mobileno}`);
-
-
-        // Validate mobile number format
+       
         if (!isValidNumber) {
             alert('Please enter a valid 10-digit mobile number.');
             return;
         }
-
+    
         setLoading(true);
-
+    
         try {
-            // Make API call to generate OTP
             const response = await axios.post(
                 `${BaseUrl}/eraktkosh/generateOTP`,
                 { mobileno },
@@ -83,63 +77,48 @@ export default function DonorLogin() {
                     },
                 }
             );
-
+    
             console.log('Response data:', response.data);
-
+    
             setCaptchaImage(response.data.captchaImage);
             setCaptchaText('');
-
+    
             const otpData = JSON.parse(response.data.OtpData);
-            const isUserExists = otpData.isUserExists;
-
-            console.log('user ?? :: ', isUserExists)
-
-            // If user doesn't exist, display the message and return
-            if (!isUserExists && otpData.notRegisteredMessage) {
-                alert(otpData.notRegisteredMessage);
-                setShowOtpField(true);
-                setIsInputDisabled(true);
-                console.log('notRegisteredMessage:', otpData.notRegisteredMessage);
-                return;
+            console.log("OTP Data: ", otpData);
+    
+            // Step 1: Check if isUserExists is present, if not, check eRaktkosh
+            if (!otpData.hasOwnProperty('isUserExists')) {
+                if (otpData.eRaktkosh === false && otpData.notRegisteredMessage) {
+                    alert(otpData.notRegisteredMessage);
+                    setShowOtpField(true);
+                    setIsInputDisabled(true);
+                    return;
+                }
             }
-
-            // If the daily OTP limit has been exceeded
-            if (isUserExists && otpData.limitExceedMessage) {
-                alert(otpData.limitExceedMessage);
-                setShowOtpField(false);
-                setIsInputDisabled(true);
-                console.log('limitExceedMessage:', otpData.limitExceedMessage);
-                return;
+    
+            // Step 2: If user exists, check OTP field
+            if (otpData.isUserExists) {
+                if (otpData.otp) {
+                    alert(otpData.messageSuccess); 
+    
+                    console.log("OTP:", otpData.otp);
+                    console.log("OTP Expiration Time:", otpData.otpExpirationTime);
+    
+                    setShowOtpField(true);
+                    setIsInputDisabled(false);
+    
+                    startOtpTimer(Math.floor(otpData.otpExpirationTime / 1000));
+                    return;
+                }
+    
+                // Step 3: If OTP is not there, check for errorMessage
+                if (otpData.errorMessage) {
+                    alert(otpData.errorMessage);
+                    setShowOtpField(false);
+                    setIsInputDisabled(true);
+                    return;
+                }
             }
-
-            // If last OTP request was made in the last 5 minutes
-            console.log('lastOtpRequestTime:', lastOtpRequestTime);
-            console.log('currentTime:', currentTime);
-            console.log('timeDifference:', currentTime - parseInt(lastOtpRequestTime));
-            if (isUserExists && lastOtpRequestTime && !isNaN(lastOtpRequestTime) && currentTime - parseInt(lastOtpRequestTime) < 300000) {
-                alert(otpData.errorMessage);
-                setShowOtpField(false);
-                setIsInputDisabled(true);
-                console.log('errorMessage:', otpData.errorMessage);
-                return;
-            }
-            console.log('messageSuccess:', otpData.messageSuccess);
-
-            const otp = otpData.otp;
-            const otpExpirationTime = Math.floor(otpData.otpExpirationTime / 1000);
-
-            console.log('OTP:', otp);
-            console.log('OTP Expiration Time:', otpExpirationTime);
-
-            alert(otpData.messageSuccess);
-            console.log("success message : ", otpData.messageSuccess)
-
-            setShowOtpField(true);
-            setIsInputDisabled(false);
-
-            localStorage.setItem(`lastOtpRequestTime_${mobileno}`, currentTime);
-
-            startOtpTimer(otpExpirationTime);
         } catch (error) {
             console.error('Error generating OTP:', error.response || error.message || error);
             alert('An error occurred while generating OTP.');
@@ -147,7 +126,7 @@ export default function DonorLogin() {
             setLoading(false);
         }
     };
-
+    
     const handleOtpChange = (index, event) => {
         const { value } = event.target
 

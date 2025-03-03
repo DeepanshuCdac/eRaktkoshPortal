@@ -149,7 +149,7 @@ export default function DonorAdmin() {
                                     {activeTab === 1 && <DonorAdminProfile />}
                                     {activeTab === 2 && <DonationCertificate onBack={() => handleTabClick(0)} />}
                                     {activeTab === 3 && <BloodAvailabiltySearch useContainer={false} />}
-                                    {activeTab === 4 && <CampSchedule />}
+                                    {activeTab === 4 && <CampSchedule useContainer={false} />}
                                 </div>
                             </div>
                         </div>

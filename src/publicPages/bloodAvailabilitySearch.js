@@ -3,10 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getApiData } from '../redux/slices/dataSlice';
 import '../scss/bloodSearch.scss'
 import axios from 'axios';
-import { Select, Space, Input, Table } from 'antd'
+import { Select, Space, Input, Table, Empty } from 'antd'
 const { Search } = Input;
 
-const BloodAvailabiltySearch = ({useContainer}) => {
+const BloodAvailabiltySearch = ({ useContainer }) => {
 
     const dispatch = useDispatch();
     const { statesWithDistricts, bloodGroups, componentList, status } = useSelector((state) => state.data);
@@ -16,6 +16,10 @@ const BloodAvailabiltySearch = ({useContainer}) => {
     const [selectedBloodGroup, setSelectedBloodGroup] = useState(null);
     const [selectedComponent, setSelectedComponent] = useState(null);
     const [bloodStockData, setBloodStockData] = useState([]);
+    const [filteredData, setFilteredData] = useState([]);
+    const [searchText, setSearchText] = useState("");
+    const [selectedCategory, setSelectedCategory] = useState(null);
+    const [uniqueCategories, setUniqueCategories] = useState([]);
 
     useEffect(() => {
         dispatch(getApiData());
@@ -36,6 +40,20 @@ const BloodAvailabiltySearch = ({useContainer}) => {
 
     const handleComponentChange = (value) => {
         setSelectedComponent(value);
+    };
+
+    const allCategories = ["Govt.", "Charitable/Vol", "Private", "Red Cross"];
+
+    const handleCategoryChange = (value) => {
+        console.log("Selected Category:", value);
+        setSelectedCategory(value);
+        if (value && value !== "All") {
+            setFilteredData(
+                bloodStockData.filter(item => item.type.trim().toLowerCase() === value.trim().toLowerCase())
+            );
+        } else {
+            setFilteredData(bloodStockData);
+        }
     };
 
     const states = statesWithDistricts || [];
@@ -66,13 +84,31 @@ const BloodAvailabiltySearch = ({useContainer}) => {
             );
 
             if (response.data.length > 1) {
-                setBloodStockData(response.data.slice(1));
+                const data = response.data.slice(1);
+                setBloodStockData(data);
+                setFilteredData(data);
+
+                const typesSet = new Set(data.map(item => item.type));
+                setUniqueCategories([...typesSet]);
             } else {
                 setBloodStockData([]);
+                setFilteredData([]);
+                setUniqueCategories([]);
             }
         } catch (error) {
             console.error("Error fetching blood stock data:", error);
         }
+    };
+
+    const handleTableSearch = (value) => {
+        setSearchText(value);
+        const lowercasedValue = value.toLowerCase();
+        const filtered = bloodStockData.filter(item =>
+            Object.values(item).some(field =>
+                field && field.toString().toLowerCase().includes(lowercasedValue)
+            )
+        );
+        setFilteredData(filtered);
     };
 
     const columns = [
@@ -90,7 +126,6 @@ const BloodAvailabiltySearch = ({useContainer}) => {
                 <div className={useContainer ? "container" : ""}>
                     <h2 className="header-page mb-3">Blood Stock Availability</h2>
                     <div className="widget px-3 py-3 mb-3">
-                        {/* <h4 className="widget-header text-center mb-4">Search Blood Stock</h4> */}
                         <div className="row">
                             <div className="col-xl-3 col-lg-3 col-md-6 col-sm-6 mb-2 mb-xl-0 mb-lg-0">
                                 <div className='d-flex flex-column'>
@@ -170,63 +205,59 @@ const BloodAvailabiltySearch = ({useContainer}) => {
                             <button type="primary" onClick={handleSearch} className="btn btn-primary-signIn px-5">Search</button>
                         </div>
                     </div>
-                    <div className="d-xl-flex d-lg-flex d-md-flex d-sm-flex align-items-center justify-content-between mt-3 mb-3">
-                        <div className="pagination-view d-flex align-items-center mb-2 mb-xl-0 mb-lg-0 mb-md-0 mb-sm-0">
-                            <p className="area mb-0 me-1">Show</p>
-                            <p className="button mb-0 me-1">6</p>
-                            <p className="mb-0 area">entries</p>
+                    <div className="d-flex justify-content-between align-items-center">
+                        <div className="">
+                            <div className="filterSection d-flex align-items-center justify-content-around px-2 py-1">
+                                <div className="d-flex align-items-center">
+                                    <p className="area mb-0 me-1">Category</p>
+                                    <p className="number mb-0 me-1">4</p>
+                                </div>
+                                <Select
+                                    style={{ width: 150 }}
+                                    value={selectedCategory}
+                                    onChange={handleCategoryChange}
+                                    placeholder="Select Category" >
+                                    <Select.Option value="All">All</Select.Option>
+                                    {allCategories.map((category, index) => (
+                                        <Select.Option key={index} value={category}>
+                                            {category}
+                                        </Select.Option>
+                                    ))}
+                                </Select>
+                                <button
+                                    className="btn px-2"
+                                    onClick={() => {
+                                        setSelectedCategory(null); setFilteredData(bloodStockData);
+                                    }}>
+                                    <img src="assets/images/close.png" />
+                                </button>
+
+                            </div>
                         </div>
                         <div className="d-flex">
-                            <Search placeholder="Search" className="me-2" />
+                            <Search
+                                placeholder="Search Blood Bank"
+                                className="me-2"
+                                value={searchText}
+                                onChange={(e) => handleTableSearch(e.target.value)}
+                            />
                             <button className="filter_btn d-flex align-items-center">
                                 <img className="me-1" src="assets/images/filter.png" />
                                 Filters
                             </button>
                         </div>
                     </div>
-                    <div className="row">
-                        <div className="col-xl-8 col-lg-8 col-md-10 col-12">
-                            <div className="row">
-                                <div className="col-xl-4 col-lg-4 col-md-4 col-12 pe-xl-0 mb-xl-0 mb-lg-0 mb-md-0 mb-2">
-                                    <div className="filterSection d-flex align-items-center justify-content-around px-2 py-1">
-                                        <div className="d-flex align-items-center">
-                                            <p className="area mb-0 me-1">Area</p>
-                                            <p className="number mb-0 me-1">4</p>
-                                        </div>
-                                        <button className="btn selected px-1">Selected<img className="ms-1" src="assets/images/arrow_down.png" /></button>
-                                        <button className="btn px-2"><img src="assets/images/close.png" /></button>
-                                    </div>
-                                </div>
-                                <div className="col-xl-4 col-lg-4 col-md-4 col-12 pe-xl-0 mb-xl-0 mb-lg-0 mb-md-0 mb-2">
-                                    <div className="filterSection d-flex align-items-center justify-content-around px-2 py-1">
-                                        <div className="d-flex align-items-center">
-                                            <p className="area mb-0 me-1">Category</p>
-                                            <p className="number mb-0 me-1">4</p>
-                                        </div>
-                                        <button className="d-flex align-items-center btn selected px-1">Selected<img className="ms-1" src="assets/images/arrow_down.png" /></button>
-                                        <button className="btn px-2"><img src="assets/images/close.png" /></button>
-                                    </div>
-                                </div>
-                                <div className="col-xl-4 col-lg-4 col-md-4 col-12 pe-xl-0 mb-xl-0 mb-lg-0 mb-md-0 mb-2">
-                                    <div className="filterSection d-flex align-items-center justify-content-around px-2 py-1">
-                                        <div className="d-flex align-items-center">
-                                            <p className="area mb-0 me-1">State</p>
-                                            <p className="number mb-0 me-1">4</p>
-                                        </div>
-                                        <button className="d-flex align-items-center btn selected px-1">Selected<img className="ms-1" src="assets/images/arrow_down.png" /></button>
-                                        <button className="btn px-2"><img src="assets/images/close.png" /></button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <Table
-                        columns={columns}
-                        dataSource={bloodStockData}
-                        rowKey="h_code"
-                        pagination={{ pageSize: 6 }}
-                        className="mt-3 mb-3"
-                    />
+                    {filteredData.length > 0 ? (
+                        <Table
+                            columns={columns}
+                            dataSource={filteredData}
+                            rowKey="h_code"
+                            pagination={{ pageSize: 10 }}
+                            className="mt-3 mb-3"
+                        />
+                    ) : (
+                        <Empty description="No Data Found" className="mt-3 mb-3" />
+                    )}
                 </div>
             </div>
         </>

@@ -58,7 +58,7 @@ function AppContent() {
         </Route>
 
         <Route path="/publicPages/campSchedule">
-          <CampSchedule />
+          <CampSchedule useContainer={true} />
         </Route>
 
         <Route path="/publicPages/campRegistration">

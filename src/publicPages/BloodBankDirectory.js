@@ -1,10 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import '../scss/bloodSearch.scss'
-import { Input, DatePicker, Space } from 'antd';
-
-const onDateChange = (date, dateString) => {
-    console.log(date, dateString);
-};
+import { Input, DatePicker, Space, Select, Table } from 'antd';
+import { useDispatch, useSelector } from 'react-redux';
+import { getApiData } from '../redux/slices/dataSlice';
+import axios from "axios";
 
 const { Search } = Input;
 
@@ -14,6 +13,101 @@ const BloodBankDirectory = () => {
         document.title = 'e-RaktKosh Blood Bank Directory'
     }, [])
 
+    const dispatch = useDispatch();
+    const { statesWithDistricts, status } = useSelector((state) => state.data);
+    const [searchText, setSearchText] = useState("");
+    const [selectedState, setSelectedState] = useState(null);
+    const [selectedDistrict, setSelectedDistrict] = useState(null);
+    const [bloodBanks, setBloodBanks] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [selectedCategory, setSelectedCategory] = useState(null);
+    const [filteredBloodBanks, setFilteredBloodBanks] = useState([]); // Filtered Data
+
+
+    useEffect(() => {
+        dispatch(getApiData());
+    }, [dispatch]);
+
+    const handleStateChange = (value) => {
+        setSelectedState(value);
+        setSelectedDistrict(null);
+    };
+
+    const handleDistrictChange = (value) => {
+        setSelectedDistrict(value);
+    };
+
+    const fetchNearestBloodBanks = async () => {
+        if (!selectedState) {
+            alert("Please select a state.");
+
+            return;
+        }
+
+        setLoading(true);
+        try {
+            const response = await axios.get(`http://10.226.25.103:8080/eraktkosh/bloodbank/nearest`, {
+                params: {
+                    stateCode: selectedState,
+                    districtCode: selectedDistrict || -1,
+                },
+            });
+
+            const formattedData = response.data.map((item, index) => ({
+                key: item.h_code || index,
+                sNo: index + 1,
+                name: item.name || "-",
+                address: item.address || "-",
+                phone: item.phone || "-",
+                email: item.email || "-",
+                category: item.hospitalType || "-",
+                distance: item.distance || "-",
+                type: "Camps",
+            }));
+
+            setBloodBanks(formattedData);
+            setFilteredBloodBanks(formattedData);
+        } catch (error) {
+            console.error("Error fetching blood banks:", error);
+            setBloodBanks([]);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const states = statesWithDistricts || [];
+    const districts = selectedState
+        ? states.find(state => state.stateCode === selectedState)?.districts || []
+        : [];
+
+    const columns = [
+        { title: "S.No.", dataIndex: "sNo", key: "sNo", },
+        { title: "Name", dataIndex: "name", key: "name", },
+        { title: "Address", dataIndex: "address", key: "address", },
+        { title: "Phone", dataIndex: "phone", key: "phone", },
+        { title: "Email", dataIndex: "email", key: "email", },
+        { title: "Category", dataIndex: "category", key: "category", },
+        { title: "Distance", dataIndex: "distance", key: "distance", },
+        {
+            title: "Type", dataIndex: "type", key: "type",
+            render: (_, record) => (
+                <div className="d-flex flex-column">
+                    <a href="/#/publicPages/campSchedule">Camps</a>
+                    <a href="/#/publicPages/bloodAvailabilitySearch">Stock</a>
+                </div>
+            ),
+        },
+    ];
+
+    const filterData = (category) => {
+        if (!category) {
+            setFilteredBloodBanks(bloodBanks); // Show all data when "All" is selected
+            return;
+        }
+        const filtered = bloodBanks.filter(bank => bank.category.trim().toLowerCase() === category.trim().toLowerCase());
+        setFilteredBloodBanks(filtered);
+    };
+
     return (
         <>
             <div className="page-wrapper">
@@ -21,161 +115,127 @@ const BloodBankDirectory = () => {
                     <h2 className="header-page mb-3">Nearest Blood Bank(BB)/ Blood Storage Unit(BSU)</h2>
                     <div className="widget px-3 py-3 mb-3">
                         <div className="row mx-4">
-                            <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 mb-2 mb-xl-0 mb-lg-0">
-                                <div className="d-flex">
-                                    <div className="w-100">
-                                        <div className="dropdown ">
-                                            <button className="p-3 d-1 btn dropdown-toggle w-100 d-flex align-items-center justify-content-between" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                Select State
-                                            </button>
-                                            <ul className="dropdown-menu w-100 py-0">
-                                                <li><a className="py-2 dropdown-item" href="#">Action</a></li>
-                                                <li><a className="py-2 dropdown-item" href="#">Another action</a></li>
-                                                <li><a className="py-2 dropdown-item" href="#">Something else here</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-
-                                    <div className="w-100">
-                                        <div className="dropdown ">
-                                            <button className="btn d-2 p-3 dropdown-toggle w-100 d-flex align-items-center justify-content-between" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                Select District
-                                            </button>
-                                            <ul className="dropdown-menu w-100 py-0">
-                                                <li><a className="py-2 dropdown-item" href="#">Action</a></li>
-                                                <li><a className="py-2 dropdown-item" href="#">Another action</a></li>
-                                                <li><a className="py-2 dropdown-item" href="#">Something else here</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
+                            <div className="col-xl-3 col-lg-3 col-md-6 col-sm-6 mb-2 mb-xl-0 mb-lg-0">
+                                <div className='d-flex flex-column'>
+                                    <label htmlFor="orgType" className="form-label mb-1">Select Your State</label>
+                                    <Space wrap>
+                                        <Select
+                                            style={{ width: '100%' }}
+                                            value={selectedState}
+                                            onChange={handleStateChange}
+                                            placeholder="Select State" >
+                                            {states.map((state) => (
+                                                <Select.Option key={state.stateCode} value={state.stateCode}>
+                                                    {state.stateName}
+                                                </Select.Option>
+                                            ))}
+                                        </Select>
+                                    </Space>
+                                </div>
+                            </div>
+                            <div className="col-xl-3 col-lg-3 col-md-6 col-sm-6 mb-2 mb-xl-0 mb-lg-0">
+                                <div className='d-flex flex-column'>
+                                    <label htmlFor="orgType" className="form-label mb-1">Select Your District</label>
+                                    <Space wrap>
+                                        <Select
+                                            style={{ width: '100%' }}
+                                            value={selectedDistrict}
+                                            onChange={handleDistrictChange}
+                                            placeholder="Select District"
+                                            disabled={!selectedState} >
+                                            {districts.map((district) => (
+                                                <Select.Option key={district.districtCode} value={district.districtCode}>
+                                                    {district.districtName}
+                                                </Select.Option>
+                                            ))}
+                                        </Select>
+                                    </Space>
                                 </div>
                             </div>
                             <div className="d-flex align-items-end justify-content-center col-xl-6 col-lg-6 col-md-6 col-sm-6 mb-2 mb-xl-0 mb-lg-0">
-                                <div className="w-100 h-100">
+                                <div className="w-100" style={{ height: '64%' }}>
                                     <Search placeholder="Search" className="me-2" />
                                 </div>
                             </div>
                         </div>
                         <div className="d-flex align-items-center justify-content-center mt-3">
-                            <button className="px-5 btn btn-primary-signIn">Search</button>
+                            <button
+                                className="px-5 btn btn-primary-signIn"
+                                onClick={fetchNearestBloodBanks}
+                                disabled={loading}
+                            >
+                                {loading ? "Searching..." : "Search"}
+                            </button>
                         </div>
                     </div>
-                    <div className="d-xl-flex d-lg-flex d-md-flex d-sm-flex align-items-center justify-content-between mt-3 mb-3">
-                        <div className="pagination-view d-flex align-items-center mb-2 mb-xl-0 mb-lg-0 mb-md-0 mb-sm-0">
-                            <p className="area mb-0 me-1">Show</p>
-                            <p className="button mb-0 me-1">6</p>
-                            <p className="mb-0 area">entries</p>
+                    <div className="d-flex justify-content-between align-items-center">
+                        <div className="">
+                            <div className="filterSection d-flex align-items-center justify-content-around px-2 py-1">
+                                <div className="d-flex align-items-center">
+                                    <p className="area mb-0 me-1">Category</p>
+                                    <p className="number mb-0 me-1">4</p>
+                                </div>
+                                <Select
+                                    style={{ width: 150 }}
+                                    placeholder="Select Category"
+                                    value={selectedCategory}
+                                    onChange={(value) => {
+                                        setSelectedCategory(value);
+                                        filterData(value);
+                                    }} >
+                                    <Select.Option value={null}>All</Select.Option>
+                                    <Select.Option value="Govt.">Govt.</Select.Option>
+                                    <Select.Option value="Private">Private</Select.Option>
+                                    <Select.Option value="Charitable/Vol">Charitable/Vol</Select.Option>
+                                    <Select.Option value="Red Cross">Red Cross</Select.Option>
+                                </Select>
+                                <button
+                                    className="btn px-2"
+                                    onClick={() => {
+                                        setSelectedCategory(null);
+                                        setFilteredBloodBanks(bloodBanks);
+                                    }} >
+                                    <img src="assets/images/close.png" />
+                                </button>
+                            </div>
                         </div>
                         <div className="d-flex">
-                            <Search placeholder="Search" className="me-2" />
+                            <Search
+                                placeholder="Search Blood Bank"
+                                className="me-2"
+                                value={searchText}
+                                onChange={(e) => {
+                                    const value = e.target.value.toLowerCase();
+                                    setSearchText(value);
+
+                                    if (!value) {
+                                        setFilteredBloodBanks(bloodBanks);
+                                        return;
+                                    }
+
+                                    const filtered = bloodBanks.filter(bank =>
+                                        bank.name.toLowerCase().includes(value) ||
+                                        bank.address.toLowerCase().includes(value) ||
+                                        bank.phone.toLowerCase().includes(value) ||
+                                        bank.email.toLowerCase().includes(value) ||
+                                        bank.category.toLowerCase().includes(value)
+                                    );
+                                    setFilteredBloodBanks(filtered);
+                                }} />
                             <button className="filter_btn d-flex align-items-center">
                                 <img className="me-1" src="assets/images/filter.png" />
                                 Filters
                             </button>
                         </div>
                     </div>
-                    <div className="row">
-                        <div className="col-xl-8 col-lg-8 col-md-10 col-12">
-                            <div className="row">
-                                <div className="col-xl-4 col-lg-4 col-md-4 col-12 pe-xl-0 mb-xl-0 mb-lg-0 mb-md-0 mb-2">
-                                    <div className="filterSection d-flex align-items-center justify-content-around px-2 py-1">
-                                        <div className="d-flex align-items-center">
-                                            <p className="area mb-0 me-1">Date</p>
-                                            <p className="number mb-0 me-1">4</p>
-                                        </div>
-                                        <button className="btn selected px-1">Selected<img className="ms-1" src="assets/images/arrow_down.png" /></button>
-                                        <button className="btn px-2"><img src="assets/images/close.png" /></button>
-                                    </div>
-                                </div>
-                                <div className="col-xl-4 col-lg-4 col-md-4 col-12 pe-xl-0 mb-xl-0 mb-lg-0 mb-md-0 mb-2">
-                                    <div className="filterSection d-flex align-items-center justify-content-around px-2 py-1">
-                                        <div className="d-flex align-items-center">
-                                            <p className="area mb-0 me-1">Camp Name</p>
-                                            <p className="number mb-0 me-1">4</p>
-                                        </div>
-                                        <button className="d-flex align-items-center btn selected px-1">Selected<img className="ms-1" src="assets/images/arrow_down.png" /></button>
-                                        <button className="btn px-2"><img src="assets/images/close.png" /></button>
-                                    </div>
-                                </div>
-                                <div className="col-xl-4 col-lg-4 col-md-4 col-12 pe-xl-0 mb-xl-0 mb-lg-0 mb-md-0 mb-2">
-                                    <div className="filterSection d-flex align-items-center justify-content-around px-2 py-1">
-                                        <div className="d-flex align-items-center">
-                                            <p className="area mb-0 me-1">State</p>
-                                            <p className="number mb-0 me-1">4</p>
-                                        </div>
-                                        <button className="d-flex align-items-center btn selected px-1">Selected<img className="ms-1" src="assets/images/arrow_down.png" /></button>
-                                        <button className="btn px-2"><img src="assets/images/close.png" /></button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
-                    <table className="table table-long mt-3">
-                        <thead>
-                            <th className="column-1">S.No.</th>
-                            <th className="column-2">Name</th>
-                            <th className="column-3">Address</th>
-                            <th className="column-4">Phone</th>
-                            <th className="column-5">Email</th>
-                            <th className="column-6">Category</th>
-                            <th className="column-7">Distance</th>
-                            <th className="column-8">Type</th>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td className="column-1" data-label="S.No.">1</td>
-                                <td className="column-2" data-label="Name">Blood Centre Changlang</td>
-                                <td className="column-3" data-label="Address">
-                                    <span>District Hospital, Changlang, Changlang, Dist. Changlang</span>
-                                </td>
-                                <td className="column-4" data-label="Phone">9863621471</td>
-                                <td className="column-5" data-label="Email">bloodcenterchanglang@gmail.com	</td>
-                                <td className="column-6" data-label="Category">Govt.</td>
-                                <td className="column-7" data-label="Distance">-</td>
-                                <td className="column-8" data-label="Type">
-                                    <div className="d-flex flex-column">
-                                        <a href="/#/publicPages/campSchedule">Camps</a>
-                                        <a href="/#/publicPages/bloodAvailabilitySearch">Stock</a>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td className="column-1" data-label="S.No.">1</td>
-                                <td className="column-2" data-label="Name">Blood Centre Changlang</td>
-                                <td className="column-3" data-label="Address">
-                                    <span>District Hospital, Changlang, Changlang, Dist. Changlang</span>
-                                </td>
-                                <td className="column-4" data-label="Phone">9863621471</td>
-                                <td className="column-5" data-label="Email">bloodcenterchanglang@gmail.com	</td>
-                                <td className="column-6" data-label="Category">Govt.</td>
-                                <td className="column-7" data-label="Distance">-</td>
-                                <td className="column-8" data-label="Type">
-                                    <div className="d-flex flex-column">
-                                        <a href="/#/publicPages/campSchedule">Camps</a>
-                                        <a href="/#/publicPages/bloodAvailabilitySearch">Stock</a>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td className="column-1" data-label="S.No.">1</td>
-                                <td className="column-2" data-label="Name">Blood Centre Changlang</td>
-                                <td className="column-3" data-label="Address">
-                                    <span>District Hospital, Changlang, Changlang, Dist. Changlang</span>
-                                </td>
-                                <td className="column-4" data-label="Phone">9863621471</td>
-                                <td className="column-5" data-label="Email">bloodcenterchanglang@gmail.com	</td>
-                                <td className="column-6" data-label="Category">Govt.</td>
-                                <td className="column-7" data-label="Distance">-</td>
-                                <td className="column-8" data-label="Type">
-                                    <div className="d-flex flex-column">
-                                        <a href="/#/publicPages/campSchedule">Camps</a>
-                                        <a href="/#/publicPages/bloodAvailabilitySearch">Stock</a>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <Table
+                        columns={columns}
+                        dataSource={filteredBloodBanks}
+                        rowKey="h_code"
+                        pagination={{ pageSize: 10 }}
+                        className="mt-3 mb-3"
+                    />
                 </div>
             </div>
         </>
