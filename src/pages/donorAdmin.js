@@ -55,6 +55,8 @@ export default function DonorAdmin() {
 
     const handleLogout = () => {
         sessionStorage.clear();
+        setActiveTab(0)
+        localStorage.removeItem('ActiveTab');
         window.location.href = '/beta#/pages/portalDonorLogin'
     };
 
