@@ -110,7 +110,7 @@ const DonationCertificate = ({ onBack }) => {
       </div>
 
       {view === "list" && (
-        <div className="widget p-4 pb-0">
+        <div className="widget p-4">
           {loading && <div className="pb-4">Loading certificate data...</div>}
           {error && <div className="text-danger">Error loading certificate data: {error}</div>}
           {!loading && !error && paginatedData.length > 0 ? (

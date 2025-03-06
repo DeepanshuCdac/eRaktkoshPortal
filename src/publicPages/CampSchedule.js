@@ -21,7 +21,9 @@ const CampSchedule = ({ useContainer }) => {
     const [selectedDistrict, setSelectedDistrict] = useState(null);
     const [selectedDate, setSelectedDate] = useState(null);
     const [campData, setCampData] = useState([]);
+    const [filteredData, setFilteredData] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [searchText, setSearchText] = useState("");
 
     useEffect(() => {
         dispatch(getApiData());
@@ -56,6 +58,7 @@ const CampSchedule = ({ useContainer }) => {
                 }
             });
             setCampData(response.data);
+            setFilteredData(response.data)
         } catch (error) {
             message.error("Failed to fetch camp data. Please try again!");
             console.error("Error fetching camp details:", error);
@@ -69,6 +72,20 @@ const CampSchedule = ({ useContainer }) => {
         ? states.find(state => state.stateCode === selectedState)?.districts || []
         : [];
 
+    const handleSearch = (value) => {
+        setSearchText(value);
+        if (value) {
+            const filtered = campData.filter((item) =>
+                Object.values(item).some((field) =>
+                    field && field.toString().toLowerCase().includes(value.toLowerCase())
+                )
+            );
+            setFilteredData(filtered);
+        } else {
+            setFilteredData(campData);
+        }
+    };
+
     const columns = [
         { title: 'S.No.', dataIndex: 'index', key: 'index', render: (text, record, index) => index + 1 },
         { title: 'Date', dataIndex: 'campDate', key: 'campDate' },
@@ -81,7 +98,9 @@ const CampSchedule = ({ useContainer }) => {
         { title: 'Conducted By', dataIndex: 'conductedBy', key: 'conductedBy' },
         {
             title: 'Register', key: 'register', render: (text, record) => (
-                <button className="btn btn-primary-signIn">Register</button>
+                <div className="d-flex flex-column">
+                    <a href="/beta#/pages/portaldonorRegister">Register</a>
+                </div>
             )
         }
     ];
@@ -147,7 +166,11 @@ const CampSchedule = ({ useContainer }) => {
                     </div>
                     <div className="d-xl-flex d-lg-flex d-md-flex d-sm-flex align-items-center justify-content-end mt-3 mb-3">
                         <div className="d-flex">
-                            <Search placeholder="Search" className="me-2" />
+                            <Search
+                                placeholder="Search"
+                                className="me-2"
+                                value={searchText}
+                                onChange={(e) => handleSearch(e.target.value)} />
                             <button className="filter_btn d-flex align-items-center">
                                 <img className="me-1" src="assets/images/filter.png" />
                                 Filters
@@ -156,11 +179,12 @@ const CampSchedule = ({ useContainer }) => {
                     </div>
                     <Table
                         columns={columns}
-                        dataSource={campData}
+                        dataSource={filteredData}
                         rowKey="camp_reqno"
                         pagination={{ pageSize: 10 }}
                         loading={loading}
                         className="mt-3 mb-3"
+                        scroll={{ x: 1000 }}
                     />
                 </div>
             </div>

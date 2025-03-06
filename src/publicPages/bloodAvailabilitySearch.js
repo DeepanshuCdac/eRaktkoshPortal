@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getApiData } from '../redux/slices/dataSlice';
 import '../scss/bloodSearch.scss'
 import axios from 'axios';
-import { Select, Space, Input, Table, Empty } from 'antd'
+import { Select, Space, Input, Table, Empty, message } from 'antd'
 const { Search } = Input;
 
 const BloodAvailabiltySearch = ({ useContainer }) => {
@@ -62,6 +62,10 @@ const BloodAvailabiltySearch = ({ useContainer }) => {
         : [];
 
     const handleSearch = async () => {
+        if (!selectedState) {
+            message.error("Please select state!");
+            return;
+        }
         try {
             const formData = new URLSearchParams();
             formData.append('state', selectedState || 'all');
@@ -247,17 +251,14 @@ const BloodAvailabiltySearch = ({ useContainer }) => {
                             </button>
                         </div>
                     </div>
-                    {filteredData.length > 0 ? (
-                        <Table
-                            columns={columns}
-                            dataSource={filteredData}
-                            rowKey="h_code"
-                            pagination={{ pageSize: 10 }}
-                            className="mt-3 mb-3"
-                        />
-                    ) : (
-                        <Empty description="No Data Found" className="mt-3 mb-3" />
-                    )}
+                    <Table
+                        columns={columns}
+                        dataSource={filteredData}
+                        rowKey="h_code"
+                        pagination={{ pageSize: 10 }}
+                        className="mt-3 mb-3"
+                        scroll={{ x: 1000 }}
+                    />
                 </div>
             </div>
         </>

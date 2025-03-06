@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import '../scss/bloodSearch.scss'
-import { Input, DatePicker, Space, Select, Table } from 'antd';
+import { Input, DatePicker, Space, Select, Table, message } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { getApiData } from '../redux/slices/dataSlice';
 import axios from "axios";
+import { BaseUrl } from "../utils/url";
 
 const { Search } = Input;
 
@@ -21,7 +22,7 @@ const BloodBankDirectory = () => {
     const [bloodBanks, setBloodBanks] = useState([]);
     const [loading, setLoading] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState(null);
-    const [filteredBloodBanks, setFilteredBloodBanks] = useState([]); // Filtered Data
+    const [filteredBloodBanks, setFilteredBloodBanks] = useState([]); 
 
 
     useEffect(() => {
@@ -39,14 +40,13 @@ const BloodBankDirectory = () => {
 
     const fetchNearestBloodBanks = async () => {
         if (!selectedState) {
-            alert("Please select a state.");
-
+            message.error("Please select state!");
             return;
         }
 
         setLoading(true);
         try {
-            const response = await axios.get(`http://10.226.25.103:8080/eraktkosh/bloodbank/nearest`, {
+            const response = await axios.get(`${BaseUrl}/eraktkosh/bloodbank/nearest`, {
                 params: {
                     stateCode: selectedState,
                     districtCode: selectedDistrict || -1,
@@ -101,7 +101,7 @@ const BloodBankDirectory = () => {
 
     const filterData = (category) => {
         if (!category) {
-            setFilteredBloodBanks(bloodBanks); // Show all data when "All" is selected
+            setFilteredBloodBanks(bloodBanks);
             return;
         }
         const filtered = bloodBanks.filter(bank => bank.category.trim().toLowerCase() === category.trim().toLowerCase());
@@ -205,13 +205,13 @@ const BloodBankDirectory = () => {
                                 className="me-2"
                                 value={searchText}
                                 onChange={(e) => {
-                                    const value = e.target.value.toLowerCase();
+                                    const value = e.target.value.toLowerCase();    
                                     setSearchText(value);
 
                                     if (!value) {
-                                        setFilteredBloodBanks(bloodBanks);
+                                        setFilteredBloodBanks(bloodBanks);  
                                         return;
-                                    }
+                                    }     
 
                                     const filtered = bloodBanks.filter(bank =>
                                         bank.name.toLowerCase().includes(value) ||
@@ -234,6 +234,7 @@ const BloodBankDirectory = () => {
                         dataSource={filteredBloodBanks}
                         rowKey="h_code"
                         pagination={{ pageSize: 10 }}
+                        scroll={{ x: 1000 }} 
                         className="mt-3 mb-3"
                     />
                 </div>

@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 import axios from 'axios'
 import {BaseUrl} from '../utils/url'
+import { message } from 'antd'
 
 export default function DonorLogin() {
     const [mobileno, setMobileNumber] = useState('')
@@ -86,7 +87,7 @@ export default function DonorLogin() {
             const otpData = JSON.parse(response.data.OtpData);
             console.log("OTP Data: ", otpData);
     
-            // Step 1: Check if isUserExists is present, if not, check eRaktkosh
+            // Step 1: Check if isUserExists is present, if not, check eRaktkosh ....
             if (!otpData.hasOwnProperty('isUserExists')) {
                 if (otpData.eRaktkosh === false && otpData.notRegisteredMessage) {
                     alert(otpData.notRegisteredMessage);
@@ -96,27 +97,34 @@ export default function DonorLogin() {
                 }
             }
     
-            // Step 2: If user exists, check OTP field
+            // Step 2: If user exists, check OTP field ....
             if (otpData.isUserExists) {
                 if (otpData.otp) {
-                    alert(otpData.messageSuccess); 
+                    message.success(otpData.messageSuccess); 
     
                     console.log("OTP:", otpData.otp);
-                    console.log("OTP Expiration Time:", otpData.otpExpirationTime);
-    
+                    console.log("OTP Expiration Time:", otpData.otpExpirationTime)
+
                     setShowOtpField(true);
                     setIsInputDisabled(false);
-    
                     startOtpTimer(Math.floor(otpData.otpExpirationTime / 1000));
                     return;
                 }
     
-                // Step 3: If OTP is not there, check for errorMessage
+                // Step 3: If OTP is not there, check for errorMessage ....
                 if (otpData.errorMessage) {
-                    alert(otpData.errorMessage);
+                    message.error(otpData.errorMessage);
                     setShowOtpField(false);
                     setIsInputDisabled(true);
                     return;
+                }
+
+                // Step 4: if otp limit is crossed ....
+                if(otpData.limitExceedMessage){
+                    message.error(otpData.limitExceedMessage)
+                    setShowOtpField(false)
+                    setIsInputDisabled(true)
+                    return
                 }
             }
         } catch (error) {
