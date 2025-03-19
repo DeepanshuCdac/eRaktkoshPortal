@@ -8,6 +8,7 @@ import dayjs from "dayjs";
 import { BaseUrl } from "../utils/url";
 
 const { Search } = Input;
+const { RangePicker } = DatePicker;
 
 const CampSchedule = ({ useContainer }) => {
     useEffect(() => {
@@ -19,7 +20,8 @@ const CampSchedule = ({ useContainer }) => {
 
     const [selectedState, setSelectedState] = useState(null);
     const [selectedDistrict, setSelectedDistrict] = useState(null);
-    const [selectedDate, setSelectedDate] = useState(null);
+    const [selectedStartDate, setSelectedStartDate] = useState(dayjs().format("YYYY-MM-DD"));
+    const [selectedEndDate, setSelectedEndDate] = useState(dayjs().format("YYYY-MM-DD"));
     const [campData, setCampData] = useState([]);
     const [filteredData, setFilteredData] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -38,8 +40,14 @@ const CampSchedule = ({ useContainer }) => {
         setSelectedDistrict(value);
     };
 
-    const handleDateChange = (date, dateString) => {
-        setSelectedDate(dateString);
+    const handleDateChange = (dates, dateStrings) => {
+        if (dates) {
+            setSelectedStartDate(dayjs(dates[0]).format("YYYY-MM-DD"));
+            setSelectedEndDate(dayjs(dates[1]).format("YYYY-MM-DD"));
+        } else {
+            setSelectedStartDate(dayjs().format("YYYY-MM-DD"));
+            setSelectedEndDate(dayjs().format("YYYY-MM-DD"));
+        }
     };
 
     const fetchCampSchedule = async () => {
@@ -48,15 +56,24 @@ const CampSchedule = ({ useContainer }) => {
             return;
         }
 
+        console.log("API Call Parameters:", {
+            stateCode: selectedState,
+            districtCode: selectedDistrict,
+            startDate: selectedStartDate,
+            endDate: selectedEndDate
+        });
+
         setLoading(true);
         try {
             const response = await axios.get(`${BaseUrl}/eraktkosh/camps/details`, {
                 params: {
                     stateCode: selectedState,
-                    districtCode: selectedDistrict,
-                    campDate: selectedDate
+                    districtCode: selectedDistrict || -1,
+                    startDate: selectedStartDate || dayjs().format("YYYY-MM-DD"),
+                    endDate: selectedEndDate || dayjs().format("YYYY-MM-DD")
                 }
             });
+            console.log("Camp Schedule API Response:", response.data);
             setCampData(response.data);
             setFilteredData(response.data)
         } catch (error) {
@@ -147,8 +164,8 @@ const CampSchedule = ({ useContainer }) => {
                             </div>
                             <div className="d-flex align-items-end justify-content-center col-xl-6 col-lg-6 col-md-6 col-sm-6 mb-2">
                                 <div className="w-100" style={{ height: '64%' }}>
-                                    <Space direction="vertical">
-                                        <DatePicker
+                                    <Space direction="vertical" size={12}>
+                                        <RangePicker
                                             className="h-100 w-100"
                                             onChange={handleDateChange}
                                             defaultValue={dayjs()}

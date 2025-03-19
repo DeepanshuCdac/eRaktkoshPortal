@@ -1,37 +1,30 @@
 import React, { useState } from 'react';
 import { useCertificate } from '../context/CertificateContext';
 import { generateCertificate } from '../utils/generateCertificate';
+import ABHA from './ABHA';
 
 export default function DonorAdminHome({ onViewAllClick }) {
   const { certificateData, loading, error } = useCertificate();
 
-  // Check if the certificateData is an array and contains data
   const isDataValid = Array.isArray(certificateData) && certificateData.length > 0;
 
   function abbreviateText(text) {
     const maxLength = 24;
 
-    // if the text is in limit return same
     if (text.length <= maxLength) {
       return text;
     }
-    // else truncate and add ellipsis
     return `${text.slice(0, maxLength - 3)}...`;
   }
 
   return (
     <>
       <div className="row">
+        {/* ABHA Section */}
         <div className="col-xl-12">
           <div className="tabContent mb-3">
             <div className="tabContainer">
-              <div className="widget-abha d-flex justify-content-between px-4 pt-4">
-                <div>
-                  <h4 className="widgeHeader mb-2">Generate/Verify ABHA</h4>
-                  <button className="btn abha-btn">Download / Verify ABHA</button>
-                </div>
-                <img src="assets/images/abha-img.png" alt="Abha-img" />
-              </div>
+              <ABHA/>
 
               {/* Donor Certificate Section */}
               <div className='d-flex mb-0 w-100'>
