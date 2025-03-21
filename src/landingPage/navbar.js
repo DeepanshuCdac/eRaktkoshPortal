@@ -48,9 +48,7 @@ export default function Navbar() {
                       </a>
                     </li>
                     <li>
-                      <a href="/BLDAHIMS/bloodbank/notification.cnt">
-                        Notifications
-                      </a>
+                      <Link className="links" to="/publicPages/Notification">Notifications</Link>
                     </li>
                     <li>
                       <Link className="links" to="/publicPages/FAQs">eRaktkosh FAQ's</Link>

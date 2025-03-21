@@ -22,6 +22,7 @@ import CampSchedule from "./publicPages/CampSchedule.js";
 import BloodBankDirectory from "./publicPages/BloodBankDirectory.js";
 import CampRegistration from "./publicPages/CampRegistration.js";
 import Faqs from "./publicPages/Faqs.js";
+import Notification from "./publicPages/Notification.js";
 
 function App() {
   return (
@@ -45,6 +46,10 @@ function AppContent() {
       {location.pathname !== '/pages/portaldonorAdmin' && <Navbar />}
 
       <Switch>
+      <Route path="/publicPages/Notification">
+          <Notification />
+        </Route>
+
         <Route path="/publicPages/FAQs">
           <Faqs />
         </Route>
