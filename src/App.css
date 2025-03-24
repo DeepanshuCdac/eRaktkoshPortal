@@ -6,31 +6,31 @@
 @font-face{
     font-family: 'SourceSans3';
     src: url('../src/assets/fonts/static/SourceSans3-Bold.ttf');
-    font-weight: normal;
+    font-weight: 700;
     font-style: normal;
 }
 @font-face{
     font-family: 'SourceSans3';
     src: url('../src/assets/fonts/static/SourceSans3-Medium.ttf');
-    font-weight: normal;
+    font-weight: 500;
     font-style: normal;
 }
 @font-face{
     font-family: 'SourceSans3';
     src: url('../src/assets/fonts/static/SourceSans3-Light.ttf');
-    font-weight: normal;
+    font-weight: 300;
     font-style: normal;
 }
 @font-face{
     font-family: 'SourceSans3';
     src: url('../src/assets/fonts/static/SourceSans3-Regular.ttf');
-    font-weight: normal;
+    font-weight: 400;
     font-style: normal;
 }
 @font-face{
     font-family: 'SourceSans3';
     src: url('../src/assets/fonts/static/SourceSans3-SemiBold.ttf');
-    font-weight: normal;
+    font-weight: 600;
     font-style: normal;
 }
 
@@ -906,35 +906,33 @@
 
 .btn-primary-signIn {
     border-radius: 4px;
-    background: #C0222B;
-    box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.04);
+    background: #7F0210;
+    /* box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.04); */
     color: #FFF;
-    font-size: 20px;
+    font-size: 14px;
     font-weight: 600;
-    transition: background-color 0.3s ease, color 0.3s ease, border 0.3s ease;
-
+    /* transition: background-color 0.3sease, color 0.3sease, border 0.3sease; */
 }
 
 .btn-primary-signIn:hover {
-    border: 1px solid #C0222B;
-    background-color: #fff;
-    color: #C0222B;
+    background: #7F0210;
+    color: #FFF;
 }
 
 .btn-primary-outline {
-    color: #C0222B;
-    font-size: 20px;
+    color: #7F0210;
+    font-size: 14px;
     font-weight: 600;
     border-radius: 4px;
-    border: 1px solid #C0222B;
-    transition: background-color 0.3s ease, color 0.3s ease, border 0.3s ease;
-    box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.04);
+    border: 1px solid #7F0210;
+    /* transition: background-color 0.3s ease, color 0.3s ease, border 0.3s ease; */
+    /* box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.04); */
 }
 
 .btn-primary-outline:hover {
-    border: 1px solid #C0222B;
-    background-color: #C0222B;
-    color: #fff;
+    border: 1px solid #7F0210;
+    background-color: rgba(127, 2, 16, 0.08);
+    color: #7F0210;
 }
 
 @media (max-width: 768px) {
@@ -1457,7 +1455,7 @@
 }
 
 .ant-select-single {
-    height: 38px;
+    height: 35px;
 }
 
 .mandatory {

@@ -3,8 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getApiData } from '../redux/slices/dataSlice';
 import '../scss/bloodSearch.scss'
 import axios from 'axios';
+import { useLocation } from "react-router-dom";
 import { Select, Space, Input, Table, Empty, message } from 'antd'
 const { Search } = Input;
+const { Option } = Select;
 
 const BloodAvailabiltySearch = ({ useContainer }) => {
 
@@ -24,6 +26,25 @@ const BloodAvailabiltySearch = ({ useContainer }) => {
     useEffect(() => {
         dispatch(getApiData());
     }, [dispatch]);
+
+    const location = useLocation();
+
+    const getPageName = () => {
+        const path = location.pathname.split("/").filter(Boolean).pop();
+        return path ? path.charAt(0).toUpperCase() + path.slice(1) : "Select a service";
+    };
+
+    const handleServiceChange = (value) => {
+        const urlMap = {
+            service1: "/beta#/publicPages/bloodAvailabilitySearch",
+            service2: "/beta#/publicPages/campSchedule",
+            service3: "/beta#/publicPages/bloodBankDirectory",
+        };
+
+        if (urlMap[value]) {
+            window.location.href = urlMap[value];
+        }
+    };
 
     const handleStateChange = (value) => {
         setSelectedState(value);
@@ -126,84 +147,82 @@ const BloodAvailabiltySearch = ({ useContainer }) => {
 
     return (
         <>
-            <div className="page-wrapper">
+            <div className="page-wrapper gradient_style">
                 <div className={useContainer ? "container" : ""}>
-                    <h2 className="header-page mb-3">Blood Stock Availability</h2>
-                    <div className="widget px-3 py-3 mb-3">
-                        <div className="row">
-                            <div className="col-xl-3 col-lg-3 col-md-6 col-sm-6 mb-2 mb-xl-0 mb-lg-0">
-                                <div className='d-flex flex-column'>
-                                    <label htmlFor="orgType" className="form-label mb-1">Select Your State</label>
-                                    <Space wrap>
-                                        <Select
-                                            style={{ width: '100%' }}
-                                            value={selectedState}
-                                            onChange={handleStateChange}
-                                            placeholder="Select State" >
-                                            {states.map((state) => (
-                                                <Select.Option key={state.stateCode} value={state.stateCode}>
-                                                    {state.stateName}
-                                                </Select.Option>
-                                            ))}
-                                        </Select>
-                                    </Space>
-                                </div>
-                            </div>
-                            <div className="col-xl-3 col-lg-3 col-md-6 col-sm-6 mb-2 mb-xl-0 mb-lg-0">
-                                <div className='d-flex flex-column'>
-                                    <label htmlFor="orgType" className="form-label mb-1">Select Your District</label>
-                                    <Space wrap>
-                                        <Select
-                                            style={{ width: '100%' }}
-                                            value={selectedDistrict}
-                                            onChange={handleDistrictChange}
-                                            placeholder="Select District"
-                                            disabled={!selectedState} >
-                                            {districts.map((district) => (
-                                                <Select.Option key={district.districtCode} value={district.districtCode}>
-                                                    {district.districtName}
-                                                </Select.Option>
-                                            ))}
-                                        </Select>
-                                    </Space>
-                                </div>
-                            </div>
-                            <div className="col-xl-3 col-lg-3 col-md-6 col-sm-6 mb-2 mb-xl-0 mb-lg-0">
-                                <div className='d-flex flex-column'>
-                                    <label htmlFor="orgType" className="form-label mb-1">Select Blood Group</label>
-                                    <Space wrap>
-                                        <Select
-                                            style={{ width: '100%' }}
-                                            value={selectedBloodGroup}
-                                            onChange={handleBloodGroupChange}
-                                            placeholder="Select Blood Group" >
-                                            {bloodGroups.map((bloodGroup) => (
-                                                <Select.Option key={bloodGroup.bloodGroupCode} value={bloodGroup.bloodGroupCode}>
-                                                    {bloodGroup.bloodGroupName}
-                                                </Select.Option>
-                                            ))}
-                                        </Select>
-                                    </Space>
-                                </div>
-                            </div>
-                            <div className="col-xl-3 col-lg-3 col-md-6 col-sm-6 mb-2 mb-xl-0 mb-lg-0">
-                                <div className='d-flex flex-column'>
-                                    <label htmlFor="orgType" className="form-label mb-1">Select Blood Component</label>
-                                    <Space wrap>
-                                        <Select
-                                            style={{ width: '100%' }}
-                                            value={selectedComponent}
-                                            onChange={handleComponentChange}
-                                            placeholder="Select Blood Component" >
-                                            {componentList.map((component) => (
-                                                <Select.Option key={component.componentCode} value={component.componentCode}>
-                                                    {component.componentName}
-                                                </Select.Option>
-                                            ))}
-                                        </Select>
-                                    </Space>
-                                </div>
-                            </div>
+                    <h2 className="header-page mb-2 pt-3">Blood Stock Availability</h2>
+                    <div className="d-flex justify-content-between flex-wrap gap-3 container-style">
+                        <div className="input-wrapper-service">
+                            <label className="form-label mb-0">Select Services</label>
+                            <Select style={{ width: "100%" }} onChange={handleServiceChange} placeholder={getPageName()}>
+                                <Option value="service1">Blood Stock Availability</Option>
+                                <Option value="service2">Camp Schedule</Option>
+                                <Option value="service3">Blood Bank Directory</Option>
+                            </Select>
+                        </div>
+                        <div className="input-wrapper-service">
+                            <label htmlFor="orgType" className="form-label mb-0">Select Your State</label>
+                            <Space wrap>
+                                <Select
+                                    style={{ width: '100%' }}
+                                    value={selectedState}
+                                    onChange={handleStateChange}
+                                    placeholder="Select State" >
+                                    {states.map((state) => (
+                                        <Select.Option key={state.stateCode} value={state.stateCode}>
+                                            {state.stateName}
+                                        </Select.Option>
+                                    ))}
+                                </Select>
+                            </Space>
+                        </div>
+                        <div className="input-wrapper-service">
+                            <label htmlFor="orgType" className="form-label mb-0">Select Your District</label>
+                            <Space wrap>
+                                <Select
+                                    style={{ width: '100%' }}
+                                    value={selectedDistrict}
+                                    onChange={handleDistrictChange}
+                                    placeholder="Select District"
+                                    disabled={!selectedState} >
+                                    {districts.map((district) => (
+                                        <Select.Option key={district.districtCode} value={district.districtCode}>
+                                            {district.districtName}
+                                        </Select.Option>
+                                    ))}
+                                </Select>
+                            </Space>
+                        </div>
+                        <div className="input-wrapper-service">
+                            <label htmlFor="orgType" className="form-label mb-1">Select Blood Group</label>
+                            <Space wrap>
+                                <Select
+                                    style={{ width: '100%' }}
+                                    value={selectedBloodGroup}
+                                    onChange={handleBloodGroupChange}
+                                    placeholder="Select Blood Group" >
+                                    {bloodGroups.map((bloodGroup) => (
+                                        <Select.Option key={bloodGroup.bloodGroupCode} value={bloodGroup.bloodGroupCode}>
+                                            {bloodGroup.bloodGroupName}
+                                        </Select.Option>
+                                    ))}
+                                </Select>
+                            </Space>
+                        </div>
+                        <div className="input-wrapper-service">
+                            <label htmlFor="orgType" className="form-label mb-1">Select Blood Component</label>
+                            <Space wrap>
+                                <Select
+                                    style={{ width: '100%' }}
+                                    value={selectedComponent}
+                                    onChange={handleComponentChange}
+                                    placeholder="Select Blood Component" >
+                                    {componentList.map((component) => (
+                                        <Select.Option key={component.componentCode} value={component.componentCode}>
+                                            {component.componentName}
+                                        </Select.Option>
+                                    ))}
+                                </Select>
+                            </Space>
                         </div>
                         <div className="d-flex align-items-center justify-content-center mt-3">
                             <button type="primary" onClick={handleSearch} className="btn btn-primary-signIn px-5">Search</button>

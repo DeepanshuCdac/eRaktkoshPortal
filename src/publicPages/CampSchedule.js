@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
 import '../scss/bloodSearch.scss'
-import { Input, DatePicker, Space, Select, Table, message } from 'antd';
+import { Input, DatePicker, Space, Select, Table, message, Tooltip } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { getApiData } from '../redux/slices/dataSlice';
 import axios from "axios";
 import dayjs from "dayjs";
 import { BaseUrl } from "../utils/url";
+import { useLocation } from "react-router-dom";
+import { SearchOutlined } from "@ant-design/icons";
 
+const { Option } = Select;
 const { Search } = Input;
-const { RangePicker } = DatePicker;
 
 const CampSchedule = ({ useContainer }) => {
     useEffect(() => {
@@ -22,14 +24,43 @@ const CampSchedule = ({ useContainer }) => {
     const [selectedDistrict, setSelectedDistrict] = useState(null);
     const [selectedStartDate, setSelectedStartDate] = useState(dayjs().format("YYYY-MM-DD"));
     const [selectedEndDate, setSelectedEndDate] = useState(dayjs().format("YYYY-MM-DD"));
+    const [dateDifference, setDateDifference] = useState(0);
     const [campData, setCampData] = useState([]);
     const [filteredData, setFilteredData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [searchText, setSearchText] = useState("");
 
+    const [pagination, setPagination] = useState({
+        current: 1,
+        pageSize: 5,
+    });
+
     useEffect(() => {
         dispatch(getApiData());
     }, [dispatch]);
+
+    const location = useLocation();
+
+    const handleTableChange = (newPagination) => {
+        setPagination(newPagination);
+    };
+
+    const getPageName = () => {
+        const path = location.pathname.split("/").filter(Boolean).pop();
+        return path ? path.charAt(0).toUpperCase() + path.slice(1) : "Select a service";
+    };
+
+    const handleServiceChange = (value) => {
+        const urlMap = {
+            service1: "/beta#/publicPages/bloodAvailabilitySearch",
+            service2: "/beta#/publicPages/campSchedule",
+            service3: "/beta#/publicPages/bloodBankDirectory",
+        };
+
+        if (urlMap[value]) {
+            window.location.href = urlMap[value];
+        }
+    };
 
     const handleStateChange = (value) => {
         setSelectedState(value);
@@ -40,13 +71,24 @@ const CampSchedule = ({ useContainer }) => {
         setSelectedDistrict(value);
     };
 
-    const handleDateChange = (dates, dateStrings) => {
-        if (dates) {
-            setSelectedStartDate(dayjs(dates[0]).format("YYYY-MM-DD"));
-            setSelectedEndDate(dayjs(dates[1]).format("YYYY-MM-DD"));
+    const handleStartDateChange = (date) => {
+        const formattedDate = date ? dayjs(date).format("YYYY-MM-DD") : "";
+        setSelectedStartDate(formattedDate);
+        calculateDateDifference(formattedDate, selectedEndDate);
+    };
+
+    const handleEndDateChange = (date) => {
+        const formattedDate = date ? dayjs(date).format("YYYY-MM-DD") : "";
+        setSelectedEndDate(formattedDate);
+        calculateDateDifference(selectedStartDate, formattedDate);
+    };
+
+    const calculateDateDifference = (start, end) => {
+        if (start && end) {
+            const diff = dayjs(end).diff(dayjs(start), "day");
+            setDateDifference(diff);
         } else {
-            setSelectedStartDate(dayjs().format("YYYY-MM-DD"));
-            setSelectedEndDate(dayjs().format("YYYY-MM-DD"));
+            setDateDifference(0);
         }
     };
 
@@ -55,13 +97,6 @@ const CampSchedule = ({ useContainer }) => {
             message.error("Please select state!");
             return;
         }
-
-        console.log("API Call Parameters:", {
-            stateCode: selectedState,
-            districtCode: selectedDistrict,
-            startDate: selectedStartDate,
-            endDate: selectedEndDate
-        });
 
         setLoading(true);
         try {
@@ -106,17 +141,38 @@ const CampSchedule = ({ useContainer }) => {
     const columns = [
         { title: 'S.No.', dataIndex: 'index', key: 'index', render: (text, record, index) => index + 1 },
         { title: 'Date', dataIndex: 'campDate', key: 'campDate' },
-        { title: 'Time', dataIndex: 'campTime', key: 'campTime' },
-        { title: 'Camp Name', dataIndex: 'campName', key: 'campName' },
-        { title: 'Address', dataIndex: 'campVenue', key: 'campVenue' },
-        { title: 'State', dataIndex: 'stateName', key: 'stateName' },
-        { title: 'District', dataIndex: 'districtName', key: 'districtName' },
-        { title: 'Contact', dataIndex: 'contact', key: 'contact' },
-        { title: 'Conducted By', dataIndex: 'conductedBy', key: 'conductedBy' },
         {
-            title: 'Register', key: 'register', render: (text, record) => (
+            title: 'Camp Detail',
+            key: 'campDetail',
+            render: (text, record) => (
+                <div>
+                    <Tooltip title={record.campName}>
+                        <p className="camp-name mb-0">{record.campName}</p>
+                    </Tooltip>
+                    <Tooltip title={record.campVenue}>
+                        <span className="camp-venue mb-0" style={{ color: "#707070" }}>{record.campVenue}</span>
+                    </Tooltip>
+                </div>
+            )
+        },
+        {
+            title: 'State/District',
+            key: 'stateDistrict',
+            render: (text, record) => (
+                <div>
+                    <p className="mb-0">{record.stateName},</p>
+                    <span>{record.districtName}</span>
+                </div>
+            )
+        },
+        { title: 'Contact', dataIndex: 'contact', key: 'contact' },
+        { title: 'Conducted By', dataIndex: 'hospName', key: 'hospName' },
+        { title: 'Organised By', dataIndex: 'conductedBy', key: 'conductedBy' },
+        { title: 'Time', dataIndex: 'campTime', key: 'campTime' },
+        {
+            title: 'Action', key: 'register', render: (text, record) => (
                 <div className="d-flex flex-column">
-                    <a href="/beta#/pages/portaldonorRegister">Register</a>
+                    <a href="/beta#/pages/portaldonorRegister" className="action">Register as Voluntary Donor</a>
                 </div>
             )
         }
@@ -124,84 +180,139 @@ const CampSchedule = ({ useContainer }) => {
 
     return (
         <>
-            <div className="page-wrapper">
+            <div className="page-wrapper gradient_style">
                 <div className={useContainer ? "container" : ""}>
-                    <h2 className="header-page mb-3">Camp Schedule</h2>
-                    <div className="widget px-3 py-3 mb-3">
-                        <div className="row mx-4">
-                            <div className="col-xl-3 col-lg-3 col-md-6 col-sm-6 mb-2">
-                                <label className="form-label mb-1">Select Your State</label>
-                                <Space wrap>
+                    <h2 className="header-page mb-2 pt-3">Camp Schedule</h2>
+                    <div className="d-flex justify-content-between flex-wrap gap-3 container-style">
+                        <div className="input-wrapper-service">
+                            <label className="form-label mb-0">Select Services</label>
+                            <Select style={{ width: "100%" }} onChange={handleServiceChange} placeholder={getPageName()}>
+                                <Option value="service1">Blood Stock Availability</Option>
+                                <Option value="service2">Camp Schedule</Option>
+                                <Option value="service3">Blood Bank Directory</Option>
+                            </Select>
+                        </div>
+                        <div className="input-wrapper-service">
+                            <label className="form-label mb-0">Select State</label>
+                            <Select
+                                style={{ width: "100%" }}
+                                value={selectedState}
+                                onChange={handleStateChange}
+                                placeholder="Select State">
+                                {states.map((state) => (
+                                    <Select.Option key={state.stateCode} value={state.stateCode}>
+                                        {state.stateName}
+                                    </Select.Option>
+                                ))}
+                            </Select>
+                        </div>
+                        <div className="input-wrapper-service">
+                            <label className="form-label mb-0">Select Your District</label>
+                            <Select
+                                style={{ width: "100%" }}
+                                value={selectedDistrict}
+                                onChange={handleDistrictChange}
+                                placeholder="Select District">
+                                {districts.map((district) => (
+                                    <Select.Option key={district.districtCode} value={district.districtCode}>
+                                        {district.districtName}
+                                    </Select.Option>
+                                ))}
+                            </Select>
+                        </div>
+                        <div className="input-wrapper-date">
+                            <label className="form-label mb-0">Start Date</label>
+                            <DatePicker className="custom-date-picker" onChange={handleStartDateChange} defaultValue={dayjs()} allowClear={false} suffixIcon={null} />
+                        </div>
+                        <div className="input-wrapper-date">
+                            <label className="form-label mb-0">To Date</label>
+                            <DatePicker className="custom-date-picker" onChange={handleEndDateChange} defaultValue={dayjs()} allowClear={false} suffixIcon={null} />
+                        </div>
+                        <div className="input-wrapper button-wrapper">
+                            <button onClick={fetchCampSchedule} className="btn btn-primary-signIn px-5">
+                                {loading ? "Loading..." : "Search"}
+                            </button>
+                        </div>
+                    </div>
+
+                    <div className="user-tile px-4 py-1 mt-3 d-xl-flex align-items-center w-100">
+                        <div className="d-flex align-items-center me-auto mb-xl-0 mb-2" style={{ flex: 1 }}>
+                            <img src="assets/images/donorImg.png" style={{ width: '53px', height: '53px' }} />
+                            <div className="ms-3 d-flex flex-column">
+                                <p className="mb-0 user-notify">Get Notified About Nearby Camps!</p>
+                                <p className="mb-0 user-alert">Get alerts for nearby blood donation camps.</p>
+                            </div>
+                        </div>
+                        <div className="d-xl-flex d-lg-flex" style={{ flex: 2, gap: '10px' }}>
+                            <div className="d-flex mb-xl-0 mb-lg-0 mb-2" style={{ flex: 2, gap: '10px' }}>
+                                <div className="input-wrapper-state">
                                     <Select
-                                        style={{ width: '100%' }}
+                                        style={{ width: "100%" }}
                                         value={selectedState}
                                         onChange={handleStateChange}
-                                        placeholder="Select State" >
+                                        placeholder="Select State">
                                         {states.map((state) => (
                                             <Select.Option key={state.stateCode} value={state.stateCode}>
                                                 {state.stateName}
                                             </Select.Option>
                                         ))}
                                     </Select>
-                                </Space>
-                            </div>
-                            <div className="col-xl-3 col-lg-3 col-md-6 col-sm-6 mb-2">
-                                <label className="form-label mb-1">Select Your District</label>
-                                <Space wrap>
+                                </div>
+                                <div className="input-wrapper-state">
                                     <Select
-                                        style={{ width: '100%' }}
+                                        style={{ width: "100%" }}
                                         value={selectedDistrict}
                                         onChange={handleDistrictChange}
-                                        placeholder="Select District"
-                                        disabled={!selectedState} >
+                                        placeholder="Select District">
                                         {districts.map((district) => (
                                             <Select.Option key={district.districtCode} value={district.districtCode}>
                                                 {district.districtName}
                                             </Select.Option>
                                         ))}
                                     </Select>
-                                </Space>
+                                </div>
                             </div>
-                            <div className="d-flex align-items-end justify-content-center col-xl-6 col-lg-6 col-md-6 col-sm-6 mb-2">
-                                <div className="w-100" style={{ height: '64%' }}>
-                                    <Space direction="vertical" size={12}>
-                                        <RangePicker
-                                            className="h-100 w-100"
-                                            onChange={handleDateChange}
-                                            defaultValue={dayjs()}
-                                            format="YYYY-MM-DD"
-                                        />
-                                    </Space>
+                            <div className="d-flex" style={{ flex: 2, gap: '10px' }}>
+                                <Input placeholder="Enter Email Address" />
+                                <div className="input-wrapper button-wrapper">
+                                    <button className="btn btn-primary-outline px-3">
+                                        Subscribe
+                                    </button>
                                 </div>
                             </div>
                         </div>
-                        <div className="d-flex align-items-center justify-content-center mt-3">
-                            <button onClick={fetchCampSchedule} className="btn btn-primary-signIn px-5">
-                                {loading ? "Loading..." : "Search"}
-                            </button>
-                        </div>
                     </div>
-                    <div className="d-xl-flex d-lg-flex d-md-flex d-sm-flex align-items-center justify-content-end mt-3 mb-3">
-                        <div className="d-flex">
-                            <Search
+
+                    <div className="d-xl-flex d-lg-flex d-md-flex d-sm-flex align-items-center justify-content-between mt-3 mb-3">
+                        <div className="d-flex align-items-center">
+                            <p className="mb-0 searchResult me-2">Search Result</p>
+                            <p className="mb-0 resultData px-2">Showing Last {dateDifference} Day Data</p>
+                        </div>
+
+                        <div className="">
+                            <Input
                                 placeholder="Search"
-                                className="me-2"
                                 value={searchText}
-                                onChange={(e) => handleSearch(e.target.value)} />
-                            <button className="filter_btn d-flex align-items-center">
-                                <img className="me-1" src="assets/images/filter.png" />
-                                Filters
-                            </button>
+                                onChange={(e) => handleSearch(e.target.value)}
+                                prefix={<SearchOutlined style={{ color: "#aaa" }} />}
+                            />
                         </div>
                     </div>
                     <Table
                         columns={columns}
                         dataSource={filteredData}
                         rowKey="camp_reqno"
-                        pagination={{ pageSize: 10 }}
+                        pagination={{
+                            current: pagination.current,
+                            pageSize: pagination.pageSize,
+                            showSizeChanger: true,
+                            pageSizeOptions: ["5", "10", "20", "50"],
+                        }}
+                        onChange={handleTableChange}
                         loading={loading}
-                        className="mt-3 mb-3"
+                        className="custom-table mt-3 mb-3"
                         scroll={{ x: 1000 }}
+                        rowClassName={() => "custom-row"}
                     />
                 </div>
             </div>
