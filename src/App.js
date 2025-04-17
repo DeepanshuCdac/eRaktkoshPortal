@@ -46,7 +46,7 @@ function AppContent() {
       {location.pathname !== '/pages/portaldonorAdmin' && <Navbar />}
 
       <Switch>
-      <Route path="/publicPages/Notification">
+        <Route path="/publicPages/Notification">
           <Notification />
         </Route>
 
@@ -95,7 +95,6 @@ function AppContent() {
           <Benefits />
         </Route>
       </Switch>
-      {/* footer */}
       <Footer />
     </>
   );

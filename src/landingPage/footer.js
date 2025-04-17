@@ -195,7 +195,7 @@ export default function Footer() {
               2016-2024 by Ministry of Health and Family we5
             </a>
           </div>
-          <p className="text-center footer-links" onClick={handleImageClick5}>
+          <p className="text-center footer-links mb-0 pb-2" onClick={handleImageClick5}>
             Designed and Developed by Centre for Development of Advanced
             Computing
           </p>

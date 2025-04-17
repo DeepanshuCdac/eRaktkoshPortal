@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import '../scss/bloodSearch.scss'
-import { Input, DatePicker, Space, Select, Table, message, Tooltip } from 'antd';
+import { Input, DatePicker, Select, Table, message, Tooltip } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { getApiData } from '../redux/slices/dataSlice';
 import axios from "axios";
@@ -10,7 +10,6 @@ import { useLocation } from "react-router-dom";
 import { SearchOutlined } from "@ant-design/icons";
 
 const { Option } = Select;
-const { Search } = Input;
 
 const CampSchedule = ({ useContainer }) => {
     useEffect(() => {
@@ -19,7 +18,6 @@ const CampSchedule = ({ useContainer }) => {
 
     const dispatch = useDispatch();
     const { statesWithDistricts } = useSelector((state) => state.data);
-
     const [selectedState, setSelectedState] = useState(null);
     const [selectedDistrict, setSelectedDistrict] = useState(null);
     const [selectedStartDate, setSelectedStartDate] = useState(dayjs().format("YYYY-MM-DD"));
@@ -29,7 +27,11 @@ const CampSchedule = ({ useContainer }) => {
     const [filteredData, setFilteredData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [searchText, setSearchText] = useState("");
-
+    const [selectedStateforUser, setSelectedStateforUser] = useState(null);
+    const [selectedDistrictforUser, setSelectedDistrictforUser] = useState(null);
+    const [email, setEmail] = useState("")
+    const [isValid, setIsValid] = useState(true);
+    const [mobileNo, setMobileNo] = useState("")
     const [pagination, setPagination] = useState({
         current: 1,
         pageSize: 5,
@@ -65,10 +67,28 @@ const CampSchedule = ({ useContainer }) => {
     const handleStateChange = (value) => {
         setSelectedState(value);
         setSelectedDistrict(null);
+
+        if (!selectedStateforUser) {
+            setSelectedStateforUser(value);
+            setSelectedDistrictforUser(null);
+        }
     };
 
     const handleDistrictChange = (value) => {
         setSelectedDistrict(value);
+
+        if (!selectedDistrictforUser) {
+            setSelectedDistrictforUser(value);
+        }
+    };
+
+    const handleStateChangeforUser = (value) => {
+        setSelectedStateforUser(value);
+        setSelectedDistrictforUser(null);
+    };
+
+    const handleDistrictChangeforUser = (value) => {
+        setSelectedDistrictforUser(value);
     };
 
     const handleStartDateChange = (date) => {
@@ -124,10 +144,14 @@ const CampSchedule = ({ useContainer }) => {
         ? states.find(state => state.stateCode === selectedState)?.districts || []
         : [];
 
+    const districts2 = selectedStateforUser
+        ? states.find(state => state.stateCode === selectedStateforUser)?.districts || []
+        : [];
+
     const handleSearch = (value) => {
         setSearchText(value);
         if (value) {
-            const filtered = campData.filter((item) =>
+            const filtered = campData.filter((item) => 
                 Object.values(item).some((field) =>
                     field && field.toString().toLowerCase().includes(value.toLowerCase())
                 )
@@ -138,8 +162,49 @@ const CampSchedule = ({ useContainer }) => {
         }
     };
 
+    const validateEmail = (email) => {
+        const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        return emailPattern.test(email);
+    };
+
+    const handleSubscribe = async () => {
+        if (!selectedStateforUser || !selectedDistrictforUser || !email) {
+            message.error("State, District, and Email are required.");
+            return;
+        }
+        if (!validateEmail(email)) {
+            message.error("Please enter a valid email address.");
+            return;
+        }
+
+        const payload = {
+            stateCode: selectedStateforUser,
+            districtCode: selectedDistrictforUser,
+            email,
+            mobileNo,
+        }
+        try {
+            const response = await axios.post(`${BaseUrl}/eraktkosh/subscribe/register`, payload);
+
+            if (response.data) {
+                message.success(response.data);
+            } else {
+                message.success("Subscription successful!");
+            }
+        } catch (error) {
+            console.error("API Error:", error);
+
+            if (error.response && error.response.data && error.response.data) {
+                message.error(error.response.data);
+            } else {
+                message.error("Error occurred while subscribing.");
+            }
+        }
+    };
+
     const columns = [
-        { title: 'S.No.', dataIndex: 'index', key: 'index', render: (text, record, index) => index + 1 },
+        { title: 'S.No.', dataIndex: 'sNo', key: 'sNo',  render: (text, record, index) => 
+            (pagination.current - 1) * pagination.pageSize + index + 1 },
         { title: 'Date', dataIndex: 'campDate', key: 'campDate' },
         {
             title: 'Camp Detail',
@@ -149,9 +214,7 @@ const CampSchedule = ({ useContainer }) => {
                     <Tooltip title={record.campName}>
                         <p className="camp-name mb-0">{record.campName}</p>
                     </Tooltip>
-                    <Tooltip title={record.campVenue}>
-                        <span className="camp-venue mb-0" style={{ color: "#707070" }}>{record.campVenue}</span>
-                    </Tooltip>
+                    <span className="camp-venue mb-0" style={{ color: "#707070" }}>{record.campVenue}</span>
                 </div>
             )
         },
@@ -180,7 +243,7 @@ const CampSchedule = ({ useContainer }) => {
 
     return (
         <>
-            <div className="page-wrapper gradient_style">
+            <div className="page_wrapper gradient_style">
                 <div className={useContainer ? "container" : ""}>
                     <h2 className="header-page mb-2 pt-3">Camp Schedule</h2>
                     <div className="d-flex justify-content-between flex-wrap gap-3 container-style">
@@ -230,11 +293,10 @@ const CampSchedule = ({ useContainer }) => {
                         </div>
                         <div className="input-wrapper button-wrapper">
                             <button onClick={fetchCampSchedule} className="btn btn-primary-signIn px-5">
-                                {loading ? "Loading..." : "Search"}
+                                {loading ? "Searching..." : "Search"}
                             </button>
                         </div>
                     </div>
-
                     <div className="user-tile px-4 py-1 mt-3 d-xl-flex align-items-center w-100">
                         <div className="d-flex align-items-center me-auto mb-xl-0 mb-2" style={{ flex: 1 }}>
                             <img src="assets/images/donorImg.png" style={{ width: '53px', height: '53px' }} />
@@ -248,8 +310,8 @@ const CampSchedule = ({ useContainer }) => {
                                 <div className="input-wrapper-state">
                                     <Select
                                         style={{ width: "100%" }}
-                                        value={selectedState}
-                                        onChange={handleStateChange}
+                                        value={selectedStateforUser}
+                                        onChange={handleStateChangeforUser}
                                         placeholder="Select State">
                                         {states.map((state) => (
                                             <Select.Option key={state.stateCode} value={state.stateCode}>
@@ -261,10 +323,10 @@ const CampSchedule = ({ useContainer }) => {
                                 <div className="input-wrapper-state">
                                     <Select
                                         style={{ width: "100%" }}
-                                        value={selectedDistrict}
-                                        onChange={handleDistrictChange}
+                                        value={selectedDistrictforUser}
+                                        onChange={handleDistrictChangeforUser}
                                         placeholder="Select District">
-                                        {districts.map((district) => (
+                                        {districts2.map((district) => (
                                             <Select.Option key={district.districtCode} value={district.districtCode}>
                                                 {district.districtName}
                                             </Select.Option>
@@ -273,9 +335,27 @@ const CampSchedule = ({ useContainer }) => {
                                 </div>
                             </div>
                             <div className="d-flex" style={{ flex: 2, gap: '10px' }}>
-                                <Input placeholder="Enter Email Address" />
+                                <Input placeholder="Enter Email Address" value={email} onChange={(e) => setEmail(e.target.value)}
+                                    style={{ borderColor: !isValid ? "red" : "" }} />
+                                {!isValid && message.error("Please enter valid Email.")}
+
+                                <Input placeholder="Enter Mobile Number" value={mobileNo}
+                                    onChange={(e) => {
+                                        const value = e.target.value;
+                                        if (/^\d*$/.test(value) && value.length <= 10) {
+                                            setMobileNo(value);
+                                        }
+                                    }}
+                                    onBlur={() => {
+                                        if (!/^[6-9]\d{9}$/.test(mobileNo) || /^(.)\1{9}$/.test(mobileNo)) {
+                                            message.error("Enter a valid mobile number (10 digits, not starting with 0-5, and not all same).");
+                                            setMobileNo("");
+                                        }
+                                    }}
+                                />
+
                                 <div className="input-wrapper button-wrapper">
-                                    <button className="btn btn-primary-outline px-3">
+                                    <button className="btn btn-primary-outline px-3" onClick={handleSubscribe}>
                                         Subscribe
                                     </button>
                                 </div>
@@ -288,7 +368,6 @@ const CampSchedule = ({ useContainer }) => {
                             <p className="mb-0 searchResult me-2">Search Result</p>
                             <p className="mb-0 resultData px-2">Showing Last {dateDifference} Day Data</p>
                         </div>
-
                         <div className="">
                             <Input
                                 placeholder="Search"
@@ -310,7 +389,7 @@ const CampSchedule = ({ useContainer }) => {
                         }}
                         onChange={handleTableChange}
                         loading={loading}
-                        className="custom-table mt-3 mb-3"
+                        className="custom-table mt-3"
                         scroll={{ x: 1000 }}
                         rowClassName={() => "custom-row"}
                     />

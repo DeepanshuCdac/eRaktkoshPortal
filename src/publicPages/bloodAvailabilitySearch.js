@@ -4,7 +4,9 @@ import { getApiData } from '../redux/slices/dataSlice';
 import '../scss/bloodSearch.scss'
 import axios from 'axios';
 import { useLocation } from "react-router-dom";
-import { Select, Space, Input, Table, Empty, message } from 'antd'
+import { SearchOutlined } from "@ant-design/icons";
+import { Select, Space, Input, Table, message, Pagination } from 'antd'
+import { BaseUrl } from '../utils/url';
 const { Search } = Input;
 const { Option } = Select;
 
@@ -12,7 +14,6 @@ const BloodAvailabiltySearch = ({ useContainer }) => {
 
     const dispatch = useDispatch();
     const { statesWithDistricts, bloodGroups, componentList, status } = useSelector((state) => state.data);
-
     const [selectedState, setSelectedState] = useState(null);
     const [selectedDistrict, setSelectedDistrict] = useState(null);
     const [selectedBloodGroup, setSelectedBloodGroup] = useState(null);
@@ -20,8 +21,10 @@ const BloodAvailabiltySearch = ({ useContainer }) => {
     const [bloodStockData, setBloodStockData] = useState([]);
     const [filteredData, setFilteredData] = useState([]);
     const [searchText, setSearchText] = useState("");
-    const [selectedCategory, setSelectedCategory] = useState(null);
+    const [loading, setLoading] = useState(false);
     const [uniqueCategories, setUniqueCategories] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [pageSize, setPageSize] = useState(5);
 
     useEffect(() => {
         dispatch(getApiData());
@@ -33,6 +36,16 @@ const BloodAvailabiltySearch = ({ useContainer }) => {
         const path = location.pathname.split("/").filter(Boolean).pop();
         return path ? path.charAt(0).toUpperCase() + path.slice(1) : "Select a service";
     };
+
+    const handlePageChange = (page, pageSize) => {
+        setCurrentPage(page);
+        setPageSize(pageSize);
+    };
+
+    const paginatedData = filteredData.slice(
+        (currentPage - 1) * pageSize,
+        currentPage * pageSize
+    );
 
     const handleServiceChange = (value) => {
         const urlMap = {
@@ -63,20 +76,6 @@ const BloodAvailabiltySearch = ({ useContainer }) => {
         setSelectedComponent(value);
     };
 
-    const allCategories = ["Govt.", "Charitable/Vol", "Private", "Red Cross"];
-
-    const handleCategoryChange = (value) => {
-        console.log("Selected Category:", value);
-        setSelectedCategory(value);
-        if (value && value !== "All") {
-            setFilteredData(
-                bloodStockData.filter(item => item.type.trim().toLowerCase() === value.trim().toLowerCase())
-            );
-        } else {
-            setFilteredData(bloodStockData);
-        }
-    };
-
     const states = statesWithDistricts || [];
     const districts = selectedState
         ? states.find(state => state.stateCode === selectedState)?.districts || []
@@ -88,24 +87,16 @@ const BloodAvailabiltySearch = ({ useContainer }) => {
             return;
         }
         try {
-            const formData = new URLSearchParams();
-            formData.append('state', selectedState || 'all');
-            formData.append('dist', selectedDistrict || '-1');
-            formData.append('bbType', '-1');
-            formData.append('bg', selectedBloodGroup || 'all');
-            formData.append('bc', selectedComponent || '11');
-            formData.append('start_index', '-1');
-            formData.append('num_records', '10');
-            formData.append('source', 'web');
+            const params = {
+                stateCode: selectedState || 'all',
+                districtId: selectedDistrict || null,
+                componentId: selectedComponent || 11,
+                bloodGroupId: selectedBloodGroup || null,
+            };
 
-            const response = await axios.post(
-                'https://eraktkosh.mohfw.gov.in/Blood_Bank/service/eRaktkoshAPI/new/stock/state',
-                formData,
-                {
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    }
-                }
+            const response = await axios.get(
+                `${BaseUrl}/eraktkosh/blood-availability`,
+                { params }
             );
 
             if (response.data.length > 1) {
@@ -137,7 +128,7 @@ const BloodAvailabiltySearch = ({ useContainer }) => {
     };
 
     const columns = [
-        { title: 'S.No.', dataIndex: 'index', key: 'index', render: (text, record, index) => index + 1 },
+        { title: "S.No.", dataIndex: "sNo", key: "sNo" },
         { title: 'Blood Bank', dataIndex: 'name', key: 'name' },
         { title: 'Category', dataIndex: 'type', key: 'type' },
         { title: 'Availability', dataIndex: 'available', key: 'available' },
@@ -147,11 +138,11 @@ const BloodAvailabiltySearch = ({ useContainer }) => {
 
     return (
         <>
-            <div className="page-wrapper gradient_style">
+            <div className="page_wrapper gradient_style">
                 <div className={useContainer ? "container" : ""}>
                     <h2 className="header-page mb-2 pt-3">Blood Stock Availability</h2>
-                    <div className="d-flex justify-content-between flex-wrap gap-3 container-style">
-                        <div className="input-wrapper-service">
+                    <div className="d-flex flex-wrap gap-2 container-style">
+                        <div className="input-wrapper-date">
                             <label className="form-label mb-0">Select Services</label>
                             <Select style={{ width: "100%" }} onChange={handleServiceChange} placeholder={getPageName()}>
                                 <Option value="service1">Blood Stock Availability</Option>
@@ -159,7 +150,7 @@ const BloodAvailabiltySearch = ({ useContainer }) => {
                                 <Option value="service3">Blood Bank Directory</Option>
                             </Select>
                         </div>
-                        <div className="input-wrapper-service">
+                        <div className="input-wrapper-date">
                             <label htmlFor="orgType" className="form-label mb-0">Select Your State</label>
                             <Space wrap>
                                 <Select
@@ -175,15 +166,14 @@ const BloodAvailabiltySearch = ({ useContainer }) => {
                                 </Select>
                             </Space>
                         </div>
-                        <div className="input-wrapper-service">
+                        <div className="input-wrapper-date">
                             <label htmlFor="orgType" className="form-label mb-0">Select Your District</label>
                             <Space wrap>
                                 <Select
                                     style={{ width: '100%' }}
                                     value={selectedDistrict}
                                     onChange={handleDistrictChange}
-                                    placeholder="Select District"
-                                    disabled={!selectedState} >
+                                    placeholder="Select District">
                                     {districts.map((district) => (
                                         <Select.Option key={district.districtCode} value={district.districtCode}>
                                             {district.districtName}
@@ -192,7 +182,16 @@ const BloodAvailabiltySearch = ({ useContainer }) => {
                                 </Select>
                             </Space>
                         </div>
-                        <div className="input-wrapper-service">
+                        <div className="input-wrapper-date">
+                            <label htmlFor="orgType" className="form-label mb-0">Search Blood Bank</label>
+                            <Space wrap>
+                                <Select
+                                    style={{ width: '100%' }}
+                                    placeholder="Select">
+                                </Select>
+                            </Space>
+                        </div>
+                        <div className="input-wrapper-date">
                             <label htmlFor="orgType" className="form-label mb-1">Select Blood Group</label>
                             <Space wrap>
                                 <Select
@@ -208,7 +207,7 @@ const BloodAvailabiltySearch = ({ useContainer }) => {
                                 </Select>
                             </Space>
                         </div>
-                        <div className="input-wrapper-service">
+                        <div className="input-wrapper-date">
                             <label htmlFor="orgType" className="form-label mb-1">Select Blood Component</label>
                             <Space wrap>
                                 <Select
@@ -224,60 +223,54 @@ const BloodAvailabiltySearch = ({ useContainer }) => {
                                 </Select>
                             </Space>
                         </div>
-                        <div className="d-flex align-items-center justify-content-center mt-3">
-                            <button type="primary" onClick={handleSearch} className="btn btn-primary-signIn px-5">Search</button>
+                        <div className="input-wrapper button-wrapper">
+                            <button className="px-5 btn btn-primary-signIn" onClick={handleSearch}>
+                                {loading ? "Searching..." : "Search"}
+                            </button>
                         </div>
                     </div>
-                    <div className="d-flex justify-content-between align-items-center">
-                        <div className="">
-                            <div className="filterSection d-flex align-items-center justify-content-around px-2 py-1">
-                                <div className="d-flex align-items-center">
-                                    <p className="area mb-0 me-1">Category</p>
-                                    <p className="number mb-0 me-1">4</p>
-                                </div>
-                                <Select
-                                    style={{ width: 150 }}
-                                    value={selectedCategory}
-                                    onChange={handleCategoryChange}
-                                    placeholder="Select Category" >
-                                    <Select.Option value="All">All</Select.Option>
-                                    {allCategories.map((category, index) => (
-                                        <Select.Option key={index} value={category}>
-                                            {category}
-                                        </Select.Option>
-                                    ))}
-                                </Select>
-                                <button
-                                    className="btn px-2"
-                                    onClick={() => {
-                                        setSelectedCategory(null); setFilteredData(bloodStockData);
-                                    }}>
-                                    <img src="assets/images/close.png" />
-                                </button>
-
-                            </div>
+                    <div className="d-xl-flex d-lg-flex d-md-flex d-sm-flex align-items-center justify-content-between mt-3 mb-3">
+                        <div className="d-flex align-items-center">
+                            <p className="mb-0 searchResult me-2">Search Result</p>
                         </div>
-                        <div className="d-flex">
-                            <Search
-                                placeholder="Search Blood Bank"
-                                className="me-2"
+                        <div className="">
+                            <Input
+                                placeholder="Search"
                                 value={searchText}
                                 onChange={(e) => handleTableSearch(e.target.value)}
+                                prefix={<SearchOutlined style={{ color: "#aaa" }} />}
                             />
-                            <button className="filter_btn d-flex align-items-center">
-                                <img className="me-1" src="assets/images/filter.png" />
-                                Filters
-                            </button>
                         </div>
                     </div>
                     <Table
                         columns={columns}
-                        dataSource={filteredData}
+                        dataSource={paginatedData.map((item, index) => ({
+                            ...item,
+                            sNo: (currentPage - 1) * pageSize + index + 1
+                        }))}
                         rowKey="h_code"
-                        pagination={{ pageSize: 10 }}
-                        className="mt-3 mb-3"
+                        pagination={false}
+                        className="mt-3"
                         scroll={{ x: 1000 }}
                     />
+                    <div className="d-flex align-items-center justify-content-between">
+                        <div className="px-2 py-1 notify_box d-flex align-items-center">
+                            <p className="notify_text mb-0">Can't find your Blood Group/Component</p>
+                            <div style={{ padding: '1px 10px' }} className="d-flex align-items-center notify_bell ms-2">
+                                <img src="" />
+                                <p className="mb-0 ">Notify Me</p>
+                            </div>
+                        </div>
+                        <Pagination
+                            current={currentPage}
+                            pageSize={pageSize}
+                            total={filteredData.length}
+                            showSizeChanger
+                            pageSizeOptions={["5", "10", "20", "50"]}
+                            onChange={handlePageChange}
+                            className="mt-3 text-center"
+                        />
+                    </div>
                 </div>
             </div>
         </>
