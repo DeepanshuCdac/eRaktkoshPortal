@@ -1,14 +1,13 @@
-.page-wrapper {
+.body_wrapper{
+    .ant-collapse{
+        font-family: "SourceSans3", sans-serif;
+        .ant-collapse-header-text{
+            font-weight: 600;
+            color: #000;
+        }
 
-    .section-header {
-        font-size: 32px;
-        line-height: 50px;
-    }
-
-    .bdrBtm{
-        width: 100px;
-        right: 27px;
-        position: absolute;
-    border-bottom: 1px solid #7F0210;
+        .ant-collapse-content-box{
+            color: #000;
+        }
     }
 }

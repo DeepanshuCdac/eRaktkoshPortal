@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import ReactDOM from "react-dom";
 import '../scss/bloodSearch.scss';
 import { BaseUrl } from "../utils/url";
-import { Input, notification } from 'antd';
+import { Input } from 'antd';
 import { SearchOutlined } from "@ant-design/icons";
 
 const Notification = () => {

@@ -5,7 +5,7 @@ import '../scss/bloodSearch.scss'
 import axios from 'axios';
 import { useLocation } from "react-router-dom";
 import { SearchOutlined } from "@ant-design/icons";
-import { Select, Space, Input, Table, message, Pagination } from 'antd'
+import { Select, Space, Input, Table, message, Pagination, Tooltip, Button, Modal } from 'antd'
 import { BaseUrl } from '../utils/url';
 const { Search } = Input;
 const { Option } = Select;
@@ -25,6 +25,8 @@ const BloodAvailabiltySearch = ({ useContainer }) => {
     const [uniqueCategories, setUniqueCategories] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize, setPageSize] = useState(5);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedRecord, setSelectedRecord] = useState(null);
 
     useEffect(() => {
         dispatch(getApiData());
@@ -40,6 +42,14 @@ const BloodAvailabiltySearch = ({ useContainer }) => {
     const handlePageChange = (page, pageSize) => {
         setCurrentPage(page);
         setPageSize(pageSize);
+    };
+
+    const showModal = (record) => {
+        setSelectedRecord(record);
+        setIsModalOpen(true);
+    };
+    const handleCancel = () => {
+        setIsModalOpen(false);
     };
 
     const paginatedData = filteredData.slice(
@@ -99,8 +109,8 @@ const BloodAvailabiltySearch = ({ useContainer }) => {
                 { params }
             );
 
-            if (response.data.length > 1) {
-                const data = response.data.slice(1);
+            if (response.data.length > 0) {
+                const data = response.data
                 setBloodStockData(data);
                 setFilteredData(data);
 
@@ -118,6 +128,7 @@ const BloodAvailabiltySearch = ({ useContainer }) => {
 
     const handleTableSearch = (value) => {
         setSearchText(value);
+        setCurrentPage(1);
         const lowercasedValue = value.toLowerCase();
         const filtered = bloodStockData.filter(item =>
             Object.values(item).some(field =>
@@ -129,11 +140,56 @@ const BloodAvailabiltySearch = ({ useContainer }) => {
 
     const columns = [
         { title: "S.No.", dataIndex: "sNo", key: "sNo" },
-        { title: 'Blood Bank', dataIndex: 'name', key: 'name' },
-        { title: 'Category', dataIndex: 'type', key: 'type' },
-        { title: 'Availability', dataIndex: 'available', key: 'available' },
+        {
+            title: 'Blood Bank',
+            key: 'bloodBank',
+            render: (text, record) => (
+                <div style={{ maxWidth: "300px" }}>
+                    <Tooltip title={record.hospitalname}>
+                        <p className="camp-name mb-0">{record.hospitalname}</p>
+                    </Tooltip>
+                    <p className="camp-venue mb-0">{record.hospitaladd}</p>
+                </div>
+            )
+        },
+        {
+            title: "Category", dataIndex: "hospitalType", key: "hospitalType",
+            render: (text) => {
+                let style = {};
+                if (text === "Govt.") {
+                    style = { color: "#3c7bc6", padding: "1px 13px", borderRadius: "13px", fontSize: "12px", border: "1px solid rgba(60, 123, 198, 0.47)", fontWeight: "bold" };
+
+                } else if (text === "Private") {
+                    style = { color: "#359811", padding: "1px 13px", borderRadius: "13px", fontSize: "12px", border: "1px solid rgba(53, 152, 17, 0.47)", fontWeight: "bold" };
+
+                } else if (text === "Charitable/Vol") {
+                    style = { color: "#bc5a00", padding: "1px 13px", borderRadius: "13px", fontSize: "12px", border: "1px solid rgba(188, 90, 0, 0.47)", fontWeight: "bold" };
+
+                } else if (text === "Red Cross ") {
+                    style = { whiteSpace: "nowrap", color: "#D10808", padding: "1px 13px", borderRadius: "13px", fontSize: "12px", border: "1px solid rgba(209, 8, 8, 0.47)", fontWeight: "bold" };
+                }
+
+                return <span style={style}>{text}</span>
+            }
+        },
+        {
+            title: 'Availability',
+            key: 'available_WithQty',
+            render: (text, record) => (
+                <span style={{ color: record.available_WithQty ? '#14930E' : '#B92120', fontWeight: '500' }}>
+                    {record.available_WithQty ? record.available_WithQty : "Not Available"}
+                </span>
+            )
+        },
         { title: 'Last Updated', dataIndex: 'lastUpdate', key: 'lastUpdate' },
-        { title: 'Type', dataIndex: 'type', key: 'type' }
+        { title: 'Type', dataIndex: 'type', key: 'type' },
+        {
+            title: 'Action',
+            key: 'action',
+            render: (_, record) => (
+                <a href='javascript:void(0)' style={{ color: "#1A6093" }} onClick={() => showModal(record)} > Details </a>
+            ),
+        }
     ];
 
     return (
@@ -272,6 +328,34 @@ const BloodAvailabiltySearch = ({ useContainer }) => {
                         />
                     </div>
                 </div>
+
+                <Modal open={isModalOpen} onCancel={handleCancel} footer={null}>
+                    {selectedRecord && (
+                        <div>
+                            <p className='mb-0 modal_header'>Blood Bank Name</p>
+                            <p className='mb-1 hospName'>{selectedRecord.hospitalname}</p>
+                            <p className='mb-1 hospAdd'>{selectedRecord.hospitaladd}</p>
+                            <p className='mb-1 hospAdd pb-2' style={{borderBottom: '2px solid #E6E6E6'}}>
+                                {selectedRecord.hospitalcontact.split(',').map((item, index) => {
+                                    const [label, value] = item.split(':').map(part => part.trim());
+                                    return (
+                                        <span key={index} className='me-3'>
+                                            <span className='labelStyle'>{label}:</span>{' '}
+                                            <span className='hospAdd'>{value}</span>
+                                        </span>
+                                    );
+                                })}
+                            </p>
+                            <p className='mb-1 mt-2' style={{fontSize: '14px', color: '#000', }}>Show Blood Bank Detail and Location</p>
+                            <div className='d-flex'>
+                                <Input className='me-3' placeholder="Your EmailID/Mobile No"/>
+                                <Button type="primary">Send</Button>
+                            </div>
+                        </div>
+                    )}
+                </Modal>
+
+
             </div>
         </>
     )

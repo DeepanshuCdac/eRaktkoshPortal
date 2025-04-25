@@ -151,7 +151,7 @@ const CampSchedule = ({ useContainer }) => {
     const handleSearch = (value) => {
         setSearchText(value);
         if (value) {
-            const filtered = campData.filter((item) => 
+            const filtered = campData.filter((item) =>
                 Object.values(item).some((field) =>
                     field && field.toString().toLowerCase().includes(value.toLowerCase())
                 )
@@ -203,18 +203,20 @@ const CampSchedule = ({ useContainer }) => {
     };
 
     const columns = [
-        { title: 'S.No.', dataIndex: 'sNo', key: 'sNo',  render: (text, record, index) => 
-            (pagination.current - 1) * pagination.pageSize + index + 1 },
+        {
+            title: 'S.No.', dataIndex: 'sNo', key: 'sNo', render: (text, record, index) =>
+                (pagination.current - 1) * pagination.pageSize + index + 1
+        },
         { title: 'Date', dataIndex: 'campDate', key: 'campDate' },
         {
             title: 'Camp Detail',
             key: 'campDetail',
             render: (text, record) => (
-                <div>
+                <div style={{ maxWidth: "300px" }}>
                     <Tooltip title={record.campName}>
                         <p className="camp-name mb-0">{record.campName}</p>
                     </Tooltip>
-                    <span className="camp-venue mb-0" style={{ color: "#707070" }}>{record.campVenue}</span>
+                    <span className="camp-venue mb-0">{record.campVenue}</span>
                 </div>
             )
         },

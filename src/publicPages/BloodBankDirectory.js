@@ -199,11 +199,11 @@ const BloodBankDirectory = () => {
         {
             title: 'Blood Bank', key: 'bloodBank',
             render: (text, record) => (
-                <div>
+                <div style={{ maxWidth: "300px" }}>
                     <Tooltip title={record.name}>
                         <p className="camp-name mb-0">{record.name}</p>
                     </Tooltip>
-                    <span className="camp-venue mb-0" style={{ color: "#707070" }}>{record.address}</span>
+                    <span className="camp-venue mb-0">{record.address}</span>
                 </div>
             )
         },
