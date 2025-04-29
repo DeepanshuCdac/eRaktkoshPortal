@@ -41,9 +41,14 @@
         min-width: 190px;
     }
 
+    .input-wrapper-field {
+        flex: 0;
+        min-width: 190px;
+    }
+
     .input-wrapper-date {
         flex: 0;
-        min-width: 155px;
+        min-width: 165px;
     }
 
     .input-wrapper-state {
@@ -450,47 +455,49 @@
     }
 }
 
-.ant-modal-content{
+.ant-modal-content {
     max-width: 450px;
-    .ant-modal-body{
+
+    .ant-modal-body {
         font-family: "SourceSans3", sans-serif;
-        .modal_header{
+
+        .modal_header {
             color: #707070;
             font-size: 12px;
             font-weight: 500;
         }
 
-        .hospName{
+        .hospName {
             color: #000;
             font-weight: 600;
             font-size: 14px;
         }
 
-        .hospAdd{
+        .hospAdd {
             color: #707070;
             font-size: 13px;
             font-weight: 500;
         }
 
-        .labelStyle{
+        .labelStyle {
             color: #000;
             font-size: 13px;
             font-weight: 600;
         }
 
-        .ant-input{
+        .ant-input {
             background-color: #EFEFEF;
             border: none;
             border-radius: 5px;
         }
 
-        .ant-input::placeholder{
+        .ant-input::placeholder {
             font-size: 13px;
             font-weight: 400;
             color: #959595;
         }
 
-        .ant-btn{
+        .ant-btn {
             color: #fff;
             background-color: #C61C29;
             border: none;
@@ -498,7 +505,7 @@
             font-size: 13px;
         }
 
-        .ant-btn-primary:not(:disabled):not(.ant-btn-disabled):hover{
+        .ant-btn-primary:not(:disabled):not(.ant-btn-disabled):hover {
             color: #fff;
             background-color: #C61C29;
         }

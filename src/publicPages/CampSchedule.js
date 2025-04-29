@@ -272,7 +272,7 @@ const CampSchedule = ({ useContainer }) => {
                             </Select>
                         </div>
                         <div className="input-wrapper-service">
-                            <label className="form-label mb-0">Select Your District</label>
+                            <label className="form-label mb-0">Select District</label>
                             <Select
                                 style={{ width: "100%" }}
                                 value={selectedDistrict}

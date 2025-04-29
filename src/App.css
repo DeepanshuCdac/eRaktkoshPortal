@@ -271,6 +271,16 @@
     border-right: 40px solid #7F0210;
 }
 
+.count_time{
+    font-size: 12px;
+    font-weight: 500;
+    color: #7F0210;
+}
+
+.count_time .time{
+    font-weight: 600;
+}
+
 .donorCount .count {
     color: #FFF;
     font-size: 24px;

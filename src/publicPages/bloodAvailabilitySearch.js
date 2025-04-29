@@ -197,8 +197,8 @@ const BloodAvailabiltySearch = ({ useContainer }) => {
             <div className="page_wrapper gradient_style">
                 <div className={useContainer ? "container" : ""}>
                     <h2 className="header-page mb-2 pt-3">Blood Stock Availability</h2>
-                    <div className="d-flex flex-wrap gap-2 container-style">
-                        <div className="input-wrapper-date">
+                    <div className="d-flex flex-wrap gap-1 container-style">
+                        <div className="input-wrapper-field">
                             <label className="form-label mb-0">Select Services</label>
                             <Select style={{ width: "100%" }} onChange={handleServiceChange} placeholder={getPageName()}>
                                 <Option value="service1">Blood Stock Availability</Option>
@@ -206,7 +206,7 @@ const BloodAvailabiltySearch = ({ useContainer }) => {
                                 <Option value="service3">Blood Bank Directory</Option>
                             </Select>
                         </div>
-                        <div className="input-wrapper-date">
+                        <div className="input-wrapper-field">
                             <label htmlFor="orgType" className="form-label mb-0">Select Your State</label>
                             <Space wrap>
                                 <Select
@@ -222,7 +222,7 @@ const BloodAvailabiltySearch = ({ useContainer }) => {
                                 </Select>
                             </Space>
                         </div>
-                        <div className="input-wrapper-date">
+                        <div className="input-wrapper-field">
                             <label htmlFor="orgType" className="form-label mb-0">Select Your District</label>
                             <Space wrap>
                                 <Select
@@ -238,7 +238,7 @@ const BloodAvailabiltySearch = ({ useContainer }) => {
                                 </Select>
                             </Space>
                         </div>
-                        <div className="input-wrapper-date">
+                        <div className="input-wrapper-field">
                             <label htmlFor="orgType" className="form-label mb-0">Search Blood Bank</label>
                             <Space wrap>
                                 <Select
@@ -247,7 +247,7 @@ const BloodAvailabiltySearch = ({ useContainer }) => {
                                 </Select>
                             </Space>
                         </div>
-                        <div className="input-wrapper-date">
+                        <div className="input-wrapper-field">
                             <label htmlFor="orgType" className="form-label mb-1">Select Blood Group</label>
                             <Space wrap>
                                 <Select
@@ -263,7 +263,7 @@ const BloodAvailabiltySearch = ({ useContainer }) => {
                                 </Select>
                             </Space>
                         </div>
-                        <div className="input-wrapper-date">
+                        <div className="input-wrapper-field">
                             <label htmlFor="orgType" className="form-label mb-1">Select Blood Component</label>
                             <Space wrap>
                                 <Select
@@ -335,7 +335,7 @@ const BloodAvailabiltySearch = ({ useContainer }) => {
                             <p className='mb-0 modal_header'>Blood Bank Name</p>
                             <p className='mb-1 hospName'>{selectedRecord.hospitalname}</p>
                             <p className='mb-1 hospAdd'>{selectedRecord.hospitaladd}</p>
-                            <p className='mb-1 hospAdd pb-2' style={{borderBottom: '2px solid #E6E6E6'}}>
+                            <p className='mb-1 hospAdd pb-2' style={{ borderBottom: '2px solid #E6E6E6' }}>
                                 {selectedRecord.hospitalcontact.split(',').map((item, index) => {
                                     const [label, value] = item.split(':').map(part => part.trim());
                                     return (
@@ -346,9 +346,9 @@ const BloodAvailabiltySearch = ({ useContainer }) => {
                                     );
                                 })}
                             </p>
-                            <p className='mb-1 mt-2' style={{fontSize: '14px', color: '#000', }}>Show Blood Bank Detail and Location</p>
+                            <p className='mb-1 mt-2' style={{ fontSize: '14px', color: '#000', }}>Send Blood Bank Detail and Location</p>
                             <div className='d-flex'>
-                                <Input className='me-3' placeholder="Your EmailID/Mobile No"/>
+                                <Input className='me-3' placeholder="Your EmailID/Mobile No" />
                                 <Button type="primary">Send</Button>
                             </div>
                         </div>

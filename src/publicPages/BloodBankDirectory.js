@@ -302,7 +302,7 @@ const BloodBankDirectory = () => {
                             </Space>
                         </div>
                         <div className="input-wrapper button-wrapper">
-                            <button className="px-5 btn btn-primary-signIn" onClick={fetchNearestBloodBanks}>
+                            <button className="px-5 btn btn-primary-signIn w-100" onClick={fetchNearestBloodBanks}>
                                 {loading ? "Searching..." : "Search"}
                             </button>
                         </div>

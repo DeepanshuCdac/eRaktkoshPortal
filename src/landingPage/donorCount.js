@@ -23,6 +23,7 @@ function animate(obj, initVal, lastVal, duration) {
 
 export default function DonorCount() {
     const [counterData, setCounterData] = useState({
+        timeStamp: 0,
         registeredDonorsAll: 0,
         donorsDonatedAll: 0,
     });
@@ -35,6 +36,7 @@ export default function DonorCount() {
                 const data = response.data;
 
                 setCounterData({
+                    timeStamp: data.timeStamp,
                     registeredDonorsAll: data.registeredDonorsAll,
                     donorsDonatedAll: data.donorsDonatedAll,
                 });
@@ -53,6 +55,7 @@ export default function DonorCount() {
     }, [counterData]);
 
     return (
+        <>
         <div className="donorCount">
             {error && <p className="error-message">{error}</p>}
             <div className='d-xl-flex d-lg-flex d-md-flex d-sm-flex'>
@@ -66,5 +69,9 @@ export default function DonorCount() {
                 </div>
             </div>
         </div>
+        <div className='text-center'>
+       <p className='count_time'> Data from 01 Jan 2022 onwards : Last update : <span className='time'> {counterData.timeStamp}</span></p>
+        </div>
+        </>
     );
 }

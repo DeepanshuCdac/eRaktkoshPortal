@@ -26,12 +26,12 @@ export default function Footer() {
               <h5 className="heading">Looking for Blood</h5>
               <div className="d-flex flex-column">
                 <a
-                  href="#/publicPages/bloodAvailabilitySearch"
+                  href="/BLDAHIMS/bloodbank/stockAvailability.cnt"
                   className="footer-details mb-2">
                   Blood Availability
                 </a>
                 <a
-                  href="#/publicPages/bloodBankDirectory"
+                  href="/BLDAHIMS/bloodbank/nearbyBBRed.cnt"
                   className="footer-details mb-2">
                   Blood Bank Directory
                 </a>
@@ -47,12 +47,12 @@ export default function Footer() {
               <h5 className="heading"></h5>
               <div className="d-flex flex-column">
                 <a
-                  href="#/publicPages/campSchedule"
+                  href="/BLDAHIMS/bloodbank/campSchedule.cnt"
                   className="footer-details mb-2">
                   Blood Donation Camp
                 </a>
                 <a
-                  href="#/pages/portalDonorLogin"
+                  href="/BLDAHIMS/bloodbank/portalDonorLogin.cnt"
                   className="footer-details mb-2">
                   Donor Login
                 </a>
@@ -62,7 +62,7 @@ export default function Footer() {
                   About Blood Donation
                 </a>
                 <a
-                  href="#/publicPages/campRegistration"
+                  href="/BLDAHIMS/bloodbank/onlineCampRequestNewBB.cnt"
                   className="footer-details mb-2">
                   Register VBD Camp
                 </a>
@@ -97,7 +97,7 @@ export default function Footer() {
                   Notifications
                 </a>
                 <a
-                  href="#/publicPages/FAQs"
+                  href="/BLDAHIMS/bloodbank/eraktkoshfaq.cnt"
                   className="footer-details mb-2">
                   e-Raktkosh FAQs
                 </a>

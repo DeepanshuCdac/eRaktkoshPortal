@@ -7,13 +7,14 @@ export default function Navbar() {
       <header className="header">
         <div className="container">
           <div className="d-flex align-items-center justify-content-between">
-            <a href="/BLDAHIMS/bloodbank/transactions/bbpublicindex.html">
+            <Link to="/beta#">
               <img
                 src="assets/images/main-icon1.png"
                 className="img-fluid"
-                alt=""
+                alt="Home"
+                style={{ cursor: 'pointer' }}
               />
-            </a>
+            </Link>
 
             <input type="checkbox" id="menu-bar" />
             <label htmlFor="menu-bar">Menu</label>
@@ -35,7 +36,7 @@ export default function Navbar() {
                       {/* <a href="/BLDAHIMS/bloodbank/transactions/bbpublicindex.html">
                         Home Beta
                       </a> */}
-                      <Link className="links" to="/">Home Beta</Link>
+                      <Link className="links" to="/beta#">Home</Link>
                     </li>
                     <li>
                       <a href="/BLDAHIMS/bloodbank/about.cnt">
@@ -48,10 +49,16 @@ export default function Navbar() {
                       </a>
                     </li>
                     <li>
-                      <Link className="links" to="/publicPages/Notification">Notifications</Link>
+                      <a className="links" href="/BLDAHIMS/bloodbank/notification.cnt">
+                        Notifications
+                      </a>
+                      {/* <Link className="links" to="/publicPages/Notification">Notifications</Link> */}
                     </li>
                     <li>
-                      <Link className="links" to="/publicPages/FAQs">eRaktkosh FAQ's</Link>
+                      <a className="links" href="/BLDAHIMS/bloodbank/eraktkoshfaq.cnt">
+                        eRaktkosh FAQ's
+                      </a>
+                      {/* <Link className="links" to="/publicPages/FAQs">eRaktkosh FAQ's</Link> */}
                     </li>
                     <li>
                       <a href="/BLDAHIMS/bloodbank/transactions/bbpublicindexGallery.html">
@@ -88,10 +95,17 @@ export default function Navbar() {
 
                   <ul className="ps-0">
                     <li>
-                      <Link className="links" to="/publicPages/bloodAvailabilitySearch">Blood Availability</Link>
+                      {/* <Link className="links" to="/publicPages/bloodAvailabilitySearch">Blood Availability</Link> */}
+                      <a href="/BLDAHIMS/bloodbank/stockAvailability.cnt">
+                        Blood Availability
+                      </a>
                     </li>
                     <li>
-                      <Link className="links" to="/publicPages/bloodBankDirectory">Blood Bank Directory</Link>
+                      {/* <Link className="links" to="/publicPages/bloodBankDirectory">Blood Bank Directory</Link> */}
+
+                      <a href="/BLDAHIMS/bloodbank/nearbyBBRed.cnt">
+                        Blood Bank Directory
+                      </a>
                     </li>
                     <li>
                       <a href="/BLDAHIMS/bloodbank/portalThalassemiaLogin.cnt">
@@ -112,10 +126,16 @@ export default function Navbar() {
                   </a>
                   <ul className="ps-0">
                     <li>
-                      <Link className="links" to="/publicPages/campSchedule"> Blood Donation Camps</Link>
+                      {/* <Link className="links" to="/publicPages/campSchedule"> Blood Donation Camps</Link> */}
+                      <a href="/BLDAHIMS/bloodbank/campSchedule.cnt">
+                        Blood Donation Camps
+                      </a>
                     </li>
                     <li>
-                      <Link className="links" to="/pages/portalDonorLogin"> Donor Login</Link>
+                      {/* <Link className="links" to="/pages/portalDonorLogin"> Donor Login</Link> */}
+                      <a href="/BLDAHIMS/bloodbank/portalDonorLogin.cnt">
+                        Donor Login
+                      </a>
                     </li>
                     <li>
                       <a href="/BLDAHIMS/bloodbank/donateblood.cnt">
@@ -123,7 +143,10 @@ export default function Navbar() {
                       </a>
                     </li>
                     <li>
-                      <Link className="links" to="/publicPages/campRegistration">Register VBD Camp</Link>
+                      {/* <Link className="links" to="/publicPages/campRegistration">Register VBD Camp</Link> */}
+                      <a href="/BLDAHIMS/bloodbank/onlineCampRequestNewBB.cnt">
+                        Register VBD Camp
+                      </a>
                     </li>
                   </ul>
                 </li>
