@@ -263,43 +263,46 @@ const BloodBankDirectory = () => {
                     <div className="d-flex justify-content-between flex-wrap gap-3 container-style">
                         <div className="input-wrapper-service">
                             <label className="form-label mb-0">Select Services</label>
-                            <Select style={{ width: "100%" }} onChange={handleServiceChange} placeholder={getPageName()}>
-                                <Option value="service1">Blood Stock Availability</Option>
-                                <Option value="service2">Camp Schedule</Option>
-                                <Option value="service3">Blood Bank Directory</Option>
-                            </Select>
+                            <Select
+                                showSearch style={{ width: '100%' }} placeholder={getPageName()} onChange={handleServiceChange}
+                                filterOption={(input, option) => {
+                                    const label = option?.label ?? '';
+                                    return label.toLowerCase().includes(input.toLowerCase())
+                                }}
+                                options={[
+                                    { value: 'service1', label: 'Blood Stock Availability' },
+                                    { value: 'service2', label: 'Camp Schedule' },
+                                    { value: 'service3', label: 'Blood Bank Directory' },
+                                ]}
+                            />
                         </div>
                         <div className='input-wrapper-service'>
-                            <label htmlFor="orgType" className="form-label mb-1">Select Your State</label>
-                            <Space wrap>
-                                <Select
-                                    style={{ width: '100%' }}
-                                    value={selectedState}
-                                    onChange={handleStateChange}
-                                    placeholder="Select State" >
-                                    {states.map((state) => (
-                                        <Select.Option key={state.stateCode} value={state.stateCode}>
-                                            {state.stateName}
-                                        </Select.Option>
-                                    ))}
-                                </Select>
-                            </Space>
+                            <label htmlFor="orgType" className="form-label mb-1">Select State</label>
+                            <Select
+                                showSearch style={{ width: '100%' }} value={selectedState}
+                                onChange={handleStateChange} placeholder="Select State"
+                                filterOption={(input, option) => {
+                                    const label = option?.label ?? '';
+                                    return label.toLowerCase().includes(input.toLowerCase());
+                                }}
+                                options={states.map((state) => ({
+                                    value: state.stateCode, label: state.stateName,
+                                }))}
+                            />
                         </div>
                         <div className='input-wrapper-service'>
-                            <label htmlFor="orgType" className="form-label mb-1">Select Your District</label>
-                            <Space wrap>
-                                <Select
-                                    style={{ width: '100%' }}
-                                    value={selectedDistrict}
-                                    onChange={handleDistrictChange}
-                                    placeholder="Select District">
-                                    {districts.map((district) => (
-                                        <Select.Option key={district.districtCode} value={district.districtCode}>
-                                            {district.districtName}
-                                        </Select.Option>
-                                    ))}
-                                </Select>
-                            </Space>
+                            <label htmlFor="orgType" className="form-label mb-1">Select District</label>
+                            <Select
+                                showSearch style={{ width: '100%' }} value={selectedDistrict}
+                                onChange={handleDistrictChange} placeholder="Select District"
+                                filterOption={(input, option) => {
+                                    const label = option?.label ?? '';
+                                    return label.toLowerCase().includes(input.toLowerCase());
+                                }}
+                                options={districts.map((district) => ({
+                                    value: district.districtCode, label: district.districtName,
+                                }))}
+                            />
                         </div>
                         <div className="input-wrapper button-wrapper">
                             <button className="px-5 btn btn-primary-signIn w-100" onClick={fetchNearestBloodBanks}>

@@ -91,6 +91,18 @@ const CampSchedule = ({ useContainer }) => {
         setSelectedDistrictforUser(value);
     };
 
+    const disabledStartDate = (current) => {
+        // Disable all dates before today
+        return current && current < dayjs().startOf('day');
+    };
+
+    const disabledEndDate = (current) => {
+        const today = dayjs().startOf('day');
+        const maxDate = today.add(1, 'month');
+        // Disable all dates before today or after 1 month from today
+        return current && (current < today || current > maxDate);
+    };
+
     const handleStartDateChange = (date) => {
         const formattedDate = date ? dayjs(date).format("YYYY-MM-DD") : "";
         setSelectedStartDate(formattedDate);
@@ -251,47 +263,58 @@ const CampSchedule = ({ useContainer }) => {
                     <div className="d-flex justify-content-between flex-wrap gap-3 container-style">
                         <div className="input-wrapper-service">
                             <label className="form-label mb-0">Select Services</label>
-                            <Select style={{ width: "100%" }} onChange={handleServiceChange} placeholder={getPageName()}>
-                                <Option value="service1">Blood Stock Availability</Option>
-                                <Option value="service2">Camp Schedule</Option>
-                                <Option value="service3">Blood Bank Directory</Option>
-                            </Select>
+                            <Select
+                                showSearch style={{ width: '100%' }} placeholder={getPageName()} onChange={handleServiceChange}
+                                filterOption={(input, option) => {
+                                    const label = option?.label ?? '';
+                                    return label.toLowerCase().includes(input.toLowerCase())
+                                }}
+                                options={[
+                                    { value: 'service1', label: 'Blood Stock Availability' },
+                                    { value: 'service2', label: 'Camp Schedule' },
+                                    { value: 'service3', label: 'Blood Bank Directory' },
+                                ]}
+                            />
                         </div>
                         <div className="input-wrapper-service">
                             <label className="form-label mb-0">Select State</label>
                             <Select
-                                style={{ width: "100%" }}
-                                value={selectedState}
-                                onChange={handleStateChange}
-                                placeholder="Select State">
-                                {states.map((state) => (
-                                    <Select.Option key={state.stateCode} value={state.stateCode}>
-                                        {state.stateName}
-                                    </Select.Option>
-                                ))}
-                            </Select>
+                                showSearch style={{ width: "100%" }} value={selectedState}
+                                onChange={handleStateChange} placeholder="Select State"
+                                filterOption={(input, option) => {
+                                    const label = option?.label ?? '';
+                                    return label.toLowerCase().includes(input.toLowerCase());
+                                }}
+                                options={states.map((state) => ({
+                                    value: state.stateCode, label: state.stateName,
+                                }))}
+                            />
                         </div>
                         <div className="input-wrapper-service">
                             <label className="form-label mb-0">Select District</label>
                             <Select
-                                style={{ width: "100%" }}
-                                value={selectedDistrict}
-                                onChange={handleDistrictChange}
-                                placeholder="Select District">
-                                {districts.map((district) => (
-                                    <Select.Option key={district.districtCode} value={district.districtCode}>
-                                        {district.districtName}
-                                    </Select.Option>
-                                ))}
-                            </Select>
+                                showSearch style={{ width: '100%' }} value={selectedDistrict}
+                                onChange={handleDistrictChange} placeholder="Select District"
+                                filterOption={(input, option) => {
+                                    const label = option?.label ?? '';
+                                    return label.toLowerCase().includes(input.toLowerCase());
+                                }}
+                                options={districts.map((district) => ({
+                                    value: district.districtCode, label: district.districtName,
+                                }))}
+                            />
                         </div>
                         <div className="input-wrapper-date">
                             <label className="form-label mb-0">Start Date</label>
-                            <DatePicker className="custom-date-picker" onChange={handleStartDateChange} defaultValue={dayjs()} allowClear={false} suffixIcon={null} />
+                            <DatePicker
+                                className="custom-date-picker" onChange={handleStartDateChange} defaultValue={dayjs()}
+                                allowClear={false} suffixIcon={null} disabledDate={disabledStartDate} />
                         </div>
                         <div className="input-wrapper-date">
                             <label className="form-label mb-0">To Date</label>
-                            <DatePicker className="custom-date-picker" onChange={handleEndDateChange} defaultValue={dayjs()} allowClear={false} suffixIcon={null} />
+                            <DatePicker
+                                className="custom-date-picker" onChange={handleEndDateChange} defaultValue={dayjs()}
+                                allowClear={false} suffixIcon={null} disabledDate={disabledEndDate} />
                         </div>
                         <div className="input-wrapper button-wrapper">
                             <button onClick={fetchCampSchedule} className="btn btn-primary-signIn px-5">
@@ -311,29 +334,29 @@ const CampSchedule = ({ useContainer }) => {
                             <div className="d-flex mb-xl-0 mb-lg-0 mb-2" style={{ flex: 2, gap: '10px' }}>
                                 <div className="input-wrapper-state">
                                     <Select
-                                        style={{ width: "100%" }}
-                                        value={selectedStateforUser}
-                                        onChange={handleStateChangeforUser}
-                                        placeholder="Select State">
-                                        {states.map((state) => (
-                                            <Select.Option key={state.stateCode} value={state.stateCode}>
-                                                {state.stateName}
-                                            </Select.Option>
-                                        ))}
-                                    </Select>
+                                        showSearch style={{ width: "100%" }} value={selectedStateforUser}
+                                        onChange={handleStateChangeforUser} placeholder="Select State"
+                                        filterOption={(input, option) => {
+                                            const label = option?.label ?? '';
+                                            return label.toLowerCase().includes(input.toLowerCase());
+                                        }}
+                                        options={states.map((state) => ({
+                                            value: state.stateCode, label: state.stateName,
+                                        }))}
+                                    />
                                 </div>
                                 <div className="input-wrapper-state">
                                     <Select
-                                        style={{ width: "100%" }}
-                                        value={selectedDistrictforUser}
-                                        onChange={handleDistrictChangeforUser}
-                                        placeholder="Select District">
-                                        {districts2.map((district) => (
-                                            <Select.Option key={district.districtCode} value={district.districtCode}>
-                                                {district.districtName}
-                                            </Select.Option>
-                                        ))}
-                                    </Select>
+                                        showSearch style={{ width: "100%" }} value={selectedDistrictforUser}
+                                        onChange={handleDistrictChangeforUser} placeholder="Select District"
+                                        filterOption={(input, option) => {
+                                            const label = option?.label ?? '';
+                                            return label.toLowerCase().includes(input.toLowerCase());
+                                        }}
+                                        options={districts.map((district) => ({
+                                            value: district.districtCode, label: district.districtName,
+                                        }))}
+                                    />
                                 </div>
                             </div>
                             <div className="d-flex" style={{ flex: 2, gap: '10px' }}>

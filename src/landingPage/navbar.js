@@ -49,16 +49,16 @@ export default function Navbar() {
                       </a>
                     </li>
                     <li>
-                      <a className="links" href="/BLDAHIMS/bloodbank/notification.cnt">
+                      {/* <a className="links" href="/BLDAHIMS/bloodbank/notification.cnt">
                         Notifications
-                      </a>
-                      {/* <Link className="links" to="/publicPages/Notification">Notifications</Link> */}
+                      </a> */}
+                      <Link className="links" to="/publicPages/Notification">Notifications</Link>
                     </li>
                     <li>
-                      <a className="links" href="/BLDAHIMS/bloodbank/eraktkoshfaq.cnt">
+                      {/* <a className="links" href="/BLDAHIMS/bloodbank/eraktkoshfaq.cnt">
                         eRaktkosh FAQ's
-                      </a>
-                      {/* <Link className="links" to="/publicPages/FAQs">eRaktkosh FAQ's</Link> */}
+                      </a> */}
+                      <Link className="links" to="/publicPages/FAQs">eRaktkosh FAQ's</Link>
                     </li>
                     <li>
                       <a href="/BLDAHIMS/bloodbank/transactions/bbpublicindexGallery.html">
@@ -95,17 +95,17 @@ export default function Navbar() {
 
                   <ul className="ps-0">
                     <li>
-                      {/* <Link className="links" to="/publicPages/bloodAvailabilitySearch">Blood Availability</Link> */}
-                      <a href="/BLDAHIMS/bloodbank/stockAvailability.cnt">
+                      <Link className="links" to="/publicPages/bloodAvailabilitySearch">Blood Availability</Link>
+                      {/* <a href="/BLDAHIMS/bloodbank/stockAvailability.cnt">
                         Blood Availability
-                      </a>
+                      </a> */}
                     </li>
                     <li>
-                      {/* <Link className="links" to="/publicPages/bloodBankDirectory">Blood Bank Directory</Link> */}
+                      <Link className="links" to="/publicPages/bloodBankDirectory">Blood Bank Directory</Link>
 
-                      <a href="/BLDAHIMS/bloodbank/nearbyBBRed.cnt">
+                      {/* <a href="/BLDAHIMS/bloodbank/nearbyBBRed.cnt">
                         Blood Bank Directory
-                      </a>
+                      </a> */}
                     </li>
                     <li>
                       <a href="/BLDAHIMS/bloodbank/portalThalassemiaLogin.cnt">
@@ -126,16 +126,16 @@ export default function Navbar() {
                   </a>
                   <ul className="ps-0">
                     <li>
-                      {/* <Link className="links" to="/publicPages/campSchedule"> Blood Donation Camps</Link> */}
-                      <a href="/BLDAHIMS/bloodbank/campSchedule.cnt">
+                      <Link className="links" to="/publicPages/campSchedule"> Blood Donation Camps</Link>
+                      {/* <a href="/BLDAHIMS/bloodbank/campSchedule.cnt">
                         Blood Donation Camps
-                      </a>
+                      </a> */}
                     </li>
                     <li>
-                      {/* <Link className="links" to="/pages/portalDonorLogin"> Donor Login</Link> */}
-                      <a href="/BLDAHIMS/bloodbank/portalDonorLogin.cnt">
+                      <Link className="links" to="/pages/portalDonorLogin"> Donor Login</Link>
+                      {/* <a href="/BLDAHIMS/bloodbank/portalDonorLogin.cnt">
                         Donor Login
-                      </a>
+                      </a> */}
                     </li>
                     <li>
                       <a href="/BLDAHIMS/bloodbank/donateblood.cnt">

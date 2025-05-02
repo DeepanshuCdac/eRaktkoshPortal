@@ -51,7 +51,6 @@ const Faqs = () => {
                             return { ...faq, faqType: "General & Blood Availability" };
                         }
                     });
-
                     setFaqItems(faqsWithType);
                 }
 
