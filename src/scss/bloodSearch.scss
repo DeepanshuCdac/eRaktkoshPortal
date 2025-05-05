@@ -511,3 +511,23 @@
         }
     }
 }
+
+.blood_availability_table{
+    :where(.css-dev-only-do-not-override-qnu6hi).ant-table-wrapper .ant-table-tbody>tr>th,
+    :where(.css-dev-only-do-not-override-qnu6hi).ant-table-wrapper .ant-table-tbody>tr>td {
+        border-bottom: none;
+    }
+    
+    .ant-table-tbody .ant-table-row .ant-table-cell{
+        border-bottom: none;
+        
+        
+    }
+}
+
+.nested_table{
+    .ant-table-thead .ant-table-cell{
+        background-color: #EBEBEB;
+        border-bottom: none;
+    }
+}

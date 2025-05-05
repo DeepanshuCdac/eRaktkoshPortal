@@ -48,7 +48,7 @@ const BloodBankDirectory = () => {
     }, [dispatch]);
 
     useEffect(() => {
-        document.title = 'e-RaktKosh Blood Bank Directory';
+        document.title = 'e-RaktKosh Blood Center Directory';
 
         sessionStorage.removeItem("geoPermissionDenied");
     }, []);
@@ -156,6 +156,11 @@ const BloodBankDirectory = () => {
         }
     };
 
+    // blood center stock
+    const fetchBankStock = async () => {
+        setModalLoading(true)
+    }
+
     // Camps link inside the nearest blook bank table...
     const fetchCampData = async (hospitalCode) => {
         setModalLoading(true)
@@ -197,7 +202,7 @@ const BloodBankDirectory = () => {
     const columns = [
         { title: "S.No.", dataIndex: "sNo", key: "sNo" },
         {
-            title: 'Blood Bank', key: 'bloodBank',
+            title: 'Blood Center', key: 'bloodBank',
             render: (text, record) => (
                 <div style={{ maxWidth: "300px" }}>
                     <Tooltip title={record.name}>
@@ -238,8 +243,11 @@ const BloodBankDirectory = () => {
         {
             title: "Action", dataIndex: "action", key: "action",
             render: (_, record) => (
-                <div className="d-flex flex-column">
-                    <a href="" className="stockStatus mb-2 px-3">Stock</a>
+                <div className="d-flex flex-column text-center">
+                    <a href="#" className="stockStatus mb-2 px-3" onClick={(e) => {
+                        e.preventDefault()
+                        fetchBankStock()
+                    }}>Stock</a>
                     <a
                         href="#"
                         className="campStatus px-3"
@@ -259,7 +267,7 @@ const BloodBankDirectory = () => {
         <>
             <div className="page_wrapper gradient_style">
                 <div className="container">
-                    <h2 className="header-page mb-2 pt-3">Nearest Blood Bank(BB)/ Blood Storage Unit(BSU)</h2>
+                    <h2 className="header-page mb-2 pt-3">Nearest Blood Center(BB)/ Blood Storage Unit(BSU)</h2>
                     <div className="d-flex justify-content-between flex-wrap gap-3 container-style">
                         <div className="input-wrapper-service">
                             <label className="form-label mb-0">Select Services</label>
@@ -272,7 +280,7 @@ const BloodBankDirectory = () => {
                                 options={[
                                     { value: 'service1', label: 'Blood Stock Availability' },
                                     { value: 'service2', label: 'Camp Schedule' },
-                                    { value: 'service3', label: 'Blood Bank Directory' },
+                                    { value: 'service3', label: 'Blood Center Directory' },
                                 ]}
                             />
                         </div>
@@ -367,7 +375,7 @@ const BloodBankDirectory = () => {
                                 </div>
                             ))
                         ) : (
-                            <p>No camps available for this blood bank.</p>
+                            <p>No camps available for this Blood Center.</p>
                         )}
                     </Modal>
                 </div>
