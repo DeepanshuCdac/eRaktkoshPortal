@@ -5,14 +5,29 @@ import "../scss/bloodSearch.scss";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 import { SearchOutlined } from "@ant-design/icons";
-import { Select, Space, Input, Table, message, Pagination, Tooltip, Button, Modal, AutoComplete, Spin } from "antd";
+import {
+  Select,
+  Space,
+  Input,
+  Table,
+  message,
+  Pagination,
+  Tooltip,
+  Button,
+  Modal,
+  AutoComplete,
+  Spin,
+} from "antd";
 import { BaseUrl } from "../utils/url";
+import { logSearch } from "../utils/logService";
 
 const { Option } = Select;
 
-const BloodAvailabiltySearch = ({ useContainer }) => {
+const BloodAvailabiltySearch = () => {
   const dispatch = useDispatch();
-  const { statesWithDistricts, bloodGroups, componentList } = useSelector((state) => state.data);
+  const { statesWithDistricts, bloodGroups, componentList } = useSelector(
+    (state) => state.data
+  );
   const [selectedState, setSelectedState] = useState(null);
   const [selectedDistrict, setSelectedDistrict] = useState(null);
   const [bloodBanks, setBloodBanks] = useState([]);
@@ -31,6 +46,7 @@ const BloodAvailabiltySearch = ({ useContainer }) => {
   const [expandedRowKeys, setExpandedRowKeys] = useState(null);
   const [nestedTableLoading, setNestedTableLoading] = useState(false);
   const [nestedData, setNestedData] = useState(null);
+  const [emailAddress, setEmailAddress] = useState("");
 
   useEffect(() => {
     dispatch(getApiData());
@@ -40,7 +56,9 @@ const BloodAvailabiltySearch = ({ useContainer }) => {
 
   const getPageName = () => {
     const path = location.pathname.split("/").filter(Boolean).pop();
-    return path ? path.charAt(0).toUpperCase() + path.slice(1) : "Select a service";
+    return path
+      ? path.charAt(0).toUpperCase() + path.slice(1)
+      : "Select a service";
   };
 
   const handlePageChange = (page, size) => {
@@ -58,7 +76,10 @@ const BloodAvailabiltySearch = ({ useContainer }) => {
   };
 
   const paginatedData = useMemo(() => {
-    return filteredData.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+    return filteredData.slice(
+      (currentPage - 1) * pageSize,
+      currentPage * pageSize
+    );
   }, [filteredData, currentPage, pageSize]);
 
   const handleServiceChange = (value) => {
@@ -98,13 +119,16 @@ const BloodAvailabiltySearch = ({ useContainer }) => {
   const fetchDetailedComponentData = async (hospitalCode) => {
     if (!selectedState) return {};
     try {
-      const response = await axios.get(`${BaseUrl}/eraktkosh/blood-availability`, {
-        params: {
-          stateCode: selectedState,
-          districtId: selectedDistrict || null,
-          hospitalCodes: hospitalCode,
-        },
-      });
+      const response = await axios.get(
+        `${BaseUrl}/eraktkosh/blood-availability`,
+        {
+          params: {
+            stateCode: selectedState,
+            districtId: selectedDistrict || null,
+            hospitalCodes: hospitalCode,
+          },
+        }
+      );
       return response.data[0]?.components || {};
     } catch (error) {
       console.error("Error fetching detailed component data:", error);
@@ -128,8 +152,26 @@ const BloodAvailabiltySearch = ({ useContainer }) => {
     };
 
     try {
+      const searchLogData = {
+        serviceType: "Blood Availability",
+        searchParams: {
+          state: selectedState,
+          district: selectedDistrict || null,
+          bloodCenter: selectedHospital,
+          bloodGroup: selectedBloodGroup,
+          bloodComponent: selectedComponent,
+        },
+        ipAddress: null,
+      };
+      logSearch(searchLogData).catch((e) =>
+        console.error("Search logging failed:", e)
+      );
+
       setLoading(true);
-      const response = await axios.get(`${BaseUrl}/eraktkosh/blood-availability`, { params });
+      const response = await axios.get(
+        `${BaseUrl}/eraktkosh/blood-availability`,
+        { params }
+      );
 
       if (response.data.length > 0) {
         const processedData = response.data.map((item, index) => {
@@ -140,7 +182,8 @@ const BloodAvailabiltySearch = ({ useContainer }) => {
           if (keys.length === 1) {
             availableQty = components[keys[0]]?.available_WithQty || "";
           } else {
-            availableQty = components["Packed Red Blood Cells"]?.available_WithQty || "";
+            availableQty =
+              components["Packed Red Blood Cells"]?.available_WithQty || "";
           }
           return {
             ...item,
@@ -176,7 +219,8 @@ const BloodAvailabiltySearch = ({ useContainer }) => {
     setCurrentPage(1);
     const filtered = bloodStockData.filter((item) =>
       Object.values(item).some(
-        (field) => field && field.toString().toLowerCase().includes(value.toLowerCase())
+        (field) =>
+          field && field.toString().toLowerCase().includes(value.toLowerCase())
       )
     );
     setFilteredData(filtered);
@@ -184,7 +228,11 @@ const BloodAvailabiltySearch = ({ useContainer }) => {
 
   const nestedColumns = [
     { title: "S.No.", dataIndex: "sNo", key: "sNo" },
-    { title: "Blood Component", dataIndex: "bloodComponent", key: "bloodComponent" },
+    {
+      title: "Blood Component",
+      dataIndex: "bloodComponent",
+      key: "bloodComponent",
+    },
     ...bloodGroups.map((group) => ({
       title: group.bloodGroupName,
       dataIndex: group.bloodGroupName,
@@ -194,7 +242,9 @@ const BloodAvailabiltySearch = ({ useContainer }) => {
 
   const columns = [
     { title: "S.No.", dataIndex: "sNo", key: "sNo" },
-    { title: "Blood Center", key: "bloodBank",
+    {
+      title: "Blood Center",
+      key: "bloodBank",
       render: (_, record) => (
         <div style={{ maxWidth: "300px" }}>
           <Tooltip title={record.hospitalname}>
@@ -204,33 +254,75 @@ const BloodAvailabiltySearch = ({ useContainer }) => {
         </div>
       ),
     },
-    { title: "Category", dataIndex: "hospitalType", key: "hospitalType",
+    {
+      title: "Category",
+      dataIndex: "hospitalType",
+      key: "hospitalType",
       render: (text) => {
         const styleMap = {
-          "Govt.": { color: "#3c7bc6", padding: "1px 13px", borderRadius: "13px", fontSize: "12px", border: "1px solid rgba(60, 123, 198, 0.47)", fontWeight: "bold",
+          "Govt.": {
+            color: "#3c7bc6",
+            padding: "1px 13px",
+            borderRadius: "13px",
+            fontSize: "12px",
+            border: "1px solid rgba(60, 123, 198, 0.47)",
+            fontWeight: "bold",
           },
-          "Private": { color: "#359811", padding: "1px 13px", borderRadius: "13px", fontSize: "12px", border: "1px solid rgba(53, 152, 17, 0.47)", fontWeight: "bold",
+          Private: {
+            color: "#359811",
+            padding: "1px 13px",
+            borderRadius: "13px",
+            fontSize: "12px",
+            border: "1px solid rgba(53, 152, 17, 0.47)",
+            fontWeight: "bold",
           },
-          "Charitable/Vol": { color: "#bc5a00", padding: "1px 13px", borderRadius: "13px", fontSize: "12px", border: "1px solid rgba(188, 90, 0, 0.47)", fontWeight: "bold",
+          "Charitable/Vol": {
+            color: "#bc5a00",
+            padding: "1px 13px",
+            borderRadius: "13px",
+            fontSize: "12px",
+            border: "1px solid rgba(188, 90, 0, 0.47)",
+            fontWeight: "bold",
           },
-          "Red Cross ": { whiteSpace: "nowrap", color: "#D10808", padding: "1px 13px", borderRadius: "13px", fontSize: "12px", border: "1px solid rgba(209, 8, 8, 0.47)", fontWeight: "bold",
+          "Red Cross ": {
+            whiteSpace: "nowrap",
+            color: "#D10808",
+            padding: "1px 13px",
+            borderRadius: "13px",
+            fontSize: "12px",
+            border: "1px solid rgba(209, 8, 8, 0.47)",
+            fontWeight: "bold",
           },
         };
         return <span style={styleMap[text] || {}}>{text}</span>;
       },
     },
-    { title: "Availability", key: "available_WithQty", dataIndex: "available_WithQty",
+    {
+      title: "Availability",
+      key: "available_WithQty",
+      dataIndex: "available_WithQty",
       render: (availableQty) => (
-        <span style={{ color: availableQty ? "#14930E" : "#B92120", fontWeight: "500" }}>
+        <span
+          style={{
+            color: availableQty ? "#14930E" : "#B92120",
+            fontWeight: "500",
+          }}
+        >
           {availableQty || "Not Available"}
         </span>
       ),
     },
     { title: "Last Updated", dataIndex: "entrydate", key: "entrydate" },
     { title: "Type", dataIndex: "type", key: "type" },
-    { title: "Action", key: "action",
+    {
+      title: "Action",
+      key: "action",
       render: (_, record) => (
-        <a href="javascript:void(0)" style={{ color: "#1A6093" }} onClick={() => showModal(record)}>
+        <a
+          href="javascript:void(0)"
+          style={{ color: "#1A6093" }}
+          onClick={() => showModal(record)}
+        >
           Details
         </a>
       ),
@@ -243,15 +335,17 @@ const BloodAvailabiltySearch = ({ useContainer }) => {
     } else {
       setNestedTableLoading(true);
       try {
-        const detailedComponents = await fetchDetailedComponentData(record.hospitalCode);
+        const detailedComponents = await fetchDetailedComponentData(
+          record.hospitalCode
+        );
         const nestedDataResult = [];
         let count = 1;
-        
+
         Object.keys(detailedComponents)
           .filter((component) => component !== "Unknown")
           .forEach((key) => {
             if (!detailedComponents[key]?.available_WithQty) return;
-            
+
             const result = detailedComponents[key].available_WithQty
               .split(",")
               .reduce((acc, item) => {
@@ -259,20 +353,23 @@ const BloodAvailabiltySearch = ({ useContainer }) => {
                 acc[key] = Number(value);
                 return acc;
               }, {});
-              
+
             nestedColumns.forEach((column) => {
-              if (!["sNo", "bloodComponent"].includes(column.dataIndex) && !result[column.dataIndex]) {
+              if (
+                !["sNo", "bloodComponent"].includes(column.dataIndex) &&
+                !result[column.dataIndex]
+              ) {
                 result[column.dataIndex] = "-";
               }
             });
-            
+
             nestedDataResult.push({
               sNo: count++,
               bloodComponent: key,
               ...result,
             });
           });
-          
+
         setNestedData(nestedDataResult);
       } catch (error) {
         message.error("Failed to load detailed component data");
@@ -286,25 +383,42 @@ const BloodAvailabiltySearch = ({ useContainer }) => {
 
   const CustomBodyRow = ({ children, record, ...restProps }) => {
     if (!children[0]?.props?.record) return <tr {...restProps}>{children}</tr>;
-    
+
     return (
       <>
         <tr {...restProps} style={{ borderBottom: 0 }}>
           {children}
         </tr>
         <tr style={{ borderBottom: "none", width: "100%" }}>
-          <td colSpan={columns.length} style={{ textAlign: "center", padding: '5px' }}>
+          <td
+            colSpan={columns.length}
+            style={{ textAlign: "center", padding: "5px" }}
+          >
             <Button
               type="link"
-              style={{ color: "#000", fontWeight: 500, padding: 0, background: '#E0EBDB', width: "100%", textAlign: "left" }}
-              onClick={() => onTableRowExpand(children[0].props.record)} >
+              style={{
+                color: "#000",
+                fontWeight: 500,
+                padding: 0,
+                background: "#E0EBDB",
+                width: "100%",
+                textAlign: "left",
+              }}
+              onClick={() => onTableRowExpand(children[0].props.record)}
+            >
               {expandedRowKeys === children[0].props.record.uniqueKey
                 ? "Hide Stock Availability"
                 : "View Stock Availability"}
             </Button>
 
             {expandedRowKeys === children[0].props.record.uniqueKey && (
-              <div style={{ padding: "6px 0px", backgroundColor: "#fff", margin: "0" }}>
+              <div
+                style={{
+                  padding: "6px 0px",
+                  backgroundColor: "#fff",
+                  margin: "0",
+                }}
+              >
                 {nestedTableLoading ? (
                   <div style={{ textAlign: "center", padding: "24px" }}>
                     <Spin size="large" />
@@ -332,9 +446,53 @@ const BloodAvailabiltySearch = ({ useContainer }) => {
     ? states.find((state) => state.stateCode === selectedState)?.districts || []
     : [];
 
+  const handleSendEmail = async () => {
+    if (!emailAddress) {
+      message.error("Please Enter Your Email Address");
+    }
+
+    const payload = {
+      email: emailAddress,
+      hospitalCode: selectedRecord?.hospitalCode || null,
+      stateCode: selectedState,
+    };
+
+    try {
+      const response = await axios.post(
+        `${BaseUrl}/eraktkosh/blood-availability/send`,
+        payload
+      );
+      message.success(response.data || "Email sent successfully!");
+      setIsModalOpen(false);
+      setEmailAddress("");
+    } catch (error) {
+      console.error("Error sending email:", error);
+      message.error("Failed to send email. Please try again.");
+    }
+  };
+
+  const handleWhatsAppShare = () => {
+    if (!selectedRecord) return;
+
+    const message =
+      `Blood Center Details:\n` +
+      `*Name:* ${selectedRecord.hospitalname}\n` +
+      `*Address:* ${selectedRecord.hospitaladd}\n` +
+      `*Contact:* ${selectedRecord.hospitalcontact}\n` +
+      `*Availability:* ${
+        selectedRecord.available_WithQty || "Not Available"
+      }\n` +
+      `*Last Updated:* ${selectedRecord.entrydate}`;
+
+    const encodedMessage = encodeURIComponent(message);
+
+    const whatsappUrl = `whatsapp://send?text=${encodedMessage}`;
+    window.open(whatsappUrl, "_blank");
+  };
+
   return (
     <div className="page_wrapper gradient_style">
-      <div className={useContainer ? "container" : ""}>
+      <div className="container">
         <h2 className="header-page mb-2 pt-3">Blood Availability</h2>
         <div className="d-flex flex-wrap gap-1 container-style">
           <div className="input-wrapper-field">
@@ -344,8 +502,10 @@ const BloodAvailabiltySearch = ({ useContainer }) => {
               style={{ width: "100%" }}
               placeholder={getPageName()}
               onChange={handleServiceChange}
-              filterOption={(input, option) => 
-                (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
+              filterOption={(input, option) =>
+                (option?.label ?? "")
+                  .toLowerCase()
+                  .includes(input.toLowerCase())
               }
               options={[
                 { value: "service1", label: "Blood Availability" },
@@ -363,8 +523,10 @@ const BloodAvailabiltySearch = ({ useContainer }) => {
               value={selectedState}
               onChange={handleStateChange}
               placeholder="Select"
-              filterOption={(input, option) => 
-                (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
+              filterOption={(input, option) =>
+                (option?.label ?? "")
+                  .toLowerCase()
+                  .includes(input.toLowerCase())
               }
               options={states.map((state) => ({
                 value: state.stateCode,
@@ -382,8 +544,10 @@ const BloodAvailabiltySearch = ({ useContainer }) => {
               value={selectedDistrict}
               onChange={handleDistrictChange}
               placeholder="Select"
-              filterOption={(input, option) => 
-                (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
+              filterOption={(input, option) =>
+                (option?.label ?? "")
+                  .toLowerCase()
+                  .includes(input.toLowerCase())
               }
               options={districts.map((district) => ({
                 value: district.districtCode,
@@ -404,7 +568,9 @@ const BloodAvailabiltySearch = ({ useContainer }) => {
               }}
               options={bloodBanks
                 .filter((bank) =>
-                  bank.hospitalName.toLowerCase().includes(bloodCenterInput.toLowerCase())
+                  bank.hospitalName
+                    .toLowerCase()
+                    .includes(bloodCenterInput.toLowerCase())
                 )
                 .map((bank) => ({
                   value: bank.hospitalName,
@@ -423,8 +589,10 @@ const BloodAvailabiltySearch = ({ useContainer }) => {
               value={selectedBloodGroup}
               onChange={setSelectedBloodGroup}
               placeholder="Select Blood"
-              filterOption={(input, option) => 
-                (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
+              filterOption={(input, option) =>
+                (option?.label ?? "")
+                  .toLowerCase()
+                  .includes(input.toLowerCase())
               }
               options={[
                 { value: null, label: "All" },
@@ -445,8 +613,10 @@ const BloodAvailabiltySearch = ({ useContainer }) => {
               value={selectedComponent}
               onChange={setSelectedComponent}
               placeholder="Select Blood Component"
-              filterOption={(input, option) => 
-                (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
+              filterOption={(input, option) =>
+                (option?.label ?? "")
+                  .toLowerCase()
+                  .includes(input.toLowerCase())
               }
               options={componentList.map((component) => ({
                 value: component.componentCode,
@@ -482,7 +652,8 @@ const BloodAvailabiltySearch = ({ useContainer }) => {
           dataSource={paginatedData.map((item, index) => ({
             ...item,
             sNo: (currentPage - 1) * pageSize + index + 1,
-            uniqueKey: item.uniqueKey || `${(currentPage - 1) * pageSize + index}`,
+            uniqueKey:
+              item.uniqueKey || `${(currentPage - 1) * pageSize + index}`,
           }))}
           components={{ body: { row: CustomBodyRow } }}
           rowKey="uniqueKey"
@@ -497,7 +668,9 @@ const BloodAvailabiltySearch = ({ useContainer }) => {
               Can't find your Blood Group/Component
             </p>
             <div className="d-flex align-items-center notify_bell ms-2">
-              <p style={{padding: '1px 10px'}} className="mb-0">Notify Me</p>
+              <p style={{ padding: "1px 10px" }} className="mb-0">
+                Notify Me
+              </p>
             </div>
           </div>
           <Pagination
@@ -518,9 +691,14 @@ const BloodAvailabiltySearch = ({ useContainer }) => {
             <p className="mb-0 modal_header">Blood Center Name</p>
             <p className="mb-1 hospName">{selectedRecord.hospitalname}</p>
             <p className="mb-1 hospAdd">{selectedRecord.hospitaladd}</p>
-            <p className="mb-1 hospAdd pb-2" style={{ borderBottom: "2px solid #E6E6E6" }}>
+            <p
+              className="mb-1 hospAdd pb-2"
+              style={{ borderBottom: "2px solid #E6E6E6" }}
+            >
               {selectedRecord.hospitalcontact.split(",").map((item, index) => {
-                const [label, value] = item.split(":").map((part) => part.trim());
+                const [label, value] = item
+                  .split(":")
+                  .map((part) => part.trim());
                 return (
                   <span key={index} className="me-3">
                     <span className="labelStyle">{label}:</span>{" "}
@@ -529,15 +707,56 @@ const BloodAvailabiltySearch = ({ useContainer }) => {
                 );
               })}
             </p>
-            <p className="mb-1 mt-2" style={{ fontSize: "14px", color: "#000" }}>
+            <p
+              className="mb-1 mt-2"
+              style={{ fontSize: "14px", color: "#000" }}
+            >
               Send Blood Center Detail and Location
             </p>
             <div className="d-flex">
-              <Input className="me-3" placeholder="Your EmailID/Mobile No" />
-              <Button type="primary">Send</Button>
+              <Input
+                className="me-3"
+                value={emailAddress}
+                onChange={(e) => setEmailAddress(e.target.value)}
+                placeholder="Your EmailID/Mobile No"
+              />
+              <Button onClick={handleSendEmail} type="primary">
+                {" "}
+                Send{" "}
+              </Button>
+              <Button
+                onClick={handleWhatsAppShare}
+                style={{ marginLeft: 8 }}
+                type="primary"
+              >
+                Share
+              </Button>
             </div>
           </div>
         )}
+      </Modal>
+
+      {/* Notify Modal */}
+      <Modal footer={null}>
+        <div>
+          <p className="mb-0 modal_header">Blood Center Name</p>
+          <p className="mb-1 hospName">Mira Bai</p>
+          <p className="mb-1 hospAdd">Palwal</p>
+          <p
+            className="mb-1 hospAdd pb-2"
+            style={{ borderBottom: "2px solid #E6E6E6" }}
+          ></p>
+          <p className="mb-1 mt-2" style={{ fontSize: "14px", color: "#000" }}>
+            Send Blood Center Detail and Location
+          </p>
+          <div className="d-flex">
+            <Input className="me-3" placeholder="Your EmailID/Mobile No" />
+            <Button type="primary"> Send </Button>
+            <Button style={{ marginLeft: 8 }} type="primary">
+              Share
+            </Button>
+          </div>
+        </div>
       </Modal>
     </div>
   );
