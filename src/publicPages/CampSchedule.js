@@ -8,7 +8,7 @@ import dayjs from "dayjs";
 import { BaseUrl } from "../utils/url";
 import { useLocation } from "react-router-dom";
 import { SearchOutlined } from "@ant-design/icons";
-import { logSearch } from "../utils/logService";
+import { logSearch } from "../components/logService";
 
 const { Option } = Select;
 
@@ -53,10 +53,13 @@ const CampSchedule = ({ useContainer }) => {
   };
 
   const getPageName = () => {
-    const path = location.pathname.split("/").filter(Boolean).pop();
-    return path
-      ? path.charAt(0).toUpperCase() + path.slice(1)
-      : "Select a service";
+    const hashPath = window.location.hash.split("/").pop();
+    const nameMap = {
+      bloodAvailabilitySearch: "Blood Stock Availability",
+      campSchedule: "Camp Schedule",
+      bloodBankDirectory: "Blood Bank Directory",
+    };
+    return nameMap[hashPath] || "Select a service";
   };
 
   const handleServiceChange = (value) => {
@@ -99,14 +102,12 @@ const CampSchedule = ({ useContainer }) => {
   };
 
   const disabledStartDate = (current) => {
-    // Disable all dates before today
     return current && current < dayjs().startOf("day");
   };
 
   const disabledEndDate = (current) => {
     const today = dayjs().startOf("day");
     const maxDate = today.add(1, "month");
-    // Disable all dates before today or after 1 month from today
     return current && (current < today || current > maxDate);
   };
 
@@ -145,7 +146,7 @@ const CampSchedule = ({ useContainer }) => {
           state: selectedState,
           district: selectedDistrict || null,
           startDate: selectedStartDate,
-          endDate: selectedEndDate
+          endDate: selectedEndDate,
         },
         ipAddress: null,
       };

@@ -19,7 +19,8 @@ import {
   Spin,
 } from "antd";
 import { BaseUrl } from "../utils/url";
-import { logSearch } from "../utils/logService";
+import { logSearch } from "../components/logService";
+import NestedBloodAvailabilityTable from "../components/NestedBloodAvailabilityTable";
 
 const { Option } = Select;
 
@@ -42,10 +43,11 @@ const BloodAvailabiltySearch = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isNotifyModalOpen, setIsNotifyModalOpen] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState(null);
   const [expandedRowKeys, setExpandedRowKeys] = useState(null);
-  const [nestedTableLoading, setNestedTableLoading] = useState(false);
-  const [nestedData, setNestedData] = useState(null);
+  // const [nestedTableLoading, setNestedTableLoading] = useState(false);
+  // const [nestedData, setNestedData] = useState(null);
   const [emailAddress, setEmailAddress] = useState("");
 
   useEffect(() => {
@@ -53,13 +55,6 @@ const BloodAvailabiltySearch = () => {
   }, [dispatch]);
 
   const location = useLocation();
-
-  const getPageName = () => {
-    const path = location.pathname.split("/").filter(Boolean).pop();
-    return path
-      ? path.charAt(0).toUpperCase() + path.slice(1)
-      : "Select a service";
-  };
 
   const handlePageChange = (page, size) => {
     setCurrentPage(page);
@@ -81,6 +76,16 @@ const BloodAvailabiltySearch = () => {
       currentPage * pageSize
     );
   }, [filteredData, currentPage, pageSize]);
+
+  const getPageName = () => {
+    const hashPath = window.location.hash.split("/").pop();
+    const nameMap = {
+      bloodAvailabilitySearch: "Blood Availability",
+      campSchedule: "Camp Schedule",
+      bloodBankDirectory: "Blood Bank Directory",
+    };
+    return nameMap[hashPath] || "Select a service";
+  };
 
   const handleServiceChange = (value) => {
     const urlMap = {
@@ -116,25 +121,25 @@ const BloodAvailabiltySearch = () => {
     }
   };
 
-  const fetchDetailedComponentData = async (hospitalCode) => {
-    if (!selectedState) return {};
-    try {
-      const response = await axios.get(
-        `${BaseUrl}/eraktkosh/blood-availability`,
-        {
-          params: {
-            stateCode: selectedState,
-            districtId: selectedDistrict || null,
-            hospitalCodes: hospitalCode,
-          },
-        }
-      );
-      return response.data[0]?.components || {};
-    } catch (error) {
-      console.error("Error fetching detailed component data:", error);
-      return {};
-    }
-  };
+  // const fetchDetailedComponentData = async (hospitalCode) => {
+  //   if (!selectedState) return {};
+  //   try {
+  //     const response = await axios.get(
+  //       `${BaseUrl}/eraktkosh/blood-availability`,
+  //       {
+  //         params: {
+  //           stateCode: selectedState,
+  //           districtId: selectedDistrict || null,
+  //           hospitalCodes: hospitalCode,
+  //         },
+  //       }
+  //     );
+  //     return response.data[0]?.components || {};
+  //   } catch (error) {
+  //     console.error("Error fetching detailed component data:", error);
+  //     return {};
+  //   }
+  // };
 
   const handleSearch = async () => {
     if (!selectedState) {
@@ -157,7 +162,9 @@ const BloodAvailabiltySearch = () => {
         searchParams: {
           state: selectedState,
           district: selectedDistrict || null,
-          bloodCenter: selectedHospital,
+          bloodCenter: selectedHospital?.hospitalName,
+          bloodCenterCode: selectedHospital?.hospitalCode,
+          bloodCenterInput: bloodCenterInput,
           bloodGroup: selectedBloodGroup,
           bloodComponent: selectedComponent,
         },
@@ -226,19 +233,19 @@ const BloodAvailabiltySearch = () => {
     setFilteredData(filtered);
   };
 
-  const nestedColumns = [
-    { title: "S.No.", dataIndex: "sNo", key: "sNo" },
-    {
-      title: "Blood Component",
-      dataIndex: "bloodComponent",
-      key: "bloodComponent",
-    },
-    ...bloodGroups.map((group) => ({
-      title: group.bloodGroupName,
-      dataIndex: group.bloodGroupName,
-      key: group.bloodGroupCode,
-    })),
-  ];
+  // const nestedColumns = [
+  //   { title: "S.No.", dataIndex: "sNo", key: "sNo" },
+  //   {
+  //     title: "Blood Component",
+  //     dataIndex: "bloodComponent",
+  //     key: "bloodComponent",
+  //   },
+  //   ...bloodGroups.map((group) => ({
+  //     title: group.bloodGroupName,
+  //     dataIndex: group.bloodGroupName,
+  //     key: group.bloodGroupCode,
+  //   })),
+  // ];
 
   const columns = [
     { title: "S.No.", dataIndex: "sNo", key: "sNo" },
@@ -329,57 +336,57 @@ const BloodAvailabiltySearch = () => {
     },
   ];
 
-  const onTableRowExpand = async (record) => {
-    if (expandedRowKeys === record?.uniqueKey) {
-      setExpandedRowKeys(null);
-    } else {
-      setNestedTableLoading(true);
-      try {
-        const detailedComponents = await fetchDetailedComponentData(
-          record.hospitalCode
-        );
-        const nestedDataResult = [];
-        let count = 1;
+  // const onTableRowExpand = async (record) => {
+  //   if (expandedRowKeys === record?.uniqueKey) {
+  //     setExpandedRowKeys(null);
+  //   } else {
+  //     setNestedTableLoading(true);
+  //     try {
+  //       const detailedComponents = await fetchDetailedComponentData(
+  //         record.hospitalCode
+  //       );
+  //       const nestedDataResult = [];
+  //       let count = 1;
 
-        Object.keys(detailedComponents)
-          .filter((component) => component !== "Unknown")
-          .forEach((key) => {
-            if (!detailedComponents[key]?.available_WithQty) return;
+  //       Object.keys(detailedComponents)
+  //         .filter((component) => component !== "Unknown")
+  //         .forEach((key) => {
+  //           if (!detailedComponents[key]?.available_WithQty) return;
 
-            const result = detailedComponents[key].available_WithQty
-              .split(",")
-              .reduce((acc, item) => {
-                const [key, value] = item.split(":").map((str) => str.trim());
-                acc[key] = Number(value);
-                return acc;
-              }, {});
+  //           const result = detailedComponents[key].available_WithQty
+  //             .split(",")
+  //             .reduce((acc, item) => {
+  //               const [key, value] = item.split(":").map((str) => str.trim());
+  //               acc[key] = Number(value);
+  //               return acc;
+  //             }, {});
 
-            nestedColumns.forEach((column) => {
-              if (
-                !["sNo", "bloodComponent"].includes(column.dataIndex) &&
-                !result[column.dataIndex]
-              ) {
-                result[column.dataIndex] = "-";
-              }
-            });
+  //           nestedColumns.forEach((column) => {
+  //             if (
+  //               !["sNo", "bloodComponent"].includes(column.dataIndex) &&
+  //               !result[column.dataIndex]
+  //             ) {
+  //               result[column.dataIndex] = "-";
+  //             }
+  //           });
 
-            nestedDataResult.push({
-              sNo: count++,
-              bloodComponent: key,
-              ...result,
-            });
-          });
+  //           nestedDataResult.push({
+  //             sNo: count++,
+  //             bloodComponent: key,
+  //             ...result,
+  //           });
+  //         });
 
-        setNestedData(nestedDataResult);
-      } catch (error) {
-        message.error("Failed to load detailed component data");
-        console.error(error);
-      } finally {
-        setNestedTableLoading(false);
-        setExpandedRowKeys(record.uniqueKey);
-      }
-    }
-  };
+  //       setNestedData(nestedDataResult);
+  //     } catch (error) {
+  //       message.error("Failed to load detailed component data");
+  //       console.error(error);
+  //     } finally {
+  //       setNestedTableLoading(false);
+  //       setExpandedRowKeys(record.uniqueKey);
+  //     }
+  //   }
+  // };
 
   const CustomBodyRow = ({ children, record, ...restProps }) => {
     if (!children[0]?.props?.record) return <tr {...restProps}>{children}</tr>;
@@ -394,47 +401,21 @@ const BloodAvailabiltySearch = () => {
             colSpan={columns.length}
             style={{ textAlign: "center", padding: "5px" }}
           >
-            <Button
-              type="link"
-              style={{
-                color: "#000",
-                fontWeight: 500,
-                padding: 0,
-                background: "#E0EBDB",
-                width: "100%",
-                textAlign: "left",
+            <NestedBloodAvailabilityTable
+              hospitalCode={children[0].props.record.hospitalCode}
+              selectedState={selectedState}
+              selectedDistrict={selectedDistrict}
+              bloodGroups={bloodGroups}
+              expandedRowKeys={expandedRowKeys}
+              uniqueKey={children[0].props.record.uniqueKey}
+              onExpandChange={(key) => {
+                if (expandedRowKeys === key) {
+                  setExpandedRowKeys(null);
+                } else {
+                  setExpandedRowKeys(key);
+                }
               }}
-              onClick={() => onTableRowExpand(children[0].props.record)}
-            >
-              {expandedRowKeys === children[0].props.record.uniqueKey
-                ? "Hide Stock Availability"
-                : "View Stock Availability"}
-            </Button>
-
-            {expandedRowKeys === children[0].props.record.uniqueKey && (
-              <div
-                style={{
-                  padding: "6px 0px",
-                  backgroundColor: "#fff",
-                  margin: "0",
-                }}
-              >
-                {nestedTableLoading ? (
-                  <div style={{ textAlign: "center", padding: "24px" }}>
-                    <Spin size="large" />
-                  </div>
-                ) : (
-                  <Table
-                    className="mb-1 nested_table"
-                    columns={nestedColumns}
-                    dataSource={nestedData}
-                    pagination={false}
-                    rowKey="key"
-                    scroll={{ x: "max-content" }}
-                  />
-                )}
-              </div>
-            )}
+            />
           </td>
         </tr>
       </>
@@ -479,15 +460,51 @@ const BloodAvailabiltySearch = () => {
       `*Name:* ${selectedRecord.hospitalname}\n` +
       `*Address:* ${selectedRecord.hospitaladd}\n` +
       `*Contact:* ${selectedRecord.hospitalcontact}\n` +
-      `*Availability:* ${
-        selectedRecord.available_WithQty || "Not Available"
-      }\n` +
+      // `*Availability:* ${
+      //   selectedRecord.available_WithQty || "Not Available"
+      // }\n` +
       `*Last Updated:* ${selectedRecord.entrydate}`;
 
     const encodedMessage = encodeURIComponent(message);
 
     const whatsappUrl = `whatsapp://send?text=${encodedMessage}`;
     window.open(whatsappUrl, "_blank");
+  };
+
+  const getSelectedFieldsDisplat = () => {
+    const parts = [];
+
+    if (selectedState) {
+      const state = states.find((s) => s.stateCode === selectedState);
+      parts.push(state?.stateName || selectedState);
+    }
+
+    if (selectedDistrict) {
+      const district = districts.find(
+        (d) => d.districtCode === selectedDistrict
+      );
+      parts.push(district?.districtName || selectedDistrict);
+    }
+
+    if (selectedHospital?.hospitalName || bloodCenterInput) {
+      parts.push(selectedHospital?.hospitalName || bloodCenterInput);
+    }
+
+    if (selectedBloodGroup) {
+      const bloodGroup = bloodGroups.find(
+        (bg) => bg.bloodGroupCode === selectedBloodGroup
+      );
+      parts.push(bloodGroup?.bloodGroupName || selectedBloodGroup);
+    }
+
+    if (selectedComponent) {
+      const component = componentList.find(
+        (c) => c.componentCode === selectedComponent
+      );
+      parts.push(component?.componentName || selectedComponent);
+    }
+
+    return parts.length > 0 ? parts.join(" / ") : "All results";
   };
 
   return (
@@ -534,7 +551,6 @@ const BloodAvailabiltySearch = () => {
               }))}
             />
           </div>
-
           <div className="input-wrapper-field">
             <label className="form-label mb-0">Select District</label>
             <Select
@@ -637,6 +653,7 @@ const BloodAvailabiltySearch = () => {
         <div className="d-xl-flex d-lg-flex d-md-flex d-sm-flex align-items-center justify-content-between mt-3 mb-3">
           <div className="d-flex align-items-center">
             <p className="mb-0 searchResult me-2">Search Result</p>
+            <p className="mb-0 resultData px-2">{getSelectedFieldsDisplat()}</p>
           </div>
           <div>
             <Input
@@ -667,7 +684,11 @@ const BloodAvailabiltySearch = () => {
             <p className="notify_text mb-0">
               Can't find your Blood Group/Component
             </p>
-            <div className="d-flex align-items-center notify_bell ms-2">
+            <div
+              className="d-flex align-items-center notify_bell ms-2"
+              style={{ cursor: "pointer" }}
+              onClick={() => setIsNotifyModalOpen(true)}
+            >
               <p style={{ padding: "1px 10px" }} className="mb-0">
                 Notify Me
               </p>
@@ -685,7 +706,12 @@ const BloodAvailabiltySearch = () => {
         </div>
       </div>
 
-      <Modal open={isModalOpen} onCancel={handleCancel} footer={null}>
+      <Modal
+        open={isModalOpen}
+        onCancel={handleCancel}
+        footer={null}
+        className="details_modal"
+      >
         {selectedRecord && (
           <div>
             <p className="mb-0 modal_header">Blood Center Name</p>
@@ -709,7 +735,7 @@ const BloodAvailabiltySearch = () => {
             </p>
             <p
               className="mb-1 mt-2"
-              style={{ fontSize: "14px", color: "#000" }}
+              style={{ fontSize: "14px", fontWeight: "500", color: "#000" }}
             >
               Send Blood Center Detail and Location
             </p>
@@ -718,7 +744,7 @@ const BloodAvailabiltySearch = () => {
                 className="me-3"
                 value={emailAddress}
                 onChange={(e) => setEmailAddress(e.target.value)}
-                placeholder="Your EmailID/Mobile No"
+                placeholder="Your EmailID"
               />
               <Button onClick={handleSendEmail} type="primary">
                 {" "}
@@ -726,10 +752,18 @@ const BloodAvailabiltySearch = () => {
               </Button>
               <Button
                 onClick={handleWhatsAppShare}
-                style={{ marginLeft: 8 }}
+                style={{
+                  border: "1px solid #2AB540",
+                  marginLeft: 8,
+                  background: "#fff",
+                  color: "#2AB540",
+                  fontWeight: "400",
+                  fontSize: "14px",
+                }}
                 type="primary"
               >
-                Share
+                <img src="assets/images/whatsapp-logo.svg" />
+                Whatsapp
               </Button>
             </div>
           </div>
@@ -737,24 +771,86 @@ const BloodAvailabiltySearch = () => {
       </Modal>
 
       {/* Notify Modal */}
-      <Modal footer={null}>
-        <div>
-          <p className="mb-0 modal_header">Blood Center Name</p>
-          <p className="mb-1 hospName">Mira Bai</p>
-          <p className="mb-1 hospAdd">Palwal</p>
-          <p
-            className="mb-1 hospAdd pb-2"
-            style={{ borderBottom: "2px solid #E6E6E6" }}
-          ></p>
-          <p className="mb-1 mt-2" style={{ fontSize: "14px", color: "#000" }}>
-            Send Blood Center Detail and Location
-          </p>
-          <div className="d-flex">
-            <Input className="me-3" placeholder="Your EmailID/Mobile No" />
-            <Button type="primary"> Send </Button>
-            <Button style={{ marginLeft: 8 }} type="primary">
-              Share
-            </Button>
+      <Modal
+        title="Tell Us Your requirement"
+        open={isNotifyModalOpen}
+        onCancel={() => setIsNotifyModalOpen(false)}
+        footer={null}
+      >
+        <div className="row">
+          <div className="col-6">
+            <div className="input-wrapper-field mb-2">
+              <label className="form-label mb-0">Select State</label>
+              <Select
+                showSearch
+                allowClear
+                style={{ width: "100%" }}
+                placeholder="Select"
+              />
+            </div>
+          </div>
+          <div className="col-6">
+            <div className="input-wrapper-field mb-2">
+              <label className="form-label mb-0">Select District</label>
+              <Select
+                showSearch
+                allowClear
+                style={{ width: "100%" }}
+                placeholder="Select"
+              />
+            </div>
+          </div>
+          <div className="col-6">
+            <div className="input-wrapper-field mb-2">
+              <label className="form-label mb-0">Select Blood Center</label>
+              <AutoComplete
+                allowClear
+                style={{ width: "100%" }}
+                placeholder="Type hospital name"
+              />
+            </div>
+          </div>
+          <div className="col-6">
+            <div className="input-wrapper-field mb-2">
+              <label className="form-label mb-1">Select Blood Group</label>
+              <Select
+                showSearch
+                allowClear
+                style={{ width: "100%" }}
+                placeholder="Select Blood"
+              />
+            </div>
+          </div>
+          <div className="col-6">
+            <div className="input-wrapper-field mb-2">
+              <label className="form-label mb-0">Enter Email</label>
+              <AutoComplete
+                allowClear
+                style={{ width: "100%" }}
+                placeholder="Enter Email ID"
+              />
+            </div>
+          </div>
+          <div className="col-6">
+            <div className="input-wrapper-field mb-2">
+              <label className="form-label mb-0">Enter Mobile No.</label>
+              <AutoComplete
+                allowClear
+                style={{ width: "100%" }}
+                placeholder="Mobile No."
+              />
+            </div>
+          </div>
+          <div className="col-6">
+            <div className="input-wrapper-field mb-2">
+              <label className="form-label mb-1">Select Blood Component</label>
+              <Select
+                showSearch
+                allowClear
+                style={{ width: "100%" }}
+                placeholder="Select Blood Component"
+              />
+            </div>
           </div>
         </div>
       </Modal>

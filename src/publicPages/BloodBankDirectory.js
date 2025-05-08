@@ -8,6 +8,7 @@ import {
   message,
   Tooltip,
   Modal,
+  Spin,
   Pagination,
 } from "antd";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,7 +17,8 @@ import axios from "axios";
 import { BaseUrl } from "../utils/url";
 import { useLocation } from "react-router-dom";
 import { SearchOutlined } from "@ant-design/icons";
-import { logSearch } from "../utils/logService";
+import { logSearch } from "../components/logService";
+import NestedBloodAvailabilityTable from "../components/NestedBloodAvailabilityTable";
 
 const { Option } = Select;
 
@@ -40,7 +42,9 @@ const haversineDistance = (lat1, lon1, lat2, lon2) => {
 
 const BloodBankDirectory = () => {
   const dispatch = useDispatch();
-  const { statesWithDistricts, status } = useSelector((state) => state.data);
+  const { statesWithDistricts, status, bloodGroups } = useSelector(
+    (state) => state.data
+  );
   const [selectedState, setSelectedState] = useState(null);
   const [selectedDistrict, setSelectedDistrict] = useState(null);
   const [bloodBanks, setBloodBanks] = useState([]);
@@ -54,6 +58,10 @@ const BloodBankDirectory = () => {
   const [modalLoading, setModalLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
+  // Add these state variables
+  const [isStockModalOpen, setIsStockModalOpen] = useState(false);
+  const [selectedBloodBank, setSelectedBloodBank] = useState(null);
+  const [stockModalLoading, setStockModalLoading] = useState(false);
 
   useEffect(() => {
     dispatch(getApiData());
@@ -100,10 +108,13 @@ const BloodBankDirectory = () => {
   );
 
   const getPageName = () => {
-    const path = location.pathname.split("/").filter(Boolean).pop();
-    return path
-      ? path.charAt(0).toUpperCase() + path.slice(1)
-      : "Select a service";
+    const hashPath = window.location.hash.split("/").pop();
+    const nameMap = {
+      bloodAvailabilitySearch: "Blood Stock Availability",
+      campSchedule: "Camp Schedule",
+      bloodBankDirectory: "Blood Bank Directory",
+    };
+    return nameMap[hashPath] || "Select a service";
   };
 
   const handleServiceChange = (value) => {
@@ -194,6 +205,11 @@ const BloodBankDirectory = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleStockClick = (record) => {
+    setSelectedBloodBank(record);
+    setIsStockModalOpen(true);
   };
 
   // Camps link inside the nearest blook bank table...
@@ -327,7 +343,14 @@ const BloodBankDirectory = () => {
       key: "action",
       render: (_, record) => (
         <div className="d-flex flex-column text-center">
-          <a href="" className="stockStatus mb-2 px-3">
+          <a
+            href=""
+            className="stockStatus mb-2 px-3"
+            onClick={(e) => {
+              e.preventDefault();
+              handleStockClick(record);
+            }}
+          >
             Stock
           </a>
           <a
@@ -342,6 +365,44 @@ const BloodBankDirectory = () => {
           </a>
         </div>
       ),
+    },
+  ];
+
+  const campColumns = [
+    {
+      title: "Camp Name",
+      dataIndex: "campName",
+      key: "campName",
+      render: (text) => <strong>{text}</strong>,
+    },
+    {
+      title: "Date",
+      dataIndex: "campDate",
+      key: "campDate",
+    },
+    {
+      title: "Venue",
+      dataIndex: "campVenue",
+      key: "campVenue",
+    },
+    {
+      title: "State/District",
+      key: "location",
+      render: (_, record) => (
+        <span>
+          {record.stateName}, {record.districtName}
+        </span>
+      ),
+    },
+    {
+      title: "Contact",
+      dataIndex: "contact",
+      key: "contact",
+    },
+    {
+      title: "Time",
+      dataIndex: "campTime",
+      key: "campTime",
     },
   ];
 
@@ -365,7 +426,7 @@ const BloodBankDirectory = () => {
                   return label.toLowerCase().includes(input.toLowerCase());
                 }}
                 options={[
-                  { value: "service1", label: "Blood Stock Availability" },
+                  { value: "service1", label: "Blood Availability" },
                   { value: "service2", label: "Camp Schedule" },
                   { value: "service3", label: "Blood Bank Directory" },
                 ]}
@@ -466,28 +527,53 @@ const BloodBankDirectory = () => {
             />
           </div>
           <Modal
+            title={selectedBloodBank?.name}
+            open={isStockModalOpen}
+            onCancel={() => setIsStockModalOpen(false)}
+            footer={null}
+            className="blood-stock-modal"
+            // width={2000}
+          >
+            {!bloodGroups ? (
+              <div style={{ textAlign: "center", padding: "24px" }}>
+                <Spin size="large" />
+              </div>
+            ) : selectedBloodBank ? (
+              <NestedBloodAvailabilityTable
+                hospitalCode={selectedBloodBank.hospitalCode}
+                selectedState={selectedState}
+                selectedDistrict={selectedDistrict}
+                bloodGroups={bloodGroups}
+                expandedRowKeys={selectedBloodBank.hospitalCode}
+                uniqueKey={selectedBloodBank.hospitalCode}
+                onExpandChange={() => {}}
+                isModal={true}
+              />
+            ) : null}
+          </Modal>
+          <Modal
             title="Camp Details"
             open={isModalOpen}
             onCancel={() => setIsModalOpen(false)}
             footer={null}
+            className="blood-stock-modal"
           >
             {modalLoading ? (
-              <p>Loading camp details...</p>
+              <div style={{ textAlign: "center", padding: "24px" }}>
+                <Spin size="large" />
+              </div>
             ) : campData && campData.length > 0 ? (
-              campData.map((camp, idx) => (
-                <div key={idx} style={{ marginBottom: "1rem" }}>
-                  <p>
-                    <strong>Camp Name:</strong> {camp.campName}
-                  </p>
-                  <p>
-                    <strong>Date:</strong> {camp.campDate}
-                  </p>
-                  <p>
-                    <strong>Venue:</strong> {camp.venue}
-                  </p>
-                  <hr />
-                </div>
-              ))
+              <Table
+                columns={campColumns}
+                dataSource={campData.map((item, index) => ({
+                  ...item,
+                  key: index,
+                }))}
+                pagination={false}
+                size="middle"
+                bordered
+                rowClassName={() => "camp-details-row"}
+              />
             ) : (
               <p>No camps available for this blood bank.</p>
             )}
