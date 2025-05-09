@@ -12,7 +12,7 @@ import { logSearch } from "../components/logService";
 
 const { Option } = Select;
 
-const CampSchedule = ({ useContainer }) => {
+const CampSchedule = () => {
   useEffect(() => {
     document.title = "e-RaktKosh Camp Registration";
   }, []);
@@ -302,7 +302,7 @@ const CampSchedule = ({ useContainer }) => {
   return (
     <>
       <div className="page_wrapper gradient_style">
-        <div className={useContainer ? "container" : ""}>
+        <div className="container">
           <h2 className="header-page mb-2 pt-3">Camp Schedule</h2>
           <div className="d-flex justify-content-between flex-wrap gap-3 container-style">
             <div className="input-wrapper-service">
