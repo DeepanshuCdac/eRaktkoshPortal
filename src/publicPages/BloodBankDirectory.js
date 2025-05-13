@@ -50,7 +50,7 @@ const BloodBankDirectory = () => {
   const [bloodBanks, setBloodBanks] = useState([]);
   const [loading, setLoading] = useState(false);
   const [filteredBloodBanks, setFilteredBloodBanks] = useState([]);
-  const [filteredData, setFilteredData] = useState([]);
+  // const [filteredData, setFilteredData] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [userLocation, setUserLocation] = useState({ lat: null, lon: null });
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -61,7 +61,7 @@ const BloodBankDirectory = () => {
   // Add these state variables
   const [isStockModalOpen, setIsStockModalOpen] = useState(false);
   const [selectedBloodBank, setSelectedBloodBank] = useState(null);
-  const [stockModalLoading, setStockModalLoading] = useState(false);
+  // const [stockModalLoading, setStockModalLoading] = useState(false);
 
   useEffect(() => {
     dispatch(getApiData());
@@ -112,7 +112,7 @@ const BloodBankDirectory = () => {
     const nameMap = {
       bloodAvailabilitySearch: "Blood Stock Availability",
       campSchedule: "Camp Schedule",
-      bloodBankDirectory: "Blood Bank Directory",
+      bloodBankDirectory: "Blood Bank Directory", 
     };
     return nameMap[hashPath] || "Select a service";
   };
@@ -503,8 +503,8 @@ const BloodBankDirectory = () => {
             scroll={{ x: 1000 }}
             className="mt-3 pb-3"
           />
-          <div className="d-flex align-items-center justify-content-between">
-            <div className="px-2 py-1 notify_box d-flex align-items-center">
+          <div className="d-flex align-items-center justify-content-end">
+            {/* <div className="px-2 py-1 notify_box d-flex align-items-center">
               <p className="notify_text mb-0">
                 Can't find your Blood Group/Component
               </p>
@@ -515,7 +515,7 @@ const BloodBankDirectory = () => {
                 <img src="" />
                 <p className="mb-0 ">Notify Me</p>
               </div>
-            </div>
+            </div> */}
             <Pagination
               current={currentPage}
               pageSize={pageSize}

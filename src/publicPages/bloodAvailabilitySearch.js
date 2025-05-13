@@ -737,7 +737,7 @@ const BloodAvailabiltySearch = () => {
               className="mb-1 mt-2"
               style={{ fontSize: "14px", fontWeight: "500", color: "#000" }}
             >
-              Send Blood Center Detail and Location
+              Send Blood Center Details
             </p>
             <div className="d-flex">
               <Input
