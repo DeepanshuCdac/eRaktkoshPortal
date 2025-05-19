@@ -7,7 +7,6 @@ import { useLocation } from "react-router-dom";
 import { SearchOutlined } from "@ant-design/icons";
 import {
   Select,
-  Space,
   Input,
   Table,
   message,
@@ -46,9 +45,18 @@ const BloodAvailabiltySearch = () => {
   const [isNotifyModalOpen, setIsNotifyModalOpen] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState(null);
   const [expandedRowKeys, setExpandedRowKeys] = useState(null);
-  // const [nestedTableLoading, setNestedTableLoading] = useState(false);
-  // const [nestedData, setNestedData] = useState(null);
   const [emailAddress, setEmailAddress] = useState("");
+
+  const [selectedNotifyState, setSelectedNotifyState] = useState(null);
+  const [selectedNotifyDistrict, setSelectedNotifyDistrict] = useState(null);
+  const [selectedNotifyHospitals, setSelectedNotifyHospitals] = useState([]);
+  const [selectedNotifyBloodGroup, setSelectedNotifyBloodGroup] =
+    useState(null);
+  const [selectedNotifyComponent, setSelectedNotifyComponent] = useState(null);
+  const [notifyEmail, setNotifyEmail] = useState("");
+  const [notifyMobile, setNotifyMobile] = useState("");
+  const [notifyBloodBanks, setNotifyBloodBanks] = useState([]);
+  const [notifyDistricts, setNotifyDistricts] = useState([]);
 
   useEffect(() => {
     dispatch(getApiData());
@@ -120,26 +128,6 @@ const BloodAvailabiltySearch = () => {
       setBloodBanks([]);
     }
   };
-
-  // const fetchDetailedComponentData = async (hospitalCode) => {
-  //   if (!selectedState) return {};
-  //   try {
-  //     const response = await axios.get(
-  //       `${BaseUrl}/eraktkosh/blood-availability`,
-  //       {
-  //         params: {
-  //           stateCode: selectedState,
-  //           districtId: selectedDistrict || null,
-  //           hospitalCodes: hospitalCode,
-  //         },
-  //       }
-  //     );
-  //     return response.data[0]?.components || {};
-  //   } catch (error) {
-  //     console.error("Error fetching detailed component data:", error);
-  //     return {};
-  //   }
-  // };
 
   const handleSearch = async () => {
     if (!selectedState) {
@@ -233,20 +221,6 @@ const BloodAvailabiltySearch = () => {
     setFilteredData(filtered);
   };
 
-  // const nestedColumns = [
-  //   { title: "S.No.", dataIndex: "sNo", key: "sNo" },
-  //   {
-  //     title: "Blood Component",
-  //     dataIndex: "bloodComponent",
-  //     key: "bloodComponent",
-  //   },
-  //   ...bloodGroups.map((group) => ({
-  //     title: group.bloodGroupName,
-  //     dataIndex: group.bloodGroupName,
-  //     key: group.bloodGroupCode,
-  //   })),
-  // ];
-
   const columns = [
     { title: "S.No.", dataIndex: "sNo", key: "sNo" },
     {
@@ -335,58 +309,6 @@ const BloodAvailabiltySearch = () => {
       ),
     },
   ];
-
-  // const onTableRowExpand = async (record) => {
-  //   if (expandedRowKeys === record?.uniqueKey) {
-  //     setExpandedRowKeys(null);
-  //   } else {
-  //     setNestedTableLoading(true);
-  //     try {
-  //       const detailedComponents = await fetchDetailedComponentData(
-  //         record.hospitalCode
-  //       );
-  //       const nestedDataResult = [];
-  //       let count = 1;
-
-  //       Object.keys(detailedComponents)
-  //         .filter((component) => component !== "Unknown")
-  //         .forEach((key) => {
-  //           if (!detailedComponents[key]?.available_WithQty) return;
-
-  //           const result = detailedComponents[key].available_WithQty
-  //             .split(",")
-  //             .reduce((acc, item) => {
-  //               const [key, value] = item.split(":").map((str) => str.trim());
-  //               acc[key] = Number(value);
-  //               return acc;
-  //             }, {});
-
-  //           nestedColumns.forEach((column) => {
-  //             if (
-  //               !["sNo", "bloodComponent"].includes(column.dataIndex) &&
-  //               !result[column.dataIndex]
-  //             ) {
-  //               result[column.dataIndex] = "-";
-  //             }
-  //           });
-
-  //           nestedDataResult.push({
-  //             sNo: count++,
-  //             bloodComponent: key,
-  //             ...result,
-  //           });
-  //         });
-
-  //       setNestedData(nestedDataResult);
-  //     } catch (error) {
-  //       message.error("Failed to load detailed component data");
-  //       console.error(error);
-  //     } finally {
-  //       setNestedTableLoading(false);
-  //       setExpandedRowKeys(record.uniqueKey);
-  //     }
-  //   }
-  // };
 
   const CustomBodyRow = ({ children, record, ...restProps }) => {
     if (!children[0]?.props?.record) return <tr {...restProps}>{children}</tr>;
@@ -505,6 +427,127 @@ const BloodAvailabiltySearch = () => {
     }
 
     return parts.length > 0 ? parts.join(" / ") : "All results";
+  };
+
+  const handleNotifyStateChange = (value) => {
+    setSelectedNotifyState(value);
+    setSelectedNotifyDistrict(null);
+    fetchNotifyBloodBanks(value, null);
+
+    // Update districts for notify modal
+    const selectedStateData = states.find((state) => state.stateCode === value);
+    setNotifyDistricts(selectedStateData?.districts || []);
+  };
+
+  const handleNotifyDistrictChange = (value) => {
+    setSelectedNotifyDistrict(value);
+    fetchNotifyBloodBanks(selectedNotifyState, value);
+  };
+
+  const fetchNotifyBloodBanks = async (stateCode, districtCode) => {
+    if (!stateCode) return;
+
+    try {
+      const response = await axios.get(`${BaseUrl}/eraktkosh/bloodbanks`, {
+        params: { stateCode, ...(districtCode && { districtCode }) },
+      });
+      setNotifyBloodBanks(Array.isArray(response.data) ? response.data : []);
+    } catch (error) {
+      console.error("Error fetching blood center:", error);
+      setNotifyBloodBanks([]);
+    }
+  };
+
+  const handleNotifySubmit = async () => {
+    // Validate required fields
+    if (!selectedNotifyState) {
+      message.error("Please select state!");
+      return;
+    }
+
+    if (!selectedNotifyDistrict) {
+      message.error("Please select district!");
+      return;
+    }
+
+    if (selectedNotifyHospitals.length === 0) {
+      message.error("Please select at least one hospital!");
+      return;
+    }
+
+    if (!selectedNotifyBloodGroup) {
+      message.error("Please select blood group!");
+      return;
+    }
+
+    if (!notifyEmail) {
+      message.error("Please enter email!");
+      return;
+    }
+
+    const payload = {
+      stateCode: selectedNotifyState,
+      districtCode: selectedNotifyDistrict,
+      bloodGroupCode: selectedNotifyBloodGroup,
+      emailId: notifyEmail,
+      bloodComponentId: selectedNotifyComponent,
+      mobileNo: notifyMobile,
+      hospitalCodes: selectedNotifyHospitals.map((h) => h.hospitalCode),
+    };
+
+    try {
+      setLoading(true);
+      const response = await axios.post(
+        `${BaseUrl}/eraktkosh/notify_me/bloodsearch`,
+        payload
+      );
+
+      message.success(
+        response.data.message || "Notification request submitted successfully!"
+      );
+      setIsNotifyModalOpen(false);
+      resetNotifyFields();
+    } catch (error) {
+      console.error("Error submitting notification:", error);
+      message.error("Failed to submit notification. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const resetNotifyFields = () => {
+    setSelectedNotifyState(null);
+    setSelectedNotifyDistrict(null);
+    setSelectedNotifyHospitals([]);
+    setSelectedNotifyBloodGroup(null);
+    setSelectedNotifyComponent(null);
+    setNotifyEmail("");
+    setNotifyMobile("");
+  };
+
+  // Set initial values when modal opens
+  const handleNotifyModalOpen = () => {
+    setSelectedNotifyState(selectedState || null);
+    setSelectedNotifyDistrict(selectedDistrict || null);
+    setSelectedNotifyBloodGroup(selectedBloodGroup || null);
+    setSelectedNotifyComponent(selectedComponent || null);
+
+    if (selectedHospital) {
+      setSelectedNotifyHospitals([selectedHospital]);
+    } else {
+      setSelectedNotifyHospitals([]);
+    }
+
+    // Fetch districts and blood banks if state is already selected
+    if (selectedState) {
+      const selectedStateData = states.find(
+        (state) => state.stateCode === selectedState
+      );
+      setNotifyDistricts(selectedStateData?.districts || []);
+      fetchNotifyBloodBanks(selectedState, selectedDistrict);
+    }
+
+    setIsNotifyModalOpen(true);
   };
 
   return (
@@ -687,7 +730,7 @@ const BloodAvailabiltySearch = () => {
             <div
               className="d-flex align-items-center notify_bell ms-2"
               style={{ cursor: "pointer" }}
-              onClick={() => setIsNotifyModalOpen(true)}
+              onClick={handleNotifyModalOpen}
             >
               <p style={{ padding: "1px 10px" }} className="mb-0">
                 Notify Me
@@ -774,70 +817,106 @@ const BloodAvailabiltySearch = () => {
       <Modal
         title="Tell Us Your requirement"
         open={isNotifyModalOpen}
+        className="notify_modal"
         onCancel={() => setIsNotifyModalOpen(false)}
-        footer={null}
+        footer={[
+          <Button
+            key="submit"
+            type="primary"
+            onClick={handleNotifySubmit}
+            loading={loading}
+          >
+            Submit
+          </Button>,
+        ]}
       >
         <div className="row">
           <div className="col-6">
             <div className="input-wrapper-field mb-2">
-              <label className="form-label mb-0">Select State</label>
+              <label className="form-label mb-0">Select State*</label>
               <Select
                 showSearch
                 allowClear
                 style={{ width: "100%" }}
                 placeholder="Select"
+                value={selectedNotifyState}
+                onChange={handleNotifyStateChange}
+                filterOption={(input, option) => {
+                  const label = option?.label ?? "";
+                  return label.toLowerCase().includes(input.toLowerCase());
+                }}
+                options={states.map((state) => ({
+                  value: state.stateCode,
+                  label: state.stateName,
+                }))}
               />
             </div>
           </div>
           <div className="col-6">
             <div className="input-wrapper-field mb-2">
-              <label className="form-label mb-0">Select District</label>
+              <label className="form-label mb-0">Select District*</label>
               <Select
                 showSearch
                 allowClear
                 style={{ width: "100%" }}
                 placeholder="Select"
+                value={selectedNotifyDistrict}
+                onChange={handleNotifyDistrictChange}
+                filterOption={(input, option) => {
+                  const label = option?.label ?? "";
+                  return label.toLowerCase().includes(input.toLowerCase());
+                }}
+                options={notifyDistricts.map((district) => ({
+                  value: district.districtCode,
+                  label: district.districtName,
+                }))}
               />
             </div>
           </div>
-          <div className="col-6">
+          <div className="col-12">
             <div className="input-wrapper-field mb-2">
-              <label className="form-label mb-0">Select Blood Center</label>
-              <AutoComplete
-                allowClear
+              <label className="form-label mb-0">
+                Select Blood Center(s)* (Max 5)
+              </label>
+              <Select
+                mode="multiple"
+                maxCount={5}
                 style={{ width: "100%" }}
-                placeholder="Type hospital name"
+                placeholder="Select hospitals"
+                value={selectedNotifyHospitals.map((h) => h.hospitalCode)}
+                onChange={(values, options) => {
+                  setSelectedNotifyHospitals(options.map((opt) => opt.item));
+                }}
+                options={notifyBloodBanks.map((bank) => ({
+                  value: bank.hospitalCode,
+                  label: bank.hospitalName,
+                  item: bank,
+                }))}
+                filterOption={(input, option) =>
+                  option.label.toLowerCase().includes(input.toLowerCase())
+                }
               />
             </div>
           </div>
           <div className="col-6">
             <div className="input-wrapper-field mb-2">
-              <label className="form-label mb-1">Select Blood Group</label>
+              <label className="form-label mb-1">Select Blood Group*</label>
               <Select
                 showSearch
                 allowClear
                 style={{ width: "100%" }}
                 placeholder="Select Blood"
-              />
-            </div>
-          </div>
-          <div className="col-6">
-            <div className="input-wrapper-field mb-2">
-              <label className="form-label mb-0">Enter Email</label>
-              <AutoComplete
-                allowClear
-                style={{ width: "100%" }}
-                placeholder="Enter Email ID"
-              />
-            </div>
-          </div>
-          <div className="col-6">
-            <div className="input-wrapper-field mb-2">
-              <label className="form-label mb-0">Enter Mobile No.</label>
-              <AutoComplete
-                allowClear
-                style={{ width: "100%" }}
-                placeholder="Mobile No."
+                value={selectedNotifyBloodGroup}
+                onChange={setSelectedNotifyBloodGroup}
+                filterOption={(input, option) =>
+                  (option?.label ?? "")
+                    .toLowerCase()
+                    .includes(input.toLowerCase())
+                }
+                options={bloodGroups.map((bloodGroup) => ({
+                  value: bloodGroup.bloodGroupCode,
+                  label: bloodGroup.bloodGroupName,
+                }))}
               />
             </div>
           </div>
@@ -849,6 +928,37 @@ const BloodAvailabiltySearch = () => {
                 allowClear
                 style={{ width: "100%" }}
                 placeholder="Select Blood Component"
+                value={selectedNotifyComponent}
+                onChange={setSelectedNotifyComponent}
+                filterOption={(input, option) =>
+                  (option?.label ?? "")
+                    .toLowerCase()
+                    .includes(input.toLowerCase())
+                }
+                options={componentList.map((component) => ({
+                  value: component.componentCode,
+                  label: component.componentName,
+                }))}
+              />
+            </div>
+          </div>
+          <div className="col-6">
+            <div className="input-wrapper-field mb-2">
+              <label className="form-label mb-0">Enter Email*</label>
+              <Input
+                value={notifyEmail}
+                onChange={(e) => setNotifyEmail(e.target.value)}
+                placeholder="Enter Email ID"
+              />
+            </div>
+          </div>
+          <div className="col-6">
+            <div className="input-wrapper-field mb-2">
+              <label className="form-label mb-0">Enter Mobile No.</label>
+              <Input
+                value={notifyMobile}
+                onChange={(e) => setNotifyMobile(e.target.value)}
+                placeholder="Mobile No."
               />
             </div>
           </div>

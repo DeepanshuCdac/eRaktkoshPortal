@@ -1,5 +1,18 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+  }
+
 .App {
     font-family: "SourceSans3", sans-serif;
+}
+
+@font-face{
+    font-family: 'PlayFair';
+    src: url('../src/assets/fonts/static/PlayfairDisplay-MediumItalic.ttf');
+    font-weight: 500;
+    font-style: normal;
 }
 
 @font-face{
@@ -818,10 +831,10 @@
     margin: 0 auto;
 }
 
-.option {
+/* .option {
     color: #5B5B5B;
     font-size: 16px;
-}
+} */
 
 .loginSection .minimise-text {
     text-align: center;
@@ -934,8 +947,6 @@
     font-weight: 600;
     border-radius: 4px;
     border: 1px solid #7F0210;
-    /* transition: background-color 0.3s ease, color 0.3s ease, border 0.3s ease; */
-    /* box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.04); */
 }
 
 .btn-primary-outline:hover {
@@ -973,144 +984,6 @@
     .password-section .modal-footer .btn {
         width: 100%;
     }
-}
-
-/* ################### DonorLogin ################ */
-
-.donorlogin .donorlogin-right {
-    border-radius: 16px;
-    border: 1px solid #E8E8E8;
-    background: #FFF;
-    padding-top: 44px;
-    padding-bottom: 44px;
-    width: 390px;
-    margin-top: 24px;
-    box-shadow: 0px 4px 24px 0px rgba(0, 0, 0, 0.08);
-}
-
-/* ---------------------- */
-.loader {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(255, 255, 255, 0.8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-}
-
-.spinner {
-    width: 11.6vw;
-    padding-top: 11vw;
-    margin: 10% auto;
-    -webkit-animation: rotation .8s infinite linear;
-    animation: rotation 1.5s infinite linear;
-    border-left: 4px solid rgba(0, 174, 239, 0.15);
-    border-right: 4px solid rgba(0, 174, 239, 0.15);
-    border-bottom: 4px solid rgba(0, 174, 239, 0.15);
-    border-top: 4px solid rgba(0, 174, 239, 0.8);
-    border-radius: 100%;
-}
-
-@-webkit-keyframes rotation {
-    from {
-        -webkit-transform: rotate(0deg);
-    }
-
-    to {
-        -webkit-transform: rotate(359deg);
-    }
-}
-
-@-moz-keyframes rotation {
-    from {
-        -moz-transform: rotate(0deg);
-    }
-
-    to {
-        -moz-transform: rotate(359deg);
-    }
-}
-
-@-o-keyframes rotation {
-    from {
-        -o-transform: rotate(0deg);
-    }
-
-    to {
-        -o-transform: rotate(359deg);
-    }
-}
-
-@keyframes rotation {
-    from {
-        transform: rotate(0deg);
-    }
-
-    to {
-        transform: rotate(359deg);
-    }
-}
-
-/* --------------------- */
-
-.otpExpiry {
-    color: rgba(0, 0, 0, 0.50);
-    font-size: 14px;
-    line-height: 20.186px;
-    letter-spacing: 0.2px;
-}
-
-.otpExpiryText {
-    color: rgba(0, 0, 0, 0.50);
-    font-family: "Source Sans 3";
-    font-size: 18px;
-    font-weight: 600;
-}
-
-.timer {
-    color: rgba(0, 0, 0, 0.50);
-    font-size: 14px;
-    font-weight: 600;
-    line-height: 20.186px;
-    letter-spacing: 0.2px;
-}
-
-.otp-input {
-    display: flex;
-    justify-content: space-between;
-}
-
-.otp-input input {
-    width: 40px;
-    height: 40px;
-    text-align: center;
-    font-size: 1.5rem;
-    border-radius: 4px;
-    border: 0.841px solid var(--black-042, rgba(0, 0, 0, 0.42));
-    color: #6D7078;
-    transition: all 0.3s ease;
-}
-
-.otp-input input:focus {
-    border-color: #A556F6;
-    box-shadow: 0 0 0 2px rgba(166, 86, 246, 0.3);
-    outline: none;
-}
-
-.login-header {
-    color: #2C2C2C;
-    font-size: 32px;
-    font-weight: 600;
-}
-
-.donorlogin .details {
-    color: #808080;
-    font-size: 14px;
-    font-weight: 600;
 }
 
 .carousel-inner-container {

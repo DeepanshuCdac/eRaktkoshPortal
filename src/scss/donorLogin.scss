@@ -1,0 +1,246 @@
+.donorlogin {
+  .carousel-indicators {
+    margin-bottom: 2rem;
+    button {
+      background-color: #7f0210 !important;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      border: 1px solid #818181;
+    }
+  }
+
+  .carousel-inner {
+    position: relative;
+    .carousel-quote {
+      font-size: 4rem;
+      font-family: serif;
+      color: #7f0210;
+      position: absolute;
+      z-index: 10;
+      pointer-events: none;
+    }
+    .quote-top-left {
+      top: -26px;
+      left: 40px;
+      transform: rotate(360deg);
+    }
+    .quote-bottom-right {
+      bottom: -18px;
+      right: 40px;
+    }
+    .carousel-caption {
+      p {
+        font-family: PlayFair;
+        font-weight: 500;
+        color: #7f0210;
+        font-size: 15px;
+      }
+    }
+  }
+
+  .donorImg {
+    width: 100%;
+    height: 100vh;
+    background-image: url("../../public/assets/images/login_bg.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    //   overflow: hidden;
+    //   position: relative;
+
+    .donor_page_header {
+      font-size: 36px;
+      font-weight: 500;
+      color: #7f0210;
+    }
+
+    .img_text {
+      font-size: 20px;
+      font-weight: 400;
+      color: #000;
+    }
+
+    .sign_up_txt {
+      font-size: 22px;
+      font-weight: 500;
+      color: #000;
+    }
+  }
+
+  .donorlogin-right {
+    padding-top: 90px;
+    .loginBox {
+      .login-header {
+        font-size: 19px;
+        font-weight: 500;
+        color: #000;
+
+        span {
+          font-weight: 500;
+          color: #7f0210;
+          font-size: 22px;
+        }
+      }
+
+      .form-label {
+        font-size: 14px;
+        font-weight: 500;
+        color: #000;
+      }
+
+      .ant-input {
+        padding: 10px;
+        font-size: 15px;
+        font-weight: 500;
+      }
+
+      .ant-btn-primary {
+        width: 100%;
+        padding: 22px;
+        font-size: 15px;
+        font-weight: 500;
+        background: #7f0210;
+      }
+
+      .otp_field {
+        font-size: 14px;
+        font-weight: 500;
+        color: #2ca308;
+      }
+
+      .captcha_container {
+        border: 1px solid #d9d9d9;
+        border-radius: 5px;
+        width: 48%;
+      }
+
+      .timer {
+        color: #7f0210;
+        font-size: 14px;
+        font-weight: 500;
+      }
+
+      .otp-input {
+        display: flex;
+        justify-content: space-between;
+        input {
+          width: 50px;
+          height: 40px;
+          text-align: center;
+          font-size: 1.2rem;
+          border-radius: 4px;
+          border: 1px solid #d9d9d9;
+          color: #6d7078;
+          transition: all 0.3s ease;
+        }
+        input:focus {
+          border-color: #a556f6;
+          box-shadow: 0 0 0 2px rgba(166, 86, 246, 0.3);
+          outline: none;
+        }
+      }
+
+      .otpExpiry {
+        color: rgba(0, 0, 0, 0.6);
+        font-size: 14px;
+        font-weight: 500;
+      }
+      .otpExpiryText {
+        color: #6d7078;
+        font-size: 14px;
+        font-weight: 500;
+      }
+    }
+  }
+  .welcome_msg {
+    font-size: 14px;
+    font-weight: 500;
+    color: #707070;
+  }
+  .register_btn {
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 5px;
+    background-color: #959595;
+  }
+
+  .register_btn:hover {
+    background-color: #959595 !important;
+  }
+}
+
+.donorLogin_footer {
+  position: fixed;
+  bottom: 0;
+  background-color: #f7eff0;
+  height: 3rem;
+  width: 100%;
+  overflow: visible;
+  z-index: 10;
+
+  .building_wrapper {
+    position: absolute;
+    bottom: 3rem;
+    width: 100%;
+    overflow: hidden;
+    height: 3rem;
+  }
+
+  .building_track {
+    display: flex;
+    animation: moveBuildings 8s linear infinite;
+    height: 100%;
+  }
+
+  .building_img {
+    height: 3rem;
+    width: auto;
+    flex-shrink: 0;
+  }
+
+  .truck_img {
+    position: absolute;
+    bottom: 3rem;
+    z-index: 2;
+    height: 2.2rem;
+    left: 8%;
+    transform: translateX(-50%);
+    transition: left 1s ease-in-out;
+    &.stage-1 {
+      left: 30%;
+    }
+
+    &.stage-2 {
+      left: 100%;
+    }
+  }
+
+  .progress_line {
+    position: absolute;
+    bottom: 3rem;
+    height: 2px;
+    background-color: #7f0210;
+    left: 0;
+    width: 7%;
+    z-index: 1;
+    transition: width 1s ease-in-out;
+
+    &.stage-1 {
+      width: 30%;
+    }
+
+    &.stage-2 {
+      width: 100%;
+    }
+  }
+  @keyframes moveBuildings {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+}

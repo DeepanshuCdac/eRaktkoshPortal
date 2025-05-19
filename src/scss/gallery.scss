@@ -1,0 +1,142 @@
+// .gallery-wrapper {
+//     text-align: center;
+//   }
+  
+//   .carousel-main {
+//     position: relative;
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+//     gap: 1rem;
+//     margin-bottom: 2rem;
+//   }
+  
+//   .carousel-item {
+//     flex-shrink: 0;
+//     width: 300px;
+//     opacity: 0;
+//     transform: scale(0.7);
+//     transition: all 0.5s ease;
+//     pointer-events: none;
+//     text-align: center;
+//   }
+//   .carousel-item img {
+//     width: 100%;
+//     border-radius: 10px;
+//   }
+  
+//   .carousel-item.active {
+//     opacity: 1;
+//     transform: scale(1);
+//     pointer-events: auto;
+//     z-index: 3;
+//   }
+  
+//   .carousel-item.prev,
+//   .carousel-item.next {
+//     opacity: 0.6;
+//     transform: scale(0.9);
+//     pointer-events: auto;
+//     z-index: 2;
+//   }
+  
+// //   .carousel-item.hidden {
+// //     display: none;
+// //   }
+  
+//   .nav-btn {
+//     background: none;
+//     border: none;
+//     font-size: 2rem;
+//     cursor: pointer;
+//     color: #444;
+//   }
+//   .nav-btn:hover {
+//     color: #000;
+//   }
+  
+//   .carousel-thumbnails {
+//     display: flex;
+//     justify-content: center;
+//     gap: 10px;
+//     flex-wrap: wrap;
+//   }
+//   .thumbnail {
+//     width: 100px;
+//     cursor: pointer;
+//     opacity: 0.6;
+//     transition: 0.3s;
+//   }
+//   .thumbnail.selected {
+//     opacity: 1;
+//     border: 2px solid #2E5266;
+//   }
+//   .thumbnail img {
+//     width: 100%;
+//     border-radius: 6px;
+//   }
+  
+
+
+
+//   .gallery-carousel-container {
+//     width: 100%;
+//     padding: 2rem;
+//     box-sizing: border-box;
+  
+//     .swiper {
+//       padding-bottom: 3rem;
+//     }
+  
+//     .swiper-slide {
+//       display: flex;
+//       justify-content: center;
+//       opacity: 0.5;
+//       transition: opacity 0.3s ease;
+  
+//       &.swiper-slide-active {
+//         opacity: 1;
+//       }
+  
+//       .slide-card {
+//         background: white;
+//         overflow: hidden;
+//         text-align: center;
+//         img {
+//           width: 100%;
+//           height: auto;
+//           object-fit: cover;
+//           border-radius: 5px;
+//         }
+//         .slide-content {
+//           padding: 1rem;
+//           h3 {
+//             font-size: 22px;
+//             font-weight: 600;
+//             color: #000;
+//           }
+//           p {
+//             font-size: 14px;
+//             color: #000;
+//             margin-top: 0.5rem;
+//           }
+//         }
+//       }
+//     }
+  
+//     .swiper-button-prev,
+//     .swiper-button-next {
+//       color: #000;
+//     }
+  
+//     .swiper-pagination-bullet {
+//       background: #aaa;
+//       &-active {
+//         background: #000;
+//       }
+//     }
+//   }
+  
+
+
+  

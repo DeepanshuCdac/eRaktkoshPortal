@@ -39,9 +39,10 @@ export default function Navbar() {
                       <Link className="links" to="/beta#">Home</Link>
                     </li>
                     <li>
-                      <a href="/BLDAHIMS/bloodbank/about.cnt">
+                      {/* <a href="/BLDAHIMS/bloodbank/about.cnt">
                         About eRaktkosh
-                      </a>
+                      </a> */}
+                      <Link className="links" to="/publicPages/AboutEraktkosh"> About eRaktkosh</Link>
                     </li>
                     <li>
                       <a className="links" href="https://eraktkosh.mohfw.gov.in/eRaktkoshUtilities/#/">
@@ -61,9 +62,10 @@ export default function Navbar() {
                       <Link className="links" to="/publicPages/FAQs">eRaktkosh FAQ's</Link>
                     </li>
                     <li>
-                      <a href="/BLDAHIMS/bloodbank/transactions/bbpublicindexGallery.html">
+                      {/* <a href="/BLDAHIMS/bloodbank/transactions/bbpublicindexGallery.html">
                         Gallery
-                      </a>
+                      </a> */}
+                      <Link className="links" to="/publicPages/gallery">Gallery</Link>
                     </li>
                     <li>
                       <a href="/BLDAHIMS/bloodbank/transactions/video.html">

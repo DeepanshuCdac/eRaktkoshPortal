@@ -23,6 +23,9 @@ import BloodBankDirectory from "./publicPages/BloodBankDirectory.js";
 import CampRegistration from "./publicPages/CampRegistration.js";
 import Faqs from "./publicPages/Faqs.js";
 import Notification from "./publicPages/Notification.js";
+import AboutEraktkosh from "./publicPages/AboutEraktkosh.js";
+// import Gallery from "./publicPages/gallery.js";
+import GalleryCarousel from "./publicPages/GalleryCarousol.jsx";
 
 function App() {
   return (
@@ -41,9 +44,14 @@ function App() {
 function AppContent() {
   const location = useLocation();
 
+  const hideNavbarPaths = ['/pages/portaldonorAdmin'];
+  const hideFooterPaths = ['/pages/portalDonorLogin', '/pages/portaldonorAdmin'];
+
   return (
     <>
-      {location.pathname !== '/pages/portaldonorAdmin' && <Navbar />}
+      {/* {location.pathname !== '/pages/portaldonorAdmin' && <Navbar />} */}
+
+      {!hideNavbarPaths.includes(location.pathname) && <Navbar />}
 
       <Switch>
         <Route path="/publicPages/Notification">
@@ -52,6 +60,14 @@ function AppContent() {
 
         <Route path="/publicPages/FAQs">
           <Faqs />
+        </Route>
+
+        <Route path="/publicPages/AboutEraktkosh">
+          <AboutEraktkosh />
+        </Route>
+
+        <Route path="/publicPages/gallery">
+          <GalleryCarousel/>
         </Route>
 
         <Route path="/publicPages/bloodAvailabilitySearch">
@@ -95,7 +111,7 @@ function AppContent() {
           <Benefits />
         </Route>
       </Switch>
-      <Footer />
+      {!hideFooterPaths.includes(location.pathname) && <Footer />}
     </>
   );
 }

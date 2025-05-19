@@ -526,6 +526,19 @@
   }
 }
 
+.notify_modal{
+  .ant-btn {
+    color: #fff;
+    background-color: #7F0210;
+    border: none;
+    border-radius: 5px;
+    font-size: 13px;
+  }
+  .ant-btn:hover{
+    background: #7F0210 !important;
+  }
+}
+
 .blood_availability_table {
   :where(.css-dev-only-do-not-override-qnu6hi).ant-table-wrapper
     .ant-table-tbody
