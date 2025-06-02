@@ -96,13 +96,13 @@
         font-weight: 500;
       }
 
-      .ant-btn-primary {
-        width: 100%;
-        padding: 22px;
-        font-size: 15px;
-        font-weight: 500;
-        background: #7f0210;
-      }
+      // .ant-btn-primary {
+      //   width: 100%;
+      //   padding: 22px;
+      //   font-size: 15px;
+      //   font-weight: 500;
+      //   background: #7f0210;
+      // }
 
       .otp_field {
         font-size: 14px;
@@ -122,25 +122,25 @@
         font-weight: 500;
       }
 
-      .otp-input {
-        display: flex;
-        justify-content: space-between;
-        input {
-          width: 50px;
-          height: 40px;
-          text-align: center;
-          font-size: 1.2rem;
-          border-radius: 4px;
-          border: 1px solid #d9d9d9;
-          color: #6d7078;
-          transition: all 0.3s ease;
-        }
-        input:focus {
-          border-color: #a556f6;
-          box-shadow: 0 0 0 2px rgba(166, 86, 246, 0.3);
-          outline: none;
-        }
-      }
+      // .otp-input {
+      //   display: flex;
+      //   justify-content: space-between;
+      //   input {
+      //     width: 50px;
+      //     height: 40px;
+      //     text-align: center;
+      //     font-size: 1.2rem;
+      //     border-radius: 4px;
+      //     border: 1px solid #d9d9d9;
+      //     color: #6d7078;
+      //     transition: all 0.3s ease;
+      //   }
+      //   input:focus {
+      //     border-color: #a556f6;
+      //     box-shadow: 0 0 0 2px rgba(166, 86, 246, 0.3);
+      //     outline: none;
+      //   }
+      // }
 
       .otpExpiry {
         color: rgba(0, 0, 0, 0.6);
@@ -244,3 +244,31 @@
     }
   }
 }
+
+.otp-input {
+        display: flex;
+        justify-content: space-between;
+        input {
+          width: 50px;
+          height: 40px;
+          text-align: center;
+          font-size: 1.2rem;
+          border-radius: 4px;
+          border: 1px solid #d9d9d9;
+          color: #6d7078;
+          transition: all 0.3s ease;
+        }
+        input:focus {
+          border-color: #a556f6;
+          box-shadow: 0 0 0 2px rgba(166, 86, 246, 0.3);
+          outline: none;
+        }
+      }
+
+      .ant-btn-primary {
+        width: 100%;
+        padding: 22px;
+        font-size: 15px;
+        font-weight: 500;
+        background: #7f0210;
+      }

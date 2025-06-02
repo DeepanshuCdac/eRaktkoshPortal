@@ -1,669 +1,783 @@
-import React, { useState, useEffect } from 'react'
-import ProgressBar from './progressBar'
-import { Select, Space } from 'antd'
-import { useDonor } from '../context/DonorContext'
-import axios from 'axios';
-import {BaseUrl} from '../utils/url.js';
+import React, { useState, useEffect } from "react";
+import { CaretRightOutlined } from "@ant-design/icons";
+import {
+  Collapse,
+  theme,
+  Select,
+  Space,
+  Input,
+  Button,
+  DatePicker,
+} from "antd";
+import { useDonor } from "../context/DonorContext";
+import { useDispatch, useSelector } from "react-redux";
+import { getApiData } from "../redux/slices/dataSlice";
+import axios from "axios";
+import { BaseUrl } from "../utils/url.js";
+import dayjs from "dayjs";
+import Swal from 'sweetalert2'
+
+const BLOOD_GROUP_MAPPING = {
+  "A-pos": "A+Ve",
+  "A-neg": "A-Ve",
+  "B-pos": "B+Ve",
+  "B-neg": "B-Ve",
+  "AB-pos": "AB+Ve",
+  "AB-neg": "AB-Ve",
+  "O-pos": "O+Ve",
+  "O-neg": "O-Ve",
+};
 
 export default function DonorAdminProfile() {
+  const dispatch = useDispatch();
+  const {
+    statesWithDistricts,
+    genders,
+    occupations,
+    religion,
+    maritalStatus,
+    bloodGroups,
+  } = useSelector((state) => state.data);
+  const [selectGender, setSelectGender] = useState(null);
+  const [bloodGroup, setBloodGroup] = useState(null);
+  const [selectMaritalStatus, setSelectMaritalStatus] = useState(null);
+  const [selectOccupation, setSelectOccupation] = useState(null);
+  const [selectReligion, setSelectReligion] = useState(null);
+  const [selectedState, setSelectedState] = useState(null);
+  const [selectedDistrict, setSelectedDistrict] = useState(null);
+  const { donorData, setDonorData } = useDonor();
+  const [errors, setErrors] = useState({});
+  const [activePanels, setActivePanels] = useState(["1"]);
 
-    const { donorData, setDonorData } = useDonor()
-    const [currentStep, setCurrentStep] = useState(1)
-    const [errors, setErrors] = useState({})
+  useEffect(() => {
+    dispatch(getApiData());
+  }, [dispatch]);
 
-    useEffect(() => {
-        document.title = 'e-Raktkosh Manage Donor Details'
-    }, [])
+  // Initialize form fields with donor data when component mounts or donorData changes
+  useEffect(() => {
+    if (donorData?.body) {
+      // Set gender
+      const genderObj = genders.find(
+        (g) => g.genderCode === donorData.body.gender
+      );
+      if (genderObj) setSelectGender(genderObj.genderCode);
 
-    const totalSteps = 3
+      // Set blood group
+      if (donorData?.body?.bloodGroup) {
+        const apiBloodGroup = donorData.body.bloodGroup;
+        const normalizedBloodGroup =
+          BLOOD_GROUP_MAPPING[apiBloodGroup] || apiBloodGroup;
 
-    const mobileNoFromSession = sessionStorage.getItem('mobileNo');
-    const tokenFromSession = sessionStorage.getItem('authToken');
-    console.log("Mobile number inside profile : ", mobileNoFromSession);
-    console.log("Token inside profile:", tokenFromSession);
+        const bloodObj = bloodGroups.find(
+          (bg) =>
+            bg.bloodGroupCode === normalizedBloodGroup ||
+            bg.bloodGroupName === normalizedBloodGroup
+        );
 
-    const genderMap = {
-        M: 'Male',
-        F: 'Female',
-        O: 'Others',
-    };
-
-    const reverseGenderMap = {
-        Male: 'M',
-        Female: 'F',
-        Others: 'O',
-    };
-
-    const convertToDDMMYYYY = (date) => {
-        if (!date) return '';
-        const [year, month, day] = date.split('-');
-        return `${day}-${month}-${year}`;
-    };
-
-    const convertToISOFormat = (date) => {
-        if (!date) return '';
-        const [day, month, year] = date.split('-');
-        return `${year}-${month}-${day}`;
-    };
-
-    const handleNextStep = () => {
-        if (validateFields()) {
-            setCurrentStep((prevStep) => Math.min(prevStep + 1, totalSteps))
+        if (bloodObj) {
+          setBloodGroup(bloodObj.bloodGroupCode);
+          // Update donor data if format differs
+          if (donorData.body.bloodGroup !== bloodObj.bloodGroupCode) {
+            handleInputChange("bloodGroup", bloodObj.bloodGroupCode);
+          }
         }
-        console.log("step:", currentStep + 1)
+      }
+
+      console.log("Current bloodGroups data:", bloodGroups);
+      console.log("Donor bloodGroup:", donorData?.body?.bloodGroup);
+
+      // Set marital status
+      const maritalStatusObj = maritalStatus.find(
+        (ms) => ms.maritalStatusCode === donorData.body.maritalStatus
+      );
+      if (maritalStatusObj)
+        setSelectMaritalStatus(maritalStatusObj.maritalStatusCode);
+
+      // Set occupation
+      const occupationObj = occupations.find(
+        (occ) => occ.occupationCode === donorData.body.occupation
+      );
+      if (occupationObj) setSelectOccupation(occupationObj.occupationCode);
+
+      // Set religion
+      const religionObj = religion.find(
+        (rel) => rel.religionCode === donorData.body.religion
+      );
+      if (religionObj) setSelectReligion(religionObj.religionCode);
+
+      // Set state and district
+      if (donorData.body.edonorStateName) {
+        setSelectedState(donorData.body.edonorStateName);
+
+        // Find districts for the state
+        const stateObj = statesWithDistricts.find(
+          (s) => s.stateCode === donorData.body?.edonorStateName
+        );
+        if (stateObj && donorData.body.edonorDistName) {
+          setSelectedDistrict(donorData.body.edonorDistName);
+        }
+      }
+    }
+  }, [
+    donorData,
+    genders,
+    bloodGroups,
+    maritalStatus,
+    occupations,
+    religion,
+    statesWithDistricts,
+  ]);
+
+  const mobileNoFromSession = sessionStorage.getItem("mobileNo");
+  const tokenFromSession = sessionStorage.getItem("authToken");
+  console.log("Mobile number inside profile : ", mobileNoFromSession);
+  console.log("Token inside profile:", tokenFromSession);
+
+  const convertToDDMMYYYY = (date) => {
+    if (!date) return "";
+    const [year, month, day] = date.split("-");
+    return `${day}-${month}-${year}`;
+  };
+
+  const convertToISOFormat = (date) => {
+    if (!date) return "";
+    const [day, month, year] = date.split("-");
+    return `${year}-${month}-${day}`;
+  };
+
+  const handleSave = async () => {
+    if (!validateFields()) {
+      alert("Please fix the errors in the form before saving.");
+      return;
     }
 
-    const handlePreviousStep = () => {
-        setCurrentStep((prevStep) => Math.max(prevStep - 1, 1))
-        console.log("step:", currentStep - 1)
+    if (!donorData) {
+      console.error("Donor data is not set in state:", donorData);
+      alert("Donor data is missing. Unable to save.");
+      return;
     }
 
-    const handleSave = async () => {
-        if (!validateFields()) {
-            alert("Please fix the errors in the form before saving.");
-            return;
+    try {
+      // Prepare the updated data object matching the API contract exactly
+      const updatedData = {
+        mobileNumber: donorData.body?.mobileno || "",
+        firstName: donorData.body?.edonorFName || "",
+        lastName: donorData.body?.edonorLName || "",
+        bloodGroupCode: bloodGroup || donorData.body?.bloodGroup || "",
+        stateCode: selectedState || donorData.body?.edonorStateName || "",
+        districtCode: selectedDistrict || donorData.body?.edonorDistName || "",
+        pincode: donorData.body?.donorPin || "",
+        email: donorData.body?.edonorEmail || "",
+        maritalStatusCode:
+          selectMaritalStatus || donorData.body?.maritalStatus || "",
+        spouseName: donorData.body?.spouce || "",
+        occupationCode: selectOccupation || donorData.body?.occupation || "",
+        houseNo: donorData.body?.hno || "",
+        landmark: donorData.body?.landmark || "",
+        genderCode: selectGender || donorData.body?.gender || "",
+        religionCode: selectReligion || donorData.body?.religion || "",
+        address: donorData.body?.address || "",
+        cityLocation: donorData.body?.location || "",
+        city: donorData.body?.donorCity || "",
+        fatherName: donorData.body?.fatherName || "",
+        dob: donorData.body?.dob ? convertToISOFormat(donorData.body.dob) : "",
+      };
+
+      console.log("Payload for API:", updatedData);
+
+      const response = await axios.put(
+        `${BaseUrl}/eraktkosh/update`,
+        updatedData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${tokenFromSession}`,
+          },
         }
+      );
 
-        if (!donorData) {
-            console.error("Donor data is not set in state:", donorData);
-            alert("Donor data is missing. Unable to save.");
-            return;
-        }
+      if (response.status === 200) {
+        console.log("API response:", response.data);
+        Swal.fire({
+          // title: "Data saved successfully!",
+          text: "Data saved successfully!",
+          icon: "success",
+        });
+        setDonorData((prev) => ({
+          ...prev,
+          body: {
+            ...prev.body,
+            ...updatedData,
+            bloodGroup: updatedData.bloodGroupCode,
+            edonorStateName: updatedData.stateCode,
+            edonorDistName: updatedData.districtCode,
+            donorPin: updatedData.pincode,
+            maritalStatus: updatedData.maritalStatusCode,
+            occupation: updatedData.occupationCode,
+            gender: updatedData.genderCode,
+            religion: updatedData.religionCode,
+            spouce: updatedData.spouseName,
+            location: updatedData.cityLocation,
+            dob: donorData.body?.dob, 
+          },
+        }));
+      } else {
+        console.error("Unexpected response:", response.status, response.data);
+        alert("Something went wrong. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error saving data:", error);
+      if (error.response) {
+        console.error("Error response data:", error.response.data);
+      }
+      alert("Failed to save data. Please try again later.");
+    }
+  };
 
-        // access fields
-        const portalDonorId = donorData.body?.mobileno;
-        const edonorPass = donorData.body?.donorPass;
+  const validateFields = () => {
+    const newErrors = {};
 
-        if (!portalDonorId || !edonorPass) {
-            alert(
-                `Missing fields:\n${!portalDonorId ? "- Mobile number\n" : ""}${!edonorPass ? "- Donor password" : ""
-                }`
-            );
-            console.error("Missing fields in donorData:", { portalDonorId, edonorPass });
-            return;
-        }
-
-        try {
-            const completeDonorData = {
-                ...donorData.body,
-                portalDonorId,
-                edonorPass,
-            };
-
-            console.log("Payload for API:", completeDonorData);
-
-            // api call
-            const response = await axios.post(
-                `${BaseUrl}/eraktkosh/updateOrInsertDonorDetails`,
-                completeDonorData,
-                {
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${tokenFromSession}`
-                    },
-                }
-            );
-
-            if (response.status === 200) {
-                console.log("API response:", response.data);
-                alert("Data saved successfully!");
-            } else {
-                console.error("Unexpected response:", response.status, response.data);
-                alert("Something went wrong. Please try again.");
-            }
-        } catch (error) {
-            console.error("Error saving data:", error);
-            alert("Failed to save data. Please try again later.");
-        }
-    };
-
-    const validateFields = () => {
-        const newErrors = {}
-
-        if (!donorData.body?.edonorFName || donorData.body.edonorFName.trim() === '') {
-            newErrors.edonorFName = 'Please Enter First Name'
-        }
-        if (!donorData.body?.dob || donorData.body.dob.trim() === '') {
-            newErrors.dob = 'Please Enter Date of Birth'
-        }
-        if (!donorData.body?.gender || donorData.body.gender.trim() === '') {
-            newErrors.gender = 'Please Select Gender'
-        }
-        if (!donorData.body?.edonorEmail || donorData.body.edonorEmail.trim() === '') {
-            newErrors.edonorEmail = 'Please Enter Your Email'
-        }
-
-        setErrors(newErrors)
-
-        return Object.keys(newErrors).length === 0
+    if (
+      !donorData.body?.edonorFName ||
+      donorData.body.edonorFName.trim() === ""
+    ) {
+      newErrors.edonorFName = "Please Enter First Name";
+    }
+    if (!donorData.body?.dob || donorData.body.dob.trim() === "") {
+      newErrors.dob = "Please Enter Date of Birth";
+    }
+    if (!donorData.body?.gender || donorData.body.gender.trim() === "") {
+      newErrors.gender = "Please Select Gender";
+    }
+    if (
+      !donorData.body?.edonorEmail ||
+      donorData.body.edonorEmail.trim() === ""
+    ) {
+      newErrors.edonorEmail = "Please Enter Your Email";
     }
 
-    const handleInputChange = (field, value) => {
-        setDonorData((prevData) => ({
-            ...prevData,
-            body: {
-                ...prevData.body,
-                [field]: field === 'gender' ? reverseGenderMap[value] : value,
-            },
-        }))
-    }
+    setErrors(newErrors);
 
-    // -----------------------------
-    return (
-        <>
-            <ProgressBar currentStep={currentStep} totalSteps={totalSteps} />
-            <div className="tabContent mb-3">
-                {currentStep === 1 &&
-                    <div className="widget p-3 mb-3">
-                        <h4 className='widgeHeader mb-4'>Stage {currentStep}/{totalSteps} Personal Details</h4>
-                        <div className="row">
-                            <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
-                                <div className="mb-3 form-inputs">
-                                    <label htmlFor="exampleInputEmail1" className="form-label mb-1">First Name</label>
-                                    <img src="assets/images/mendate.png" alt="Mendate" />
-                                    <input
-                                        type="text"
-                                        placeholder='Enter Your Name'
-                                        className="form-control"
-                                        id="firstName"
-                                        value={donorData.body?.edonorFName || ''}
-                                        onChange={(e) => handleInputChange('edonorFName', e.target.value)}
-                                    />
-                                    {errors.edonorFName && <div className="form-text" style={{ color: '#C0222B' }}>{errors.edonorFName}</div>}
-                                </div>
-                            </div>
+    return Object.keys(newErrors).length === 0;
+  };
 
-                            <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
-                                <div className="mb-3 form-inputs">
-                                    <label htmlFor="exampleInputEmail1" className="form-label mb-1">Last Name</label>
-                                    <input
-                                        type="text"
-                                        placeholder='Enter Your Last Name'
-                                        className="form-control"
-                                        id="lastName"
-                                        value={donorData.body?.edonorLName || ''}
-                                        onChange={e =>
-                                            setDonorData({
-                                                ...donorData,
-                                                body: {
-                                                    ...donorData.body,
-                                                    edonorLName: e.target.value,
-                                                },
-                                            })
-                                        }
-                                    />
-                                </div>
-                            </div>
+  const handleInputChange = (field, value) => {
+    setDonorData((prevData) => ({
+      ...prevData,
+      body: {
+        ...prevData.body,
+        [field]: value,
+      },
+    }));
+  };
 
-                            <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
-                                <div className="mb-3 form-inputs">
-                                    <label htmlFor="exampleInputEmail1" className="form-label mb-1">Date of Birth </label>
-                                    <img src="assets/images/mendate.png" alt="Mendate" />
-                                    <input
-                                        type="date"
-                                        placeholder="Enter Your Date of Birth"
-                                        className="form-control"
-                                        id="dob"
-                                        value={convertToISOFormat(donorData.body?.dob) || ''}
-                                        onChange={(e) => handleInputChange('dob', convertToDDMMYYYY(e.target.value))}
-                                    />
-                                    {errors.dob && <div className="form-text" style={{ color: '#C0222B' }}>{errors.dob}</div>}
-                                </div>
-                            </div>
+  const handleStateChange = (value) => {
+    setSelectedState(value);
+    setSelectedDistrict(null);
+    setDonorData((prevData) => ({
+      ...prevData,
+      body: {
+        ...prevData.body,
+        edonorStateName: value,
+        edonorDistName: null,
+      },
+    }));
+  };
 
-                            <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
-                                <div className='d-flex flex-column'>
-                                    <div className='d-flex align-items-center'>
-                                        <label htmlFor="gender" className="form-label mb-1">Gender</label>
-                                        <img src="assets/images/mendate.png" alt="Mendate" />
-                                    </div>
-                                    <Space wrap>
-                                        <Select
-                                            style={{ width: '100%' }}
-                                            value={genderMap[donorData.body?.gender] || null}
-                                            onChange={(value) => handleInputChange('gender', value)}
-                                            options={[
-                                                { value: 'Male', label: 'Male' },
-                                                { value: 'Female', label: 'Female' },
-                                                { value: 'Others', label: 'Others' },
-                                            ]}
-                                            placeholder="Select donor gender"
-                                        />
-                                    </Space>
-                                    {errors.gender && (
-                                        <div className="form-text" style={{ color: '#C0222B' }}>
-                                            {errors.gender}
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
+  const handleDistrictChange = (value) => {
+    setSelectedDistrict(value);
+    setDonorData((prevData) => ({
+      ...prevData,
+      body: {
+        ...prevData.body,
+        edonorDistName: value,
+      },
+    }));
+  };
 
-                            <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
-                                <div className="mb-3 form-inputs">
-                                    <label htmlFor="exampleInputEmail1" className="form-label mb-1">Email</label>
-                                    <img src="assets/images/mendate.png" alt="Mendate" />
-                                    <input
-                                        type="email"
-                                        placeholder='Enter Your Email ID'
-                                        className="form-control"
-                                        id="emailID"
-                                        value={donorData.body?.edonorEmail || ''}
-                                        onChange={(e) => handleInputChange('edonorEmail', e.target.value)}
-                                    />
-                                    {errors.edonorEmail && <div className="form-text" style={{ color: '#C0222B' }}>{errors.edonorEmail}</div>}
-                                </div>
-                            </div>
+  const { token } = theme.useToken();
 
-                            <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
-                                <div className="mb-3 form-inputs">
-                                    <label htmlFor="exampleInputEmail1" className="form-label mb-1">Mobile No.</label>
-                                    <img src="assets/images/mendate.png" alt="Mendate" />
-                                    <input type="text"
-                                        disabled
-                                        className="form-control"
-                                        id="exampleInputEmail1"
-                                        aria-describedby="emailHelp"
-                                        value={donorData.body.mobileno || ''}
-                                        onChange={e =>
-                                            setDonorData({
-                                                ...donorData,
-                                                mobileno: e.target.value
-                                            })}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                }
+  const panelStyle = {
+    marginBottom: 24,
+    background: token.colorFillAlter,
+    borderRadius: token.borderRadiusLG,
+    border: "none",
+  };
 
-                {currentStep === 2 &&
-                    <div className="widget p-3 mb-3">
-                        <h4 className='widgeHeader mb-4'>Stage {currentStep}/{totalSteps} Personal Details</h4>
-                        <div className="row">
-                            <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
-                                <div className="d-flex flex-column">
-                                    <label htmlFor="exampleInputEmail1" className="form-label mb-1">Blood Group</label>
-                                    <Space wrap>
-                                        <Select
-                                            value={donorData.body?.bloodGroupName || undefined}
-                                            style={{ width: '100%' }}
-                                            onChange={value => {
-                                                console.log('Selected Blood group:', value);
-                                                setDonorData(prevData => ({
-                                                    ...prevData,
-                                                    body: {
-                                                        ...prevData.body,
-                                                        bloodGroupName: value,
-                                                    },
-                                                }));
-                                            }}
-                                            options={[
-                                                { value: 20, label: 'A+' },
-                                                { value: 12, label: 'A-' },
-                                                { value: 13, label: 'B+' },
-                                                { value: 14, label: 'B-' },
-                                                { value: 17, label: 'AB+' },
-                                                { value: 18, label: 'AB-' },
-                                                { value: 15, label: 'O+' },
-                                                { value: 16, label: 'O-' },
-                                            ]}
-                                            placeholder="Select it"
-                                        />
-                                    </Space>
-                                </div>
-                            </div>
+  const states = statesWithDistricts || [];
+  const districts = selectedState
+    ? states.find((state) => state.stateCode === selectedState)?.districts || []
+    : [];
 
-                            <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
-                                <div className="mb-3 form-inputs">
-                                    <label htmlFor="exampleInputEmail1" className="form-label mb-1">Father Name</label>
-                                    <input
-                                        type="text"
-                                        placeholder='Enter Your Father Name'
-                                        className="form-control"
-                                        id="fatherName"
-                                        value={donorData.body?.fatherName || ''}
-                                        onChange={e =>
-                                            setDonorData({
-                                                ...donorData,
-                                                body: {
-                                                    ...donorData.body,
-                                                    fatherName: e.target.value,
-                                                },
-                                            })
-                                        }
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
-                                <div className='d-flex flex-column'>
-                                    <label htmlFor="exampleInputEmail1" className="form-label mb-1">Marital Status</label>
-                                    <Space wrap >
-                                        <Select
-                                            value={donorData.body?.maritalStatus !== undefined ? donorData.body.maritalStatus : undefined}
-                                            style={{ width: '100%' }}
-                                            onChange={value => {
-                                                console.log('Selected Marital Status:', value); 
-                                                setDonorData(prevData => ({
-                                                    ...prevData,
-                                                    body: {
-                                                        ...prevData.body,
-                                                        maritalStatus: value, 
-                                                    },
-                                                }));
-                                            }}
-                                            options={[
-                                                { value: 1, label: 'Married' },
-                                                { value: -1, label: 'Single' },
-                                            ]}
-                                            placeholder="Select it"
-                                        />
-                                    </Space>
-                                </div>
-                            </div>
-
-                            <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
-                                <div className="mb-3 form-inputs">
-                                    <label htmlFor="exampleInputEmail1" className="form-label mb-1">Spouse Name</label>
-                                    <input
-                                        type="text"
-                                        placeholder='Enter Your Spouse Name'
-                                        className="form-control"
-                                        id="spouseName"
-                                        value={donorData.body?.spouce || ''}
-                                        onChange={e =>
-                                            setDonorData({
-                                                ...donorData,
-                                                body: {
-                                                    ...donorData.body,
-                                                    spouce: e.target.value,
-                                                },
-                                            })
-                                        }
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
-                                <div className='d-flex flex-column'>
-                                    <label htmlFor="exampleInputEmail1" className="form-label mb-1">Occupation</label>
-                                    <Space wrap >
-                                        <Select
-                                            value={donorData.body?.occupation || "Select Occupation"}
-                                            style={{ width: '100%' }}
-                                            onChange={value => {
-                                                console.log('Selected Occupation:', value);
-                                                setDonorData(prevData => ({
-                                                    ...prevData,
-                                                    body: {
-                                                        ...prevData.body,
-                                                        occupation: value,
-                                                    },
-                                                }));
-                                            }}
-                                            options={[
-                                                { value: 'Agriculture', label: 'Agriculture' },
-                                                { value: 'Teaching', label: 'Teaching' }
-                                            ]}
-                                            placeholder="Select Occupation"
-                                        />
-                                    </Space>
-                                </div>
-                            </div>
-
-                            <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
-                                <div className='d-flex flex-column'>
-                                    <label htmlFor="exampleInputEmail1" className="form-label mb-1">Religion</label>
-                                    <Space wrap>
-                                        <Select
-                                            value={donorData.body?.religion || "Select It"}
-                                            style={{ width: '100%' }}
-                                            onChange={value => {
-                                                console.log('Selected Religion:', value);
-                                                setDonorData(prevData => ({
-                                                    ...prevData,
-                                                    body: {
-                                                        ...prevData.body,
-                                                        religion: value,
-                                                    },
-                                                }));
-                                            }}
-                                            options={[
-                                                { value: 'Hinduism', label: 'Hinduism' },
-                                                { value: 'Buddhism', label: 'Buddhism' },
-                                            ]}
-                                            placeholder="Select it"
-                                        />
-                                    </Space>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                }
-
-                {currentStep === 3 &&
-                    <div>
-                        <div className="widget p-3 mb-3">
-                            <h4 className='widgeHeader mb-4'>Stage {currentStep}/{totalSteps} Personal Details</h4>
-                            <div className="row">
-
-                                <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
-                                    <div className="mb-3 form-inputs">
-                                        <label htmlFor="exampleInputEmail1" className="form-label mb-1">H. No.</label>
-                                        <input
-                                            type="text"
-                                            placeholder='Enter Your H. No.'
-                                            className="form-control"
-                                            id="houseno"
-                                            value={donorData.body?.hno || ''}
-                                            onChange={e =>
-                                                setDonorData({
-                                                    ...donorData,
-                                                    body: {
-                                                        ...donorData.body,
-                                                        hno: e.target.value,
-                                                    },
-                                                })
-                                            }
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
-                                    <div className="mb-3 form-inputs">
-                                        <label htmlFor="exampleInputEmail1" className="form-label mb-1">Street/ Address</label>
-                                        <input
-                                            type="text"
-                                            placeholder='Enter Your Street/ Address'
-                                            className="form-control"
-                                            id="address"
-                                            value={donorData.body?.address || ''}
-                                            onChange={e =>
-                                                setDonorData({
-                                                    ...donorData,
-                                                    body: {
-                                                        ...donorData.body,
-                                                        address: e.target.value,
-                                                    },
-                                                })
-                                            }
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
-                                    <div className="mb-3 form-inputs">
-                                        <label htmlFor="exampleInputEmail1" className="form-label mb-1">Location</label>
-                                        <input
-                                            type="text"
-                                            placeholder='Enter Your Loaction'
-                                            className="form-control"
-                                            id="location"
-                                            value={donorData.body?.location || ''}
-                                            onChange={e =>
-                                                setDonorData({
-                                                    ...donorData,
-                                                    body: {
-                                                        ...donorData.body,
-                                                        location: e.target.value,
-                                                    },
-                                                })
-                                            }
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
-                                    <div className="mb-3 form-inputs">
-                                        <label htmlFor="exampleInputEmail1" className="form-label mb-1">City/ Village</label>
-                                        <input
-                                            type="text"
-                                            placeholder='Enter Your City/ Village'
-                                            className="form-control"
-                                            id="donorCity"
-                                            value={donorData.body?.donorCity || ''}
-                                            onChange={e =>
-                                                setDonorData({
-                                                    ...donorData,
-                                                    body: {
-                                                        ...donorData.body,
-                                                        donorCity: e.target.value,
-                                                    },
-                                                })
-                                            }
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
-                                    <div className='d-flex flex-column'>
-                                        <label htmlFor="exampleInputEmail1" className="form-label mb-1">District</label>
-                                        <Space wrap >
-                                            <Select
-                                                value={donorData.body.edonorDistName || "Select Your District"}
-                                                style={{ width: '100%' }}
-                                                onChange={(value) => handleInputChange('district', value)}
-                                                options={[
-                                                    {
-                                                        value: 'Noida',
-                                                        label: 'Noida',
-                                                    }
-                                                ]}
-                                                placeholder="Select Your District"
-                                            />
-                                        </Space>
-                                    </div>
-                                </div>
-
-                                <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
-                                    <div className='d-flex flex-column'>
-                                        <label htmlFor="exampleInputEmail1" className="form-label mb-1">State</label>
-                                        <Space wrap >
-                                            <Select
-                                                value={donorData.body.edonorStateName || "Select Your State"}
-                                                style={{ width: '100%' }}
-                                                onChange={(value) => handleInputChange('State', value)}
-                                                options={[
-                                                    {
-                                                        value: 'Uttar Pradesh',
-                                                        label: 'Uttar Pradesh',
-                                                    }
-                                                ]}
-                                                placeholder="Select Your State"
-                                            />
-                                        </Space>
-                                    </div>
-                                </div>
-
-                                <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
-                                    <div className="d-flex flex-column">
-                                        <label htmlFor="exampleInputEmail1" className="form-label mb-1">Country</label>
-                                        <Space wrap>
-                                            <Select
-                                                value="India"
-                                                style={{
-                                                    width: '100%',
-                                                }}
-                                                disabled
-                                                options={[
-                                                    {
-                                                        value: 'India',
-                                                        label: 'India',
-                                                    },
-                                                ]}
-                                                placeholder="Select Your Country"
-                                            />
-                                        </Space>
-                                    </div>
-                                </div>
-
-
-                                <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
-                                    <div className="mb-3 form-inputs">
-                                        <label htmlFor="exampleInputEmail1" className="form-label mb-1">Pin Code</label>
-                                        <input
-                                            type="text"
-                                            placeholder='Enter Your Pin Code'
-                                            className="form-control"
-                                            id="pinCode"
-                                            value={donorData.body?.donorPin || ''}
-                                            onChange={e =>
-                                                setDonorData({
-                                                    ...donorData,
-                                                    body: {
-                                                        ...donorData.body,
-                                                        donorPin: e.target.value,
-                                                    },
-                                                })
-                                            }
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
-                                    <div className="mb-3 form-inputs">
-                                        <label htmlFor="exampleInputEmail1" className="form-label mb-1">Land Mark</label>
-                                        <input
-                                            type="text"
-                                            placeholder='Enter Your LandMark'
-                                            className="form-control"
-                                            id="landMark"
-                                            value={donorData.body?.landmark || ''}
-                                            onChange={e =>
-                                                setDonorData({
-                                                    ...donorData,
-                                                    body: {
-                                                        ...donorData.body,
-                                                        landmark: e.target.value,
-                                                    },
-                                                })
-                                            }
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                }
-
-                <div className='text-center'>
-                    {currentStep !== 1 && (
-                        <button onClick={handlePreviousStep} className="btn btn-primary-outline me-3" style={{ padding: '7px 136px' }}>
-                            Back
-                        </button>
-                    )}
-                    {currentStep !== 3 && (
-                        <button onClick={handleNextStep} className="btn btn-primary-signIn" style={{ padding: '7px 136px' }}>
-                            Next
-                        </button>
-                    )}
-                    {currentStep === 3 && (
-                        <button onClick={handleSave} className="btn btn-primary-signIn" style={{ padding: '7px 136px' }}>
-                            Save
-                        </button>
-                    )}
-                </div>
+  const getItems = (panelStyle) => [
+    {
+      key: "1",
+      label: "Personal Details",
+      children: (
+        <div className="pt-1 mb-3">
+          <div className="row">
+            <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+              <div className="mb-3 form-inputs">
+                <label htmlFor="exampleInputEmail1" className="form-label mb-1">
+                  First Name<span className="mendate">*</span>
+                </label>
+                <Input
+                  placeholder="Enter your first name"
+                  value={donorData.body?.edonorFName || ""}
+                  onChange={(e) =>
+                    handleInputChange("edonorFName", e.target.value)
+                  }
+                  style={{ borderColor: errors.edonorFName ? "red" : "" }}
+                />
+                {errors.edonorFName && (
+                  <div className="text-danger">{errors.edonorFName}</div>
+                )}
+              </div>
             </div>
-        </>
-    )
+
+            <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+              <div className="mb-3 form-inputs">
+                <label htmlFor="exampleInputEmail1" className="form-label mb-1">
+                  Last Name
+                </label>
+                <Input
+                  placeholder="Enter your last name"
+                  value={donorData.body?.edonorLName || ""}
+                  onChange={(e) =>
+                    handleInputChange("edonorLName", e.target.value)
+                  }
+                />
+              </div>
+            </div>
+
+            <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+              <div className="mb-3 d-flex flex-column">
+                <label htmlFor="exampleInputEmail1" className="form-label mb-1">
+                  Date of Birth<span className="mendate">*</span>
+                </label>
+                <DatePicker
+                  placeholder="Enter Your Date of Birth"
+                  className="custom-date-picker"
+                  value={
+                    donorData.body?.dob
+                      ? dayjs(
+                          convertToISOFormat(donorData.body.dob),
+                          "YYYY-MM-DD"
+                        )
+                      : null
+                  }
+                  onChange={(date, dateString) =>
+                    handleInputChange("dob", convertToDDMMYYYY(dateString))
+                  }
+                  allowClear
+                  style={{ borderColor: errors.dob ? "red" : "" }}
+                />
+                {errors.dob && <div className="text-danger">{errors.dob}</div>}
+              </div>
+            </div>
+
+            <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+              <div className="d-flex flex-column">
+                <div className="d-flex align-items-center">
+                  <label htmlFor="gender" className="form-label mb-1">
+                    Gender<span className="mendate">*</span>
+                  </label>
+                </div>
+                <Select
+                  showSearch
+                  allowClear
+                  style={{
+                    width: "100%",
+                    borderColor: errors.gender ? "red" : "",
+                  }}
+                  value={selectGender}
+                  onChange={(value) => {
+                    setSelectGender(value);
+                    handleInputChange("gender", value);
+                  }}
+                  placeholder="Select Gender"
+                  filterOption={(input, option) =>
+                    (option?.label ?? "")
+                      .toLowerCase()
+                      .includes(input.toLowerCase())
+                  }
+                  options={genders.map((gender) => ({
+                    value: gender.genderCode,
+                    label: gender.genderName,
+                  }))}
+                />
+                {errors.gender && (
+                  <div className="text-danger">{errors.gender}</div>
+                )}
+              </div>
+            </div>
+
+            <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+              <div className="mb-3 form-inputs">
+                <label htmlFor="exampleInputEmail1" className="form-label mb-1">
+                  Email<span className="mendate">*</span>
+                </label>
+                <Input
+                  placeholder="Enter Email Address"
+                  value={donorData.body?.edonorEmail || ""}
+                  onChange={(e) =>
+                    handleInputChange("edonorEmail", e.target.value)
+                  }
+                  style={{ borderColor: errors.edonorEmail ? "red" : "" }}
+                />
+                {errors.edonorEmail && (
+                  <div className="text-danger">{errors.edonorEmail}</div>
+                )}
+              </div>
+            </div>
+
+            <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+              <div className="mb-3 form-inputs">
+                <label htmlFor="exampleInputEmail1" className="form-label mb-1">
+                  Mobile No.<span className="mendate">*</span>
+                </label>
+                <Input
+                  placeholder="Enter Mobile Number"
+                  disabled
+                  value={donorData.body?.mobileno || ""}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      ),
+      style: panelStyle,
+    },
+    {
+      key: "2",
+      label: "Additional Information",
+      children: (
+        <div className="pt-1 mb-3">
+          <div className="row">
+            <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+              <div className="d-flex flex-column">
+                <label htmlFor="exampleInputEmail1" className="form-label mb-1">
+                  Blood Group
+                </label>
+                <Select
+                  showSearch
+                  allowClear
+                  style={{ width: "100%" }}
+                  value={bloodGroup}
+                  onChange={(value) => {
+                    setBloodGroup(value);
+                    handleInputChange("bloodGroup", value);
+                  }}
+                  placeholder="Select Blood group"
+                  options={bloodGroups.map((blood) => ({
+                    value: blood.bloodGroupCode,
+                    label: blood.bloodGroupName,
+                  }))}
+                />
+              </div>
+            </div>
+
+            <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+              <div className="mb-3 form-inputs">
+                <label htmlFor="exampleInputEmail1" className="form-label mb-1">
+                  Father Name
+                </label>
+                <Input
+                  placeholder="Enter Your Father Name"
+                  value={donorData.body?.fatherName || ""}
+                  onChange={(e) =>
+                    handleInputChange("fatherName", e.target.value)
+                  }
+                />
+              </div>
+            </div>
+
+            <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+              <div className="d-flex flex-column">
+                <label htmlFor="exampleInputEmail1" className="form-label mb-1">
+                  Marital Status
+                </label>
+                <Select
+                  showSearch
+                  allowClear
+                  style={{ width: "100%" }}
+                  value={selectMaritalStatus}
+                  onChange={(value) => {
+                    setSelectMaritalStatus(value);
+                    handleInputChange("maritalStatus", value);
+                  }}
+                  placeholder="Select Marriage"
+                  filterOption={(input, option) =>
+                    (option?.label ?? "")
+                      .toLowerCase()
+                      .includes(input.toLowerCase())
+                  }
+                  options={maritalStatus.map((marriage) => ({
+                    value: marriage.maritalStatusCode,
+                    label: marriage.maritalStatusName,
+                  }))}
+                />
+              </div>
+            </div>
+
+            <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+              <div className="mb-3 form-inputs">
+                <label htmlFor="exampleInputEmail1" className="form-label mb-1">
+                  Spouse Name
+                </label>
+                <Input
+                  placeholder="Enter Your Spouse Name"
+                  value={donorData.body?.spouce || ""}
+                  onChange={(e) => handleInputChange("spouce", e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+              <div className="d-flex flex-column">
+                <label htmlFor="exampleInputEmail1" className="form-label mb-1">
+                  Occupation
+                </label>
+                <Select
+                  showSearch
+                  allowClear
+                  style={{ width: "100%" }}
+                  value={selectOccupation}
+                  onChange={(value) => {
+                    setSelectOccupation(value);
+                    handleInputChange("occupation", value);
+                  }}
+                  placeholder="Select occupation"
+                  filterOption={(input, option) =>
+                    (option?.label ?? "")
+                      .toLowerCase()
+                      .includes(input.toLowerCase())
+                  }
+                  options={occupations.map((occupation) => ({
+                    value: occupation.occupationCode,
+                    label: occupation.occupationName,
+                  }))}
+                />
+              </div>
+            </div>
+
+            <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+              <div className="d-flex flex-column">
+                <label htmlFor="exampleInputEmail1" className="form-label mb-1">
+                  Religion
+                </label>
+                <Select
+                  showSearch
+                  allowClear
+                  style={{ width: "100%" }}
+                  value={selectReligion}
+                  onChange={(value) => {
+                    setSelectReligion(value);
+                    handleInputChange("religion", value);
+                  }}
+                  placeholder="Select religion"
+                  filterOption={(input, option) =>
+                    (option?.label ?? "")
+                      .toLowerCase()
+                      .includes(input.toLowerCase())
+                  }
+                  options={religion.map((religion) => ({
+                    value: religion.religionCode,
+                    label: religion.religionName,
+                  }))}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      ),
+      style: panelStyle,
+    },
+    {
+      key: "3",
+      label: "Address Details",
+      children: (
+        <div className="pt-1 mb-3">
+          <div className="row">
+            <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+              <div className="mb-3 form-inputs">
+                <label htmlFor="exampleInputEmail1" className="form-label mb-1">
+                  H. No.
+                </label>
+                <Input
+                  placeholder="Enter Your H. No."
+                  value={donorData.body?.hno || ""}
+                  onChange={(e) => handleInputChange("hno", e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+              <div className="mb-3 form-inputs">
+                <label htmlFor="exampleInputEmail1" className="form-label mb-1">
+                  Street/ Address
+                </label>
+                <Input
+                  placeholder="Enter your Street/ Address"
+                  value={donorData.body?.address || ""}
+                  onChange={(e) => handleInputChange("address", e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+              <div className="mb-3 form-inputs">
+                <label htmlFor="exampleInputEmail1" className="form-label mb-1">
+                  Location
+                </label>
+                <Input
+                  placeholder="Enter Your location"
+                  value={donorData.body?.location || ""}
+                  onChange={(e) =>
+                    handleInputChange("location", e.target.value)
+                  }
+                />
+              </div>
+            </div>
+
+            <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+              <div className="mb-3 form-inputs">
+                <label htmlFor="exampleInputEmail1" className="form-label mb-1">
+                  City/ Village
+                </label>
+                <Input
+                  placeholder="Enter Your location"
+                  value={donorData.body?.donorCity || ""}
+                  onChange={(e) =>
+                    handleInputChange("donorCity", e.target.value)
+                  }
+                />
+              </div>
+            </div>
+
+            <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+              <div className="d-flex flex-column">
+                <label htmlFor="exampleInputEmail1" className="form-label mb-1">
+                  State
+                </label>
+                <Select
+                  showSearch
+                  allowClear
+                  style={{ width: "100%" }}
+                  value={selectedState}
+                  onChange={handleStateChange}
+                  placeholder="Select"
+                  filterOption={(input, option) =>
+                    (option?.label ?? "")
+                      .toLowerCase()
+                      .includes(input.toLowerCase())
+                  }
+                  options={states.map((state) => ({
+                    value: state.stateCode,
+                    label: state.stateName,
+                  }))}
+                />
+              </div>
+            </div>
+
+            <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+              <div className="d-flex flex-column">
+                <label htmlFor="exampleInputEmail1" className="form-label mb-1">
+                  District
+                </label>
+                <Select
+                  showSearch
+                  allowClear
+                  style={{ width: "100%" }}
+                  value={selectedDistrict}
+                  onChange={handleDistrictChange}
+                  placeholder="Select"
+                  filterOption={(input, option) =>
+                    (option?.label ?? "")
+                      .toLowerCase()
+                      .includes(input.toLowerCase())
+                  }
+                  options={districts.map((district) => ({
+                    value: district.districtCode,
+                    label: district.districtName,
+                  }))}
+                />
+              </div>
+            </div>
+
+            <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+              <div className="d-flex flex-column">
+                <label htmlFor="exampleInputEmail1" className="form-label mb-1">
+                  Country
+                </label>
+                <Space wrap>
+                  <Select
+                    value="India"
+                    style={{
+                      width: "100%",
+                    }}
+                    disabled
+                  />
+                </Space>
+              </div>
+            </div>
+
+            <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+              <div className="mb-3 form-inputs">
+                <label htmlFor="exampleInputEmail1" className="form-label mb-1">
+                  Pin Code
+                </label>
+                <Input
+                  placeholder="Enter Your pin code"
+                  value={donorData.body?.donorPin || ""}
+                  onChange={(e) =>
+                    handleInputChange("donorPin", e.target.value)
+                  }
+                />
+              </div>
+            </div>
+
+            <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+              <div className="mb-3 form-inputs">
+                <label htmlFor="exampleInputEmail1" className="form-label mb-1">
+                  Land Mark
+                </label>
+                <Input
+                  placeholder="Enter Your landmark"
+                  value={donorData.body?.landmark || ""}
+                  onChange={(e) =>
+                    handleInputChange("landmark", e.target.value)
+                  }
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      ),
+      style: panelStyle,
+    },
+  ];
+
+  return (
+    <>
+      <div className="tabContent mb-3">
+        <Collapse
+          bordered={false}
+          activeKey={activePanels}
+          onChange={(keys) => setActivePanels(keys)}
+          expandIcon={({ isActive }) => (
+            <CaretRightOutlined rotate={isActive ? 90 : 0} />
+          )}
+          style={{ background: token.colorBgContainer }}
+          items={getItems(panelStyle)}
+        />
+
+        <div className="mt-4">
+          <Button onClick={handleSave} type="primary">
+            Save Changes
+          </Button>
+        </div>
+      </div>
+    </>
+  );
 }

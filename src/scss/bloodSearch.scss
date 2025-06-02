@@ -300,6 +300,9 @@
       font-size: 14px;
       font-weight: 500;
       color: #c61c29;
+      border: none;
+      background: transparent;
+      text-decoration: underline;
     }
   }
 
@@ -526,16 +529,16 @@
   }
 }
 
-.notify_modal{
+.notify_modal {
   .ant-btn {
     color: #fff;
-    background-color: #7F0210;
+    background-color: #7f0210;
     border: none;
     border-radius: 5px;
     font-size: 13px;
   }
-  .ant-btn:hover{
-    background: #7F0210 !important;
+  .ant-btn:hover {
+    background: #7f0210 !important;
   }
 }
 

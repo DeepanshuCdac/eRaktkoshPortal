@@ -1,0 +1,98 @@
+.page_wrapper {
+  .ant-btn-primary {
+    font-size: 14px;
+    font-weight: 500;
+    background: #7f0210;
+    border-radius: 5px;
+    &:hover {
+      background: #7f0210 !important;
+    }
+  }
+  .camp_header {
+    font-size: 15px;
+    font-weight: 500;
+    color: #000;
+  }
+  .widget {
+    background-color: #fff;
+    border-radius: 5px;
+
+    .mendate {
+      color: #7f0210;
+    }
+
+    .ant-btn-default {
+      border-radius: 5px;
+      border: 1px solid #7f0210;
+      color: #7f0210;
+      font-weight: 500;
+      &:hover {
+        border: 1px solid #7f0210;
+        color: #7f0210;
+      }
+    }
+
+    .small_btn {
+      border: 1px solid #7f0210;
+      color: #7f0210;
+      font-size: 12px;
+    }
+
+    .otpExpire {
+      font-size: 14px;
+      color: #484848;
+
+      .timer {
+        font-size: 14px;
+        font-weight: 500;
+        color: #7f0210;
+      }
+    }
+  }
+  .container-style {
+    .key {
+      font-size: 13px;
+      color: #707070;
+    }
+
+    .value {
+      font-size: 15px;
+      color: #000;
+      font-weight: 500;
+    }
+
+    .header_bg {
+      background-image: url("../../public/assets/images/campHeader.svg");
+      height: 90px;
+      display: flex;
+      align-items: center;
+      width: 247px;
+
+      p {
+        font-size: 14px;
+        line-height: 15px;
+        font-weight: 500;
+        color: #000;
+      }
+
+      a {
+        color: #7f0210;
+        font-size: 13px;
+        font-weight: 500;
+      }
+    }
+  }
+
+  .ant-radio-wrapper {
+    border: 1px solid #000;
+    border-radius: 5px;
+    padding: 5px;
+    background: #fff;
+    font-weight: 500;
+  }
+
+  .otp_generated {
+    font-size: 14px;
+    color: #2ca308;
+  }
+}

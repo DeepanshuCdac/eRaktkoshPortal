@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../scss/bloodSearch.scss";
+import { Link } from "react-router-dom";
 import { Input, DatePicker, Select, Table, message, Tooltip } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { getApiData } from "../redux/slices/dataSlice";
@@ -9,6 +10,8 @@ import { BaseUrl } from "../utils/url";
 import { useLocation } from "react-router-dom";
 import { SearchOutlined } from "@ant-design/icons";
 import { logSearch } from "../components/logService";
+import { useCampContext } from "../context/CampContext";
+import { useHistory } from "react-router-dom";
 
 const { Option } = Select;
 
@@ -18,6 +21,8 @@ const CampSchedule = () => {
   }, []);
 
   const dispatch = useDispatch();
+  const { updateSelectedCamp } = useCampContext();
+  const history = useHistory();
   const { statesWithDistricts } = useSelector((state) => state.data);
   const [selectedState, setSelectedState] = useState(null);
   const [selectedDistrict, setSelectedDistrict] = useState(null);
@@ -41,6 +46,7 @@ const CampSchedule = () => {
     current: 1,
     pageSize: 5,
   });
+  const [userDropdownsModified, setUserDropdownsModified] = useState(false);
 
   useEffect(() => {
     dispatch(getApiData());
@@ -78,7 +84,8 @@ const CampSchedule = () => {
     setSelectedState(value);
     setSelectedDistrict(null);
 
-    if (!selectedStateforUser) {
+    // Only auto-populate user dropdowns if they haven't been manually modified
+    if (!userDropdownsModified) {
       setSelectedStateforUser(value);
       setSelectedDistrictforUser(null);
     }
@@ -87,7 +94,7 @@ const CampSchedule = () => {
   const handleDistrictChange = (value) => {
     setSelectedDistrict(value);
 
-    if (!selectedDistrictforUser) {
+    if (!userDropdownsModified && selectedStateforUser === selectedState) {
       setSelectedDistrictforUser(value);
     }
   };
@@ -95,10 +102,12 @@ const CampSchedule = () => {
   const handleStateChangeforUser = (value) => {
     setSelectedStateforUser(value);
     setSelectedDistrictforUser(null);
+    setUserDropdownsModified(true);
   };
 
   const handleDistrictChangeforUser = (value) => {
     setSelectedDistrictforUser(value);
+    setUserDropdownsModified(true);
   };
 
   const disabledStartDate = (current) => {
@@ -291,9 +300,15 @@ const CampSchedule = () => {
       key: "register",
       render: (text, record) => (
         <div className="d-flex flex-column">
-          <a href="/beta#/pages/portaldonorRegister" className="action">
+          <button
+            className="action"
+            onClick={() => {
+              updateSelectedCamp(record); // Save camp data to context
+              history.push("/publicPages/donorCampRegister"); // Changed from navigate
+            }}
+          >
             Register as Voluntary Donor
-          </a>
+          </button>
         </div>
       ),
     },

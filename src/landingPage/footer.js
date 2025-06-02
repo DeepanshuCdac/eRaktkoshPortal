@@ -91,11 +91,12 @@ export default function Footer() {
             <div className="col-12 col-md-6 col-xl-2 mb-3">
               <h5 className="heading">About Us</h5>
               <div className="d-flex flex-column">
-                <a
+                {/* <a
                   href="/BLDAHIMS/bloodbank/about.cnt"
                   className="footer-details mb-2">
                   About e-Raktkosh
-                </a>
+                </a> */}
+                <Link className="footer-details mb-2" to="/publicPages/AboutEraktkosh"> About e-Raktkosh</Link>
                 {/* <a
                   href="/BLDAHIMS/bloodbank/notification.cnt"
                   className="footer-details mb-2">

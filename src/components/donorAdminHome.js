@@ -1,113 +1,178 @@
-import React, { useState } from 'react';
-import { useCertificate } from '../context/CertificateContext';
-import { generateCertificate } from '../utils/generateCertificate';
-import ABHA from './ABHA';
+import React from "react";
+import { useCertificate } from "../context/CertificateContext";
+import { generateCertificate } from "../utils/generateCertificate";
+import { Button, Table, Tag } from "antd";
 
 export default function DonorAdminHome({ onViewAllClick }) {
   const { certificateData, loading, error } = useCertificate();
 
-  const isDataValid = Array.isArray(certificateData) && certificateData.length > 0;
+  const isDataValid =
+    Array.isArray(certificateData) && certificateData.length > 0;
+
+  const onChange = (pagination, filters, sorter, extra) => {
+    console.log("params", pagination, filters, sorter, extra);
+  };
 
   function abbreviateText(text) {
     const maxLength = 24;
-
     if (text.length <= maxLength) {
       return text;
     }
     return `${text.slice(0, maxLength - 3)}...`;
   }
 
+  const recentCertificates = isDataValid
+    ? [...certificateData]
+        .sort((a, b) => new Date(b.date) - new Date(a.date))
+        .slice(0, 4)
+        .map((item, index) => ({
+          key: index + 1,
+          serialNumber: index + 1,
+          donationDate: item.date || "-",
+          bloodBankName: item.bloodbank || "-",
+          location: item.districtName || "-",
+          status: "Completed",
+          action: item,
+        }))
+    : [];
+
+  const columns = [
+    {
+      title: "S.No.",
+      dataIndex: "serialNumber",
+      key: "serialNumber",
+    },
+    {
+      title: "Donation Date",
+      dataIndex: "donationDate",
+      sorter: (a, b) => new Date(a.donationDate) - new Date(b.donationDate),
+      key: "donationDate",
+    },
+    {
+      title: "Blood Bank Name",
+      dataIndex: "bloodBankName",
+      key: "bloodBankName",
+      render: (text) => abbreviateText(text),
+    },
+    {
+      title: "Location",
+      dataIndex: "location",
+      key: "location",
+    },
+    {
+      title: "Donation Status",
+      dataIndex: "status",
+      key: "status",
+      render: (status) => <Tag>{status}</Tag>,
+    },
+    {
+      title: "Action",
+      key: "action",
+      render: (_, record) => (
+        <>
+          <div className="downlaod_box">
+            <img src="assets/images/download.svg" alt="" />
+            <Button
+              type="link"
+              className="ms-1"
+              onClick={() => generateCertificate(record.action)}
+            >
+              Download
+            </Button>
+          </div>
+        </>
+      ),
+    },
+  ];
+
   return (
     <>
-      <div className="row">
-        {/* ABHA Section */}
-        <div className="col-xl-12">
-          <div className="tabContent mb-3">
-            <div className="tabContainer">
-              <ABHA/>
-
-              {/* Donor Certificate Section */}
-              <div className='d-flex mb-0 w-100'>
-                <h4 className="widgeHeader mb-0 me-auto">Donor Certificate</h4>
-                <button onClick={onViewAllClick} className="btn btn-link px-0 py-1">
-                  View All
-                </button>
-              </div>
-              <div className="widget p-4">
-                {loading && <div>Loading certificate data...</div>}
-                {error && <div className="text-danger">Error loading certificate data: {error}</div>}
-                {!loading && !error && isDataValid ? (
-                  <div className="row">
-                    {/* Loop through certificateData array */}
-                    {certificateData.slice(0, 3).map((item, index) => (
-                      <div key={index} className="col-xl-4">
-                        <div className='d-flex align-items-start'>
-                          <img style={{ height: '30px' }} src="assets/images/pdf.png" alt="Pdf" />
-                          <div style={{ marginLeft: '12px' }}>
-                            <p className="mb-0 widgeText">{abbreviateText(item.bloodbank || 'Unknown Hospital')}</p>
-                            <p className="mb-0 donationTxt">
-                              Donation Date: <span className='mb-0 donation-date'>{item.date || 'N/A'}</span>
-                            </p>
-                            <button
-                              className="btn btn-link p-0"
-                              onClick={() => generateCertificate(item)}
-                            >
-                              Download
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  !loading && !error && <div>No donation records found.</div>
-                )}
-              </div>
-
-              {/* Previous Donations Section */}
-              <h4 className="widgeHeader mb-2">Previous Donations</h4>
-              <div className="widget p-4">
-                {loading && <div>Loading previous donation data...</div>}
-                {error && <div className="text-danger">Error loading previous donations: {error}</div>}
-                {!loading && !error && isDataValid ? (
-                  <div className="row">
-                    {/* show only last three donation records.. */}
-                    {certificateData.slice(0, 3).map((item, index) => (
-                      <div key={index} className='col-xl-4'>
-                        <div className='d-flex align-items-start'>
-                          <img className='img-fluid' style={{ height: '27px' }} src="assets/images/hospital.png" alt="Hospital" />
-                          <div style={{ marginLeft: '12px' }}>
-                            <p className='mb-0 widgeText'>{abbreviateText(item.bloodbank || 'Unknown Hospital')}</p>
-                            <p className='mb-0 donationTxt'>
-                              Donation Date: <span className='mb-0 donation-date'>{item.date || 'N/A'}</span>
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  !loading && !error && <div>No previous donations found.</div>
-                )}
-              </div>
-
-              {/* In News Section */}
-              <h4 className="widgeHeader mb-2">In News</h4>
-              <div className="row">
-                {["View", "Download PDF", "View"].map((action, index) => (
-                  <div key={index} className="col-xl-4">
-                    <div className="widget p-4">
-                      <div>
-                        <p className='mb-1 widgeText'>Grant of Special Casual Leave for the purpose of blood donation</p>
-                        <p className='mb-1 newsTxt'>
-                          It has now been decided that Special Casual leave may be granted for blood donation or for apheresis (blood components such as red cells, plasma, platelets etc.) donation at licensed blood banks on a working day (for that day only) up to a maximum of four times in a year on submission of valid proof of donation.
-                        </p>
-                        <a href="javascript:void(0)">{action}</a>
-                      </div>
+      <div className="tabContent mb-3">
+        <div className="tabContainer">
+          <div className="row">
+            <div className="col-6">
+              <div className="abha_widget p-3">
+                <div className="d-flex align-items-center">
+                  <img src="assets/images/abha.svg" alt="" />
+                  <div className="d-flex align-items-center justify-content-between w-100">
+                    <div className="ms-3">
+                      <p className=" mb-0 abha_text">Generate/Verify ABHA</p>
+                      <p className="mb-0 abha_subtext">
+                        Create Your Digital Health ID & Access Seamless <br />{" "}
+                        Healthcare Services.
+                      </p>
                     </div>
+                    <Button type="primary">Download & Verify ABHA</Button>
                   </div>
-                ))}
+                </div>
               </div>
+            </div>
+            <div className="col-6">
+              <div className="donor_widget p-3 h-100 d-flex align-items-center">
+                <div>
+                  <p className="mb-0 donor_text">
+                    You recently donated blood on
+                  </p>
+                  <p className="mb-0 donor_date">
+                    {recentCertificates.length > 0
+                      ? recentCertificates[0].donationDate
+                      : "N/A"}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="d-flex mb-0 w-100 mt-4">
+            <h4 className="table_header mb-1 me-auto">
+              Recent Donations & Certificates
+            </h4>
+            <a href="javascript:void(0)" onClick={onViewAllClick}>
+              View All
+            </a>
+          </div>
+
+          {loading && <div>Loading certificate data...</div>}
+          {error && (
+            <div className="text-danger">
+              Error loading certificate data: {error}
+            </div>
+          )}
+
+          <Table
+            dataSource={recentCertificates}
+            columns={columns}
+            onChange={onChange}
+            loading={loading}
+            pagination={false}
+            locale={{
+              emptyText: "No donation records found",
+            }}
+          />
+
+          <div className="d-flex mb-0 w-100 mt-4">
+            <h4 className="table_header mb-1 me-auto">
+              Inspiring quotes fom Real Heroes
+            </h4>
+          </div>
+          <div>
+            <div className="bg_inspire align-items-center justify-content-around">
+              <div style={{ position: "relative" }}>
+                <span class="carousel-quote quote-top-left">“</span>
+                <span class="carousel-quote quote-bottom-right">”</span>
+                <p className="inspire_text mb-0 text-center">
+                  Donating blood isn't just saving lives, it's <br /> giving
+                  someone a chance to huf their family <br /> again.
+                </p>
+              </div>
+              <div className="d-flex align-items-center">
+                <img src="assets/images/male.png" alt="" />
+                <div className="ms-2">
+                  <p className="mb-0 name">CDAC</p>
+                  <p className="mb-0 designation">Noida</p>
+                </div>
+              </div>
+              <img src="assets/images/doc.svg" alt="" />
             </div>
           </div>
         </div>

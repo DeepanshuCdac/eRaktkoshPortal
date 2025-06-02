@@ -525,7 +525,6 @@ const BloodAvailabiltySearch = () => {
     setNotifyMobile("");
   };
 
-  // Set initial values when modal opens
   const handleNotifyModalOpen = () => {
     setSelectedNotifyState(selectedState || null);
     setSelectedNotifyDistrict(selectedDistrict || null);
@@ -538,7 +537,6 @@ const BloodAvailabiltySearch = () => {
       setSelectedNotifyHospitals([]);
     }
 
-    // Fetch districts and blood banks if state is already selected
     if (selectedState) {
       const selectedStateData = states.find(
         (state) => state.stateCode === selectedState
@@ -764,17 +762,63 @@ const BloodAvailabiltySearch = () => {
               className="mb-1 hospAdd pb-2"
               style={{ borderBottom: "2px solid #E6E6E6" }}
             >
-              {selectedRecord.hospitalcontact.split(",").map((item, index) => {
-                const [label, value] = item
-                  .split(":")
-                  .map((part) => part.trim());
+              {(() => {
+                const contactInfo = {
+                  Phone: "",
+                  Fax: "",
+                  Email: "",
+                };
+
+                // Parse the contact string
+                selectedRecord.hospitalcontact.split(",").forEach((item) => {
+                  const [label, value] = item
+                    .split(":")
+                    .map((part) => part.trim());
+                  if (label === "Phone") {
+                    // Take only the first phone number if multiple exist
+                    const firstPhone = value.split(",")[0].trim();
+                    contactInfo.Phone = firstPhone;
+                  } else if (label in contactInfo) {
+                    contactInfo[label] = value;
+                  }
+                });
+
                 return (
-                  <span key={index} className="me-3">
-                    <span className="labelStyle">{label}:</span>{" "}
-                    <span className="hospAdd">{value}</span>
-                  </span>
+                  <div className="hospital-contact">
+                    <div className="contact-line">
+                      {contactInfo.Phone && (
+                        <span className="me-3">
+                          <span className="labelStyle">Phone:</span>{" "}
+                          <span className="hospAdd">{contactInfo.Phone}</span>
+                        </span>
+                      )}
+                      {contactInfo.Fax && contactInfo.Fax !== "-" && (
+                        <span className="me-3">
+                          <span className="labelStyle">Fax:</span>{" "}
+                          <span className="hospAdd">{contactInfo.Fax}</span>
+                        </span>
+                      )}
+                      {(!contactInfo.Fax || contactInfo.Fax === "-") &&
+                        contactInfo.Email && (
+                          <span className="me-3">
+                            <span className="labelStyle">Email:</span>{" "}
+                            <span className="hospAdd">{contactInfo.Email}</span>
+                          </span>
+                        )}
+                    </div>
+                    {contactInfo.Fax &&
+                      contactInfo.Fax !== "-" &&
+                      contactInfo.Email && (
+                        <div className="contact-line">
+                          <span className="me-3">
+                            <span className="labelStyle">Email:</span>{" "}
+                            <span className="hospAdd">{contactInfo.Email}</span>
+                          </span>
+                        </div>
+                      )}
+                  </div>
                 );
-              })}
+              })()}
             </p>
             <p
               className="mb-1 mt-2"

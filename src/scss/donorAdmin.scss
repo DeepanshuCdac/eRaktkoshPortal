@@ -1,0 +1,305 @@
+.donorAdmin {
+  .navbar {
+    .header-section {
+      .greet {
+        color: #7f0210;
+        font-size: 18px;
+      }
+
+      .greetName {
+        color: #7f0210;
+        font-size: 22px;
+        font-weight: 700;
+      }
+
+      .key {
+        color: #000;
+        font-size: 13px;
+      }
+    }
+
+    .navbar-nav {
+      gap: 40px;
+
+      .nav-item {
+        .nav-link {
+          color: #000;
+          font-size: 14px;
+          font-weight: 500;
+        }
+
+        .nav-link.custom-active {
+          font-weight: 700;
+          font-size: 15px;
+          color: #7f0210 !important;
+          border-bottom: 3px solid #7f0210;
+        }
+      }
+    }
+  }
+
+  .widget {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 5px;
+    background-color: #fbf7f7;
+
+    .number {
+      font-size: 24px;
+      font-weight: 700;
+      color: #7f0210;
+    }
+
+    .text {
+      font-size: 15px;
+      color: #413e3e;
+    }
+  }
+
+  .tabContent {
+    .abha_widget {
+      background-color: #dfe4f1;
+      border-radius: 5px;
+
+      .abha_text {
+        color: #000;
+        font-size: 15px;
+        font-weight: 600;
+      }
+      .abha_subtext {
+        color: #000;
+        font-size: 14px;
+        font-weight: 400;
+      }
+
+      .ant-btn {
+        background-color: transparent;
+        border-radius: 5px;
+        border: 1px solid #183576;
+        color: #183576;
+        font-size: 14px;
+        font-weight: 500;
+        &:hover{
+          background-color: transparent;
+        }
+      }
+    }
+
+    .donor_widget {
+      background-color: #f7eff0;
+      border-radius: 5px;
+
+      .donor_text {
+        color: #000;
+        font-size: 15px;
+        font-weight: 500;
+      }
+
+      .donor_date {
+        color: #7f0210;
+        font-size: 18px;
+        font-weight: 600;
+      }
+    }
+
+    .table_header {
+      color: #000;
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .ant-table-thead {
+      .ant-table-cell {
+        background-color: #ede4e5;
+        font-size: 14px;
+        color: #000;
+        padding: 8px 12px;
+        border-bottom: 8px solid #fff;
+        white-space: nowrap;
+        font-weight: 600;
+      }
+    }
+
+    .ant-table-tbody {
+      .ant-table-cell {
+        background-color: #f7f7f7;
+        font-weight: 500;
+        font-size: 14px;
+        color: #000;
+        border-bottom: 8px solid #fff;
+        padding: 6px 12px;
+
+        .ant-btn {
+          padding: 0px;
+          font-weight: 500;
+          color: #e07911;
+          background-color: transparent;
+          font-size: 12px;
+        }
+
+        .downlaod_box {
+          border: 1px solid #e07911;
+          border-radius: 16px;
+          width: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .ant-tag {
+          color: #359811;
+          border: none;
+          font-size: 14px;
+        }
+      }
+    }
+
+    .mendate {
+      color: #7f0210;
+    }
+
+    .ant-input {
+      font-weight: 500;
+      border-radius: 5px;
+      border: 1px solid #e8e5e5;
+      padding: 6px 12px;
+    }
+
+    .ant-picker {
+      font-weight: 500;
+      border-radius: 5px;
+      border: 1px solid #e8e5e5;
+      padding: 6px 12px;
+
+      input {
+        font-weight: 500;
+      }
+    }
+
+    .ant-select-selector {
+      font-weight: 500;
+      border-radius: 5px;
+      border: 1px solid #e8e5e5;
+      padding: 6px 12px;
+
+      .ant-select-selection-item {
+        font-weight: 500;
+      }
+    }
+
+    .ant-collapse {
+      .ant-collapse-header {
+        background-color: #fbf7f7;
+        border-radius: 5px;
+
+        .ant-collapse-header-text {
+          font-size: 14px;
+          font-weight: 500;
+          color: #7f0210;
+        }
+      }
+
+      .ant-collapse-content {
+        background-color: #fff;
+
+        .ant-collapse-content-box {
+          padding-left: 0;
+        }
+      }
+    }
+
+    .ant-btn {
+      padding: 22px;
+      font-size: 15px;
+      font-weight: 500;
+      background: #7f0210;
+      &:hover{
+        background: #7f0210;
+      }
+    }
+  }
+
+  .certificate-functions {
+    .table_header {
+      color: #000;
+      font-size: 15px;
+      font-weight: 500;
+    }
+  }
+
+  .bg_inspire {
+    background-image: url("../../public/assets/images/Background.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    border-radius: 5px;
+
+    .quote-bottom-right {
+      bottom: -53px;
+      right: -30px;
+    }
+
+    .carousel-quote {
+      font-size: 4rem;
+      font-family: serif;
+      color: #7f0210;
+      position: absolute;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    .quote-top-left {
+      top: -26px;
+      left: -40px;
+      transform: rotate(360deg);
+    }
+
+    .carousel-quote {
+      font-size: 4rem;
+      font-family: serif;
+      color: #7f0210;
+      position: absolute;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    .inspire_text {
+      font-family: PlayFair;
+      font-weight: 500;
+      color: #7f0210;
+      font-size: 15px;
+    }
+
+    .name {
+      color: #000;
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    .designation {
+      color: #3e3b3b;
+      font-weight: 500;
+      font-size: 12px;
+    }
+  }
+}
+
+.logout {
+  color: #fff;
+  font-size: 15px;
+  line-height: 20px;
+  letter-spacing: 0.15px;
+  text-decoration-line: underline;
+}
+
+.donorAdmin .tabContainer a {
+  color: #c0222b;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  text-decoration-line: underline;
+}

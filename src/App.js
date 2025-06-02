@@ -1,6 +1,11 @@
 import "./App.css";
 import React from "react";
-import { HashRouter as Router, Switch, Route, useLocation } from 'react-router-dom';
+import {
+  HashRouter as Router,
+  Switch,
+  Route,
+  useLocation,
+} from "react-router-dom";
 import Navbar from "../src/landingPage/navbar.js";
 import Service from "../src/landingPage/service.js";
 import Aboutpage from "../src/landingPage/aboutPage.js";
@@ -26,6 +31,8 @@ import Notification from "./publicPages/Notification.js";
 import AboutEraktkosh from "./publicPages/AboutEraktkosh.js";
 // import Gallery from "./publicPages/gallery.js";
 import GalleryCarousel from "./publicPages/GalleryCarousol.jsx";
+import DonorCampRegister from "./publicPages/donorCampRegister.js";
+import { CampProvider } from "./context/CampContext.js";
 
 function App() {
   return (
@@ -33,7 +40,9 @@ function App() {
       <Router basename="/">
         <DonorProvider>
           <CertificateProvider>
-            <AppContent />
+            <CampProvider>
+              <AppContent />
+            </CampProvider>
           </CertificateProvider>
         </DonorProvider>
       </Router>
@@ -44,8 +53,11 @@ function App() {
 function AppContent() {
   const location = useLocation();
 
-  const hideNavbarPaths = ['/pages/portaldonorAdmin'];
-  const hideFooterPaths = ['/pages/portalDonorLogin', '/pages/portaldonorAdmin'];
+  const hideNavbarPaths = ["/pages/portaldonorAdmin"];
+  const hideFooterPaths = [
+    "/pages/portalDonorLogin",
+    "/pages/portaldonorAdmin",
+  ];
 
   return (
     <>
@@ -67,7 +79,7 @@ function AppContent() {
         </Route>
 
         <Route path="/publicPages/gallery">
-          <GalleryCarousel/>
+          <GalleryCarousel />
         </Route>
 
         <Route path="/publicPages/bloodAvailabilitySearch">
@@ -79,7 +91,11 @@ function AppContent() {
         </Route>
 
         <Route path="/publicPages/campSchedule">
-          <CampSchedule useContainer={true} />
+          <CampSchedule />
+        </Route>
+
+        <Route path="/publicPages/donorCampRegister">
+          <DonorCampRegister />
         </Route>
 
         <Route path="/publicPages/campRegistration">

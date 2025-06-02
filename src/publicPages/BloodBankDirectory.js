@@ -50,7 +50,6 @@ const BloodBankDirectory = () => {
   const [bloodBanks, setBloodBanks] = useState([]);
   const [loading, setLoading] = useState(false);
   const [filteredBloodBanks, setFilteredBloodBanks] = useState([]);
-  // const [filteredData, setFilteredData] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [userLocation, setUserLocation] = useState({ lat: null, lon: null });
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -58,10 +57,8 @@ const BloodBankDirectory = () => {
   const [modalLoading, setModalLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
-  // Add these state variables
   const [isStockModalOpen, setIsStockModalOpen] = useState(false);
   const [selectedBloodBank, setSelectedBloodBank] = useState(null);
-  // const [stockModalLoading, setStockModalLoading] = useState(false);
 
   useEffect(() => {
     dispatch(getApiData());
@@ -112,7 +109,7 @@ const BloodBankDirectory = () => {
     const nameMap = {
       bloodAvailabilitySearch: "Blood Stock Availability",
       campSchedule: "Camp Schedule",
-      bloodBankDirectory: "Blood Bank Directory", 
+      bloodBankDirectory: "Blood Bank Directory",
     };
     return nameMap[hashPath] || "Select a service";
   };
