@@ -1,4 +1,11 @@
 .donorlogin {
+  .ant-btn-primary {
+        width: 100%;
+        padding: 22px;
+        font-size: 15px;
+        font-weight: 500;
+        background: #7f0210;
+      }
   .carousel-indicators {
     margin-bottom: 2rem;
     button {
@@ -263,12 +270,4 @@
           box-shadow: 0 0 0 2px rgba(166, 86, 246, 0.3);
           outline: none;
         }
-      }
-
-      .ant-btn-primary {
-        width: 100%;
-        padding: 22px;
-        font-size: 15px;
-        font-weight: 500;
-        background: #7f0210;
       }

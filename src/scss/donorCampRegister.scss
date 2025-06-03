@@ -95,4 +95,48 @@
     font-size: 14px;
     color: #2ca308;
   }
+
+  .abha-header{
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  .checkbox_modal {
+    .ant-checkbox-wrapper {
+      font-size: 15px;
+      font-weight: 500;
+    }
+    .ant-btn-link {
+      font-weight: 500;
+      font-size: 15px;
+      color: #7f0210;
+      text-decoration: underline;
+
+      &:hover {
+        color: #7f0210;
+      }
+    }
+  }
+
+  .widget_ABHA {
+    overflow-y: auto;
+    max-height: 250px;
+    background-color: #fff;
+    border-radius: 5px;
+  }
+
+  .abha_txt{
+    white-space: nowrap;
+    font-size: 15px;
+    font-weight: 500;
+  }
+
+  .abha_btn{
+    background-color: #3479b5;
+    
+    &:hover{
+      background-color: #3479b5 !important;
+
+    }
+  }
 }
