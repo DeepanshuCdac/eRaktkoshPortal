@@ -48,7 +48,7 @@ export default function HeroComponent() {
               </div>
               <div className="carousel-caption d-md-block"  style={{ left: '8%', bottom: '0' }}>
                 <h5 className="img-text">Donate Blood Save Lives</h5>
-                <p className="img-content">Be a lifesaver today. Donate blood at the Blood Bank,</p>
+                <p className="img-content">Be a lifesaver today. Donate blood at the Blood Center,</p>
                 <p className="img-content mb-3">where every donation is a lifeline.</p>
                 <button className="btn imgBtn d-none d-lg-block d-xl-block" onClick={handleClick}>BECOME A DONOR</button>
               </div>

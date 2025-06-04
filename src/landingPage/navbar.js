@@ -103,10 +103,10 @@ export default function Navbar() {
                       </a> */}
                     </li>
                     <li>
-                      <Link className="links" to="/publicPages/bloodBankDirectory">Blood Bank Directory</Link>
+                      <Link className="links" to="/publicPages/bloodBankDirectory">Blood Center Directory</Link>
 
                       {/* <a href="/BLDAHIMS/bloodbank/nearbyBBRed.cnt">
-                        Blood Bank Directory
+                        Blood Center Directory
                       </a> */}
                     </li>
                     <li>
@@ -154,7 +154,7 @@ export default function Navbar() {
                 </li>
                 <li>
                   <a href="javascript:void(0)">
-                    BLOOD BANK LOGIN
+                    BLOOD Center LOGIN
                     <img
                       className="ms-2 dropdown-icon"
                       src="assets/images/drop-down.png"
@@ -170,7 +170,7 @@ export default function Navbar() {
                     </li>
                     <li>
                       <a className="links" href="/BLDAHIMS/bloodbank/bbOnboard.cnt?hmode=GETONBOARDFORMESSENTIAL">
-                        Add Your Blood Bank
+                        Add Your Blood Center
                       </a>
                     </li>
                   </ul>

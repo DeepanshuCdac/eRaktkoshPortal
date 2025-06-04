@@ -30,7 +30,7 @@ const AboutEraktkosh = () => {
           <div className="row">
             <div className="col-12 col-xl-8 col-lg-8 col-md-8 col-sm-8 mb-3">
               <h4 className="header-page mb-1">
-                e-Raktkosh: A Centralized Blood Bank Management System
+                e-Raktkosh: A Centralized Blood Center Management System
               </h4>
               <p className="text_section mb-0">
                 eRaktkosh was Inaugurated on 7th April 2016 by Hon'ble Minister
@@ -141,7 +141,7 @@ const AboutEraktkosh = () => {
                         className="img-fluid"
                       />
                       <p className="mb-0 text_section">
-                        Networking of Blood Banks
+                        Networking of Blood Centers
                       </p>
                     </div>
                   </div>
@@ -258,7 +258,7 @@ const AboutEraktkosh = () => {
                   </li>
                   <li className="text_section mb-2">
                     A Centralized Blood inventory Management System for keeping
-                    track of the blood stock across numerous blood banks.
+                    track of the blood stock across numerous blood centers.
                   </li>
                   <li className="text_section mb-2">
                     Bio-Medical Waste Management System for disposal of

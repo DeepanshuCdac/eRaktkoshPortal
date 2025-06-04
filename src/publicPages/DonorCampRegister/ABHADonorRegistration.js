@@ -22,6 +22,11 @@ const ABHADonorRegistration = ({ selectedCamp }) => {
   const [otpSent, setOtpSent] = useState(false);
   const [otpVerified, setOtpVerified] = useState(false);
   const [abhaData, setAbhaData] = useState(null);
+  const [flowType, setFlowType] = useState(null);
+  const [selectedAbhaRecord, setSelectedAbhaRecord] = useState(null);
+  const [searchViaMobTaxId, setsearchViaMobTaxId] = useState("");
+  const [usingExistingAbha, setUsingExistingAbha] = useState(false);
+  const [abhaNumber, setAbhaNumber] = useState("");
   const [formData, setFormData] = useState({
     firstName: "",
     age: "",
@@ -178,6 +183,8 @@ const ABHADonorRegistration = ({ selectedCamp }) => {
       return;
     }
 
+    setFlowType("new");
+
     if (verificationMethod !== "mobile") {
       message.error("Please select mobile verification method");
       return;
@@ -245,40 +252,45 @@ const ABHADonorRegistration = ({ selectedCamp }) => {
   };
 
   const handleVerifyOtp = async () => {
-    if (!otp || otp.length !== 6) {
-      message.error("Please enter a valid 6-digit OTP");
-      return;
-    }
-
-    if (!txnId) {
-      message.error("Transaction ID not found. Please request OTP again.");
-      return;
-    }
-
-    setLoading(true);
-    try {
-      const response = await axios.post(
-        `${BaseUrl}/eraktkosh/abha/commonABHACall`,
-        {
-          APIKey: "CreationMobileVerifyOtp",
-          otp: otp,
-          txnId: txnId,
-          HospitalCode: `campid${selectedCamp?.campReqNo}`,
-        }
-      );
-
-      if (response.data?.message === "OTP Verified Successfully") {
-        message.success("OTP verified successfully");
-        setOtpVerified(true);
-        setToken(response.data?.tokens?.token || "");
-      } else {
-        throw new Error(response.data?.message || "OTP verification failed");
+    if (flowType === "existing") {
+      await handleVerifyExistingAbhaOtp();
+    } else {
+      // Original OTP verification logic for new ABHA creation
+      if (!otp || otp.length !== 6) {
+        message.error("Please enter a valid 6-digit OTP");
+        return;
       }
-    } catch (error) {
-      console.error("Error verifying OTP:", error);
-      message.error(error.message || "OTP verification failed");
-    } finally {
-      setLoading(false);
+
+      if (!txnId) {
+        message.error("Transaction ID not found. Please request OTP again.");
+        return;
+      }
+
+      setLoading(true);
+      try {
+        const response = await axios.post(
+          `${BaseUrl}/eraktkosh/abha/commonABHACall`,
+          {
+            APIKey: "CreationMobileVerifyOtp",
+            otp: otp,
+            txnId: txnId,
+            HospitalCode: `campid${selectedCamp?.campReqNo}`,
+          }
+        );
+
+        if (response.data?.message === "OTP Verified Successfully") {
+          message.success("OTP verified successfully");
+          setOtpVerified(true);
+          setToken(response.data?.tokens?.token || "");
+        } else {
+          throw new Error(response.data?.error || "OTP verification failed");
+        }
+      } catch (error) {
+        console.error("Error verifying OTP:", error);
+        message.error(error.message || "OTP verification failed");
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
@@ -313,7 +325,7 @@ const ABHADonorRegistration = ({ selectedCamp }) => {
         <Button
           type="primary"
           onClick={() => {
-            setOtpVerified(true);
+            handleUseExistingAbha(record);
           }}
         >
           Use This ABHA
@@ -345,6 +357,32 @@ const ABHADonorRegistration = ({ selectedCamp }) => {
     } catch (error) {
       console.error("Error fetching LGD district code:", error);
       return districtCode;
+    }
+  };
+
+  const fetchStateCode = async (lgdStateCode) => {
+    try {
+      const response = await axios.post(
+        `${BaseUrl}/eraktkosh/utility/getStateCode`,
+        { lgdStateCode }
+      );
+      return response.data?.stateCode;
+    } catch (error) {
+      console.error("Error fetching LGD state code:", error);
+      return lgdStateCode;
+    }
+  };
+
+  const fetchDistrictCode = async (lgdDistrictCode) => {
+    try {
+      const response = await axios.post(
+        `${BaseUrl}/eraktkosh/utility/getDistrictCode`,
+        { lgdDistrictCode }
+      );
+      return response.data?.districtCode;
+    } catch (error) {
+      console.error("Error fetching LGD district code:", error);
+      return lgdDistrictCode;
     }
   };
 
@@ -564,6 +602,129 @@ const ABHADonorRegistration = ({ selectedCamp }) => {
     }
   };
 
+  const handleUseExistingAbha = async (record) => {
+    setFlowType("existing");
+    setSelectedAbhaRecord(record);
+    setLoading(true);
+
+    try {
+      const response = await axios.post(
+        `${BaseUrl}/eraktkosh/abha/commonABHACall`,
+        {
+          loginId: record.ABHA.index,
+          txnId: record.txnId,
+          APIKey: "AbhaSearchRequestOtp",
+          HospitalCode: `campid${selectedCamp?.campReqNo}`,
+        }
+      );
+
+      if (response.data?.txnId) {
+        message.success("OTP sent successfully");
+        setsearchViaMobTaxId(response.data?.txnId);
+        setOtpSent(true);
+        setAbhaData(null);
+      } else {
+        throw new Error(response.data?.message || "Failed to send OTP");
+      }
+    } catch (error) {
+      console.error("Error sending OTP for existing ABHA:", error);
+      message.error(error.message || "Failed to send OTP");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleVerifyExistingAbhaOtp = async () => {
+    if (!otp || otp.length !== 6) {
+      message.error("Please enter a valid 6-digit OTP");
+      return;
+    }
+
+    if (!searchViaMobTaxId) {
+      message.error("Transaction ID not found. Please request OTP again.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const verifyResponse = await axios.post(
+        `${BaseUrl}/eraktkosh/abha/commonABHACall`,
+        {
+          otpValue: otp,
+          txnId: searchViaMobTaxId,
+          APIKey: "AbhaSearchVerifyOtp",
+          HospitalCode: `campid${selectedCamp?.campReqNo}`,
+        }
+      );
+
+      if (verifyResponse.data?.token) {
+        message.success(verifyResponse.data?.message);
+        const token = verifyResponse.data.token;
+
+        const profileResponse = await axios.post(
+          `${BaseUrl}/eraktkosh/abha/commonABHACall`,
+          {
+            "header#X-Token": token,
+            APIKey: "LoginAbhaGetProfile",
+            HospitalCode: `campid${selectedCamp?.campReqNo}`,
+          }
+        );
+
+        if (profileResponse.data) {
+          const profileData = profileResponse.data;
+
+          const stateCode = await fetchStateCode(profileData.stateCode);
+          const districtCode = await fetchDistrictCode(
+            profileData.districtCode
+          );
+
+          setFormData({
+            ...formData,
+            firstName: profileData.name || "",
+            healthId: profileData.preferredAbhaAddress || "",
+            address: profileData.address || "",
+            pincode: profileData.pincode || "",
+          });
+
+          if (profileData.gender) {
+            setSelectedGender(profileData.gender);
+          }
+
+          if (profileData.yearOfBirth) {
+            const currentYear = new Date().getFullYear();
+            const age = currentYear - parseInt(profileData.yearOfBirth);
+            setFormData((prev) => ({
+              ...prev,
+              age: age.toString(),
+              yearOfBirth: profileData.yearOfBirth,
+              monthOfBirth: profileData.monthOfBirth || "01",
+              dayOfBirth: profileData.dayOfBirth || "01",
+            }));
+          }
+
+          if (profileData.ABHANumber) {
+            setAbhaNumber(profileData.ABHANumber);
+          }
+          setSelectedState(stateCode);
+          setSelectedDistrict(districtCode);
+          setUsingExistingAbha(true);
+          setOtpVerified(true);
+        } else {
+          throw new Error("Failed to fetch profile data");
+        }
+      } else {
+        throw new Error(
+          verifyResponse.data?.message || "OTP verification failed"
+        );
+      }
+    } catch (error) {
+      console.error("Error verifying OTP or fetching profile:", error);
+      message.error(error.message || "Failed to verify OTP or fetch profile");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       {otpVerified ? (
@@ -726,24 +887,39 @@ const ABHADonorRegistration = ({ selectedCamp }) => {
           </div>
           <div className="widget p-3 ">
             <div className="row">
-              <div className="col-6 d-flex align-items-center gap-3">
-                <p className="mb-0 abha_txt me-2">Enter ABHA Address</p>
-                <Input
-                  placeholder="Enter your ABHA address (e.g., deepanshu124)"
-                  value={formData.healthId.replace("@sbx", "")}
-                  onChange={handleHealthIdChange}
-                  addonAfter="@sbx"
-                />
-                <Button
-                  className="px-5 py-3 abha_btn"
-                  type="primary"
-                  loading={loading}
-                  onClick={handleCreateAbhaNumber}
-                  disabled={!formData.healthId}
-                >
-                  Create ABHA Address
-                </Button>
-              </div>
+              {!usingExistingAbha ? (
+                <div className="col-6 d-flex align-items-center gap-3">
+                  <p className="mb-0 abha_txt me-2">Enter ABHA Address</p>
+                  <Input
+                    placeholder="Enter your ABHA address (e.g., deepanshu124)"
+                    value={formData.healthId.replace("@sbx", "")}
+                    onChange={handleHealthIdChange}
+                    addonAfter="@sbx"
+                  />
+                  <Button
+                    className="px-5 py-3 abha_btn"
+                    type="primary"
+                    loading={loading}
+                    onClick={handleCreateAbhaNumber}
+                    disabled={!formData.healthId}
+                  >
+                    Create ABHA Address
+                  </Button>
+                </div>
+              ) : (
+                <div className="d-flex">
+                  <div className="col-6 d-flex align-items-center gap-3">
+                    <p className="mb-0 abha_txt_key me-2">ABHA Address:</p>
+                    <p className="mb-0 abha_txt_key me-2">
+                      {formData.healthId}
+                    </p>
+                  </div>
+                  <div className="col-6 d-flex align-items-center gap-3">
+                    <p className="mb-0 abha_txt me-2">ABHA Number:</p>
+                    <p className="mb-0 abha_txt me-2">{abhaNumber}</p>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
           <div className="d-flex align-items-center justify-content-end mt-3">
@@ -761,22 +937,51 @@ const ABHADonorRegistration = ({ selectedCamp }) => {
         <div>
           {abhaData ? (
             <div className="widget p-3 mb-3">
-              <h4>Existing ABHA Numbers Found</h4>
-              <Table
-                columns={abhaColumns}
-                dataSource={abhaData}
-                rowKey={(record) => record.ABHA?.ABHANumber || Math.random()}
-                pagination={false}
-              />
-              <div className="mt-3">
-                <Button
-                  type="default"
-                  onClick={handleCreateNewAbha}
-                  loading={loading}
-                >
-                  Create New ABHA
-                </Button>
-              </div>
+              {otpSent && flowType === "existing" ? (
+                <div className="row align-items-end">
+                  <div className="col-3">
+                    <div className="form-inputs">
+                      <Input
+                        placeholder="Enter OTP"
+                        value={otp}
+                        onChange={handleOtpChange}
+                        maxLength={6}
+                      />
+                    </div>
+                  </div>
+                  <div className="col-2">
+                    <Button
+                      onClick={handleVerifyOtp}
+                      className="px-5 py-3"
+                      type="primary"
+                      loading={loading}
+                    >
+                      Verify OTP
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <h4>Existing ABHA Numbers Found</h4>
+                  <Table
+                    columns={abhaColumns}
+                    dataSource={abhaData}
+                    rowKey={(record) =>
+                      record.ABHA?.ABHANumber || Math.random()
+                    }
+                    pagination={false}
+                  />
+                  <div className="mt-3">
+                    <Button
+                      type="default"
+                      onClick={handleCreateNewAbha}
+                      loading={loading}
+                    >
+                      Create New ABHA
+                    </Button>
+                  </div>
+                </>
+              )}
             </div>
           ) : (
             <>
@@ -784,11 +989,35 @@ const ABHADonorRegistration = ({ selectedCamp }) => {
                 <h3 className="abha-header">Create your ABHA through</h3>
               )}
               <div className="row pb-3">
-                <div className={`col-${otpSent ? "12" : "5"}`}>
+                <div className={`col-${otpSent ? "12" : "6"}`}>
                   <div className="widget p-3">
                     {!showCreateAbha ? (
-                      <div className="d-flex align-items-end">
-                        <div className="me-2">
+                      <div className="d-flex align-items-end gap-3">
+                        <div className="form-inputs" style={{ width: "40%" }}>
+                          <label className="form-label mb-1">Verify via</label>
+                          <Select
+                            className="w-100"
+                            showSearch
+                            allowClear
+                            placeholder="Select option"
+                            filterOption={(input, option) =>
+                              (option?.label ?? "")
+                                .toLowerCase()
+                                .includes(input.toLowerCase())
+                            }
+                            options={[
+                              { value: "Abha Address", label: "Abha Address" },
+                              { value: "Abha Number", label: "Abha Number" },
+                              { value: "Mobile", label: "Mobile" },
+                              { value: "Aadhaar", label: "Aadhaar" },
+                              {
+                                value: "Abha Search Via Mobile",
+                                label: "Abha Search Via Mobile",
+                              },
+                            ]}
+                          />
+                        </div>
+                        <div className="" style={{ width: "40%" }}>
                           <label className="form-label mb-1">
                             ABHA Number/ ABHA Address
                             <span className="mendate" style={{ color: "red" }}>
@@ -798,7 +1027,7 @@ const ABHADonorRegistration = ({ selectedCamp }) => {
                           <Input placeholder="Abc@adbm" />
                         </div>
                         <Button>Verify</Button>
-                        <p className="mb-0 mx-3">Or</p>
+                        <p className="mb-0">Or</p>
                         <Button onClick={handleCreateAbha}>Create ABHA</Button>
                       </div>
                     ) : (

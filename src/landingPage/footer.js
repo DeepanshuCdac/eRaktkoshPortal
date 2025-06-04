@@ -35,9 +35,9 @@ export default function Footer() {
                 {/* <a
                   href="/BLDAHIMS/bloodbank/nearbyBBRed.cnt"
                   className="footer-details mb-2">
-                  Blood Bank Directory
+                  Blood Center Directory
                 </a> */}
-                <Link className="footer-details mb-2" to="/publicPages/bloodBankDirectory">Blood Bank Directory</Link>
+                <Link className="footer-details mb-2" to="/publicPages/bloodBankDirectory">Blood Center Directory</Link>
                 <a
                   href="/BLDAHIMS/bloodbank/portalThalassemiaLogin.cnt"
                   className="footer-details mb-2">
@@ -74,7 +74,7 @@ export default function Footer() {
               </div>
             </div>
             <div className="col-12 col-md-4 col-xl-2 mb-3">
-              <h5 className="heading">Blood Bank Login</h5>
+              <h5 className="heading">Blood Center Login</h5>
               <div className="d-flex flex-column">
                 <a
                   href="/eRaktKosh/hissso/loginLogin"
@@ -84,7 +84,7 @@ export default function Footer() {
                 <a
                   href="/BLDAHIMS/bloodbank/bbOnboard.cnt?hmode=GETONBOARDFORMESSENTIAL"
                   className="footer-details mb-2" >
-                  Add your Blood Bank
+                  Add your Blood Center
                 </a>
               </div>
             </div>

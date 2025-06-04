@@ -121,7 +121,7 @@ export default function DonationType() {
       label5: "How long does it take?",
       content5: "45-60 minutes to donate. 2-3 hours for pre-donation screening.",
       label6: "How often can I donate?",
-      content6: "Every 2 weeks but should not exceed more than 24 times in a year.",
+      content6: "You can typically donate platelets every 2-7 days, with a maximum of 24 times per year.",
       image: "assets/images/tabImg3.png",
       active: activeTab === 2,
     },
@@ -156,7 +156,7 @@ export default function DonationType() {
               </div>
               <div className="text-center mt-3">
                 <button className="btn searchBtn" onClick={handleButtonClick}>
-                  Find Nearest Blood Bank To Donate
+                  Find Nearest Blood Center To Donate
                   <img
                     className="ms-2"
                     src="assets/images/fwdRight.png"

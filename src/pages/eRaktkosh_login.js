@@ -164,7 +164,7 @@ const ERaktkoshLogin = () => {
             <div className="col-xl-4 col-lg-4 col-md-4">
               <div className="minimise-text">
                 <p className="mb-0 e-login">eRaktkosh Login</p>
-                <p className="mb-0 bb-login">Blood Bank Login: Portal/Application</p>
+                <p className="mb-0 bb-login">Blood Center Login: Portal/Application</p>
               </div>
               <div className="form-container d-flex">
                 <form action="#" method="POST" onSubmit={handleSubmit}>

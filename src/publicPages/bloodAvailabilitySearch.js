@@ -90,7 +90,7 @@ const BloodAvailabiltySearch = () => {
     const nameMap = {
       bloodAvailabilitySearch: "Blood Availability",
       campSchedule: "Camp Schedule",
-      bloodBankDirectory: "Blood Bank Directory",
+      bloodBankDirectory: "Blood Center Directory",
     };
     return nameMap[hashPath] || "Select a service";
   };

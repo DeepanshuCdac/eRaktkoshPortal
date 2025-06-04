@@ -49,7 +49,7 @@ export default function DonorAdminHome({ onViewAllClick }) {
       key: "donationDate",
     },
     {
-      title: "Blood Bank Name",
+      title: "Blood Center Name",
       dataIndex: "bloodBankName",
       key: "bloodBankName",
       render: (text) => abbreviateText(text),

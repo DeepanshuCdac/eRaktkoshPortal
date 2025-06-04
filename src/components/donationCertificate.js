@@ -66,7 +66,7 @@ const DonationCertificate = ({ onBack }) => {
       render: (date) => date || "N/A",
     },
     {
-      title: "Blood Bank Name",
+      title: "Blood Center Name",
       dataIndex: "bloodbank",
       key: "bloodbank",
       render: (text) => abbreviateText(text || "Unknown Hospital"),
@@ -124,7 +124,7 @@ const DonationCertificate = ({ onBack }) => {
                 onChange={(e) => setSearchTerm(e.target.value)}
                 style={{ fontSize: "14px" }}
                 className="form-control"
-                placeholder="Search by blood bank or date"
+                placeholder="Search by blood center or date"
               />
             </div>
           </div>

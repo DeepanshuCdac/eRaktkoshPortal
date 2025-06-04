@@ -185,7 +185,7 @@ const CampRegistration = () => {
                             <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                                 <div className='d-flex flex-column'>
                                     <div className='d-flex align-items-center'>
-                                        <label htmlFor="bankName" className="form-label mb-1">Blood Bank <span className="mandatory">*</span></label>
+                                        <label htmlFor="bankName" className="form-label mb-1">Blood Center <span className="mandatory">*</span></label>
                                     </div>
                                     <Space wrap>
                                         <Select

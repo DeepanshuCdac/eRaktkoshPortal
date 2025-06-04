@@ -63,7 +63,7 @@ const CampSchedule = () => {
     const nameMap = {
       bloodAvailabilitySearch: "Blood Stock Availability",
       campSchedule: "Camp Schedule",
-      bloodBankDirectory: "Blood Bank Directory",
+      bloodBankDirectory: "Blood Center Directory",
     };
     return nameMap[hashPath] || "Select a service";
   };
@@ -334,7 +334,7 @@ const CampSchedule = () => {
                 options={[
                   { value: "service1", label: "Blood Stock Availability" },
                   { value: "service2", label: "Camp Schedule" },
-                  { value: "service3", label: "Blood Bank Directory" },
+                  { value: "service3", label: "Blood Center Directory" },
                 ]}
               />
             </div>

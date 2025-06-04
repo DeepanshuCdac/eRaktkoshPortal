@@ -46,7 +46,7 @@ const Faqs = () => {
                         } else if (faq.faqQuestion.toLowerCase().includes("donation") || faq.faqAnswer.toLowerCase().includes("camp")) {
                             return { ...faq, faqType: "Blood Donation & Camps" };
                         } else if (faq.faqQuestion.toLowerCase().includes("app") || faq.faqAnswer.toLowerCase().includes("app")) {
-                            return { ...faq, faqType: "Blood Bank Registration & App Usage" };
+                            return { ...faq, faqType: "Blood Center Registration & App Usage" };
                         } else {
                             return { ...faq, faqType: "General & Blood Availability" };
                         }
@@ -155,8 +155,8 @@ const Faqs = () => {
                             onClick={() => setActiveFilter('General & Blood Availability')}> General & Blood Availability </p>
                         <p className={`mb-0 filters ${activeFilter === 'Blood Donation & Camps' ? 'active' : ''}`}
                             onClick={() => setActiveFilter('Blood Donation & Camps')}> Blood Donation & Camps </p>
-                        <p className={`mb-0 filters ${activeFilter === 'Blood Bank Registration & App Usage' ? 'active' : ''}`}
-                            onClick={() => setActiveFilter('Blood Bank Registration & App Usage')}> Blood Bank Registration & App Usage </p>
+                        <p className={`mb-0 filters ${activeFilter === 'Blood Center Registration & App Usage' ? 'active' : ''}`}
+                            onClick={() => setActiveFilter('Blood Center Registration & App Usage')}> Blood Center Registration & App Usage </p>
                     </div>
                     <div className="row">
                         <div className="col-9">

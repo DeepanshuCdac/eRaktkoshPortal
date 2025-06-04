@@ -22,8 +22,8 @@ export default function Service() {
     },
     {
       imgSrc: "assets/images/blood-directory.png",
-      altText: "Blood Bank Directory",
-      cardText: "Blood Bank Directory",
+      altText: "Blood Center Directory",
+      cardText: "Blood Center Directory",
       // url: '#/publicPages/bloodBankDirectory'
       url: '/BLDAHIMS/bloodbank/nearbyBBRed.cnt'
     },

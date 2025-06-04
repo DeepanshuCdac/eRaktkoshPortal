@@ -65,7 +65,7 @@ const BloodBankDirectory = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    document.title = "e-RaktKosh Blood Bank Directory";
+    document.title = "e-RaktKosh Blood Center Directory";
 
     sessionStorage.removeItem("geoPermissionDenied");
   }, []);
@@ -109,7 +109,7 @@ const BloodBankDirectory = () => {
     const nameMap = {
       bloodAvailabilitySearch: "Blood Stock Availability",
       campSchedule: "Camp Schedule",
-      bloodBankDirectory: "Blood Bank Directory",
+      bloodBankDirectory: "Blood Center Directory",
     };
     return nameMap[hashPath] || "Select a service";
   };
@@ -143,7 +143,7 @@ const BloodBankDirectory = () => {
     setLoading(true);
     try {
       const searchLogData = {
-        serviceType: "Blood Bank Directory",
+        serviceType: "Blood Center Directory",
         searchParams: {
           state: selectedState,
           district: selectedDistrict || null,
@@ -197,7 +197,7 @@ const BloodBankDirectory = () => {
       setBloodBanks(formattedData);
       setFilteredBloodBanks(formattedData);
     } catch (error) {
-      console.error("Error fetching blood banks:", error);
+      console.error("Error fetching blood Center:", error);
       setBloodBanks([]);
     } finally {
       setLoading(false);
@@ -254,7 +254,7 @@ const BloodBankDirectory = () => {
   const columns = [
     { title: "S.No.", dataIndex: "sNo", key: "sNo" },
     {
-      title: "Blood Bank",
+      title: "Blood Center",
       key: "bloodBank",
       render: (text, record) => (
         <div style={{ maxWidth: "300px" }}>
@@ -408,7 +408,7 @@ const BloodBankDirectory = () => {
       <div className="page_wrapper gradient_style">
         <div className="container">
           <h2 className="header-page mb-2 pt-3">
-            Nearest Blood Bank(BB)/ Blood Storage Unit(BSU)
+            Nearest Blood Center(BB)/ Blood Storage Unit(BSU)
           </h2>
           <div className="d-flex justify-content-between flex-wrap gap-3 container-style">
             <div className="input-wrapper-service">
@@ -425,7 +425,7 @@ const BloodBankDirectory = () => {
                 options={[
                   { value: "service1", label: "Blood Availability" },
                   { value: "service2", label: "Camp Schedule" },
-                  { value: "service3", label: "Blood Bank Directory" },
+                  { value: "service3", label: "Blood Center Directory" },
                 ]}
               />
             </div>
@@ -572,7 +572,7 @@ const BloodBankDirectory = () => {
                 rowClassName={() => "camp-details-row"}
               />
             ) : (
-              <p>No camps available for this blood bank.</p>
+              <p>No camps available for this blood center.</p>
             )}
           </Modal>
         </div>

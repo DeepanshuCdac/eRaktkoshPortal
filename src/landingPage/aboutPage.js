@@ -20,14 +20,14 @@ export default function Aboutpage() {
                   <p className="about-text">
                     e-Raktkosh is a platform to provide information about blood
                     banks, blood availability, blood donation camps and assistant
-                    automation. More than 3800 blood banks are registered on
+                    automation. More than 3800 blood center are registered on
                     e-Raktkosh from 29 states and 8 UTs.
                   </p>
                   <p className="about-text">
                     e-Raktkosh is a citizen centric portal and mobile app for
-                    various services such as nearest blood bank, blood
+                    various services such as nearest blood center, blood
                     availability & blood donation camps information. It enforces
-                    blood banks to strictly follow national blood policy standards
+                    blood center to strictly follow national blood policy standards
                     and guidelines.
                   </p>
                 </div>
