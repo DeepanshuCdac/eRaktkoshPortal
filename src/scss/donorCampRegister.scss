@@ -17,6 +17,23 @@
     background-color: #fff;
     border-radius: 5px;
 
+    .ant-input-wrapper {
+      .ant-input {
+        background-color: #fff;
+        font-size: 14px;
+        font-weight: 500;
+        padding: 5px 11px;
+        border: 1px solid #e5e5e5;
+        border-radius: 5px 0 0 5px;
+      }
+
+      .ant-input-group-addon {
+        background-color: #fff;
+        font-size: 15px;
+        font-weight: 500;
+      }
+    }
+
     .mendate {
       color: #7f0210;
     }
@@ -96,7 +113,7 @@
     color: #2ca308;
   }
 
-  .abha-header{
+  .abha-header {
     font-size: 16px;
     font-weight: 600;
   }
@@ -123,20 +140,23 @@
     max-height: 250px;
     background-color: #fff;
     border-radius: 5px;
+
+    .ant-checkbox-wrapper{
+      margin-bottom: 10px;
+    }
   }
 
-  .abha_txt{
+  .abha_txt {
     white-space: nowrap;
     font-size: 15px;
     font-weight: 500;
   }
 
-  .abha_btn{
+  .abha_btn {
     background-color: #3479b5;
-    
-    &:hover{
-      background-color: #3479b5 !important;
 
+    &:hover {
+      background-color: #3479b5 !important;
     }
   }
 }

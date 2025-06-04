@@ -11,7 +11,7 @@ import ABHADonorRegistration from "./DonorCampRegister/ABHADonorRegistration";
 export default function DonorCampRegister() {
   const dispatch = useDispatch();
   const { selectedCamp } = useCampContext();
-  const [value, setValue] = useState(2); // Default to Mobile option
+  const [value, setValue] = useState(1); // Default to Mobile option
 
   useEffect(() => {
     dispatch(getApiData());
