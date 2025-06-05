@@ -514,7 +514,7 @@ const CampSchedule = () => {
             <div className="d-flex align-items-center">
               <p className="mb-0 searchResult me-2">Search Result</p>
               <p className="mb-0 resultData px-2">
-                Showing Last {dateDifference} Day Data
+                Showing Data from {selectedStartDate} to {selectedEndDate} 
               </p>
             </div>
             <div className="">

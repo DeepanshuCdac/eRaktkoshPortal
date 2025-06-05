@@ -296,15 +296,15 @@ const BloodAvailabiltySearch = () => {
     { title: "Last Updated", dataIndex: "entrydate", key: "entrydate" },
     { title: "Type", dataIndex: "type", key: "type" },
     {
-      title: "Action",
-      key: "action",
+      title: "Details",
+      key: "details",
       render: (_, record) => (
         <a
           href="javascript:void(0)"
           style={{ color: "#1A6093" }}
           onClick={() => showModal(record)}
         >
-          Details
+          View
         </a>
       ),
     },
@@ -693,7 +693,7 @@ const BloodAvailabiltySearch = () => {
         </div>
         <div className="d-xl-flex d-lg-flex d-md-flex d-sm-flex align-items-center justify-content-between mt-3 mb-3">
           <div className="d-flex align-items-center">
-            <p className="mb-0 searchResult me-2">Search Result</p>
+            <p className="mb-0 searchResult me-2">Selected Fields</p>
             <p className="mb-0 resultData px-2">{getSelectedFieldsDisplat()}</p>
           </div>
           <div>
