@@ -118,7 +118,7 @@ export default function DonorAdmin() {
                             </span>
                           </p>
                         </div>
-                        <div className="d-flex align-items-center justify-content-end mb-1">
+                        <div className="d-flex align-items-center mb-1">
                           <p className="mb-0 me-2 key">Last Login:</p>
                           <span className="mb-0 key">
                             {donorData.body?.isLastLogin || "N/A"}

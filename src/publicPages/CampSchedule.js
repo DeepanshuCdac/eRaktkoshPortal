@@ -513,9 +513,9 @@ const CampSchedule = () => {
           <div className="d-xl-flex d-lg-flex d-md-flex d-sm-flex align-items-center justify-content-between mt-3 mb-3">
             <div className="d-flex align-items-center">
               <p className="mb-0 searchResult me-2">Search Result</p>
-              <p className="mb-0 resultData px-2">
+              {/* <p className="mb-0 resultData px-2">
                 Showing Data from {selectedStartDate} to {selectedEndDate} 
-              </p>
+              </p> */}
             </div>
             <div className="">
               <Input

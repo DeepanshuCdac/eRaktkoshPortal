@@ -46,7 +46,7 @@ const BloodAvailabiltySearch = () => {
   const [selectedRecord, setSelectedRecord] = useState(null);
   const [expandedRowKeys, setExpandedRowKeys] = useState(null);
   const [emailAddress, setEmailAddress] = useState("");
-
+  const [emailError, setEmailError] = useState("");
   const [selectedNotifyState, setSelectedNotifyState] = useState(null);
   const [selectedNotifyDistrict, setSelectedNotifyDistrict] = useState(null);
   const [selectedNotifyHospitals, setSelectedNotifyHospitals] = useState([]);
@@ -827,12 +827,25 @@ const BloodAvailabiltySearch = () => {
               Send Blood Center Details
             </p>
             <div className="d-flex">
-              <Input
-                className="me-3"
-                value={emailAddress}
-                onChange={(e) => setEmailAddress(e.target.value)}
-                placeholder="Your EmailID"
-              />
+              <div className="d-flex flex-column">
+                <Input
+                  className="me-3"
+                  value={emailAddress}
+                  onChange={(e) => setEmailAddress(e.target.value)}
+                  placeholder="Your EmailID"
+                  onBlur={() => {
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (emailAddress && !emailRegex.test(emailAddress)) {
+                      setEmailError("Invalid email address");
+                    } else {
+                      setEmailError("");
+                    }
+                  }}
+                />
+                {emailError && (
+                  <div style={{ color: "#7F0210" }}>{emailError}</div>
+                )}
+              </div>
               <Button onClick={handleSendEmail} type="primary">
                 {" "}
                 Send{" "}
@@ -993,7 +1006,18 @@ const BloodAvailabiltySearch = () => {
                 value={notifyEmail}
                 onChange={(e) => setNotifyEmail(e.target.value)}
                 placeholder="Enter Email ID"
+                onBlur={() => {
+                  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                  if (notifyEmail && !emailRegex.test(notifyEmail)) {
+                    setEmailError("Invalid email address");
+                  } else {
+                    setEmailError("");
+                  }
+                }}
               />
+              {emailError && (
+                <div style={{ color: "#7F0210" }}>{emailError}</div>
+              )}
             </div>
           </div>
           <div className="col-6">
@@ -1001,8 +1025,14 @@ const BloodAvailabiltySearch = () => {
               <label className="form-label mb-0">Enter Mobile No.</label>
               <Input
                 value={notifyMobile}
-                onChange={(e) => setNotifyMobile(e.target.value)}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (/^\d{0,10}$/.test(value)) {
+                    setNotifyMobile(value);
+                  }
+                }}
                 placeholder="Mobile No."
+                maxLength={10}
               />
             </div>
           </div>

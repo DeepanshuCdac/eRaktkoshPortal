@@ -7,8 +7,10 @@ import { BaseUrl } from "../../utils/url";
 import ConsentCheckboxes from "./ConsentCheckboxes";
 import { checkboxContents } from "./CheckboxContent";
 import AbhaRegistrationForm from "./ABHARegistrationForm";
+import AbhaSearchViaMobile from "./AbhaSearchViaMobile";
 
 const ABHADonorRegistration = ({ selectedCamp }) => {
+  // State management
   const { statesWithDistricts, genders } = useSelector((state) => state.data);
   const [selectedState, setSelectedState] = useState(null);
   const [selectedDistrict, setSelectedDistrict] = useState(null);
@@ -29,6 +31,13 @@ const ABHADonorRegistration = ({ selectedCamp }) => {
   const [usingExistingAbha, setUsingExistingAbha] = useState(false);
   const [abhaNumber, setAbhaNumber] = useState("");
   const [abhaCreated, setAbhaCreated] = useState(false);
+  const [token, setToken] = useState("");
+  const [checkAll, setCheckAll] = useState(true);
+  const [showValidationError, setShowValidationError] = useState(false);
+  const [selectedVerificationMethod, setSelectedVerificationMethod] =
+    useState(null);
+
+  // Form data state
   const [formData, setFormData] = useState({
     firstName: "",
     age: "",
@@ -41,16 +50,324 @@ const ABHADonorRegistration = ({ selectedCamp }) => {
     monthOfBirth: "",
     yearOfBirth: "",
   });
-  const [token, setToken] = useState("");
+
+  // Checkboxes state
   const [checkboxes, setCheckboxes] = useState(
     checkboxContents.reduce((acc, item) => {
       acc[item.key] = true;
       return acc;
     }, {})
   );
-  const [checkAll, setCheckAll] = useState(true);
-  const [showValidationError, setShowValidationError] = useState(false);
 
+  // Derived data
+  const states = statesWithDistricts || [];
+  const districts = selectedState
+    ? states.find((state) => state.stateCode === selectedState)?.districts || []
+    : [];
+
+  // API Functions
+  const sendOtpForNewAbha = async () => {
+    try {
+      const response = await axios.post(
+        `${BaseUrl}/eraktkosh/abha/commonABHACall`,
+        {
+          APIKey: "CreationMobileRequestOtp",
+          patMobileNo: mobileNumber,
+          HospitalCode: `campid${selectedCamp?.campReqNo}`,
+        }
+      );
+
+      const errorMessage = response.data?.Error?.message;
+      if (
+        errorMessage?.includes("you have exceeded ABHA address creation limit")
+      ) {
+        Swal.fire({
+          title: "Error",
+          text: errorMessage,
+          icon: "error",
+          confirmButtonText: "OK",
+        });
+        return null;
+      }
+
+      if (response.data?.txnId) {
+        return response.data.txnId;
+      }
+      throw new Error(response.data?.message || "Failed to send OTP");
+    } catch (error) {
+      console.error("Error sending OTP:", error);
+      throw error;
+    }
+  };
+
+  const searchAbhaNumberViaMobile = async () => {
+    try {
+      const response = await axios.post(
+        `${BaseUrl}/eraktkosh/abha/commonABHACall`,
+        {
+          mobile: mobileNumber,
+          APIKey: "SearchAbhaNumberViaMobile",
+          HospitalCode: `campid${selectedCamp?.campReqNo}`,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error searching ABHA:", error);
+      throw error;
+    }
+  };
+
+  const verifyOtpForNewAbha = async () => {
+    try {
+      const response = await axios.post(
+        `${BaseUrl}/eraktkosh/abha/commonABHACall`,
+        {
+          APIKey: "CreationMobileVerifyOtp",
+          otp: otp,
+          txnId: txnId,
+          HospitalCode: `campid${selectedCamp?.campReqNo}`,
+        }
+      );
+
+      if (response.data?.message === "OTP Verified Successfully") {
+        return response.data?.tokens?.token || "";
+      }
+      throw new Error(response.data?.error || "OTP verification failed");
+    } catch (error) {
+      console.error("Error verifying OTP:", error);
+      throw error;
+    }
+  };
+
+  const sendOtpForExistingAbha = async (record) => {
+    try {
+      const response = await axios.post(
+        `${BaseUrl}/eraktkosh/abha/commonABHACall`,
+        {
+          loginId: record.ABHA.index,
+          txnId: record.txnId,
+          APIKey: "AbhaSearchRequestOtp",
+          HospitalCode: `campid${selectedCamp?.campReqNo}`,
+        }
+      );
+
+      if (response.data?.txnId) {
+        return response.data.txnId;
+      }
+      throw new Error(response.data?.message || "Failed to send OTP");
+    } catch (error) {
+      console.error("Error sending OTP for existing ABHA:", error);
+      throw error;
+    }
+  };
+
+  const verifyOtpForExistingAbha = async () => {
+    try {
+      const response = await axios.post(
+        `${BaseUrl}/eraktkosh/abha/commonABHACall`,
+        {
+          otpValue: otp,
+          txnId: searchViaMobTaxId,
+          APIKey: "AbhaSearchVerifyOtp",
+          HospitalCode: `campid${selectedCamp?.campReqNo}`,
+        }
+      );
+
+      if (response.data?.token) {
+        return response.data.token;
+      }
+      throw new Error(response.data?.message || "OTP verification failed");
+    } catch (error) {
+      console.error("Error verifying OTP:", error);
+      throw error;
+    }
+  };
+
+  const getAbhaProfile = async (token) => {
+    try {
+      const response = await axios.post(
+        `${BaseUrl}/eraktkosh/abha/commonABHACall`,
+        {
+          "header#X-Token": token,
+          APIKey: "LoginAbhaGetProfile",
+          HospitalCode: `campid${selectedCamp?.campReqNo}`,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching ABHA profile:", error);
+      throw error;
+    }
+  };
+
+  const createAbhaNumber = async () => {
+    try {
+      const lgdStateCode = await fetchLgdStateCode(selectedState);
+      const lgdDistrictCode = await fetchLgdDistrictCode(selectedDistrict);
+      const combinedName = formData.firstName.replace(/\s+/g, "").toLowerCase();
+
+      const response = await axios.post(
+        `${BaseUrl}/eraktkosh/abha/commonABHACall`,
+        {
+          APIKey: "CreationMobileCreateAbha",
+          firstName: formData.firstName,
+          middleName: "",
+          lastName: "",
+          gender: selectedGender,
+          dayOfBirth: formData.dayOfBirth || "01",
+          monthOfBirth: formData.monthOfBirth || "01",
+          yearOfBirth: formData.yearOfBirth,
+          password: "",
+          profilePhoto: "",
+          wardCode: "",
+          townCode: "",
+          email: "",
+          address: formData.address,
+          stateCode: lgdStateCode,
+          districtCode: lgdDistrictCode,
+          pincode: formData.pincode,
+          mobile: mobileNumber,
+          restrictions: "",
+          overridePatDtlExistCheck: "false",
+          healthId: formData.healthId,
+          villageCode: "",
+          token: token,
+          subdistrictCode: "",
+          name: combinedName,
+          txnId: txnId,
+          HospitalCode: `campid${selectedCamp?.campReqNo}`,
+        }
+      );
+
+      if (response.data?.message === "ABHA Address Created Successfully") {
+        return response.data;
+      }
+      throw new Error(response.data?.error || "Failed to create ABHA Address");
+    } catch (error) {
+      console.error("Error creating ABHA Number:", error);
+      throw error;
+    }
+  };
+
+  const registerDonor = async () => {
+    const formattedCampDate = formatCampDate(selectedCamp?.campDate);
+
+    const payload = {
+      campId: selectedCamp?.campReqNo,
+      mobileNo: mobileNumber,
+      name: formData.firstName,
+      dob: "",
+      genderCode: selectedGender,
+      bloodGroupCode: "",
+      address: "",
+      stateCode: selectedState,
+      districtCode: selectedDistrict,
+      healthId: null,
+      healthIdNumber: null,
+      password: "7c4a8d09ca3762af61e59520943dc26494f8941b",
+      email: formData.email,
+      city: formData.address,
+      fatherName: formData.fatherName,
+      age: formData.age,
+      empId: null,
+      pinCode: formData.pincode,
+      campDate: formattedCampDate,
+      campSource: null,
+      isBloodBankRegister: 0,
+      source: null,
+    };
+
+    try {
+      const response = await axios.post(
+        `${BaseUrl}/eraktkosh/CampDonorRegistration/register`,
+        payload
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Registration error:", error);
+      throw error;
+    }
+  };
+
+  // Utility Functions
+  const fetchLgdStateCode = async (stateCode) => {
+    try {
+      const response = await axios.post(
+        `${BaseUrl}/eraktkosh/utility/getLgdStateCode`,
+        { stateCode }
+      );
+      return response.data?.lgdStateCode;
+    } catch (error) {
+      console.error("Error fetching LGD state code:", error);
+      return stateCode;
+    }
+  };
+
+  const fetchLgdDistrictCode = async (districtCode) => {
+    try {
+      const response = await axios.post(
+        `${BaseUrl}/eraktkosh/utility/getLgdDistrictCode`,
+        { districtCode }
+      );
+      return response.data?.lgdDistrictCode;
+    } catch (error) {
+      console.error("Error fetching LGD district code:", error);
+      return districtCode;
+    }
+  };
+
+  const fetchStateCode = async (lgdStateCode) => {
+    try {
+      const response = await axios.post(
+        `${BaseUrl}/eraktkosh/utility/getStateCode`,
+        { lgdStateCode }
+      );
+      return response.data?.stateCode;
+    } catch (error) {
+      console.error("Error fetching state code:", error);
+      return lgdStateCode;
+    }
+  };
+
+  const fetchDistrictCode = async (lgdDistrictCode) => {
+    try {
+      const response = await axios.post(
+        `${BaseUrl}/eraktkosh/utility/getDistrictCode`,
+        { lgdDistrictCode }
+      );
+      return response.data?.districtCode;
+    } catch (error) {
+      console.error("Error fetching district code:", error);
+      return lgdDistrictCode;
+    }
+  };
+
+  const formatCampDate = (dateString) => {
+    if (!dateString) return "";
+    const parts = dateString.split("-");
+    if (parts.length !== 3) return "";
+    const day = parts[0];
+    const month = parts[1];
+    const year = parts[2];
+    const monthMap = {
+      Jan: "01",
+      Feb: "02",
+      Mar: "03",
+      Apr: "04",
+      May: "05",
+      Jun: "06",
+      Jul: "07",
+      Aug: "08",
+      Sep: "09",
+      Oct: "10",
+      Nov: "11",
+      Dec: "12",
+    };
+    const monthNumber = monthMap[month] || "01";
+    return `${day}-${monthNumber}-${year}`;
+  };
+
+  // Handler Functions
   const validateCheckboxes = () => {
     const allChecked = Object.values(checkboxes).every(Boolean);
     if (!allChecked) {
@@ -68,12 +385,6 @@ const ABHADonorRegistration = ({ selectedCamp }) => {
     }
     return allChecked;
   };
-
-  // Prepare states and districts data
-  const states = statesWithDistricts || [];
-  const districts = selectedState
-    ? states.find((state) => state.stateCode === selectedState)?.districts || []
-    : [];
 
   const handleStateChange = (value) => {
     setSelectedState(value);
@@ -104,9 +415,7 @@ const ABHADonorRegistration = ({ selectedCamp }) => {
       [key]: !checkboxes[key],
     };
     setCheckboxes(newCheckboxes);
-
-    const allChecked = Object.values(newCheckboxes).every(Boolean);
-    setCheckAll(allChecked);
+    setCheckAll(Object.values(newCheckboxes).every(Boolean));
   };
 
   const toggleWidget = () => {
@@ -118,7 +427,9 @@ const ABHADonorRegistration = ({ selectedCamp }) => {
   };
 
   const handleVerificationMethodChange = (value) => {
+    setSelectedVerificationMethod(value);
     setVerificationMethod(value);
+    setAbhaData(null); // Reset ABHA data when method changes
   };
 
   const handleMobileNumberChange = (e) => {
@@ -138,38 +449,14 @@ const ABHADonorRegistration = ({ selectedCamp }) => {
 
     setLoading(true);
     try {
-      const response = await axios.post(
-        `${BaseUrl}/eraktkosh/abha/commonABHACall`,
-        {
-          APIKey: "CreationMobileRequestOtp",
-          patMobileNo: mobileNumber,
-          HospitalCode: `campid${selectedCamp?.campReqNo}`,
-        }
-      );
-
-      const errorMessage = response.data?.Error?.message;
-      if (
-        errorMessage?.includes("you have exceeded ABHA address creation limit")
-      ) {
-        Swal.fire({
-          title: "Error",
-          text: errorMessage,
-          icon: "error",
-          confirmButtonText: "OK",
-        });
-        return;
-      }
-
-      if (response.data?.txnId) {
+      const txnId = await sendOtpForNewAbha();
+      if (txnId) {
         message.success("OTP sent successfully");
-        setTxnId(response.data.txnId);
+        setTxnId(txnId);
         setOtpSent(true);
         setAbhaData(null);
-      } else {
-        throw new Error(response.data?.message || "Failed to send OTP");
       }
     } catch (error) {
-      console.error("Error sending OTP:", error);
       message.error(error.message || "Failed to send OTP");
     } finally {
       setLoading(false);
@@ -178,7 +465,6 @@ const ABHADonorRegistration = ({ selectedCamp }) => {
 
   const handleMobileSubmit = async () => {
     if (!validateCheckboxes()) {
-      // Show all checkboxes if they're not already visible
       if (!showWidget) {
         setShowWidget(true);
       }
@@ -199,18 +485,8 @@ const ABHADonorRegistration = ({ selectedCamp }) => {
 
     setLoading(true);
     try {
-      const searchResponse = await axios.post(
-        `${BaseUrl}/eraktkosh/abha/commonABHACall`,
-        {
-          mobile: mobileNumber,
-          APIKey: "SearchAbhaNumberViaMobile",
-          HospitalCode: `campid${selectedCamp?.campReqNo}`,
-        }
-      );
+      const responseData = await searchAbhaNumberViaMobile();
 
-      const responseData = searchResponse.data;
-
-      // If ABHA number(s) found
       if (Array.isArray(responseData) && responseData.length > 0) {
         const flattenedData = responseData.flatMap((item) =>
           item.ABHA.map((abha) => ({
@@ -221,9 +497,7 @@ const ABHADonorRegistration = ({ selectedCamp }) => {
 
         setAbhaData(flattenedData);
         message.success(`${flattenedData.length} ABHA number(s) found`);
-      }
-      // If object format with error
-      else if (
+      } else if (
         responseData?.Error?.error?.code === "ABDM-1114" ||
         responseData?.HttpStatus === 404
       ) {
@@ -257,7 +531,6 @@ const ABHADonorRegistration = ({ selectedCamp }) => {
     if (flowType === "existing") {
       await handleVerifyExistingAbhaOtp();
     } else {
-      // Original OTP verification logic for new ABHA creation
       if (!otp || otp.length !== 6) {
         message.error("Please enter a valid 6-digit OTP");
         return;
@@ -270,25 +543,11 @@ const ABHADonorRegistration = ({ selectedCamp }) => {
 
       setLoading(true);
       try {
-        const response = await axios.post(
-          `${BaseUrl}/eraktkosh/abha/commonABHACall`,
-          {
-            APIKey: "CreationMobileVerifyOtp",
-            otp: otp,
-            txnId: txnId,
-            HospitalCode: `campid${selectedCamp?.campReqNo}`,
-          }
-        );
-
-        if (response.data?.message === "OTP Verified Successfully") {
-          message.success("OTP verified successfully");
-          setOtpVerified(true);
-          setToken(response.data?.tokens?.token || "");
-        } else {
-          throw new Error(response.data?.error || "OTP verification failed");
-        }
+        const token = await verifyOtpForNewAbha();
+        message.success("OTP verified successfully");
+        setOtpVerified(true);
+        setToken(token);
       } catch (error) {
-        console.error("Error verifying OTP:", error);
         message.error(error.message || "OTP verification failed");
       } finally {
         setLoading(false);
@@ -296,6 +555,203 @@ const ABHADonorRegistration = ({ selectedCamp }) => {
     }
   };
 
+  const handleAgeChange = (e) => {
+    const ageValue = e.target.value;
+    const currentYear = new Date().getFullYear();
+    const birthYear = currentYear - parseInt(ageValue);
+    if (/^\d{0,2}$/.test(ageValue)) {
+      setFormData({
+        ...formData,
+        age: ageValue,
+        yearOfBirth: birthYear.toString(),
+        monthOfBirth: "01",
+        dayOfBirth: "01",
+      });
+    }
+  };
+
+  const handleNameChange = (e) => {
+    setFormData({
+      ...formData,
+      firstName: e.target.value,
+    });
+  };
+
+  const handleFormChange = (field) => (e) => {
+    const value = e.target.value;
+
+    if (field === "pincode") {
+      // Allow only digits and max 6 chars
+      if (/^\d{0,6}$/.test(value)) {
+        setFormData({ ...formData, [field]: value });
+      }
+    } else {
+      setFormData({ ...formData, [field]: value });
+    }
+  };
+
+  const handleHealthIdChange = (e) => {
+    const value = e.target.value;
+    let processedValue = value;
+
+    if (!value.endsWith("@sbx") && !value.includes("@")) {
+      processedValue = value.replace("@sbx", "") + "@sbx";
+    }
+
+    setFormData({
+      ...formData,
+      healthId: processedValue,
+    });
+  };
+
+  const handleCreateAbhaNumber = async () => {
+    if (!token) {
+      message.error("Authentication token not found. Please verify OTP again.");
+      return;
+    }
+
+    if (!formData.healthId) {
+      message.error("Please enter ABHA Address");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await createAbhaNumber();
+      Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: "ABHA Address Created Successfully",
+      });
+      setAbhaCreated(true);
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: error.message || "Failed to create ABHA Address",
+      });
+      setAbhaCreated(false);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleRegister = async () => {
+    if (!validateCheckboxes()) {
+      if (!showWidget) {
+        setShowWidget(true);
+      }
+      return;
+    }
+
+    if (
+      !formData.firstName ||
+      !formData.age ||
+      !selectedGender ||
+      !mobileNumber ||
+      !formData.fatherName ||
+      !selectedState ||
+      !selectedDistrict
+    ) {
+      message.error("Please fill all mandatory fields.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await registerDonor();
+      Swal.fire({
+        title: "Success!",
+        text: "Registered Successfully.",
+        icon: "success",
+        confirmButtonText: "OK",
+      });
+    } catch (error) {
+      message.error(error.response?.data || "Registration failed!");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleUseExistingAbha = async (record) => {
+    setFlowType("existing");
+    setSelectedAbhaRecord(record);
+    setLoading(true);
+
+    try {
+      const txnId = await sendOtpForExistingAbha(record);
+      message.success("OTP sent successfully");
+      setsearchViaMobTaxId(txnId);
+      setOtpSent(true);
+      setAbhaData(null);
+    } catch (error) {
+      message.error(error.message || "Failed to send OTP");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleVerifyExistingAbhaOtp = async () => {
+    if (!otp || otp.length !== 6) {
+      message.error("Please enter a valid 6-digit OTP");
+      return;
+    }
+
+    if (!searchViaMobTaxId) {
+      message.error("Transaction ID not found. Please request OTP again.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const token = await verifyOtpForExistingAbha();
+      message.success("OTP verified successfully");
+
+      const profileData = await getAbhaProfile(token);
+      if (profileData) {
+        const stateCode = await fetchStateCode(profileData.stateCode);
+        const districtCode = await fetchDistrictCode(profileData.districtCode);
+
+        setFormData({
+          ...formData,
+          firstName: profileData.name || "",
+          healthId: profileData.preferredAbhaAddress || "",
+          address: profileData.address || "",
+          pincode: profileData.pincode || "",
+        });
+
+        if (profileData.gender) {
+          setSelectedGender(profileData.gender);
+        }
+
+        if (profileData.yearOfBirth) {
+          const currentYear = new Date().getFullYear();
+          const age = currentYear - parseInt(profileData.yearOfBirth);
+          setFormData((prev) => ({
+            ...prev,
+            age: age.toString(),
+            yearOfBirth: profileData.yearOfBirth,
+            monthOfBirth: profileData.monthOfBirth || "01",
+            dayOfBirth: profileData.dayOfBirth || "01",
+          }));
+        }
+
+        if (profileData.ABHANumber) {
+          setAbhaNumber(profileData.ABHANumber);
+        }
+        setSelectedState(stateCode);
+        setSelectedDistrict(districtCode);
+        setUsingExistingAbha(true);
+        setOtpVerified(true);
+      }
+    } catch (error) {
+      message.error(error.message || "Failed to verify OTP or fetch profile");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Table columns
   const abhaColumns = [
     {
       title: "ABHA Number",
@@ -336,404 +792,13 @@ const ABHADonorRegistration = ({ selectedCamp }) => {
     },
   ];
 
-  const fetchLgdStateCode = async (stateCode) => {
-    try {
-      const response = await axios.post(
-        `${BaseUrl}/eraktkosh/utility/getLgdStateCode`,
-        { stateCode }
-      );
-      return response.data?.lgdStateCode;
-    } catch (error) {
-      console.error("Error fetching LGD state code:", error);
-      return stateCode;
-    }
-  };
-
-  const fetchLgdDistrictCode = async (districtCode) => {
-    try {
-      const response = await axios.post(
-        `${BaseUrl}/eraktkosh/utility/getLgdDistrictCode`,
-        { districtCode }
-      );
-      return response.data?.lgdDistrictCode;
-    } catch (error) {
-      console.error("Error fetching LGD district code:", error);
-      return districtCode;
-    }
-  };
-
-  const fetchStateCode = async (lgdStateCode) => {
-    try {
-      const response = await axios.post(
-        `${BaseUrl}/eraktkosh/utility/getStateCode`,
-        { lgdStateCode }
-      );
-      return response.data?.stateCode;
-    } catch (error) {
-      console.error("Error fetching LGD state code:", error);
-      return lgdStateCode;
-    }
-  };
-
-  const fetchDistrictCode = async (lgdDistrictCode) => {
-    try {
-      const response = await axios.post(
-        `${BaseUrl}/eraktkosh/utility/getDistrictCode`,
-        { lgdDistrictCode }
-      );
-      return response.data?.districtCode;
-    } catch (error) {
-      console.error("Error fetching LGD district code:", error);
-      return lgdDistrictCode;
-    }
-  };
-
-  const handleAgeChange = (e) => {
-    const ageValue = e.target.value;
-    const currentYear = new Date().getFullYear();
-    const birthYear = currentYear - parseInt(ageValue);
-
-    setFormData({
-      ...formData,
-      age: ageValue,
-      yearOfBirth: birthYear.toString(),
-      monthOfBirth: "01", // January
-      dayOfBirth: "01", // 1st
-    });
-  };
-
-  const handleNameChange = (e) => {
-    setFormData({
-      ...formData,
-      firstName: e.target.value,
-    });
-  };
-
-  const handleFormChange = (field) => (e) => {
-    setFormData({
-      ...formData,
-      [field]: e.target.value,
-    });
-  };
-
-  const handleHealthIdChange = (e) => {
-    const value = e.target.value;
-    let processedValue = value;
-
-    // If the value doesn't end with @sbx and doesn't contain any @ symbol
-    if (!value.endsWith("@sbx") && !value.includes("@")) {
-      // Remove any existing @sbx if somehow present in the middle
-      processedValue = value.replace("@sbx", "") + "@sbx";
-    }
-
-    setFormData({
-      ...formData,
-      healthId: processedValue,
-    });
-  };
-
-  const handleCreateAbhaNumber = async () => {
-    if (!token) {
-      message.error("Authentication token not found. Please verify OTP again.");
-      return;
-    }
-
-    if (!formData.healthId) {
-      message.error("Please enter ABHA Address");
-      return;
-    }
-
-    const combinedName = formData.firstName.replace(/\s+/g, "").toLowerCase();
-
-    setLoading(true);
-    try {
-      const lgdStateCode = await fetchLgdStateCode(selectedState);
-      const lgdDistrictCode = await fetchLgdDistrictCode(selectedDistrict);
-
-      const response = await axios.post(
-        `${BaseUrl}/eraktkosh/abha/commonABHACall`,
-        {
-          APIKey: "CreationMobileCreateAbha",
-          firstName: formData.firstName,
-          middleName: "",
-          lastName: "",
-          gender: selectedGender,
-          dayOfBirth: formData.dayOfBirth || "01",
-          monthOfBirth: formData.monthOfBirth || "01",
-          yearOfBirth: formData.yearOfBirth,
-          password: "",
-          profilePhoto: "",
-          wardCode: "",
-          townCode: "",
-          email: "",
-          address: formData.address,
-          stateCode: lgdStateCode,
-          districtCode: lgdDistrictCode,
-          pincode: formData.pincode,
-          mobile: mobileNumber,
-          restrictions: "",
-          overridePatDtlExistCheck: "false",
-          healthId: formData.healthId,
-          villageCode: "",
-          token: token,
-          subdistrictCode: "",
-          name: combinedName,
-          txnId: txnId,
-          HospitalCode: `campid${selectedCamp?.campReqNo}`,
-        }
-      );
-
-      if (response.data?.message === "ABHA Address Created Successfully") {
-        Swal.fire({
-          icon: "success",
-          title: "Success",
-          text: response.data?.message,
-        });
-        setAbhaCreated(true);
-      } else {
-        throw new Error(
-          response.data?.error || "Failed to create ABHA Address"
-        );
-      }
-    } catch (error) {
-      console.error("Error creating ABHA Number:", error);
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: error,
-      });
-      setAbhaCreated(false);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const formatCampDate = (dateString) => {
-    if (!dateString) return "";
-    const parts = dateString.split("-");
-    if (parts.length !== 3) return "";
-    const day = parts[0];
-    const month = parts[1];
-    const year = parts[2];
-    const monthMap = {
-      Jan: "01",
-      Feb: "02",
-      Mar: "03",
-      Apr: "04",
-      May: "05",
-      Jun: "06",
-      Jul: "07",
-      Aug: "08",
-      Sep: "09",
-      Oct: "10",
-      Nov: "11",
-      Dec: "12",
-    };
-    const monthNumber = monthMap[month] || "01";
-    return `${day}-${monthNumber}-${year}`;
-  };
-
-  const handleRegister = async () => {
-    if (!validateCheckboxes()) {
-      if (!showWidget) {
-        setShowWidget(true);
-      }
-      return;
-    }
-
-    if (
-      !formData.firstName ||
-      !formData.age ||
-      !selectedGender ||
-      !mobileNumber ||
-      !formData.fatherName ||
-      !selectedState ||
-      !selectedDistrict
-    ) {
-      message.error("Please fill all mandatory fields.");
-      return;
-    }
-
-    const formattedCampDate = formatCampDate(selectedCamp?.campDate);
-
-    const payload = {
-      campId: selectedCamp?.campReqNo,
-      mobileNo: mobileNumber,
-      name: formData.firstName,
-      dob: "",
-      genderCode: selectedGender,
-      bloodGroupCode: "",
-      address: "",
-      stateCode: selectedState,
-      districtCode: selectedDistrict,
-      healthId: null,
-      healthIdNumber: null,
-      password: "7c4a8d09ca3762af61e59520943dc26494f8941b",
-      email: formData.email,
-      city: formData.address,
-      fatherName: formData.fatherName,
-      age: formData.age,
-      empId: null,
-      pinCode: formData.pincode,
-      campDate: formattedCampDate,
-      campSource: null,
-      isBloodBankRegister: 0,
-      source: null,
-    };
-
-    setLoading(true);
-    try {
-      const response = await axios.post(
-        `${BaseUrl}/eraktkosh/CampDonorRegistration/register`,
-        payload
-      );
-
-      if (response.status === 200) {
-        Swal.fire({
-          title: "Success!",
-          text: "Registered Successfully.",
-          icon: "success",
-          confirmButtonText: "OK",
-        });
-        // handleEditMobile();
-        // onSuccess();
-      }
-    } catch (error) {
-      console.error("Registration error :", error);
-      message.error(error.response?.data || "registration failed!");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleUseExistingAbha = async (record) => {
-    setFlowType("existing");
-    setSelectedAbhaRecord(record);
-    setLoading(true);
-
-    try {
-      const response = await axios.post(
-        `${BaseUrl}/eraktkosh/abha/commonABHACall`,
-        {
-          loginId: record.ABHA.index,
-          txnId: record.txnId,
-          APIKey: "AbhaSearchRequestOtp",
-          HospitalCode: `campid${selectedCamp?.campReqNo}`,
-        }
-      );
-
-      if (response.data?.txnId) {
-        message.success("OTP sent successfully");
-        setsearchViaMobTaxId(response.data?.txnId);
-        setOtpSent(true);
-        setAbhaData(null);
-      } else {
-        throw new Error(response.data?.message || "Failed to send OTP");
-      }
-    } catch (error) {
-      console.error("Error sending OTP for existing ABHA:", error);
-      message.error(error.message || "Failed to send OTP");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleVerifyExistingAbhaOtp = async () => {
-    if (!otp || otp.length !== 6) {
-      message.error("Please enter a valid 6-digit OTP");
-      return;
-    }
-
-    if (!searchViaMobTaxId) {
-      message.error("Transaction ID not found. Please request OTP again.");
-      return;
-    }
-
-    setLoading(true);
-    try {
-      const verifyResponse = await axios.post(
-        `${BaseUrl}/eraktkosh/abha/commonABHACall`,
-        {
-          otpValue: otp,
-          txnId: searchViaMobTaxId,
-          APIKey: "AbhaSearchVerifyOtp",
-          HospitalCode: `campid${selectedCamp?.campReqNo}`,
-        }
-      );
-
-      if (verifyResponse.data?.token) {
-        message.success(verifyResponse.data?.message);
-        const token = verifyResponse.data.token;
-
-        const profileResponse = await axios.post(
-          `${BaseUrl}/eraktkosh/abha/commonABHACall`,
-          {
-            "header#X-Token": token,
-            APIKey: "LoginAbhaGetProfile",
-            HospitalCode: `campid${selectedCamp?.campReqNo}`,
-          }
-        );
-
-        if (profileResponse.data) {
-          const profileData = profileResponse.data;
-
-          const stateCode = await fetchStateCode(profileData.stateCode);
-          const districtCode = await fetchDistrictCode(
-            profileData.districtCode
-          );
-
-          setFormData({
-            ...formData,
-            firstName: profileData.name || "",
-            healthId: profileData.preferredAbhaAddress || "",
-            address: profileData.address || "",
-            pincode: profileData.pincode || "",
-          });
-
-          if (profileData.gender) {
-            setSelectedGender(profileData.gender);
-          }
-
-          if (profileData.yearOfBirth) {
-            const currentYear = new Date().getFullYear();
-            const age = currentYear - parseInt(profileData.yearOfBirth);
-            setFormData((prev) => ({
-              ...prev,
-              age: age.toString(),
-              yearOfBirth: profileData.yearOfBirth,
-              monthOfBirth: profileData.monthOfBirth || "01",
-              dayOfBirth: profileData.dayOfBirth || "01",
-            }));
-          }
-
-          if (profileData.ABHANumber) {
-            setAbhaNumber(profileData.ABHANumber);
-          }
-          setSelectedState(stateCode);
-          setSelectedDistrict(districtCode);
-          setUsingExistingAbha(true);
-          setOtpVerified(true);
-        } else {
-          throw new Error("Failed to fetch profile data");
-        }
-      } else {
-        throw new Error(
-          verifyResponse.data?.message || "OTP verification failed"
-        );
-      }
-    } catch (error) {
-      console.error("Error verifying OTP or fetching profile:", error);
-      message.error(error.message || "Failed to verify OTP or fetch profile");
-    } finally {
-      setLoading(false);
-    }
-  };
-
+  // Render
   return (
     <>
       {otpVerified ? (
         <div>
           <AbhaRegistrationForm
+            abhaData={abhaData}
             formData={formData}
             mobileNumber={mobileNumber}
             selectedGender={selectedGender}
@@ -834,33 +899,72 @@ const ABHADonorRegistration = ({ selectedCamp }) => {
                             showSearch
                             allowClear
                             placeholder="Select option"
+                            value={selectedVerificationMethod}
+                            onChange={(value) => {
+                              setSelectedVerificationMethod(value);
+                              setVerificationMethod(value);
+                              setAbhaData(null);
+                            }}
                             filterOption={(input, option) =>
                               (option?.label ?? "")
                                 .toLowerCase()
                                 .includes(input.toLowerCase())
                             }
                             options={[
-                              { value: "Abha Address", label: "Abha Address" },
-                              { value: "Abha Number", label: "Abha Number" },
-                              { value: "Mobile", label: "Mobile" },
-                              { value: "Aadhaar", label: "Aadhaar" },
+                              { value: "mobile", label: "Mobile" },
+                              { value: "aadhaar", label: "Aadhaar" },
                               {
-                                value: "Abha Search Via Mobile",
-                                label: "Abha Search Via Mobile",
+                                value: "abhaSearchViaMobile",
+                                label: "Search ABHA via Mobile",
                               },
+                              { value: "abhaNumber", label: "ABHA Number" },
+                              { value: "abhaAddress", label: "ABHA Address" },
                             ]}
                           />
                         </div>
-                        <div className="" style={{ width: "40%" }}>
-                          <label className="form-label mb-1">
-                            ABHA Number/ ABHA Address
-                            <span className="mendate" style={{ color: "red" }}>
-                              *
-                            </span>
-                          </label>
-                          <Input placeholder="Abc@adbm" />
-                        </div>
-                        <Button>Verify</Button>
+
+                        {selectedVerificationMethod ===
+                        "abhaSearchViaMobile" ? (
+                          <div>
+                            <AbhaSearchViaMobile
+                              mobileNumber={mobileNumber}
+                              setMobileNumber={setMobileNumber}
+                              setFlowType={setFlowType}
+                              setOtpSent={setOtpSent}
+                              setLoading={setLoading}
+                              selectedCamp={selectedCamp}
+                              setAbhaData={setAbhaData}
+                              setSelectedAbhaRecord={setSelectedAbhaRecord}
+                              setsearchViaMobTaxId={setsearchViaMobTaxId}
+                            />
+                          </div>
+                        ) : (
+                          <>
+                            <div style={{ width: "40%" }}>
+                              <label className="form-label mb-1">
+                                ABHA Number/ ABHA Address
+                                <span
+                                  className="mendate"
+                                  style={{ color: "red" }}
+                                >
+                                  *
+                                </span>
+                              </label>
+                              <Input
+                                placeholder={
+                                  selectedVerificationMethod === "abhaNumber"
+                                    ? "Enter ABHA Number"
+                                    : selectedVerificationMethod ===
+                                      "abhaAddress"
+                                    ? "Enter ABHA Address"
+                                    : "Select verification method first"
+                                }
+                              />
+                            </div>
+                            <Button>Verify</Button>
+                          </>
+                        )}
+
                         <p className="mb-0">Or</p>
                         <Button onClick={handleCreateAbha}>Create ABHA</Button>
                       </div>

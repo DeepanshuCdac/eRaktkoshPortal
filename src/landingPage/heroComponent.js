@@ -12,7 +12,7 @@ export default function HeroComponent() {
   }, []);
 
   const handleClick = () => {
-    window.location.href = "/BLDAHIMS/bloodbank/portalDonorLogin.cnt";
+    window.location.href = "/beta#/publicPages/bloodAvailabilitySearch";
   };
 
   const handleIndicatorClick = (index) => {
@@ -37,23 +37,6 @@ export default function HeroComponent() {
           ))}
         </div>
         <div className="carousel-inner">
-          {/* 1st Slide */}
-          {/* <div className={`carousel-item ${currentIndex === 0 ? 'active' : ''}`}>
-            <div className="carousel-inner-container">
-              <div className="carousel-image">
-                <img src="assets/images/heroImg1.png" className="d-block w-100" alt="First Image" />
-              </div>
-              <div className="carousel-image carousel-image-right">
-                <img src="assets/gif/heroComponent1.gif" className="d-block w-100" alt="Second Image" />
-              </div>
-              <div className="carousel-caption d-md-block"  style={{ left: '8%', bottom: '0' }}>
-                <h5 className="img-text">Donate Blood Save Lives</h5>
-                <p className="img-content">Be a lifesaver today. Donate blood at the Blood Center,</p>
-                <p className="img-content mb-3">where every donation is a lifeline.</p>
-                <button className="btn imgBtn d-none d-lg-block d-xl-block" onClick={handleClick}>BECOME A DONOR</button>
-              </div>
-            </div>
-          </div> */}
 
           {/* 2nd Slide */}
           <div className={`carousel-item ${currentIndex === 0 ? 'active' : ''}`}>
@@ -66,9 +49,6 @@ export default function HeroComponent() {
             <div className="carousel-caption d-md-block" style={{ left: '46%', bottom: '0' }}>
               <div className="d-flex flex-column text-center">
                 <div>
-                  {/* <h5 className="img-text">Donate Blood, Save Lives</h5>
-                  <p className="img-content">Make a life-changing Impact: Donate blood, save lives. </p>
-                  <p className="img-content mb-5">Together, We can heal communities.</p> */}
                   <button className="btn imgBtn d-none d-lg-block d-xl-block" onClick={handleClick}>BECOME A DONOR</button>
                 </div>
               </div>
@@ -79,10 +59,7 @@ export default function HeroComponent() {
           <div className={`carousel-item ${currentIndex === 2 ? 'active' : ''}`}>
             <img src="assets/images/header4.png" className="d-block w-100" alt="Fourth Image" />
             <div className="carousel-caption d-md-block mt-3" style={{ left: '7%', bottom: '0' }}>
-              {/* <h5 className="img-text">Donate Blood, Save Lives</h5>
-              <p className="img-content">Uniting to save lives: One nation, one blood, one platform.</p>
-              <p className="img-content mb-5">Donate today and be a hero.</p> */}
-              <button className="btn imgBtn d-none d-lg-block d-xl-block" onClick={handleClick}>BECOME A DONOR</button>
+              <button className="btn imgBtn d-none d-lg-block d-xl-block" onClick={handleClick}>SEARCH BLOOD</button>
             </div>
           </div>
 
@@ -90,10 +67,7 @@ export default function HeroComponent() {
           <div className={`carousel-item ${currentIndex === 3 ? 'active' : ''}`}>
             <img src="assets/images/header5.png" className="d-block w-100" alt="Fifth Image" />
             <div className="carousel-caption d-md-block" style={{ left: '8%', bottom: '0' }}>
-              {/* <h5 className="img-text">Donate Blood, Save Lives</h5>
-              <p className="img-content">Uniting to save lives: One nation, one blood, one platform.</p>
-              <p className="img-content mb-5">Donate today and be a hero.</p> */}
-              <button className="btn imgBtn d-none d-lg-block d-xl-block" onClick={handleClick}>BECOME A DONOR</button>
+              <button className="btn imgBtn d-none d-lg-block d-xl-block" onClick={handleClick}>SEARCH FOR BLOOD DONATION CAMPS</button>
             </div>
           </div>
         </div>

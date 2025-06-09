@@ -154,7 +154,7 @@ export default function Navbar() {
                 </li>
                 <li>
                   <a href="javascript:void(0)">
-                    BLOOD Center LOGIN
+                    BLOOD CENTER LOGIN
                     <img
                       className="ms-2 dropdown-icon"
                       src="assets/images/drop-down.png"
@@ -178,14 +178,14 @@ export default function Navbar() {
                 <li className="nav-item d-flex d-xl-none d-lg-none">
                   <a
                     className="nav-link"
-                    href="https://eraktkosh.mohfw.gov.in/eRaktkoshUtilities/#/" > e-Raktkosh Dashboard
+                    href="https://eraktkosh.mohfw.gov.in/eRaktkoshUtilities/#/" > E-RAKTKOSH DASHBOARD
                   </a>
                 </li>
                 <div className="d-xl-flex d-lg-flex d-none">
                   <li className="nav-item">
                     <a
                       className="nav-link"
-                      href="https://eraktkosh.mohfw.gov.in/eRaktkoshUtilities/#/" > e-Raktkosh Dashboard
+                      href="https://eraktkosh.mohfw.gov.in/eRaktkoshUtilities/#/" > E-RAKTKOSH DASHBOARD
                     </a>
                   </li>
                 </div>

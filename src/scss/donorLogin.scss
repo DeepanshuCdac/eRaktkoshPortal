@@ -5,6 +5,11 @@
         font-size: 15px;
         font-weight: 500;
         background: #7f0210;
+        
+        &:hover{
+          background: #7f0210 !important;
+
+        }
       }
   .carousel-indicators {
     margin-bottom: 2rem;
@@ -164,6 +169,7 @@
   .welcome_msg {
     font-size: 14px;
     font-weight: 500;
+    white-space: nowrap;
     color: #707070;
   }
   .register_btn {

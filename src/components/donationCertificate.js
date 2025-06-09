@@ -133,20 +133,20 @@ const DonationCertificate = ({ onBack }) => {
 
       <div className="tabContent">
         {loading && <div className="pb-4">Loading certificate data...</div>}
-        {error && (
+        {/* {error && (
           <div className="text-danger">
-            Error loading certificate data: {error}
+            No Donation Record Found.
           </div>
-        )}
+        )} */}
 
         <Table
           columns={columns}
           dataSource={paginatedData}
           loading={loading}
           pagination={false}
-          locale={{
-            emptyText: !loading && !error ? "No donation records found" : null,
-          }}
+           locale={{
+              emptyText: "No donation records found",
+            }}
           rowKey={(record, index) => index}
         />
 

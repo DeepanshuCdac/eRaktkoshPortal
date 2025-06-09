@@ -3,8 +3,8 @@ import { useHistory } from "react-router-dom";
 import axios from "axios";
 import { Input, Button } from "antd";
 import { BaseUrl } from "../utils/url";
-import { message } from "antd";
 import "../scss/donorLogin.scss";
+import Swal from "sweetalert2";
 
 const CarouselContent = () => {
   return (
@@ -141,7 +141,7 @@ export default function DonorLogin() {
     const isValidNumber = /^\d{10}$/.test(mobileno);
 
     if (!isValidNumber) {
-      alert("Please enter a valid 10-digit mobile number.");
+      Swal.fire("Please enter a valid 10-digit mobile number.");
       return;
     }
 
@@ -170,7 +170,10 @@ export default function DonorLogin() {
       // Step 1: Check if isUserExists is present, if not, check eRaktkosh ....
       if (!otpData.hasOwnProperty("isUserExists")) {
         if (otpData.eRaktkosh === false && otpData.notRegisteredMessage) {
-          alert(otpData.notRegisteredMessage);
+          Swal.fire({
+            text: otpData.notRegisteredMessage,
+            icon: "success",
+          });
           setShowOtpField(true);
           setIsInputDisabled(true);
           return;
@@ -180,7 +183,10 @@ export default function DonorLogin() {
       // Step 2: If user exists, check OTP field ....
       if (otpData.isUserExists) {
         if (otpData.otp) {
-          message.success(otpData.messageSuccess);
+          Swal.fire({
+            text: otpData.messageSuccess,
+            icon: "success",
+          });
           setLoginStage(1);
 
           console.log("OTP:", otpData.otp);
@@ -194,7 +200,10 @@ export default function DonorLogin() {
 
         // Step 3: If OTP is not there, check for errorMessage ....
         if (otpData.errorMessage) {
-          message.error(otpData.errorMessage);
+          Swal.fire({
+            text: otpData.errorMessage,
+            icon: "error",
+          });
           setShowOtpField(false);
           setIsInputDisabled(true);
           return;
@@ -202,7 +211,7 @@ export default function DonorLogin() {
 
         // Step 4: if otp limit is crossed ....
         if (otpData.limitExceedMessage) {
-          message.error(otpData.limitExceedMessage);
+          Swal.fire(otpData.limitExceedMessage);
           setShowOtpField(false);
           setIsInputDisabled(true);
           return;
@@ -213,7 +222,10 @@ export default function DonorLogin() {
         "Error generating OTP:",
         error.response || error.message || error
       );
-      alert("An error occurred while generating OTP.");
+      Swal.fire({
+        text: "An error occurred while generating OTP.",
+        icon: "error",
+      });
     } finally {
       setLoading(false);
     }
@@ -254,13 +266,19 @@ export default function DonorLogin() {
       const otpData = JSON.parse(response.data.OtpData);
       const otpExpirationTime = Math.floor(otpData.otpExpirationTime / 1000);
 
-      alert("OTP has been resent.");
+      Swal.fire({
+        text: "OTP has been resent.",
+        icon: "success",
+      });
       setIsOtpExpired(false);
       startOtpTimer(otpExpirationTime);
       setLoginStage(1);
     } catch (error) {
       console.error("Error resending OTP:", error);
-      alert("An error occurred while resending the OTP.");
+      Swal.fire({
+        text: "An error occurred while resending the OTP.",
+        icon: "error",
+      });
     }
   };
 
@@ -277,7 +295,10 @@ export default function DonorLogin() {
         "Error refreshing CAPTCHA:",
         error.response || error.message || error
       );
-      alert("An error occurred while refreshing the CAPTCHA.");
+      Swal.fire({
+        text: "An error occurred while refreshing the CAPTCHA.",
+        icon: "error",
+      });
     }
   };
 
@@ -285,7 +306,7 @@ export default function DonorLogin() {
     const otpValues = otpRefs.current.map((input) => input.value).join("");
 
     if (otpValues.length !== 6 || !captchaText) {
-      alert("Please fill in both OTP and Captcha.");
+      Swal.fire("Please fill in both OTP and Captcha.");
       return;
     }
 
@@ -326,16 +347,24 @@ export default function DonorLogin() {
           const newTabUrl = `${window.location.origin}/beta#/pages/portaldonorAdmin`;
           window.location.assign(newTabUrl);
         } else {
-          alert("Failed to fetch mobile number or token from response.");
+          Swal.fire({
+            text: "Failed to fetch mobile number or token from response.",
+            icon: "error",
+          });
           setLoading(false);
         }
       } else if (response.status === 401) {
         sessionStorage.clear();
-        alert("Unauthorized access. Please try again.");
+        Swal.fire({
+          text: "Unauthorized access. Please try again.",
+          icon: "error",
+        });
         setLoading(false);
       } else {
-        alert(`Validation failed with status code: ${response.status}`);
-        console.log("Validate response:", response);
+        Swal.fire({
+          text: `Validation failed with status code: ${response.status}`,
+          icon: "error",
+        });
         setLoading(false);
       }
     } catch (error) {
@@ -343,18 +372,29 @@ export default function DonorLogin() {
         switch (error.response.status) {
           case 400:
           case 401:
-            alert("Invalid OTP or CAPTCHA. Please try again.");
+            Swal.fire({
+              text: "Invalid OTP or CAPTCHA. Please try again.",
+              icon: "error",
+            });
             break;
           case 500:
-            alert("Server error. Please try again later.");
+            Swal.fire({
+              text: "Server error. Please try again later.",
+              icon: "error",
+            });
             break;
           default:
-            alert(`An error occurred. Status code: ${error.response.status}`);
+            Swal.fire({
+              text: `An error occurred. Status code: ${error.response.status}`,
+              icon: "error",
+            });
         }
         console.error("Error response:", error.response);
       } else {
-        alert("An error occurred while validating OTP and Captcha.");
-        console.error("Error during validation:", error.message || error);
+        Swal.fire({
+          text: "An error occurred while validating OTP and Captcha.",
+          icon: "error",
+        });
       }
       setLoading(false);
     }
@@ -412,7 +452,7 @@ export default function DonorLogin() {
                         Enter Mobile No.
                       </label>
                       <Input
-                      style={{ letterSpacing: "0.1rem" }}
+                        style={{ letterSpacing: "0.1rem" }}
                         placeholder=""
                         type="text"
                         id="username"
@@ -508,7 +548,11 @@ export default function DonorLogin() {
                       </div>
                     )}
                     {!showOtpField && !loading && (
-                      <Button type="primary" className="mt-3" onClick={handleGenerateOtp}>
+                      <Button
+                        type="primary"
+                        className="mt-3"
+                        onClick={handleGenerateOtp}
+                      >
                         {" "}
                         Generate OTP
                       </Button>
@@ -521,6 +565,7 @@ export default function DonorLogin() {
                 <p className="welcome_msg me-3 mb-0">Don't Have an Account?</p>
                 <Button
                   className="register_btn"
+                  style={{ padding: "12px" }}
                   type="primary"
                   onClick={handleClick}
                 >

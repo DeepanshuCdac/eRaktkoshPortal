@@ -39,7 +39,7 @@ const MobileDonorRegistration = ({ selectedCamp, onSuccess }) => {
 
   const handleStateChange = (value) => {
     setSelectedState(value);
-    setSelectedDistrict(null); 
+    setSelectedDistrict(null);
   };
 
   const handleDistrictChange = (value) => {
@@ -58,7 +58,10 @@ const MobileDonorRegistration = ({ selectedCamp, onSuccess }) => {
   };
 
   const handleOtpChange = (e) => {
-    setOtp(e.target.value);
+    const value = e.target.value;
+    if (/^\d{0,6}$/.test(value)) {
+      setOtp(value);
+    }
   };
 
   const handleGenerateOTP = async () => {
@@ -335,6 +338,7 @@ const MobileDonorRegistration = ({ selectedCamp, onSuccess }) => {
                 <Input
                   placeholder="Enter OTP"
                   value={otp}
+                  maxLength={6}
                   onChange={handleOtpChange}
                   style={{
                     marginRight: "10px",
@@ -444,9 +448,13 @@ const MobileDonorRegistration = ({ selectedCamp, onSuccess }) => {
                   <Input
                     placeholder="Enter your age"
                     value={formData.age}
-                    onChange={(e) =>
-                      setFormData({ ...formData, age: e.target.value })
-                    }
+                    maxLength={2}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (/^\d{0,2}$/.test(value)) {
+                        setFormData({ ...formData, age: value });
+                      }
+                    }}
                   />
                 </div>
               </div>
@@ -510,25 +518,29 @@ const MobileDonorRegistration = ({ selectedCamp, onSuccess }) => {
                 </div>
               </div>
               <div className="col-4">
-                <div className="mb-3 form-inputs">
-                  <label
-                    htmlFor="exampleInputEmail1"
-                    className="form-label mb-1"
-                  >
-                    Email
-                  </label>
-                  <Input
-                    placeholder="Enter your email"
-                    value={formData.email}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        email: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-              </div>
+  <div className="mb-3 form-inputs">
+    <label htmlFor="exampleInputEmail1" className="form-label mb-1">
+      Email
+    </label>
+    <Input
+      placeholder="Enter your email"
+      value={formData.email}
+      onChange={(e) =>
+        setFormData({
+          ...formData,
+          email: e.target.value,
+        })
+      }
+      onBlur={() => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (formData.email && !emailRegex.test(formData.email)) {
+          message.error("Invalid email address"); // or use message.error() if using antd
+        }
+      }}
+    />
+  </div>
+</div>
+
               <div className="col-4">
                 <div className="mb-3 form-inputs">
                   <label
@@ -607,12 +619,16 @@ const MobileDonorRegistration = ({ selectedCamp, onSuccess }) => {
                   <Input
                     placeholder="Enter Pincode"
                     value={formData.pincode}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        pincode: e.target.value,
-                      })
-                    }
+                    maxLength={6}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (/^\d{0,6}$/.test(value)) {
+                        setFormData({
+                          ...formData,
+                          pincode: value,
+                        });
+                      }
+                    }}
                   />
                 </div>
               </div>

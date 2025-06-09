@@ -1,5 +1,5 @@
 import React from "react";
-import { Input, Select, Button } from "antd";
+import { Input, Select, Button, message } from "antd";
 
 const AbhaRegistrationForm = ({
   formData,
@@ -48,6 +48,7 @@ const AbhaRegistrationForm = ({
                 placeholder="Enter your age"
                 value={formData.age}
                 onChange={handleAgeChange}
+                maxLength={2}
               />
             </div>
           </div>
@@ -106,12 +107,20 @@ const AbhaRegistrationForm = ({
                 placeholder="Enter your email"
                 value={formData.email}
                 onChange={handleFormChange("email")}
+                onBlur={() => {
+                  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                  if (formData.email && !emailRegex.test(formData.email)) {
+                    message.error("Invalid email address");
+                  }
+                }}
               />
             </div>
           </div>
           <div className="col-4">
             <div className="mb-3 form-inputs">
-              <label className="form-label mb-1">Address<span className="mendate">*</span></label>
+              <label className="form-label mb-1">
+                Address<span className="mendate">*</span>
+              </label>
               <Input
                 placeholder="Enter Address"
                 value={formData.address}
@@ -173,6 +182,12 @@ const AbhaRegistrationForm = ({
                 placeholder="Enter Pincode"
                 value={formData.pincode}
                 onChange={handleFormChange("pincode")}
+                maxLength={6}
+                onBlur={() => {
+                  if (formData.pincode && formData.pincode.length !== 6) {
+                    message.error("Pincode must be exactly 6 digits");
+                  }
+                }}
               />
             </div>
           </div>

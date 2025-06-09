@@ -133,11 +133,11 @@ export default function DonorAdminHome({ onViewAllClick }) {
           </div>
 
           {loading && <div>Loading certificate data...</div>}
-          {error && (
+          {/* {error && (
             <div className="text-danger">
-              Error loading certificate data: {error}
+              No Donation Record Found.
             </div>
-          )}
+          )} */}
 
           <Table
             dataSource={recentCertificates}
@@ -161,8 +161,8 @@ export default function DonorAdminHome({ onViewAllClick }) {
                 <span class="carousel-quote quote-top-left">“</span>
                 <span class="carousel-quote quote-bottom-right">”</span>
                 <p className="inspire_text mb-0 text-center">
-                  Donating blood isn't just saving lives, it's <br /> giving
-                  someone a chance to huf their family <br /> again.
+                  Donating blood isn't just saving lives — it's <br /> giving
+                  someone a chance to hug their family <br /> again.
                 </p>
               </div>
               <div className="d-flex align-items-center">

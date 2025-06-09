@@ -15,7 +15,7 @@ import { getApiData } from "../redux/slices/dataSlice";
 import axios from "axios";
 import { BaseUrl } from "../utils/url.js";
 import dayjs from "dayjs";
-import Swal from 'sweetalert2'
+import Swal from "sweetalert2";
 
 const BLOOD_GROUP_MAPPING = {
   "A-pos": "A+Ve",
@@ -185,7 +185,7 @@ export default function DonorAdminProfile() {
 
       console.log("Payload for API:", updatedData);
 
-      const response = await axios.put(
+      const response = await axios.post(
         `${BaseUrl}/eraktkosh/update`,
         updatedData,
         {
@@ -218,7 +218,7 @@ export default function DonorAdminProfile() {
             religion: updatedData.religionCode,
             spouce: updatedData.spouseName,
             location: updatedData.cityLocation,
-            dob: donorData.body?.dob, 
+            dob: donorData.body?.dob,
           },
         }));
       } else {
@@ -262,13 +262,48 @@ export default function DonorAdminProfile() {
   };
 
   const handleInputChange = (field, value) => {
-    setDonorData((prevData) => ({
-      ...prevData,
-      body: {
-        ...prevData.body,
-        [field]: value,
-      },
-    }));
+    const nameFields = [
+      "edonorFName",
+      "edonorLName",
+      "spouce",
+      "fatherName",
+    ];
+
+    if (nameFields.includes(field)) {
+      // Allow only letters and spaces (no numbers or special characters)
+      const cleanedValue = value.replace(/[^a-zA-Z\s]/g, "");
+
+      // Limit to 50 characters
+      if (cleanedValue.length <= 50) {
+        setDonorData((prevData) => ({
+          ...prevData,
+          body: {
+            ...prevData.body,
+            [field]: cleanedValue,
+          },
+        }));
+
+        // Clear any previous error
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          [field]: "",
+        }));
+      } else {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          [field]: "Maximum 50 characters allowed",
+        }));
+      }
+    } else {
+      // Default update for other fields
+      setDonorData((prevData) => ({
+        ...prevData,
+        body: {
+          ...prevData.body,
+          [field]: value,
+        },
+      }));
+    }
   };
 
   const handleStateChange = (value) => {
@@ -324,6 +359,7 @@ export default function DonorAdminProfile() {
                 <Input
                   placeholder="Enter your first name"
                   value={donorData.body?.edonorFName || ""}
+                  maxLength={50}
                   onChange={(e) =>
                     handleInputChange("edonorFName", e.target.value)
                   }
@@ -342,6 +378,7 @@ export default function DonorAdminProfile() {
                 </label>
                 <Input
                   placeholder="Enter your last name"
+                  maxLength={50}
                   value={donorData.body?.edonorLName || ""}
                   onChange={(e) =>
                     handleInputChange("edonorLName", e.target.value)
@@ -423,6 +460,17 @@ export default function DonorAdminProfile() {
                   onChange={(e) =>
                     handleInputChange("edonorEmail", e.target.value)
                   }
+                  onBlur={() => {
+                    const email = donorData.body?.edonorEmail || "";
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    setErrors((prev) => ({
+                      ...prev,
+                      edonorEmail:
+                        email && !emailRegex.test(email)
+                          ? "Invalid email address"
+                          : "",
+                    }));
+                  }}
                   style={{ borderColor: errors.edonorEmail ? "red" : "" }}
                 />
                 {errors.edonorEmail && (
@@ -484,6 +532,7 @@ export default function DonorAdminProfile() {
                 </label>
                 <Input
                   placeholder="Enter Your Father Name"
+                  maxLength={50}
                   value={donorData.body?.fatherName || ""}
                   onChange={(e) =>
                     handleInputChange("fatherName", e.target.value)
@@ -506,7 +555,7 @@ export default function DonorAdminProfile() {
                     setSelectMaritalStatus(value);
                     handleInputChange("maritalStatus", value);
                   }}
-                  placeholder="Select Marriage"
+                  placeholder="Select Marital Status"
                   filterOption={(input, option) =>
                     (option?.label ?? "")
                       .toLowerCase()
@@ -527,6 +576,7 @@ export default function DonorAdminProfile() {
                 </label>
                 <Input
                   placeholder="Enter Your Spouse Name"
+                  maxLength={50}
                   value={donorData.body?.spouce || ""}
                   onChange={(e) => handleInputChange("spouce", e.target.value)}
                 />
@@ -646,7 +696,7 @@ export default function DonorAdminProfile() {
                   City/ Village
                 </label>
                 <Input
-                  placeholder="Enter Your location"
+                  placeholder="Enter Your City/Village"
                   value={donorData.body?.donorCity || ""}
                   onChange={(e) =>
                     handleInputChange("donorCity", e.target.value)
@@ -666,7 +716,7 @@ export default function DonorAdminProfile() {
                   style={{ width: "100%" }}
                   value={selectedState}
                   onChange={handleStateChange}
-                  placeholder="Select"
+                  placeholder="Select State"
                   filterOption={(input, option) =>
                     (option?.label ?? "")
                       .toLowerCase()
@@ -691,7 +741,7 @@ export default function DonorAdminProfile() {
                   style={{ width: "100%" }}
                   value={selectedDistrict}
                   onChange={handleDistrictChange}
-                  placeholder="Select"
+                  placeholder="Select District"
                   filterOption={(input, option) =>
                     (option?.label ?? "")
                       .toLowerCase()
@@ -728,15 +778,18 @@ export default function DonorAdminProfile() {
                   Pin Code
                 </label>
                 <Input
-                  placeholder="Enter Your pin code"
+                  placeholder="Enter Your Pincode"
+                  maxLength={6}
                   value={donorData.body?.donorPin || ""}
-                  onChange={(e) =>
-                    handleInputChange("donorPin", e.target.value)
-                  }
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (/^\d{0,6}$/.test(value)) {
+                      handleInputChange("donorPin", value);
+                    }
+                  }}
                 />
               </div>
             </div>
-
             <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
               <div className="mb-3 form-inputs">
                 <label htmlFor="exampleInputEmail1" className="form-label mb-1">
@@ -772,7 +825,7 @@ export default function DonorAdminProfile() {
           items={getItems(panelStyle)}
         />
 
-        <div className="mt-4">
+        <div className="mt-4 d-flex justify-content-end">
           <Button onClick={handleSave} type="primary">
             Save Changes
           </Button>
