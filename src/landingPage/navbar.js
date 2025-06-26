@@ -145,10 +145,10 @@ export default function Navbar() {
                       </a>
                     </li>
                     <li>
-                      {/* <Link className="links" to="/publicPages/campRegistration">Register VBD Camp</Link> */}
-                      <a href="/BLDAHIMS/bloodbank/onlineCampRequestNewBB.cnt">
+                      <Link className="links" to="/publicPages/campRegistration">Register VBD Camp</Link>
+                      {/* <a href="/BLDAHIMS/bloodbank/onlineCampRequestNewBB.cnt">
                         Register VBD Camp
-                      </a>
+                      </a> */}
                     </li>
                   </ul>
                 </li>

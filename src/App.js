@@ -1,5 +1,5 @@
 import "./App.css";
-import React from "react";
+import React, {useEffect} from "react";
 import {
   HashRouter as Router,
   Switch,
@@ -33,6 +33,10 @@ import AboutEraktkosh from "./publicPages/AboutEraktkosh.js";
 import GalleryCarousel from "./publicPages/GalleryCarousol.jsx";
 import DonorCampRegister from "./publicPages/donorCampRegister.js";
 import { CampProvider } from "./context/CampContext.js";
+import { initGA, logPageView } from './utils/ga.js';
+
+// const MEASUREMENT_ID = "G-SBWWZLM7W6"
+// ReactGA.initialize(MEASUREMENT_ID)
 
 function App() {
   return (
@@ -52,6 +56,14 @@ function App() {
 
 function AppContent() {
   const location = useLocation();
+
+   useEffect(() => {
+    initGA(); // initialize once on load
+  }, []);
+
+  useEffect(() => {
+    logPageView(location.pathname + location.search); // log on route change
+  }, [location]);
 
   const hideNavbarPaths = ["/pages/portaldonorAdmin"];
   const hideFooterPaths = [

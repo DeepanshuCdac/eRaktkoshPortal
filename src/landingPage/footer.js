@@ -2,21 +2,23 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 export default function Footer() {
-
   const handleImageClick1 = () => {
-    window.location.href = 'http://mohfw.nic.in/';
+    window.location.href = "https://mohfw.gov.in/";
   };
   const handleImageClick2 = () => {
-    window.location.href = 'https://web.umang.gov.in/landing/';
+    window.location.href = "https://web.umang.gov.in/landing/";
   };
   const handleImageClick3 = () => {
-    window.location.href = 'https://www.nhp.gov.in/';
+    window.location.href = "https://nhm.gov.in/";
   };
   const handleImageClick4 = () => {
-    window.location.href = 'https://india.gov.in/';
+    window.location.href = "https://www.india.gov.in/";
   };
   const handleImageClick5 = () => {
-    window.location.href = 'https://cdac.in/';
+    window.location.href = "https://www.cdac.in/";
+  };
+  const handleImageClick6 = () => {
+    window.location.href = "https://eraktkosh.mohfw.gov.in/eraktkoshPortal/#/";
   };
   return (
     <>
@@ -141,69 +143,98 @@ export default function Footer() {
           <div className="row mb-5">
             <div className="col-12 col-md-4 col-xl-2 mb-3">
               <img
-                style={{ cursor: 'pointer' }}
+                onClick={handleImageClick6}
+                style={{ cursor: "pointer" }}
                 className=""
                 width="67px"
                 height="67px"
                 src="assets/images/main-icon.png"
-                alt="...Symbols" />
+                alt="...Symbols"
+              />
             </div>
             <div className="col-12 col-md-4 col-xl-3 mb-3 d-xl-flex justify-content-center">
-              <img className=""
+              <img
+                className=""
                 src="assets/images/ministry-icon.png"
-                style={{ cursor: 'pointer' }}
+                style={{ cursor: "pointer" }}
                 onClick={handleImageClick1}
-                alt="...Symbols" />
+                alt="...Symbols"
+              />
             </div>
             <div className="col-12 col-md-4 col-xl-2 mb-3 d-xl-flex justify-content-center">
-              <img className=""
+              <img
+                className=""
                 src="assets/images/umang-icon.png"
-                style={{ cursor: 'pointer' }}
+                style={{ cursor: "pointer" }}
                 onClick={handleImageClick2}
-                alt="...Symbols" />
+                alt="...Symbols"
+              />
             </div>
             <div className="col-12 col-md-4 col-xl-3 mb-3 d-xl-flex justify-content-center">
-              <img className=""
+              <img
+                className=""
                 src="assets/images/nhp-icon.png"
-                style={{ cursor: 'pointer' }}
+                style={{ cursor: "pointer" }}
                 onClick={handleImageClick3}
-                alt="...Symbols" />
+                alt="...Symbols"
+              />
             </div>
             <div className="col-12 col-md-4 col-xl-2 mb-3 d-xl-flex justify-content-center">
-              <img className=""
+              <img
+                className=""
                 src="assets/images/govt-icon.png"
-                style={{ cursor: 'pointer' }}
+                style={{ cursor: "pointer" }}
                 onClick={handleImageClick4}
-                alt="...Symbols" />
+                alt="...Symbols"
+              />
             </div>
           </div>
 
           <div className="text-center mb-1">
-            <a className="footer-links" href="/BLDAHIMS/bloodbank/termsAndConditions.cnt">
+            <a
+              className="footer-links"
+              href="/BLDAHIMS/bloodbank/termsAndConditions.cnt"
+            >
               Terms & Conditions
             </a>
             |
-            <a className="footer-links" href="/BLDAHIMS/bloodbank/privacyPolicy.cnt">
+            <a
+              className="footer-links"
+              href="/BLDAHIMS/bloodbank/privacyPolicy.cnt"
+            >
               Privacy Policy
             </a>
             |
-            <a className="footer-links" href="/BLDAHIMS/bloodbank/accessibilityStmt.cnt">
+            <a
+              className="footer-links"
+              href="/BLDAHIMS/bloodbank/accessibilityStmt.cnt"
+            >
               Accessibility Statement
             </a>
             |
             <a className="footer-links" href="javascript:void(0)">
-              Last Updated: 12 March 2024
+              Last Updated: 13 June 2025
             </a>
             |
-            <a className="footer-links" href="/BLDAHIMS/bloodbank/eraktkoshSiteMap.cnt">
+            <a
+              className="footer-links"
+              href="/BLDAHIMS/bloodbank/eraktkoshSiteMap.cnt"
+            >
               Site Map
             </a>
             |
-            <a className="footer-links" href="javascript:void(0)" onClick={handleImageClick1}>
-              2016-2024 by Ministry of Health and Family we5
+            <a
+              className="footer-links"
+              href="javascript:void(0)"
+              onClick={handleImageClick1}
+            >
+              2016-2025 by Ministry of Health and Family Welfare
             </a>
           </div>
-          <p className="text-center footer-links mb-0 pb-2" onClick={handleImageClick5}>
+          <p
+            className="text-center footer-links mb-0 pb-2"
+            onClick={handleImageClick5}
+          >
             Designed and Developed by Centre for Development of Advanced
             Computing
           </p>

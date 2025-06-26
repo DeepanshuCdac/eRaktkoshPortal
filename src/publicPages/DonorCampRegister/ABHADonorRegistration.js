@@ -429,7 +429,7 @@ const ABHADonorRegistration = ({ selectedCamp }) => {
   const handleVerificationMethodChange = (value) => {
     setSelectedVerificationMethod(value);
     setVerificationMethod(value);
-    setAbhaData(null); // Reset ABHA data when method changes
+    setAbhaData(null); 
   };
 
   const handleMobileNumberChange = (e) => {

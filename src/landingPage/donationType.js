@@ -64,7 +64,8 @@ const TabContent = ({ tabs }) => {
 export default function DonationType() {
 
   const handleButtonClick = () => {
-    window.location.href = '/BLDAHIMS/bloodbank/nearbyBBRed.cnt';
+     window.location.href = '/beta#/publicPages/campSchedule'; 
+    // window.location.href = '/BLDAHIMS/bloodbank/nearbyBBRed.cnt'; 
   };
   const [activeTab, setActiveTab] = useState(0);
 

@@ -3,7 +3,8 @@ import React from 'react'
 export default function Aboutpage() {
 
   const handleButtonClick = () => {
-    window.location.href = '/BLDAHIMS/bloodbank/about.cnt';
+     window.location.href = '/beta#/publicPages/AboutEraktkosh';
+    // window.location.href = '/BLDAHIMS/bloodbank/about.cnt';
   };
 
   return (
