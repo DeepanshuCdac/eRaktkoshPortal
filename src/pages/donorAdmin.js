@@ -94,21 +94,21 @@ export default function DonorAdmin() {
                 <div className="container-fluid p-0">
                   <div className="header-section mb-3">
                     <div className="d-xl-flex d-lg-flex d-md-flex align-items-center me-auto">
-                        {donorData.body.gender === "M" ? 
-                      <img
-                        style={{ width: "45px", height: "45px" }}
-                        className="img-fluid"
-                        src="assets/images/male.png"
-                        alt="user-img"
-                      />
-                      :
-                      <img
-                        style={{ width: "45px", height: "45px" }}
-                        className="img-fluid"
-                        src="assets/images/female.png"
-                        alt="user-img"
-                      />
-                        }
+                      {donorData.body.gender === "M" ? (
+                        <img
+                          style={{ width: "45px", height: "45px" }}
+                          className="img-fluid"
+                          src="assets/images/male.png"
+                          alt="user-img"
+                        />
+                      ) : (
+                        <img
+                          style={{ width: "45px", height: "45px" }}
+                          className="img-fluid"
+                          src="assets/images/female.png"
+                          alt="user-img"
+                        />
+                      )}
                       <div className="ms-2">
                         <div className="">
                           <p className="mb-0 greet">
@@ -193,7 +193,7 @@ export default function DonorAdmin() {
                           }`}
                           onClick={() => setActiveLink("Looking for Blood")}
                           aria-current="page"
-                          href="/beta#/publicPages/bloodAvailabilitySearch"
+                          href="javascript:void(0)"
                         >
                           Looking for Blood
                         </a>
@@ -207,7 +207,7 @@ export default function DonorAdmin() {
                           }`}
                           onClick={() => setActiveLink("Want to Donate")}
                           aria-current="page"
-                          href="/beta#/publicPages/campSchedule"
+                          href="javascript:void(0)"
                         >
                           Want to Donate
                         </a>
@@ -273,10 +273,12 @@ export default function DonorAdmin() {
                 {activeLink === "Donation Certificate" && (
                   <DonationCertificate onBack={() => setActiveLink("Home")} />
                 )}
-                {/* {activeLink === "Looking for Blood" && (
-                  <BloodAvailabiltySearch />
+                {activeLink === "Looking for Blood" && (
+                  <BloodAvailabiltySearch fromDonorAdmin={true} />
                 )}
-                {activeLink === "Want to Donate" && <CampSchedule />} */}
+                {activeLink === "Want to Donate" && (
+                  <CampSchedule fromDonorAdmin={true} />
+                )}
               </div>
             </div>
           )}

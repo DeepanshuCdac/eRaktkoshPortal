@@ -23,7 +23,7 @@ import NestedBloodAvailabilityTable from "../components/NestedBloodAvailabilityT
 
 const { Option } = Select;
 
-const BloodAvailabiltySearch = () => {
+const BloodAvailabiltySearch = ({ fromDonorAdmin }) => {
   const dispatch = useDispatch();
   const { statesWithDistricts, bloodGroups, componentList } = useSelector(
     (state) => state.data
@@ -553,25 +553,27 @@ const BloodAvailabiltySearch = () => {
       <div className="container">
         <h2 className="header-page mb-2 pt-3">Blood Availability</h2>
         <div className="d-flex flex-wrap gap-1 container-style">
-          <div className="input-wrapper-field">
-            <label className="form-label mb-0">Select Services</label>
-            <Select
-              showSearch
-              style={{ width: "100%" }}
-              placeholder={getPageName()}
-              onChange={handleServiceChange}
-              filterOption={(input, option) =>
-                (option?.label ?? "")
-                  .toLowerCase()
-                  .includes(input.toLowerCase())
-              }
-              options={[
-                { value: "service1", label: "Blood Availability" },
-                { value: "service2", label: "Camp Schedule" },
-                { value: "service3", label: "Blood Center Directory" },
-              ]}
-            />
-          </div>
+          {!fromDonorAdmin && (
+            <div className="input-wrapper-field">
+              <label className="form-label mb-0">Select Services</label>
+              <Select
+                showSearch
+                style={{ width: "100%" }}
+                placeholder={getPageName()}
+                onChange={handleServiceChange}
+                filterOption={(input, option) =>
+                  (option?.label ?? "")
+                    .toLowerCase()
+                    .includes(input.toLowerCase())
+                }
+                options={[
+                  { value: "service1", label: "Blood Availability" },
+                  { value: "service2", label: "Camp Schedule" },
+                  { value: "service3", label: "Blood Center Directory" },
+                ]}
+              />
+            </div>
+          )}
           <div className="input-wrapper-field">
             <label className="form-label mb-0">Select State</label>
             <Select

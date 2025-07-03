@@ -141,7 +141,10 @@ export default function DonorLogin() {
     const isValidNumber = /^\d{10}$/.test(mobileno);
 
     if (!isValidNumber) {
-      Swal.fire("Please enter a valid 10-digit mobile number.");
+      Swal.fire({
+        text: "Please enter a valid 10-digit mobile number.",
+        icon: "question",
+      });
       return;
     }
 
@@ -211,7 +214,10 @@ export default function DonorLogin() {
 
         // Step 4: if otp limit is crossed ....
         if (otpData.limitExceedMessage) {
-          Swal.fire(otpData.limitExceedMessage);
+          Swal.fire({
+            text: otpData.limitExceedMessage,
+            icon: "error",
+          });
           setShowOtpField(false);
           setIsInputDisabled(true);
           return;
@@ -306,7 +312,10 @@ export default function DonorLogin() {
     const otpValues = otpRefs.current.map((input) => input.value).join("");
 
     if (otpValues.length !== 6 || !captchaText) {
-      Swal.fire("Please fill in both OTP and Captcha.");
+      Swal.fire({
+        text: "Please fill in both OTP and Captcha.",
+        icon: "question",
+      });
       return;
     }
 

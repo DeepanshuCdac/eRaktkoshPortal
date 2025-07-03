@@ -15,7 +15,7 @@ import { useHistory } from "react-router-dom";
 
 const { Option } = Select;
 
-const CampSchedule = () => {
+const CampSchedule = ({ fromDonorAdmin }) => {
   useEffect(() => {
     document.title = "e-RaktKosh Camp Registration";
   }, []);
@@ -320,6 +320,7 @@ const CampSchedule = () => {
         <div className="container">
           <h2 className="header-page mb-2 pt-3">Camp Schedule</h2>
           <div className="d-flex justify-content-between flex-wrap gap-3 container-style">
+            {!fromDonorAdmin && (
             <div className="input-wrapper-service">
               <label className="form-label mb-0">Select Services</label>
               <Select
@@ -338,6 +339,7 @@ const CampSchedule = () => {
                 ]}
               />
             </div>
+            )}
             <div className="input-wrapper-service">
               <label className="form-label mb-0">Select State</label>
               <Select
