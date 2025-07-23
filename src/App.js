@@ -34,6 +34,8 @@ import GalleryCarousel from "./publicPages/GalleryCarousol.jsx";
 import DonorCampRegister from "./publicPages/donorCampRegister.js";
 import { CampProvider } from "./context/CampContext.js";
 import { initGA, logPageView } from './utils/ga.js';
+import BodyMan from "./landingPage/bodyMan.js";
+import ScrollToTop from "./landingPage/scrollToTop.js";
 
 // const MEASUREMENT_ID = "G-SBWWZLM7W6"
 // ReactGA.initialize(MEASUREMENT_ID)
@@ -132,11 +134,13 @@ function AppContent() {
           <HeroComponent />
           <DonorCount />
           <Service />
+          <BodyMan/>
           <Aboutpage />
           <LearnDonation />
           <Donationworking />
           <DonationType />
           <Benefits />
+<ScrollToTop/>
         </Route>
       </Switch>
       {!hideFooterPaths.includes(location.pathname) && <Footer />}

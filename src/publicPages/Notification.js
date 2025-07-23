@@ -82,8 +82,8 @@ const Notification = () => {
         }, 300);
     };
 
-    if (loading) return <p>Loading notifications...</p>;
-    if (error) return <p style={{ color: "red" }}>Error: {error}</p>;
+    if (loading) return <p className="page-wrapper">Loading notifications...</p>;
+    if (error) return <p className="page-wrapper" style={{ color: "red" }}>Error: {error}</p>;
 
     const filteredNotification = notifications.filter(notification =>
         notification.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -92,7 +92,7 @@ const Notification = () => {
 
     return (
         <>
-            <div className="pageWrapper">
+            <div className="pageWrapper page-wrapper">
                 <div className="container">
                     <div className="d-xl-flex d-lg-flex d-md-flex d-sm-flex align-items-center justify-content-between py-3">
                         <div className="d-flex align-items-center">
@@ -117,7 +117,7 @@ const Notification = () => {
                 </div>
             </div>
 
-            <div className="body_wrapper py-3">
+            <div className="body_wrapper py-3 page-wrapper">
                 <div className="container" ref={containerRef} style={{ position: "relative" }}>
                     <p className="mb-3 searchResult">Latest Notifications</p>
                     <div className="row">

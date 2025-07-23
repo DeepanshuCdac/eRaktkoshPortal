@@ -10,7 +10,7 @@ const CampRegistration = () => {
 
     return (
         <>
-            <div className="campRegistration mt-3">
+            <div className="campRegistration page-wrapper">
                 <div className="container">
                     <div>
                         <h4 className="text-center header-page">Camp Registration</h4>

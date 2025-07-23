@@ -21,7 +21,7 @@ export default function HeroComponent() {
   };
 
   return (
-    <section className="heroComponent">
+    <section className="heroComponent page-wrapper">
       <div
         id="carouselExampleInterval"
         className="carousel slide"

@@ -1,199 +1,323 @@
-import React from "react";
-import { Link } from 'react-router-dom';
+import React, { useState } from "react";
+import "../scss/landingPage.scss";
+import CallSharpIcon from "@mui/icons-material/CallSharp";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import MenuIcon from "@mui/icons-material/Menu";
+import CloseIcon from "@mui/icons-material/Close";
+import { Input, Button } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
+import { Link } from "react-router-dom";
 export default function Navbar() {
+  const [showInput, setShowInput] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const openDashboard = () => {
+    window.open(
+      "https://eraktkosh.mohfw.gov.in/eRaktkoshUtilities/#/",
+      "_blank"
+    );
+  };
+
+  const handleIconClick = () => {
+    setShowInput(true);
+  };
+
+  const handleBlur = () => {
+    setShowInput(false);
+  };
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
 
   return (
     <>
-      <header className="header">
-        <div className="container">
-          <div className="d-flex align-items-center justify-content-between">
-            <Link to="/beta#">
-              <img
-                src="assets/images/main-icon1.png"
-                className="img-fluid"
-                alt="Home"
-                style={{ cursor: 'pointer' }}
-              />
-            </Link>
+      <main>
+        <header>
+          <section className="top_header p-1">
+            <div className="container">
+              <div className="d-flex align-items-center">
+                <CallSharpIcon style={{ height: "14px" }} />
+                <div className="d-flex">
+                  <p className="mb-0 tollFree">
+                    <span className="d-none d-lg-inline d-xl-inline">
+                      Toll Free Number:
+                    </span>{" "}
+                    9650816031
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
 
-            <input type="checkbox" id="menu-bar" />
-            <label htmlFor="menu-bar">Menu</label>
+          <section className="mid_header p-2">
+            <div className="container">
+              <div className="d-flex align-items-center justify-content-between">
+                <div className="d-flex ">
+                  <img
+                    className="ministry_image"
+                    src="assets/landingPage/health&family.svg"
+                    alt=""
+                  />
+                  <div className="divider"></div>
+                  <img
+                    className="eraktkosh_image"
+                    src="assets/landingPage/eraktkosh.svg"
+                    alt=""
+                  />
+                </div>
+                <div className="d-flex">
+                  <Button
+                    onClick={openDashboard}
+                    className="d-none d-xl-block d-lg-block"
+                  >
+                    e-Raktkosh Dashboard
+                  </Button>
+                  <div className="d-none d-xl-block d-lg-block">
+                    <Input
+                      className="ms-3"
+                      placeholder="Search"
+                      prefix={<SearchOutlined />}
+                    />
+                  </div>
+                  <div className="d-block d-xl-none d-lg-none">
+                    {!showInput ? (
+                      <div className="d-flex">
+                        <SearchOutlined
+                          className="me-4"
+                          onClick={handleIconClick}
+                        />
+                        <div
+                          onClick={toggleMenu}
+                          className="nav__toggle"
+                          id="nav__toggle"
+                        >
+                          {isMenuOpen ? (
+                            <CloseIcon className="nav__close" />
+                          ) : (
+                            <MenuIcon className="nav__burger" />
+                          )}
+                        </div>
+                      </div>
+                    ) : (
+                      <Input
+                        autoFocus
+                        className="ms-2 w-48 transition-all duration-30"
+                        placeholder="Search"
+                        onBlur={handleBlur}
+                        prefix={<SearchOutlined />}
+                      />
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
 
-            <nav className="navbar py-0">
-              <ul className="mb-0 ps-0">
-                <li className="activ">
-                  <a className="dropMenu" href="javascript:void(0)">
-                    HOME
-                    <img
-                      className="ms-2 dropdown-icon"
-                      src="assets/images/drop-down.png"
-                      width="12px"
-                      height="7.4px"
-                      alt="" />
-                  </a>
-                  <ul className="ps-0">
-                    <li>
-                      {/* <a href="/BLDAHIMS/bloodbank/transactions/bbpublicindex.html">
-                        Home Beta
-                      </a> */}
-                      <Link className="links" to="/beta#">Home</Link>
-                    </li>
-                    <li>
-                      {/* <a href="/BLDAHIMS/bloodbank/about.cnt">
-                        About eRaktkosh
-                      </a> */}
-                      <Link className="links" to="/publicPages/AboutEraktkosh"> About eRaktkosh</Link>
-                    </li>
-                    <li>
-                      <a className="links" href="https://eraktkosh.mohfw.gov.in/eRaktkoshUtilities/#/">
-                        e-Raktkosh Dashboard
-                      </a>
-                    </li>
-                    <li>
-                      {/* <a className="links" href="/BLDAHIMS/bloodbank/notification.cnt">
-                        Notifications
-                      </a> */}
-                      <Link className="links" to="/publicPages/Notification">Notifications</Link>
-                    </li>
-                    <li>
-                      {/* <a className="links" href="/BLDAHIMS/bloodbank/eraktkoshfaq.cnt">
-                        eRaktkosh FAQ's
-                      </a> */}
-                      <Link className="links" to="/publicPages/FAQs">eRaktkosh FAQ's</Link>
-                    </li>
-                    <li>
-                      <a href="/BLDAHIMS/bloodbank/transactions/bbpublicindexGallery.html">
-                        Gallery
-                      </a>
-                      {/* <Link className="links" to="/publicPages/gallery">Gallery</Link> */}
-                    </li>
-                    <li>
-                      <a href="/BLDAHIMS/bloodbank/transactions/video.html">
-                        Video Gallery
-                      </a>
-                    </li>
-                    <li>
-                      <a href="/BLDAHIMS/bloodbank/contact.cnt">
-                        Contact Us
-                      </a>
-                    </li>
-                    <li>
-                      <a href="/BLDAHIMS/bloodbank/downloadMobile.cnt">
-                        Mobile Apps
-                      </a>
-                    </li>
-                  </ul>
-                </li>
-                <li>
-                  <a href="javascript:void(0)">
-                    LOOKING FOR BLOOD
-                    <img
-                      className="ms-2 dropdown-icon"
-                      src="assets/images/drop-down.png"
-                      width="12px"
-                      height="7.4px"
-                      alt="" />
-                  </a>
-
-                  <ul className="ps-0">
-                    <li>
-                      <Link className="links" to="/publicPages/bloodAvailabilitySearch">Blood Availability</Link>
-                      {/* <a href="/BLDAHIMS/bloodbank/stockAvailability.cnt">
-                        Blood Availability
-                      </a> */}
-                    </li>
-                    <li>
-                      <Link className="links" to="/publicPages/bloodBankDirectory">Blood Center Directory</Link>
-
-                      {/* <a href="/BLDAHIMS/bloodbank/nearbyBBRed.cnt">
-                        Blood Center Directory
-                      </a> */}
-                    </li>
-                    <li>
-                      <a href="/BLDAHIMS/bloodbank/portalThalassemiaLogin.cnt">
-                        Thalassemia Request
-                      </a>
-                    </li>
-                  </ul>
-                </li>
-                <li>
-                  <a href="javascript:void(0)">
-                    WANT TO DONATE BLOOD
-                    <img
-                      className="ms-2 dropdown-icon"
-                      src="assets/images/drop-down.png"
-                      width="12px"
-                      height="7.4px"
-                      alt="" />
-                  </a>
-                  <ul className="ps-0">
-                    <li>
-                      <Link className="links" to="/publicPages/campSchedule"> Blood Donation Camps</Link>
-                      {/* <a href="/BLDAHIMS/bloodbank/campSchedule.cnt">
-                        Blood Donation Camps
-                      </a> */}
-                    </li>
-                    <li>
-                      <Link className="links" to="/pages/portalDonorLogin"> Donor Login</Link>
-                      {/* <a href="/BLDAHIMS/bloodbank/portalDonorLogin.cnt">
-                        Donor Login
-                      </a> */}
-                    </li>
-                    <li>
-                      <a href="/BLDAHIMS/bloodbank/donateblood.cnt">
-                        About Blood Donation
-                      </a>
-                    </li>
-                    <li>
-                      <Link className="links" to="/publicPages/campRegistration">Register VBD Camp</Link>
-                      {/* <a href="/BLDAHIMS/bloodbank/onlineCampRequestNewBB.cnt">
-                        Register VBD Camp
-                      </a> */}
-                    </li>
-                  </ul>
-                </li>
-                <li>
-                  <a href="javascript:void(0)">
-                    BLOOD CENTER LOGIN
-                    <img
-                      className="ms-2 dropdown-icon"
-                      src="assets/images/drop-down.png"
-                      width="12px"
-                      height="7.4px"
-                      alt="" />
-                  </a>
-                  <ul className="ps-0">
-                    <li>
-                      <a className="links" href="/eRaktKosh/hissso/loginLogin">
-                        eRaktkosh Login
-                      </a>
-                    </li>
-                    <li>
-                      <a className="links" href="/BLDAHIMS/bloodbank/bbOnboard.cnt?hmode=GETONBOARDFORMESSENTIAL">
-                        Add Your Blood Center
-                      </a>
-                    </li>
-                  </ul>
-                </li>
-                <li className="nav-item d-flex d-xl-none d-lg-none">
-                  <a
-                    className="nav-link"
-                    href="https://eraktkosh.mohfw.gov.in/eRaktkoshUtilities/#/" > E-RAKTKOSH DASHBOARD
-                  </a>
-                </li>
-                <div className="d-xl-flex d-lg-flex d-none">
-                  <li className="nav-item">
-                    <a
-                      className="nav-link"
-                      href="https://eraktkosh.mohfw.gov.in/eRaktkoshUtilities/#/" > E-RAKTKOSH DASHBOARD
+          <section className="last_header">
+            <nav className="nav container">
+              <div
+                className={`nav__menu ${isMenuOpen ? "show-menu" : ""}`}
+                id="nav__menu"
+              >
+                <ul className="nav__list">
+                  <li className="nav__list__li">
+                    <a href="#" className="nav__link">
+                      Home
                     </a>
                   </li>
-                </div>
-              </ul>
+
+                  <div className="divider"></div>
+
+                  <li className="nav__list__li">
+                    {/* <a href="#" className="nav__link">
+                      About e-Raktkosh
+                      </a> */}
+                    <Link
+                      className="nav__link"
+                      to="/publicPages/AboutEraktkosh"
+                    >
+                      {" "}
+                      About e-Raktkosh
+                    </Link>
+                  </li>
+                      <div className="divider"></div>
+
+                  {/* dropdown 1 */}
+                  <li className="dropdown__item">
+                    <div className="nav__link">
+                      Looking for Blood{" "}
+                      <KeyboardArrowDownIcon className="dropdown__arrow" />
+                    </div>
+
+                    <ul className="dropdown__menu">
+                      <li className="dropdown__menu__li">
+                        {/* <a href="#" className="dropdown__link">
+                          Notifications
+                        </a> */}
+                        <Link
+                          className="dropdown__link"
+                          to="/publicPages/Notification"
+                        >
+                          Notifications
+                        </Link>
+                      </li>
+
+                      <li className="dropdown__menu__li">
+                        {/* <a href="#" className="dropdown__link">
+                          Donor Login
+                        </a> */}
+                        <Link className="dropdown__link" to="/pages/portalDonorLogin">
+                        {" "}
+                        Donor Login
+                      </Link>
+                      </li>
+                      <li className="dropdown__menu__li">
+                        {/* <a href="#" className="dropdown__link">
+                          Blood Donation Camps
+                        </a> */}
+                        <Link className="dropdown__link" to="/publicPages/campSchedule">
+                        {" "}
+                        Blood Donation Camps
+                      </Link>
+                      </li>
+
+                      <li className="dropdown__menu__li">
+                        {/* <a href="#" className="dropdown__link">
+                          e-Raktkosh Faq's
+                        </a> */}
+                        <Link className="dropdown__link" to="/publicPages/FAQs">
+                        eRaktkosh FAQ's
+                      </Link>
+                      </li>
+
+                      {/* dropdown submenu */}
+                      <li className="dropdown__subitem dropdown__menu__li">
+                        <div className="dropdown__link">
+                          Mobile Apps
+                          <KeyboardArrowDownIcon className="dropdown__add" />
+                        </div>
+
+                        <ul className="dropdown__submenu">
+                          <li className="dropdown__submenu__li">
+                            <a href="#" className="dropdown__sublink">
+                              Test
+                            </a>
+                          </li>
+
+                          <li className="dropdown__submenu__li">
+                            <a href="#" className="dropdown__sublink">
+                              Blood Donation Test
+                            </a>
+                          </li>
+
+                          <li className="dropdown__submenu__li">
+                            <a href="#" className="dropdown__sublink">
+                              Test
+                            </a>
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </li>
+
+                   <div className="divider"></div>
+
+                  <li className="nav__list__li">
+                    <a href="#" className="nav__link">
+                      Want to Donate
+                    </a>
+                  </li>
+
+                   <div className="divider"></div>
+
+                  {/* dropdown 2 */}
+                  <li className="dropdown__item">
+                    <div className="nav__link">
+                      Blood Center Login{" "}
+                      <KeyboardArrowDownIcon className="dropdown__arrow" />
+                    </div>
+
+                    <ul className="dropdown__menu">
+                      <li className="dropdown__menu__li">
+                        {/* <a href="#" className="dropdown__link">
+                          Blood Availability
+                        </a> */}
+                        <Link
+                        className="dropdown__link"
+                        to="/publicPages/bloodAvailabilitySearch"
+                      >
+                        Blood Availability
+                      </Link>
+                      </li>
+
+                      <li className="dropdown__menu__li">
+                        {/* <a href="#" className="dropdown__link">
+                          Blood Center Directory
+                        </a> */}
+                        <Link
+                        className="dropdown__link"
+                        to="/publicPages/bloodBankDirectory"
+                      >
+                        Blood Center Directory
+                      </Link>
+                      </li>
+
+                      <li className="dropdown__menu__li">
+                        <a href="/BLDAHIMS/bloodbank/portalThalassemiaLogin.cnt" className="dropdown__link">
+                          Thalassemia Request
+                        </a>
+                      </li>
+                      <li className="dropdown__menu__li">
+                        <a href="/BLDAHIMS/bloodbank/donateblood.cnt" className="dropdown__link">
+                          About Blood Donation
+                        </a>
+                      </li>
+                      <li className="dropdown__menu__li">
+                        <a href="/eRaktKosh/hissso/loginLogin" className="dropdown__link">
+                          e-Raktkosk Login
+                        </a>
+                      </li>
+                      <li className="dropdown__menu__li">
+                        <a href="/BLDAHIMS/bloodbank/bbOnboard.cnt?hmode=GETONBOARDFORMESSENTIAL" className="dropdown__link">
+                          Add Your Blood Center
+                        </a>
+                      </li>
+                      <li className="dropdown__menu__li">
+                        {/* <a href="#" className="dropdown__link">
+                          Register VBD Camp
+                        </a> */}
+                        <Link
+                        className="dropdown__link"
+                        to="/publicPages/campRegistration"
+                      >
+                        Register VBD Camp
+                      </Link>
+                      </li>
+                    </ul>
+                  </li>
+
+                   <div className="divider"></div>
+
+                  <li className="nav__list__li">
+                    <a href="/BLDAHIMS/bloodbank/transactions/bbpublicindexGallery.html" className="nav__link">
+                      Media/Gallery
+                    </a>
+                  </li>
+
+                   <div className="divider"></div>
+
+                  <li className="nav__list__li">
+                    <a href="/BLDAHIMS/bloodbank/contact.cnt" className="nav__link">
+                      Contact Us
+                    </a>
+                  </li>
+                </ul>
+              </div>
             </nav>
-          </div>
-        </div>
-      </header>
+          </section>
+        </header>
+      </main>
     </>
   );
 }

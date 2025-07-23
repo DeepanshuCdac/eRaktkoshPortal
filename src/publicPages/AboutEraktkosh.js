@@ -4,7 +4,7 @@ import "../scss/aboutEraktkosh.scss";
 const AboutEraktkosh = () => {
   return (
     <>
-      <div className="pageWrapper">
+      <div className="pageWrapper page-wrapper">
         <div className="container">
           <div className="d-xl-flex d-lg-flex d-md-flex d-sm-flex align-items-center justify-content-between py-3">
             <div className="d-flex align-items-center">

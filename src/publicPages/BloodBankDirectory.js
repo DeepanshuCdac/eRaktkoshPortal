@@ -405,7 +405,7 @@ const BloodBankDirectory = () => {
 
   return (
     <>
-      <div className="page_wrapper gradient_style">
+      <div className="page_wrapper gradient_style page-wrapper">
         <div className="container">
           <h2 className="header-page mb-2 pt-3">
             Nearest Blood Center(BB)/ Blood Storage Unit(BSU)

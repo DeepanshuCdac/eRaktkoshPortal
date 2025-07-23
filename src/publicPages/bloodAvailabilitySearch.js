@@ -549,7 +549,7 @@ const BloodAvailabiltySearch = ({ fromDonorAdmin }) => {
   };
 
   return (
-    <div className="page_wrapper gradient_style">
+    <div className="page_wrapper gradient_style page-wrapper">
       <div className="container">
         <h2 className="header-page mb-2 pt-3">Blood Availability</h2>
         <div className="d-flex flex-wrap gap-1 container-style">

@@ -416,7 +416,7 @@ export default function DonorLogin() {
           <div className="spinner"></div>
         </div>
       )} */}
-      <section className="donorlogin">
+      <section className="donorlogin page-wrapper">
         <div className="container-fluid">
           <div className="row">
             <div className="col-xl-7 d-none d-lg-block d-xl-block d-md-block col-lg-7 col-md-7">
