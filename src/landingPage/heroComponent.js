@@ -1,18 +1,18 @@
+import { Button } from "antd";
 import React, { useState, useEffect } from "react";
 
 export default function HeroComponent() {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % 3);
-    }, 10000);
-
-    return () => clearInterval(interval);
+    // const interval = setInterval(() => {
+    //   setCurrentIndex((prevIndex) => (prevIndex + 1) % 4);
+    // }, 10000);
+    // return () => clearInterval(interval);
   }, []);
 
   const handleClick = () => {
-    window.location.href = "/beta#/pages/portalDonorLogin";
+    window.location.href = "/#/publicPages/bloodAvailabilitySearch";
     // window.location.href = "/BLDAHIMS/bloodbank/portalDonorLogin.cnt";
   };
 
@@ -25,10 +25,10 @@ export default function HeroComponent() {
       <div
         id="carouselExampleInterval"
         className="carousel slide"
-        data-bs-ride="carousel"
+        // data-bs-ride="carousel"
       >
-        <div className="carousel-indicators">
-          {[0, 1, 2].map((index) => (
+        <div className="carousel-indicators mb-1">
+          {[0, 1, 2, 3].map((index) => (
             <button
               key={index}
               type="button"
@@ -43,29 +43,22 @@ export default function HeroComponent() {
         </div>
         <div className="carousel-inner">
           {/* 1st Slide */}
-          {/* <div className={`carousel-item ${currentIndex === 0 ? 'active' : ''}`}>
-            <div className="carousel-inner-container">
-              <div className="carousel-image">
-                <img src="assets/images/heroImg1.png" className="d-block w-100" alt="First Image" />
-              </div>
-              <div className="carousel-image carousel-image-right">
-                <img src="assets/gif/heroComponent1.gif" className="d-block w-100" alt="Second Image" />
-              </div>
-              <div className="carousel-caption d-md-block"  style={{ left: '8%', bottom: '0' }}>
-                <h5 className="img-text">Donate Blood Save Lives</h5>
-                <p className="img-content">Be a lifesaver today. Donate blood at the Blood Center,</p>
-                <p className="img-content mb-3">where every donation is a lifeline.</p>
-                <button className="btn imgBtn d-none d-lg-block d-xl-block" onClick={handleClick}>BECOME A DONOR</button>
-              </div>
-            </div>
-          </div> */}
-
-          {/* 2nd Slide */}
           <div
             className={`carousel-item ${currentIndex === 0 ? "active" : ""}`}
           >
             <img
-              src="assets/images/header2.png"
+              src="assets/landingPage/Banner-11.jpg"
+              className="d-block w-100"
+              alt="Second Image"
+            />
+          </div>
+
+          {/* 2nd Slide */}
+          <div
+            className={`carousel-item ${currentIndex === 1 ? "active" : ""}`}
+          >
+            <img
+              src="assets/landingPage/Banner-21.jpg"
               className="d-block w-100"
               alt="Second Image"
             />
@@ -73,23 +66,26 @@ export default function HeroComponent() {
 
           {/* 3rd Slide */}
           <div
-            className={`carousel-item ${currentIndex === 1 ? "active" : ""}`}
+            className={`carousel-item ${currentIndex === 2 ? "active" : ""}`}
           >
             <img
-              src="assets/images/header3.png"
+              src="assets/landingPage/Banner-3.jpg"
               className="d-block w-100"
-              alt=""
+              alt="Second Image"
             />
             <div
               className="carousel-caption d-md-block"
-              style={{ left: "46%", bottom: "0" }}
+              style={{ left: "19%", bottom: "8%" }}
             >
               <div className="d-flex flex-column text-center">
-                <div>
-                  {/* <h5 className="img-text">Donate Blood, Save Lives</h5>
-                  <p className="img-content">Make a life-changing Impact: Donate blood, save lives. </p>
-                  <p className="img-content mb-5">Together, We can heal communities.</p> */}
-                  {/* <button className="btn imgBtn d-none d-lg-block d-xl-block" onClick={handleClick}>BECOME A DONOR</button> */}
+                <div className="d-flex flex-column align-items-baseline">
+                  <h5 className="img-text">Download Now On</h5>
+                  <a href="#" className="mb-2">
+                    <img src="assets/landingPage/playstore.png" alt="" />
+                  </a>
+                  <a href="#">
+                    <img src="assets/landingPage/appstore.png" alt="" />
+                  </a>
                 </div>
               </div>
             </div>
@@ -97,36 +93,26 @@ export default function HeroComponent() {
 
           {/* 4th Slide */}
           <div
-            className={`carousel-item ${currentIndex === 2 ? "active" : ""}`}
+            className={`carousel-item ${currentIndex === 3 ? "active" : ""}`}
           >
             <img
-              src="assets/images/header4.png"
+              src="assets/landingPage/Banner-4.jpg"
               className="d-block w-100"
-              alt="Fourth Image"
+              alt="Second Image"
             />
             <div
-              className="carousel-caption d-md-block mt-3"
-              style={{ left: "7%", bottom: "0" }}
+              className="carousel-caption d-md-block"
+              style={{ left: "12%", bottom: "5%" }}
             >
-              {/* <h5 className="img-text">Donate Blood, Save Lives</h5>
-              <p className="img-content">Uniting to save lives: One nation, one blood, one platform.</p>
-              <p className="img-content mb-5">Donate today and be a hero.</p> */}
-              <button
-                className="btn imgBtn d-none d-lg-block d-xl-block"
-                onClick={handleClick}
-              >
-                BECOME A DONOR
-              </button>
+              <div className="d-flex flex-column text-center">
+                <div className="d-flex">
+                  <Button onClick={handleClick} className="btn__outlined ">
+                    Find Blood Availability
+                  </Button>
+                </div>
+              </div>
             </div>
           </div>
-
-          {/* 5th Slide */}
-          {/* <div className={`carousel-item ${currentIndex === 3 ? 'active' : ''}`}>
-            <img src="assets/images/header5.png" className="d-block w-100" alt="Fifth Image" />
-            <div className="carousel-caption d-md-block" style={{ left: '8%', bottom: '0' }}>
-              <button className="btn imgBtn d-none d-lg-block d-xl-block" onClick={handleClick}>BECOME A DONOR</button>
-            </div>
-          </div> */}
         </div>
 
         {/* Navigation Buttons */}

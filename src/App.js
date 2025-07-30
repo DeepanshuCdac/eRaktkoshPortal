@@ -1,5 +1,5 @@
 import "./App.css";
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import {
   HashRouter as Router,
   Switch,
@@ -33,9 +33,10 @@ import AboutEraktkosh from "./publicPages/AboutEraktkosh.js";
 import GalleryCarousel from "./publicPages/GalleryCarousol.jsx";
 import DonorCampRegister from "./publicPages/donorCampRegister.js";
 import { CampProvider } from "./context/CampContext.js";
-import { initGA, logPageView } from './utils/ga.js';
+import { initGA, logPageView } from "./utils/ga.js";
 import BodyMan from "./landingPage/bodyMan.js";
 import ScrollToTop from "./landingPage/scrollToTop.js";
+import Link from "./landingPage/link.js";
 
 // const MEASUREMENT_ID = "G-SBWWZLM7W6"
 // ReactGA.initialize(MEASUREMENT_ID)
@@ -59,7 +60,7 @@ function App() {
 function AppContent() {
   const location = useLocation();
 
-   useEffect(() => {
+  useEffect(() => {
     initGA(); // initialize once on load
   }, []);
 
@@ -132,15 +133,16 @@ function AppContent() {
 
         <Route path="/">
           <HeroComponent />
-          <DonorCount />
+          <Link/>
+          {/* <DonorCount /> */}
           <Service />
-          <BodyMan/>
-          <Aboutpage />
-          <LearnDonation />
+          <BodyMan />
+          {/* <Aboutpage />
+          <LearnDonation /> */}
           <Donationworking />
-          <DonationType />
-          <Benefits />
-<ScrollToTop/>
+          {/* <DonationType />
+          <Benefits /> */}
+          <ScrollToTop />
         </Route>
       </Switch>
       {!hideFooterPaths.includes(location.pathname) && <Footer />}

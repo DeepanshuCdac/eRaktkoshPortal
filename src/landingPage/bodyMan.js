@@ -89,17 +89,27 @@ export default function BodyMan() {
     }
   };
 
-  const handleGuidelines = () => {
+  const handleMouseEnter = () => {
     setShowGuidelines(true);
+  };
+
+  const handleMouseLeave = () => {
+    setShowGuidelines(false);
   };
 
   return (
     <section className="body__man">
       <div className="container">
-        <div className="inner__container my-4">
-          <div className="guidelines__img d-flex">
-            {!showGuidelines && <p className="mb-0">NHM Blood Guidelines</p>}
-            <img src="assets/landingPage/guidelines.svg" alt="" />
+        <div className="inner__container mt-4 mb-2">
+          <div className="guidelines__img d-flex align-items-center">
+            <p className="mb-0 guidelines__content">NHM Blood Guidelines</p>
+            <img
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+              src="assets/landingPage/guidelines.svg"
+              alt="Guidelines"
+              className="cursor-pointer"
+            />
           </div>
           <div className="left__panel">
             {/* Step 1 */}
@@ -159,7 +169,7 @@ export default function BodyMan() {
                     <p className="mb-3 section__overview">
                       Question {currentIndex + 1} of {questions.length}
                     </p>
-                    <p className="mb-0 question__section">
+                    <p className="mb-3 question__section">
                       {questions[currentIndex].ques}
                     </p>
                     <p className="mb-1 section__overview">
@@ -235,14 +245,19 @@ export default function BodyMan() {
                       </svg>
                     </div>
                   </div>
-                  <div>
+                  <div className="health__percent text-center">
                     <p className="body__percent mb-0">{percentageShow}</p>
+                    <p className="body__percent_text mb-0">Health Percentage</p>
                   </div>
                 </div>
               )}
             </div>
           </div>
         </div>
+        <p className="note__text mb-2">
+          The answers to these questions are for general guidance only. Please
+          consult a doctor before donating blood.
+        </p>
       </div>
     </section>
   );
