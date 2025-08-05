@@ -167,6 +167,7 @@ main {
 // hero Component...
 .heroComponent {
   .carousel-indicators {
+    margin-bottom: 0.25rem;
     button {
       background-color: $highlight-color;
       border-radius: 50%;
@@ -368,6 +369,60 @@ main {
   }
 }
 
+// india map...
+.map__india {
+  svg {
+    display: inline-block !important;
+    position: relative !important;
+    vertical-align: middle;
+    height: 600px;
+    left: 25% !important;
+  }
+  svg > g > g:nth-child(4) {
+    display: none;
+  }
+  .map__dropdown__section {
+    max-width: 160px;
+    label {
+      font-size: 20px;
+      font-weight: 700;
+      color: $black;
+    }
+    .ant-select-focused,
+    .ant-select-outlined,
+    .ant-select-selector {
+      box-shadow: none !important;
+      border: transparent !important;
+      color: $black;
+    }
+    .ant-select-selector {
+      border: none;
+      padding: 0;
+      .ant-select-selection-item {
+        font-size: 16px;
+        font-weight: 500;
+      }
+    }
+  }
+  .map__data_container {
+    background-color: $map_data_background;
+    border-radius: 5px;
+    .key {
+      font-size: 13px;
+      color: $map_data_color;
+    }
+    .value {
+      font-size: 24px;
+      font-weight: 700;
+      color: $highlight-color;
+      // padding-left: 19px;
+    }
+  }
+  .datamap-state {
+    fill: $map_data_color;
+  }
+}
+
 // Scroll btn...
 .scroll-to-top {
   position: fixed;
@@ -418,159 +473,6 @@ main {
   p {
     font-size: 13px;
     font-weight: 500;
-  }
-}
-
-@media screen and (max-width: 576px) {
-  .body__man {
-    .inner__container {
-      .right__panel {
-        display: block;
-
-        .health__percent {
-          margin-left: 15% !important;
-        }
-      }
-    }
-  }
-}
-
-@media (max-width: 768px) {
-  .mid_header {
-    .ministry_image {
-      width: 28%;
-    }
-    .eraktkosh_image {
-      width: 42%;
-    }
-
-    .anticon-search {
-      font-size: 15px !important;
-    }
-  }
-}
-
-@media screen and (max-width: 991px) {
-  main .last_header .nav {
-    height: 0;
-  }
-  .nav__menu {
-    max-height: 500px;
-    position: fixed;
-    left: 0;
-    top: -100%;
-    width: 80%;
-    background-color: $highlight-color;
-    transition: top 0.4s ease;
-    z-index: 1000;
-    overflow-y: scroll;
-
-    &.show-menu {
-      top: 26px;
-    }
-
-    .nav__list {
-      background-color: $highlight-color;
-      padding-top: 1rem;
-      padding-bottom: 1rem;
-      li {
-        .nav__link {
-          color: $white;
-          padding: 1rem 1.5rem;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          transition: background-color 0.3s;
-
-          &:hover {
-            background-color: darken($highlight-color, 10%);
-          }
-        }
-      }
-
-      .dropdown__item {
-        cursor: pointer;
-
-        .dropdown__menu,
-        .dropdown__submenu {
-          max-height: 0;
-          overflow: hidden;
-          transition: max-height 0.4s ease-out;
-
-          .dropdown__menu__li,
-          .dropdown__submenu__li {
-            padding: 10px 40px;
-
-            &:hover {
-              background-color: darken($highlight-color, 10%);
-            }
-          }
-        }
-
-        .dropdown__arrow {
-          font-size: 1.25rem;
-          transition: transform 0.4s;
-        }
-
-        .dropdown__link,
-        .dropdown__sublink {
-          color: $white;
-          font-weight: 500;
-        }
-      }
-
-      .dropdown__item:hover .dropdown__menu,
-      .dropdown__subitem:hover > .dropdown__submenu {
-        max-height: 1000px;
-        transition: max-height 0.4s ease-in;
-      }
-
-      .dropdown__item:hover .dropdown__arrow {
-        transform: rotate(180deg);
-      }
-    }
-  }
-
-  .nav__menu::-webkit-scrollbar {
-    width: 0;
-  }
-
-  .show-menu {
-    opacity: 1;
-    pointer-events: initial;
-  }
-
-  .show-icon {
-    .nav__burger {
-      opacity: 0;
-      transform: rotate(90deg);
-    }
-    .nav__close {
-      opacity: 1;
-      transform: rotate(90deg);
-    }
-  }
-
-  .body__man {
-    .inner__container {
-      display: flex;
-      flex-direction: column;
-      .guidelines__img {
-        right: 0px;
-      }
-      .left__panel {
-      }
-      .right__panel {
-      }
-    }
-  }
-
-  .service {
-    .service__inner__section {
-      .tab__view {
-        display: none;
-      }
-    }
   }
 }
 
@@ -787,6 +689,26 @@ main {
   }
 }
 
+@media screen and (max-width: 1400px) {
+  .heroComponent {
+    .carousel-caption {
+      .img-text {
+        font-size: 14px !important;
+      }
+      img {
+        width: 100px;
+        height: 30px;
+      }
+    }
+  }
+
+  .map__india {
+    svg {
+      left: 23% !important;
+    }
+  }
+}
+
 @media screen and (max-width: 1200px) {
   .btn__colored {
     font-size: 13px;
@@ -805,6 +727,289 @@ main {
           font-size: 18px !important;
         }
       }
+    }
+  }
+
+  .heroComponent {
+    .carousel-indicators {
+      margin-bottom: 0.1rem;
+      button {
+        width: 7px;
+        height: 7px;
+        margin-right: 5px;
+      }
+    }
+    .carousel-caption {
+      .img-text {
+        font-size: 12px !important;
+      }
+      img {
+        width: 90px;
+        height: 27px;
+      }
+    }
+  }
+
+  .map__india {
+    svg {
+      left: 10% !important;
+      height: 500px;
+    }
+  }
+}
+
+@media screen and (max-width: 991px) {
+  main .last_header .nav {
+    height: 0;
+  }
+  .nav__menu {
+    max-height: 500px;
+    position: fixed;
+    left: 0;
+    top: -100%;
+    width: 80%;
+    background-color: $highlight-color;
+    transition: top 0.4s ease;
+    z-index: 1000;
+    overflow-y: scroll;
+
+    &.show-menu {
+      top: 26px;
+    }
+
+    .nav__list {
+      background-color: $highlight-color;
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+      li {
+        .nav__link {
+          color: $white;
+          padding: 1rem 1.5rem;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          transition: background-color 0.3s;
+
+          &:hover {
+            background-color: darken($highlight-color, 10%);
+          }
+        }
+      }
+
+      .dropdown__item {
+        cursor: pointer;
+
+        .dropdown__menu,
+        .dropdown__submenu {
+          max-height: 0;
+          overflow: hidden;
+          transition: max-height 0.4s ease-out;
+
+          .dropdown__menu__li,
+          .dropdown__submenu__li {
+            padding: 10px 40px;
+
+            &:hover {
+              background-color: darken($highlight-color, 10%);
+            }
+          }
+        }
+
+        .dropdown__arrow {
+          font-size: 1.25rem;
+          transition: transform 0.4s;
+        }
+
+        .dropdown__link,
+        .dropdown__sublink {
+          color: $white;
+          font-weight: 500;
+        }
+      }
+
+      .dropdown__item:hover .dropdown__menu,
+      .dropdown__subitem:hover > .dropdown__submenu {
+        max-height: 1000px;
+        transition: max-height 0.4s ease-in;
+      }
+
+      .dropdown__item:hover .dropdown__arrow {
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+  .nav__menu::-webkit-scrollbar {
+    width: 0;
+  }
+
+  .show-menu {
+    opacity: 1;
+    pointer-events: initial;
+  }
+
+  .heroComponent {
+    .carousel-indicators {
+      margin-bottom: 0;
+      button {
+        width: 6px;
+        height: 6px;
+        margin-right: 4px;
+      }
+    }
+    .carousel-caption {
+      bottom: 4% !important;
+      .img-text {
+        margin-bottom: 0.2rem;
+        font-size: 10px !important;
+      }
+      img {
+        width: 70px;
+        height: 21px;
+      }
+    }
+  }
+
+  .show-icon {
+    .nav__burger {
+      opacity: 0;
+      transform: rotate(90deg);
+    }
+    .nav__close {
+      opacity: 1;
+      transform: rotate(90deg);
+    }
+  }
+
+  .body__man {
+    .inner__container {
+      display: flex;
+      flex-direction: column;
+      .guidelines__img {
+        right: 0px;
+      }
+      .left__panel {
+      }
+      .right__panel {
+      }
+    }
+  }
+
+  .service {
+    .service__inner__section {
+      .tab__view {
+        display: none;
+      }
+    }
+  }
+
+  .map__india {
+    svg {
+      left: 18% !important;
+      height: 500px;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .mid_header {
+    .ministry_image {
+      width: 28%;
+    }
+    .eraktkosh_image {
+      width: 42%;
+    }
+
+    .anticon-search {
+      font-size: 15px !important;
+    }
+  }
+
+  .heroComponent {
+    .carousel-indicators [data-bs-target] {
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+    }
+    .carousel-caption {
+      bottom: 2% !important;
+      .img-text {
+        margin-bottom: 0.1rem;
+        font-size: 8px !important;
+      }
+      img {
+        width: 50px;
+        height: 15px;
+      }
+    }
+  }
+
+  .map__india {
+    svg {
+      left: 10% !important;
+      height: 500px;
+    }
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .heroComponent {
+    .carousel-indicators [data-bs-target] {
+      border-top: 3px solid transparent;
+      border-bottom: 3px solid transparent;
+
+      button {
+        width: 5px;
+        height: 5px;
+        margin-right: 3px;
+      }
+    }
+    .carousel-caption {
+      bottom: -2% !important;
+      .img-text {
+        margin-bottom: 0;
+        font-size: 8px !important;
+      }
+      img {
+        width: 50px;
+        height: 15px;
+      }
+    }
+  }
+
+  .body__man {
+    .inner__container {
+      .right__panel {
+        display: block;
+
+        .health__percent {
+          margin-left: 15% !important;
+        }
+      }
+    }
+  }
+
+  .map__india {
+    svg {
+      left: 0% !important;
+      height: 450px;
+    }
+  }
+}
+
+@media screen and (max-width: 463px) {
+    .map__india {
+    svg {
+      left: 0% !important;
+      height: 350px;
+    }
+  }
+}
+
+@media screen and (max-width: 362px) {
+    .map__india {
+    svg {
+      left: 0% !important;
+      height: 300px;
     }
   }
 }

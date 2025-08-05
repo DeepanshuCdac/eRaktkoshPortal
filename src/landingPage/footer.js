@@ -37,7 +37,7 @@ export default function Footer() {
             </div>
             <div className="sub__section" style={{ flex: 2 }}>
               <div className="row">
-                <div className="col-6">
+                <div className="col-xl-6 col-lg-6 col-md-6 col-12 ">
                   <div className="d-flex flex-column">
                     <h3 className="section__header mb-3">Important Links</h3>
                     <Link
@@ -72,7 +72,7 @@ export default function Footer() {
                     </Link>
                   </div>
                 </div>
-                <div className="col-6">
+                <div className="col-xl-6 col-lg-6 col-md-6 col-12 ">
                   <div className="d-flex flex-column">
                     <h3 className="section__header mb-3">Policies</h3>
                     {/* <Link

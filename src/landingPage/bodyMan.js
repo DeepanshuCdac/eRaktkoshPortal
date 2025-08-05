@@ -124,7 +124,7 @@ export default function BodyMan() {
                 </p>
                 <div>
                   <Button
-                    className="me-3 btn__colored"
+                    className="me-3 mb-3 btn__colored"
                     onClick={() => setStep(2)}
                   >
                     Check your eligibility

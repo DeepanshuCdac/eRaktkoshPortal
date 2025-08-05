@@ -37,6 +37,7 @@ import { initGA, logPageView } from "./utils/ga.js";
 import BodyMan from "./landingPage/bodyMan.js";
 import ScrollToTop from "./landingPage/scrollToTop.js";
 import Link from "./landingPage/link.js";
+import IndiaMap from "./landingPage/indiaMap.js";
 
 // const MEASUREMENT_ID = "G-SBWWZLM7W6"
 // ReactGA.initialize(MEASUREMENT_ID)
@@ -139,6 +140,7 @@ function AppContent() {
           <BodyMan />
           {/* <Aboutpage />
           <LearnDonation /> */}
+          <IndiaMap/>
           <Donationworking />
           {/* <DonationType />
           <Benefits /> */}

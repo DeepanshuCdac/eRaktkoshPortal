@@ -27,7 +27,7 @@ export default function HeroComponent() {
         className="carousel slide"
         // data-bs-ride="carousel"
       >
-        <div className="carousel-indicators mb-1">
+        <div className="carousel-indicators">
           {[0, 1, 2, 3].map((index) => (
             <button
               key={index}
@@ -80,7 +80,7 @@ export default function HeroComponent() {
               <div className="d-flex flex-column text-center">
                 <div className="d-flex flex-column align-items-baseline">
                   <h5 className="img-text">Download Now On</h5>
-                  <a href="#" className="mb-2">
+                  <a href="#" className="">
                     <img src="assets/landingPage/playstore.png" alt="" />
                   </a>
                   <a href="#">
