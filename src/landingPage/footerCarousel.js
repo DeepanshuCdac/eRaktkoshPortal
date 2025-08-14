@@ -2,31 +2,31 @@ import React, { useEffect, useState } from "react";
 
 const initialImages = [
   { img: "assets/landingPage/ministry.png", id: 1 },
-  { img: "assets/landingPage/electronics.png", id: 2 },
-  { img: "assets/landingPage/cdac.png", id: 3 },
-  { img: "assets/landingPage/digitalindia.png", id: 4 },
-  { img: "assets/landingPage/indiagov.png", id: 5 },
-  { img: "assets/landingPage/mygov.png", id: 6 },
+  // { img: "assets/landingPage/electronics.png", id: 2 },
+  { img: "assets/landingPage/cdac.png", id: 2 },
+  { img: "assets/landingPage/digitalindia.png", id: 3 },
+  { img: "assets/landingPage/indiagov.png", id: 4 },
+  { img: "assets/landingPage/mygov.png", id: 5 },
 ];
 
 export default function FooterCarousel() {
-  const [visibleCount, setVisibleCount] = useState(6);
+  const [visibleCount, setVisibleCount] = useState(5);
   const [startIndex, setStartIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const [direction, setDirection] = useState(null);
 
-  // Update visible count based on window size
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth;
-      if (width >= 1400) setVisibleCount(6);
+      if (width >= 1400) setVisibleCount(5);
       else if (width >= 1200) setVisibleCount(5);
       else if (width >= 991) setVisibleCount(4);
       else if (width >= 768) setVisibleCount(3);
-      else setVisibleCount(2);
+      else if(width>= 463) setVisibleCount(2);
+      else setVisibleCount(1)
     };
 
-    handleResize(); // initial check
+    handleResize(); 
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
@@ -46,10 +46,9 @@ export default function FooterCarousel() {
         );
       }
       setIsAnimating(false);
-    }, 400); // match transition time
+    }, 400);
   };
 
-  // Create visible image list by rotating from startIndex
   const getVisibleImages = () => {
     const visible = [];
     for (let i = 0; i < visibleCount; i++) {

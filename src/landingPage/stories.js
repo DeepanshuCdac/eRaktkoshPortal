@@ -82,8 +82,8 @@ export default function Stories() {
   }, []);
 
   const handleGalleryActive = () => {
-    setGalleryActive(true);
-    setVideoActive(false);
+    setGalleryActive(true)
+    setVideoActive(false)
   };
 
   const handleVideoActive = () => {
