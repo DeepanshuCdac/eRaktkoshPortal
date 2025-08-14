@@ -11,6 +11,27 @@ export default function Service() {
     console.log();
   };
 
+  const handleBloodSearch = () => {
+    console.log("button clicked");
+    window.location.href = '/#/publicPages/bloodAvailabilitySearch'
+  }
+  const handleBloodDirectory = () => {
+    console.log("button clicked");
+    window.location.href = '/#/publicPages/bloodBankDirectory'
+  }
+  const handleDonationCamps = () => {
+    console.log("button clicked");
+    window.location.href = '/#/publicPages/campSchedule'
+  }
+  const handleDonorLogin = () => {
+    console.log("button clicked");
+    window.location.href = '/#/pages/portalDonorLogin'
+  }
+  const handleRegisterCamps = () => {
+    console.log("button clicked");
+    window.location.href = '/#/publicPages/campRegistration'
+  }
+
   const text = {
     blood_availability:
       "The Blood Availability Search lets users quickly check real-time blood availability across registered blood center. By selecting State, District, Blood Group, Component and Location, users can easily find the required units. This tool supports patients, donors, and hospitals in making informed decisions during emergencies or planned treatments.",
@@ -48,7 +69,7 @@ export default function Service() {
         <div className="d-flex">
           <div style={{ flex: 1 }}>
             <p className="">{text.blood_availability}</p>
-            <Button className="btn__outlined">Blood Availability Search</Button>
+            <Button onClick={handleBloodSearch} className="btn__outlined">Blood Availability Search</Button>
           </div>
           <div style={{ flex: 1 }} className="d-flex justify-content-end">
             <img src={content_image.blood_availability} alt="" />
@@ -68,7 +89,7 @@ export default function Service() {
         <div className="d-flex">
           <div style={{ flex: 1 }}>
             <p className="">{text.blood_center_directory}</p>
-            <Button className="btn__outlined">Blood Center Directory</Button>
+            <Button onClick={handleBloodDirectory} className="btn__outlined">Blood Center Directory</Button>
           </div>
           <div style={{ flex: 1 }} className="d-flex justify-content-end">
             <img src={content_image.blood_center_directory} alt="" />
@@ -88,7 +109,7 @@ export default function Service() {
         <div className="d-flex">
           <div style={{ flex: 1 }}>
             <p className="">{text.blood_donation_camps}</p>
-            <Button className="btn__outlined">Blood Donation Camps</Button>
+            <Button onClick={handleDonationCamps} className="btn__outlined">Blood Donation Camps</Button>
           </div>
           <div style={{ flex: 1 }} className="d-flex justify-content-end">
             <img src={content_image.blood_donation_camps} alt="" />
@@ -108,7 +129,7 @@ export default function Service() {
         <div className="d-flex">
           <div style={{ flex: 1 }}>
             <p className="">{text.donor_login}</p>
-            <Button className="btn__outlined">Donor Login</Button>
+            <Button onClick={handleDonorLogin} className="btn__outlined">Donor Login</Button>
           </div>
           <div style={{ flex: 1 }} className="d-flex justify-content-end">
             <img src={content_image.donor_login} alt="" />
@@ -130,7 +151,7 @@ export default function Service() {
         <div className="d-flex">
           <div style={{ flex: 1 }}>
             <p className="">{text.register_voluntary_camp}</p>
-            <Button className="btn__outlined">Register Voluntary Camps</Button>
+            <Button onClick={handleRegisterCamps} className="btn__outlined">Register Voluntary Camps</Button>
           </div>
           <div style={{ flex: 1 }} className="d-flex justify-content-end">
             <img src={content_image.register_voluntary_camp} alt="" />
@@ -165,7 +186,7 @@ export default function Service() {
         <div className="d-flex flex-column align-items-center">
           <div className="mb-2">
             <p>{text.blood_availability}</p>
-            <Button className="btn__outlined">
+            <Button className="btn__outlined" onClick={handleBloodSearch}>              
               {btnLink.blood_availability}
             </Button>
           </div>
@@ -190,7 +211,7 @@ export default function Service() {
         <div className="d-flex flex-column align-items-center">
           <div className="mb-2">
             <p>{text.blood_center_directory}</p>
-            <Button className="btn__outlined">
+            <Button className="btn__outlined" onClick={handleBloodDirectory}>
               {btnLink.blood_center_directory}
             </Button>
           </div>
@@ -215,7 +236,7 @@ export default function Service() {
         <div className="d-flex flex-column align-items-center">
           <div className="mb-2">
             <p>{text.blood_donation_camps}</p>
-            <Button className="btn__outlined">
+            <Button className="btn__outlined" onClick={handleDonationCamps}>
               {btnLink.blood_donation_camps}
             </Button>
           </div>
@@ -240,7 +261,7 @@ export default function Service() {
         <div className="d-flex flex-column align-items-center">
           <div className="mb-2">
             <p>{text.donor_login}</p>
-            <Button className="btn__outlined">{btnLink.donor_login}</Button>
+            <Button className="btn__outlined" onClick={handleDonorLogin}>{btnLink.donor_login}</Button>
           </div>
           <img src={content_image.donor_login} alt="" />
         </div>
@@ -265,7 +286,7 @@ export default function Service() {
         <div className="d-flex flex-column align-items-center">
           <div className="mb-2">
             <p>{text.register_voluntary_camp}</p>
-            <Button className="btn__outlined">
+            <Button className="btn__outlined" onClick={handleRegisterCamps}>
               {btnLink.register_voluntary_camp}
             </Button>
           </div>

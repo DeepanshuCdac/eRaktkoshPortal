@@ -226,7 +226,7 @@ export default function DonorRegister() {
 
   return (
     <>
-      <section className="donorRegistration">
+      <section className="donorRegistration page-wrapper">
         <div className="container-fluid">
           <h2 className="login-header text-center mt-3 mb-3">Donor Sign-Up</h2>
           {!isOtpGenerated && (

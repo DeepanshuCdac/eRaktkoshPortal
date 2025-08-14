@@ -127,7 +127,7 @@ const IndiaMap = () => {
   });
 
   return (
-    <div className="map__india">
+    <section className="map__india">
       <div className="container">
         <div className="row align-items-center">
           <div className="col-xl-4 col-lg-5 col-12">
@@ -278,7 +278,7 @@ const IndiaMap = () => {
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

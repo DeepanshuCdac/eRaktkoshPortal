@@ -36,27 +36,30 @@ const Faqs = () => {
     return matchesSearch && matchesFilter;
   });
 
-  useEffect(() => {
-    const fetchInitialData = async () => {
-      try {
-        // fetching faq from api...
-        const faqResponse = await axios.get(`${BaseUrl}/eraktkosh/faq/list`);
-        if (Array.isArray(faqResponse.data)) {
-          const faqsWithType = faqResponse.data.map((faq) => {
+ useEffect(() => {
+  const fetchInitialData = async () => {
+    try {
+      // fetching faq from api...
+      const faqResponse = await axios.get(`${BaseUrl}/eraktkosh/question/list`);
+
+      if (Array.isArray(faqResponse.data)) {
+        const faqsWithType = faqResponse.data
+          .filter((faq) => faq.quesType?.toLowerCase() === "faq question") // ✅ Only take matching quesType
+          .map((faq) => {
             // faq filters...
             if (
-              faq.faqQuestion.toLowerCase().includes("blood availability") ||
-              faq.faqAnswer.toLowerCase().includes("general")
+              faq.faqQuestion?.toLowerCase().includes("blood availability") ||
+              faq.faqAnswer?.toLowerCase().includes("general")
             ) {
               return { ...faq, faqType: "General & Blood Availability" };
             } else if (
-              faq.faqQuestion.toLowerCase().includes("donation") ||
-              faq.faqAnswer.toLowerCase().includes("camp")
+              faq.faqQuestion?.toLowerCase().includes("donation") ||
+              faq.faqAnswer?.toLowerCase().includes("camp")
             ) {
               return { ...faq, faqType: "Blood Donation & Camps" };
             } else if (
-              faq.faqQuestion.toLowerCase().includes("app") ||
-              faq.faqAnswer.toLowerCase().includes("app")
+              faq.faqQuestion?.toLowerCase().includes("app") ||
+              faq.faqAnswer?.toLowerCase().includes("app")
             ) {
               return {
                 ...faq,
@@ -66,25 +69,28 @@ const Faqs = () => {
               return { ...faq, faqType: "General & Blood Availability" };
             }
           });
-          setFaqItems(faqsWithType);
-        }
 
-        // captcha api....
-        const captchaResponse = await axios.post(
-          `${BaseUrl}/eraktkosh/regenerateCaptcha`
-        );
-        const data = captchaResponse.data;
-        setCaptchaImage(data.captchaImage);
-        setCaptchaText(data.captchaText);
-        console.log("CAPTCHA fetched:", data);
-      } catch (error) {
-        console.error("Error fetching initial data:", error);
-        message.error("Something went wrong while loading the page.");
+        setFaqItems(faqsWithType);
       }
-    };
 
-    fetchInitialData();
-  }, []);
+      // captcha api....
+      const captchaResponse = await axios.post(
+        `${BaseUrl}/eraktkosh/regenerateCaptcha`
+      );
+      const data = captchaResponse.data;
+      setCaptchaImage(data.captchaImage);
+      setCaptchaText(data.captchaText);
+      console.log("CAPTCHA fetched:", data);
+
+    } catch (error) {
+      console.error("Error fetching initial data:", error);
+      message.error("Something went wrong while loading the page.");
+    }
+  };
+
+  fetchInitialData();
+}, []);
+
 
   const fetchCaptcha = async () => {
     try {

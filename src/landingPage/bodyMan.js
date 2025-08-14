@@ -1,53 +1,7 @@
 import { Button } from "antd";
 import React, { useEffect, useState } from "react";
-
-const questions = [
-  {
-    ques: "Are you between 18 to 65 years of age?",
-    quesTitle:
-      "For your safety, there are minimum and maximum ages for blood donation. The minimum age is 18 and the maximum age is 65 for first-time donors.",
-  },
-  {
-    ques: "Is your body weight at least 45 kg?",
-    quesTitle:
-      "For your safety, there are minimum and maximum ages for blood donation. The minimum age is 18 and the maximum age is 65 for first-time donors.",
-  },
-  {
-    ques: "Are you currently taking any medication (e.g., antibiotics, blood thinners)?",
-    quesTitle:
-      "For your safety, there are minimum and maximum ages for blood donation. The minimum age is 18 and the maximum age is 65 for first-time donors.",
-  },
-  {
-    ques: "Have you had any infection, fever, cold, cough, weakness, dizziness, or fatigue today?",
-    quesTitle:
-      "For your safety, there are minimum and maximum ages for blood donation. The minimum age is 18 and the maximum age is 65 for first-time donors.",
-  },
-  {
-    ques: "Have you undergone any surgery or major dental procedure recently (last 6–12 months)?",
-    quesTitle:
-      "For your safety, there are minimum and maximum ages for blood donation. The minimum age is 18 and the maximum age is 65 for first-time donors.",
-  },
-  {
-    ques: "Did you have at least 6 hours of sleep last night?",
-    quesTitle:
-      "For your safety, there are minimum and maximum ages for blood donation. The minimum age is 18 and the maximum age is 65 for first-time donors.",
-  },
-  {
-    ques: "Did you eat a light (non-oily) meal 2–3 hours before donating?",
-    quesTitle:
-      "For your safety, there are minimum and maximum ages for blood donation. The minimum age is 18 and the maximum age is 65 for first-time donors.",
-  },
-  {
-    ques: "Have you had any tattoos, piercings, or acupuncture in the last 6 months?",
-    quesTitle:
-      "For your safety, there are minimum and maximum ages for blood donation. The minimum age is 18 and the maximum age is 65 for first-time donors.",
-  },
-  {
-    ques: "Have you consumed alcohol in the last 24 hours?",
-    quesTitle:
-      "For your safety, there are minimum and maximum ages for blood donation. The minimum age is 18 and the maximum age is 65 for first-time donors.",
-  },
-];
+import { BaseUrl } from "../utils/url";
+import axios from "axios";
 
 export default function BodyMan() {
   const [step, setStep] = useState(1);
@@ -55,16 +9,50 @@ export default function BodyMan() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [fillPercentage, setFillPercentage] = useState(0);
   const [showGuidelines, setShowGuidelines] = useState(false);
+  const [questions, setQuestions] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+ useEffect(() => {
+  const handleQuestions = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`${BaseUrl}/eraktkosh/question/list`);
+
+      if (Array.isArray(response.data)) {
+        const donorQuestions = response.data.filter(
+          (ques) => ques.quesType?.toLowerCase() === "donor question"
+        );
+        setQuestions(donorQuestions);
+      } else {
+        setError("Invalid questions data format");
+        setQuestions([]);
+      }
+
+      console.log("Questions deepu1 : ", response.data);
+    } catch (error) {
+      console.error("Error loading donation questions", error);
+      setError("Failed to load questions");
+      setQuestions([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  handleQuestions();
+}, []);
 
   useEffect(() => {
-    const yesCount = answers.filter((ans) => ans === "yes").length;
-    const rawFill = (yesCount / questions.length) * 100;
-    const calculatedFill = Math.min(
-      100,
-      rawFill + (yesCount === questions.length ? 1 : 0)
-    );
-    setFillPercentage(calculatedFill);
-  }, [answers]);
+    if (questions.length > 0) {
+      const correctCount = answers.filter((ans) => ans === "correct").length;
+      const rawFill = (correctCount / questions.length) * 100;
+      const calculatedFill = Math.min(
+        100,
+        rawFill + (correctCount === questions.length ? 1 : 0)
+      );
+      setFillPercentage(calculatedFill);
+    }
+  }, [answers, questions]);
 
   const clipPathStyle = {
     clipPath: `inset(${100 - fillPercentage}% 0 0 0)`,
@@ -75,12 +63,12 @@ export default function BodyMan() {
   console.log(`clipPath inset: ${Math.max(0, 100 - fillPercentage)}%`);
 
   const handleAnswer = (response) => {
-    if (currentIndex === questions.length - 1 && response === "no") {
-      return;
-    }
+    const currentQuestion = questions[currentIndex];
+
     setAnswers((prev) => {
       const updated = [...prev];
-      updated[currentIndex] = response;
+      updated[currentIndex] =
+        response === currentQuestion.faqAnswer ? "correct" : "incorrect";
       return updated;
     });
 
@@ -95,6 +83,10 @@ export default function BodyMan() {
 
   const handleMouseLeave = () => {
     setShowGuidelines(false);
+  };
+
+  const handleNearbyCamps = () => {
+    window.location.href = "/#/publicPages/campSchedule";
   };
 
   return (
@@ -129,7 +121,9 @@ export default function BodyMan() {
                   >
                     Check your eligibility
                   </Button>
-                  <Button className="btn__outlined">Find Nearby Camps</Button>
+                  <Button onClick={handleNearbyCamps} className="btn__outlined">
+                    Find Nearby Camps
+                  </Button>
                 </div>
               </div>
             )}
@@ -170,14 +164,14 @@ export default function BodyMan() {
                       Question {currentIndex + 1} of {questions.length}
                     </p>
                     <p className="mb-3 question__section">
-                      {questions[currentIndex].ques}
+                      {questions[currentIndex].faqQuestion}
                     </p>
                     <p className="mb-1 section__overview">
-                      {questions[currentIndex].quesTitle}
+                      {questions[currentIndex].title}
                     </p>
                     <Button
                       onClick={() => handleAnswer("yes")}
-                      className="me-3 btn__colored"
+                      className="btn__colored me-3"
                     >
                       Yes
                     </Button>

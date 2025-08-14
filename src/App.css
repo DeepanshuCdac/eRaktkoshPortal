@@ -269,61 +269,6 @@ body {
   font-size: 15px;
 }
 
-/* ###################### donation working ###################### */
-
-.donation-working {
-  position: relative;
-}
-
-.donation-working .donation-bg-img {
-  background-image: url("../public/assets/images/donation-wg-bg.png");
-  background-size: cover;
-  background-position: center;
-  min-height: 435px;
-  position: relative;
-}
-
-.donation-working .container {
-  top: 0;
-  left: 0;
-  right: 0;
-  width: 100%;
-  z-index: 1;
-}
-
-.donation-working .section-heading {
-  color: #242424;
-  font-size: 40px;
-  line-height: 120%;
-  letter-spacing: -0.96px;
-}
-
-.donation-working .section-heading .donation {
-  color: #c0222b;
-  font-size: 40px;
-  font-weight: 600;
-  line-height: 120%;
-  letter-spacing: -0.96px;
-}
-
-.donation-working .card {
-  border-radius: 16px;
-  background: #fff;
-  border: none;
-  min-width: 380px;
-}
-
-.donation-working .card .card-text {
-  color: #c0222b;
-  font-size: 20px;
-  font-weight: 600;
-}
-
-.donation-working .card .card-text-light {
-  color: #2b2b2b;
-  font-size: 16px;
-}
-
 /* ######################### Donation Type ######################### */
 
 .donationType .section-heading {
@@ -713,12 +658,6 @@ body {
 
   .password-section .modal-footer .btn {
     width: 100%;
-  }
-}
-
-@media (max-width: 480px) {
-  .carousel-inner-container {
-    height: 20vh;
   }
 }
 

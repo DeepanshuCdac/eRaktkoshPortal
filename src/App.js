@@ -8,14 +8,9 @@ import {
 } from "react-router-dom";
 import Navbar from "../src/landingPage/navbar.js";
 import Service from "../src/landingPage/service.js";
-import Aboutpage from "../src/landingPage/aboutPage.js";
 import Donationworking from "../src/landingPage/donationWorking.js";
 import Footer from "../src/landingPage/footer.js";
-import Benefits from "../src/landingPage/benefits.js";
 import HeroComponent from "./landingPage/heroComponent.js";
-import DonorCount from "./landingPage/donorCount";
-import LearnDonation from "./landingPage/learnDonation";
-import DonationType from "./landingPage/donationType";
 import DonorLogin from "./pages/donorLogin.js";
 import DonorRegister from "./pages/donorRegister.js";
 import DonorAdmin from "./pages/donorAdmin";
@@ -38,6 +33,12 @@ import BodyMan from "./landingPage/bodyMan.js";
 import ScrollToTop from "./landingPage/scrollToTop.js";
 import Link from "./landingPage/link.js";
 import IndiaMap from "./landingPage/indiaMap.js";
+import FooterCarousel from "./landingPage/footerCarousel.js";
+import Counter from "./testing/counter.jsx";
+import Card from "./testing/card.jsx";
+import Todo from "./testing/todo.jsx";
+import Stories from "./landingPage/stories.js";
+import ColorPicker from "./testing/colorPicker.jsx";
 
 // const MEASUREMENT_ID = "G-SBWWZLM7W6"
 // ReactGA.initialize(MEASUREMENT_ID)
@@ -62,11 +63,11 @@ function AppContent() {
   const location = useLocation();
 
   useEffect(() => {
-    initGA(); // initialize once on load
+    initGA();
   }, []);
 
   useEffect(() => {
-    logPageView(location.pathname + location.search); // log on route change
+    logPageView(location.pathname + location.search);
   }, [location]);
 
   const hideNavbarPaths = ["/pages/portaldonorAdmin"];
@@ -134,16 +135,17 @@ function AppContent() {
 
         <Route path="/">
           <HeroComponent />
-          <Link/>
-          {/* <DonorCount /> */}
+          <Link />
           <Service />
           <BodyMan />
-          {/* <Aboutpage />
-          <LearnDonation /> */}
-          <IndiaMap/>
           <Donationworking />
-          {/* <DonationType />
-          <Benefits /> */}
+          <IndiaMap />
+          {/* <Counter/> */}
+          {/* <Card/> */}
+          {/* <Todo/> */}
+          {/* <ColorPicker/> */}
+          <Stories/>
+          <FooterCarousel />
           <ScrollToTop />
         </Route>
       </Switch>

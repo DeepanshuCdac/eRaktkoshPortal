@@ -19,13 +19,13 @@ export default function ScrollToTop() {
   }, []);
   return (
     <>
-      <div className={`scroll-to-top ${isVisible ? "show" : ""}`}>
+      <section className={`scroll-to-top ${isVisible ? "show" : ""}`}>
         <Button
           onClick={scrollToTop}
           aria-label="Scroll to top"
           icon={<ArrowCircleUpIcon />}
         />
-      </div>
+      </section>
     </>
   );
 }
