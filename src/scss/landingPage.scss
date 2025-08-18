@@ -729,7 +729,7 @@ main {
           margin-bottom: 4px;
           font-family: "SourceSans3", sans-serif;
           &::before {
-            border: 1px solid white;
+            border: 1px solid $white;
             z-index: 1;
           }
           .ant-tabs-nav-wrap {
@@ -744,7 +744,6 @@ main {
                 background-color: $collapse_background;
                 height: 100%;
                 border-radius: 10px 10px 0 0;
-                // width: 20%;
                 &:hover {
                   color: $black;
                 }
@@ -762,6 +761,7 @@ main {
               }
               .ant-tabs-tab-active {
                 background-color: $highlight-color;
+                animation: tabHighlightAnim 0.3s ease-in-out;
                 .tab__header__text {
                   font-weight: 500;
                   color: $white !important;
@@ -775,11 +775,32 @@ main {
             padding: 20px;
             background: $collapse_background;
             border-radius: 0 0 10px 10px;
+            opacity: 0;
+            animation: fadeIn 0.6s ease-in-out forwards;
           }
           p {
             font-size: 14px;
             color: $black;
             font-weight: 400;
+          }
+        }
+        @keyframes tabHighlightAnim {
+          100% {
+            background-color: $highlight-color;
+          }
+          0% {
+            background-color: $collapse-background;
+          }
+        }
+
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateX(10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
           }
         }
       }
@@ -862,15 +883,15 @@ main {
       display: flex;
       flex-wrap: nowrap;
       gap: 12px;
-      overflow-x: auto; 
+      overflow-x: auto;
       overflow-y: hidden;
       -webkit-overflow-scrolling: touch;
       padding-bottom: 5px;
-      scrollbar-width: none; 
+      scrollbar-width: none;
     }
 
     .gallery_scroller::-webkit-scrollbar {
-      display: none; 
+      display: none;
     }
 
     .gallery_item {

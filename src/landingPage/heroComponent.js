@@ -5,10 +5,10 @@ export default function HeroComponent() {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
-    // const interval = setInterval(() => {
-    //   setCurrentIndex((prevIndex) => (prevIndex + 1) % 4);
-    // }, 10000);
-    // return () => clearInterval(interval);
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % 4);
+    }, 10000);
+    return () => clearInterval(interval);
   }, []);
 
   const handleClick = () => {
@@ -25,7 +25,7 @@ export default function HeroComponent() {
       <div
         id="carouselExampleInterval"
         className="carousel slide"
-        // data-bs-ride="carousel"
+        data-bs-ride="carousel"
       >
         <div className="carousel-indicators">
           {[0, 1, 2, 3].map((index) => (

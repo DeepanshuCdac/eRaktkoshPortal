@@ -13,36 +13,36 @@ export default function Service() {
 
   const handleBloodSearch = () => {
     console.log("button clicked");
-    window.location.href = '/#/publicPages/bloodAvailabilitySearch'
-  }
+    window.location.href = "/#/publicPages/bloodAvailabilitySearch";
+  };
   const handleBloodDirectory = () => {
     console.log("button clicked");
-    window.location.href = '/#/publicPages/bloodBankDirectory'
-  }
+    window.location.href = "/#/publicPages/bloodBankDirectory";
+  };
   const handleDonationCamps = () => {
     console.log("button clicked");
-    window.location.href = '/#/publicPages/campSchedule'
-  }
+    window.location.href = "/#/publicPages/campSchedule";
+  };
   const handleDonorLogin = () => {
     console.log("button clicked");
-    window.location.href = '/#/pages/portalDonorLogin'
-  }
+    window.location.href = "/#/pages/portalDonorLogin";
+  };
   const handleRegisterCamps = () => {
     console.log("button clicked");
-    window.location.href = '/#/publicPages/campRegistration'
-  }
+    window.location.href = "/#/publicPages/campRegistration";
+  };
 
   const text = {
     blood_availability:
       "The Blood Availability Search lets users quickly check real-time blood availability across registered blood center. By selecting State, District, Blood Group, Component and Location, users can easily find the required units. This tool supports patients, donors, and hospitals in making informed decisions during emergencies or planned treatments.",
     blood_center_directory:
-      "The Blood Availability Search lets users quickly check real-time blood availability across registered blood center. By selecting State, District, Blood Group, Component and Location, users can easily find the required units. This tool supports patients, donors, and hospitals in making informed decisions during emergencies or planned treatments.",
+      "The Blood Center Directory provides an easy way to find contact and service details of registered blood centers across the country. Users can search by State, District, or Blood Bank Name to access location, contact numbers, ensuring quick and reliable connections for donations or Blood unit confirmation.",
     blood_donation_camps:
-      "The Blood Availability Search lets users quickly check real-time blood availability across registered blood center. By selecting State, District, Blood Group, Component and Location, users can easily find the required units. This tool supports patients, donors, and hospitals in making informed decisions during emergencies or planned treatments.",
+      "The Blood Donation Camps section lists upcoming blood donation events, enabling donors to plan their participation in advance. By filtering by State, District, and Date, users can find nearby camps and contribute to life-saving efforts. This helps both blood centre and communities maintain steady blood supplies.",
     donor_login:
-      "The Blood Availability Search lets users quickly check real-time blood availability across registered blood center. By selecting State, District, Blood Group, Component and Location, users can easily find the required units. This tool supports patients, donors, and hospitals in making informed decisions during emergencies or planned treatments.",
+      "The Donor Login portal allows registered donors to securely access their profiles, view donation history, update personal details, and receive notifications about nearby camps. This personalized space makes it easier for donors to stay engaged and informed.",
     register_voluntary_camp:
-      "The Blood Availability Search lets users quickly check real-time blood availability across registered blood center. By selecting State, District, Blood Group, Component and Location, users can easily find the required units. This tool supports patients, donors, and hospitals in making informed decisions during emergencies or planned treatments.",
+      "The Register Voluntary Blood Camps feature lets organizations, institutions, and groups schedule and register their planned blood donation drives online. By providing camp details such as location, date, and coordinator contact information, organizers can ensure visibility to potential donors and support from local blood centers.",
   };
 
   const content_image = {
@@ -69,7 +69,9 @@ export default function Service() {
         <div className="d-flex">
           <div style={{ flex: 1 }}>
             <p className="">{text.blood_availability}</p>
-            <Button onClick={handleBloodSearch} className="btn__outlined">Blood Availability Search</Button>
+            <Button onClick={handleBloodSearch} className="btn__outlined">
+              Blood Availability Search
+            </Button>
           </div>
           <div style={{ flex: 1 }} className="d-flex justify-content-end">
             <img src={content_image.blood_availability} alt="" />
@@ -89,7 +91,9 @@ export default function Service() {
         <div className="d-flex">
           <div style={{ flex: 1 }}>
             <p className="">{text.blood_center_directory}</p>
-            <Button onClick={handleBloodDirectory} className="btn__outlined">Blood Center Directory</Button>
+            <Button onClick={handleBloodDirectory} className="btn__outlined">
+              Blood Center Directory
+            </Button>
           </div>
           <div style={{ flex: 1 }} className="d-flex justify-content-end">
             <img src={content_image.blood_center_directory} alt="" />
@@ -109,7 +113,9 @@ export default function Service() {
         <div className="d-flex">
           <div style={{ flex: 1 }}>
             <p className="">{text.blood_donation_camps}</p>
-            <Button onClick={handleDonationCamps} className="btn__outlined">Blood Donation Camps</Button>
+            <Button onClick={handleDonationCamps} className="btn__outlined">
+              Blood Donation Camps
+            </Button>
           </div>
           <div style={{ flex: 1 }} className="d-flex justify-content-end">
             <img src={content_image.blood_donation_camps} alt="" />
@@ -129,7 +135,9 @@ export default function Service() {
         <div className="d-flex">
           <div style={{ flex: 1 }}>
             <p className="">{text.donor_login}</p>
-            <Button onClick={handleDonorLogin} className="btn__outlined">Donor Login</Button>
+            <Button onClick={handleDonorLogin} className="btn__outlined">
+              Donor Login
+            </Button>
           </div>
           <div style={{ flex: 1 }} className="d-flex justify-content-end">
             <img src={content_image.donor_login} alt="" />
@@ -151,7 +159,9 @@ export default function Service() {
         <div className="d-flex">
           <div style={{ flex: 1 }}>
             <p className="">{text.register_voluntary_camp}</p>
-            <Button onClick={handleRegisterCamps} className="btn__outlined">Register Voluntary Camps</Button>
+            <Button onClick={handleRegisterCamps} className="btn__outlined">
+              Register Voluntary Camps
+            </Button>
           </div>
           <div style={{ flex: 1 }} className="d-flex justify-content-end">
             <img src={content_image.register_voluntary_camp} alt="" />
@@ -186,7 +196,7 @@ export default function Service() {
         <div className="d-flex flex-column align-items-center">
           <div className="mb-2">
             <p>{text.blood_availability}</p>
-            <Button className="btn__outlined" onClick={handleBloodSearch}>              
+            <Button className="btn__outlined" onClick={handleBloodSearch}>
               {btnLink.blood_availability}
             </Button>
           </div>
@@ -261,7 +271,9 @@ export default function Service() {
         <div className="d-flex flex-column align-items-center">
           <div className="mb-2">
             <p>{text.donor_login}</p>
-            <Button className="btn__outlined" onClick={handleDonorLogin}>{btnLink.donor_login}</Button>
+            <Button className="btn__outlined" onClick={handleDonorLogin}>
+              {btnLink.donor_login}
+            </Button>
           </div>
           <img src={content_image.donor_login} alt="" />
         </div>
