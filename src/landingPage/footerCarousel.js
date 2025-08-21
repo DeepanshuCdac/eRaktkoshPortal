@@ -78,7 +78,7 @@ export default function FooterCarousel() {
             >
               {getVisibleImages().map((item) => (
                 <a href="#" key={item.id}>
-                  <img src={item.img} className="footer__img" />
+                  <img src={item.img} className="footer__img"/>
                 </a>
               ))}
             </div>

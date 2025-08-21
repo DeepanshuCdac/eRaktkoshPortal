@@ -16,11 +16,13 @@ const IndiaMap = () => {
     bloodCollectionSummary: { totalCollection: "N/A", stateName: "" },
     donorRegistered: { hnumDonorRegistered: "N/A" },
     totalBloodCenters: [{ hnumTotalBloodCentres: "N/A" }],
+    campsOrganised: { finalCount: "N/A" },
   });
   const [allStateData, setAllStateData] = useState({
     bloodCollectionSummary: [],
     totalBloodCenters: [],
     donorRegistered: [],
+    campsOrganised: [],
   });
   const [isLoading, setIsLoading] = useState(false);
 
@@ -74,6 +76,12 @@ const IndiaMap = () => {
     console.log("All donor data:", allStateData.donorRegistered);
     console.log("Matched donor data:", donorData);
 
+    const campsData = allStateData.campsOrganised.find(
+      (item) => item.stateCode?.toString() === stateCode?.toString()
+    );
+    console.log("All camp data: ", allStateData.campsOrganised);
+    console.log("Matched camp data: ", campsData);
+
     setStateStats({
       bloodCollectionSummary: {
         totalCollection: bloodData?.totalCollection ?? "N/A",
@@ -87,6 +95,9 @@ const IndiaMap = () => {
           hnumTotalBloodCentres: centerData?.hnumTotalBloodCentres ?? "N/A",
         },
       ],
+      campsOrganised: {
+        finalCount: campsData?.finalCount ?? "N/A",
+      },
     });
   };
   useEffect(() => {
@@ -230,7 +241,9 @@ const IndiaMap = () => {
                     </div>
                     <div className="d-flex flex-column">
                       <p className="mb-0 key">Camps Organised</p>
-                      <p className="mb-0 value">123</p>
+                      <p className="mb-0 value">
+                        {stateStats?.campsOrganised?.finalCount}
+                      </p>
                     </div>
                   </div>
                 </div>
