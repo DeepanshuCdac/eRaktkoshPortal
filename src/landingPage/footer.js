@@ -1,7 +1,26 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 
 export default function Footer() {
+  useEffect(() => {
+    const sc_project = 10830880;
+    const sc_invisible = 1;
+    const sc_security = "81667bbc";
+    const scJsHost =
+      document.location.protocol === "https:"
+        ? "https://secure."
+        : "http://www.";
+
+    const script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src = scJsHost + "statcounter.com/counter/counter.js";
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
   return (
     <>
       <section className="footer__section py-4">
@@ -111,10 +130,7 @@ export default function Footer() {
                     >
                       Accessibility Statement
                     </a>
-                    <Link
-                      className="value mb-2"
-                      to="/publicPages/siteMap"
-                    >
+                    <Link className="value mb-2" to="/publicPages/siteMap">
                       Site Map
                     </Link>
                   </div>
@@ -124,22 +140,53 @@ export default function Footer() {
             <div className="sub__section" style={{ flex: 1 }}>
               <div className="mb-3">
                 <p className="key mb-0">Visitors Count</p>
-                <p className="value mb-0">xyz</p>
+                <a
+                  href="http://statcounter.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <img
+                    className="statcounter"
+                    src="http://c.statcounter.com/10830880/0/81667bbc/0/"
+                    alt="hits counter"
+                    style={{ padding: 0 }}
+                  />
+                </a>
               </div>
               <div className="mb-3">
                 <p className="key mb-0">Social Media</p>
                 <div>
                   <a href="#">
-                    <img style={{height: '25px'}} className="me-2" src="assets/landingPage/twitter.png" alt="" />
+                    <img
+                      style={{ height: "25px" }}
+                      className="me-2"
+                      src="assets/landingPage/twitter.png"
+                      alt=""
+                    />
                   </a>
                   <a href="#">
-                    <img style={{height: '25px'}} className="me-2" src="assets/landingPage/insta.png" alt="" />
+                    <img
+                      style={{ height: "25px" }}
+                      className="me-2"
+                      src="assets/landingPage/insta.png"
+                      alt=""
+                    />
                   </a>
                   <a href="#">
-                    <img style={{height: '25px'}} className="me-2" src="assets/landingPage/youtube.png" alt="" />
+                    <img
+                      style={{ height: "25px" }}
+                      className="me-2"
+                      src="assets/landingPage/youtube.png"
+                      alt=""
+                    />
                   </a>
                   <a href="#">
-                    <img style={{height: '25px'}} className="me-2" src="assets/landingPage/facebook.png" alt="" />
+                    <img
+                      style={{ height: "25px" }}
+                      className="me-2"
+                      src="assets/landingPage/facebook.png"
+                      alt=""
+                    />
                   </a>
                 </div>
               </div>

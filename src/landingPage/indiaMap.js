@@ -141,7 +141,7 @@ const IndiaMap = () => {
     <section className="map__india">
       <div className="container">
         <div className="row align-items-center">
-          <div className="col-xl-4 col-lg-5 col-12">
+          <div className="col-xl-5 col-lg-5 col-12">
             <h3 className="section__heading mb-2">
               Nationwide Presence.
               <br />
@@ -251,7 +251,7 @@ const IndiaMap = () => {
             </div>
           </div>
 
-          <div className="col-xl-8 col-lg-7 col-12">
+          <div className="col-xl-7 col-lg-7 col-12">
             <DatamapsIndia
               hoverComponent={({ value }) => {
                 const matchedState = states.find(

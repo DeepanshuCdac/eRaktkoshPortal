@@ -47,9 +47,9 @@ export default function Link() {
           </div>
         ) : (
           <div className="link__tags d-flex align-items-center flex-column">
-            <a href="#" className="whatsapp__link my-2">
+            {/* <a href="#" className="whatsapp__link my-2">
               <img src="assets/landingPage/Whatsapp.png" alt="" />
-            </a>
+            </a> */}
             <a href="#" onClick={handleShow} className="mobile__link">
               <img src="assets/landingPage/download.png" alt="" />
             </a>

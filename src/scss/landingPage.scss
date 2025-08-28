@@ -369,90 +369,90 @@ main {
     color: $black;
   }
 
-  /* BodyMan.css */
-.step-content {
-  transition: all 0.3s ease;
-}
-
-.slide-in-right {
-  animation: slideInRight 0.5s ease forwards;
-}
-
-.slide-out-left {
-  animation: slideOutLeft 0.5s ease forwards;
-}
-
-.fade-in {
-  animation: fadeIn 0.5s ease forwards;
-}
-
-.fade-out {
-  animation: fadeOut 0.5s ease forwards;
-}
-
-@keyframes slideInRight {
-  from {
-    opacity: 0;
-    transform: translateX(30px);
+  .step-content {
+    transition: all 0.3s ease;
   }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
 
-@keyframes slideOutLeft {
-  from {
-    opacity: 1;
-    transform: translateX(0);
+  .slide-in-right {
+    animation: slideInRight 0.5s ease forwards;
   }
-  to {
-    opacity: 0;
-    transform: translateX(-30px);
-  }
-}
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
+  .slide-out-left {
+    animation: slideOutLeft 0.5s ease forwards;
   }
-  to {
-    opacity: 1;
-  }
-}
 
-@keyframes fadeOut {
-  from {
-    opacity: 1;
+  .fade-in {
+    animation: fadeIn 0.5s ease forwards;
   }
-  to {
-    opacity: 0;
-  }
-}
 
-.question_block {
-  transition: all 0.3s ease;
-}
-
-.image__wrapper img {
-  transition: all 0.5s ease;
-}
-
-.btn__colored, .btn__outlined {
-  transition: all 0.3s ease;
-}
-
-@keyframes pulse {
-  0% {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  .fade-out {
+    animation: fadeOut 0.5s ease forwards;
   }
-  50% {
-    box-shadow: 0 4px 20px rgba(0, 123, 255, 0.3);
+
+  @keyframes slideInRight {
+    from {
+      opacity: 0;
+      transform: translateX(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
   }
-  100% {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+  @keyframes slideOutLeft {
+    from {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateX(-30px);
+    }
   }
-}
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes fadeOut {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+
+  .question_block {
+    transition: all 0.3s ease;
+  }
+
+  .image__wrapper img {
+    transition: all 0.5s ease;
+  }
+
+  .btn__colored,
+  .btn__outlined {
+    transition: all 0.3s ease;
+  }
+
+  @keyframes pulse {
+    0% {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    50% {
+      box-shadow: 0 4px 20px rgba(0, 123, 255, 0.3);
+    }
+    100% {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+  }
 }
 
 // donation type...
@@ -578,8 +578,8 @@ main {
     }
   }
   .images__section {
-    position: relative;
-    top: -35%;
+    position: absolute;
+    bottom: 0px;
     gap: 10px;
     .view_btn {
       font-size: 15px;
@@ -594,9 +594,9 @@ main {
       .gallery_item {
         .gallery__images {
           border-radius: 8px;
-          height: 110px;
+          height: 120px;
           object-fit: cover;
-          min-width: 260px;
+          min-width: 275px;
         }
       }
     }
@@ -911,6 +911,15 @@ main {
       left: 23% !important;
     }
   }
+
+  .stories__section {
+    .gallery__images {
+      border-radius: 8px;
+      height: 110px;
+      object-fit: cover;
+      min-width: 250px;
+    }
+  }
 }
 
 @media screen and (max-width: 1200px) {
@@ -960,10 +969,24 @@ main {
       height: 500px;
     }
   }
+
+  .stories__section {
+    .gallery__images {
+      border-radius: 8px;
+      height: 110px;
+      object-fit: cover;
+      min-width: 20px;
+    }
+  }
 }
 
 @media screen and (max-width: 1040px) {
   .stories__section {
+    .images__section {
+      position: relative;
+      bottom: 0px;
+      gap: 10px;
+    }
     .gallery_scroller {
       display: flex;
       flex-wrap: nowrap;
@@ -1119,6 +1142,8 @@ main {
     .inner__container {
       display: flex;
       flex-direction: column;
+      align-items: center;
+      justify-content: center;
       .guidelines__img {
         right: 0px;
       }
@@ -1235,7 +1260,7 @@ main {
   .body__man {
     .inner__container {
       .right__panel {
-        display: block;
+        // display: block;
 
         .health__percent {
           margin-left: 15% !important;
