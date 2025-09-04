@@ -1,12 +1,42 @@
 import React, { useEffect, useState } from "react";
 
 const initialImages = [
-  { img: "assets/landingPage/ministry.png", id: 1 },
+  {
+    img: "assets/landingPage/ministry.png",
+    src: "https://mohfw.gov.in/",
+    id: 1,
+  },
   // { img: "assets/landingPage/electronics.png", id: 2 },
-  { img: "assets/landingPage/cdac.png", id: 2 },
-  { img: "assets/landingPage/digitalindia.png", id: 3 },
-  { img: "assets/landingPage/indiagov.png", id: 4 },
-  { img: "assets/landingPage/mygov.png", id: 5 },
+  {
+    img: "assets/landingPage/cdac.png",
+    src: "https://cdac.in/index.aspx?id=ND",
+    id: 2,
+  },
+  {
+    img: "assets/landingPage/digitalindia.png",
+    src: "https://dic.gov.in/",
+    id: 3,
+  },
+  {
+    img: "assets/landingPage/indiagov.png",
+    src: "https://v2.india.gov.in/services/details/e-raktkosh-blood-doner-login",
+    id: 4,
+  },
+  {
+    img: "assets/landingPage/mygov.png",
+    src: "https://pledge.mygov.in/world-blood-donorday-2023/",
+    id: 5,
+  },
+  {
+    img: "assets/landingPage/nhm.jpg",
+    src: "https://nhm.gov.in/index1.php?lang=1&level=2&sublinkid=1214&lid=498",
+    id: 6,
+  },
+  {
+    img: "assets/landingPage/india-portal-logo.png",
+    src: " https://services.india.gov.in/service/detail/e-raktkosh-blood-stock-availability-1",
+    id: 7,
+  },
 ];
 
 export default function FooterCarousel() {
@@ -22,11 +52,11 @@ export default function FooterCarousel() {
       else if (width >= 1200) setVisibleCount(5);
       else if (width >= 991) setVisibleCount(4);
       else if (width >= 768) setVisibleCount(3);
-      else if(width>= 463) setVisibleCount(2);
-      else setVisibleCount(1)
+      else if (width >= 463) setVisibleCount(2);
+      else setVisibleCount(1);
     };
 
-    handleResize(); 
+    handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
@@ -41,8 +71,8 @@ export default function FooterCarousel() {
       if (dir === "left") {
         setStartIndex((prev) => (prev + 1) % initialImages.length);
       } else {
-        setStartIndex((prev) =>
-          (prev - 1 + initialImages.length) % initialImages.length
+        setStartIndex(
+          (prev) => (prev - 1 + initialImages.length) % initialImages.length
         );
       }
       setIsAnimating(false);
@@ -70,15 +100,27 @@ export default function FooterCarousel() {
           />
           <div className="image__strip-container overflow-hidden w-100">
             <div
-              className={`image__strip-inner d-flex justify-content-around ${isAnimating ? "animate" : ""}`}
+              className={`image__strip-inner d-flex justify-content-around ${
+                isAnimating ? "animate" : ""
+              }`}
               style={{
-                transform: `translateX(${direction === "left" ? "-20px" : direction === "right" ? "20px" : "0"})`,
-                transition: 'transform 0.4s ease-in-out'
+                transform: `translateX(${
+                  direction === "left"
+                    ? "-20px"
+                    : direction === "right"
+                    ? "20px"
+                    : "0"
+                })`,
+                transition: "transform 0.4s ease-in-out",
               }}
             >
               {getVisibleImages().map((item) => (
-                <a href="#" key={item.id}>
-                  <img src={item.img} className="footer__img"/>
+                <a href={item.src} key={item.id}>
+                  <img
+                    style={{ width: "70px", height: "55px" }}
+                    src={item.img}
+                    className="footer__img"
+                  />
                 </a>
               ))}
             </div>

@@ -12,7 +12,7 @@ export default function HeroComponent() {
   }, []);
 
   const handleClick = () => {
-    window.location.href = "/#/publicPages/bloodAvailabilitySearch";
+    window.location.href = "/beta#/publicPages/bloodAvailabilitySearch";
     // window.location.href = "/BLDAHIMS/bloodbank/portalDonorLogin.cnt";
   };
 
@@ -80,10 +80,13 @@ export default function HeroComponent() {
               <div className="d-flex flex-column text-center">
                 <div className="d-flex flex-column align-items-baseline">
                   <h5 className="img-text">Download Now On</h5>
-                  <a href="#" className="">
+                  <a
+                    href="https://play.google.com/store/apps/details?id=in.cdac.mhealth.m_raktkosh"
+                    className=""
+                  >
                     <img src="assets/landingPage/playstore.png" alt="" />
                   </a>
-                  <a href="#">
+                  <a href="https://apps.apple.com/in/app/eraktkosh/id1108324530">
                     <img src="assets/landingPage/appstore.png" alt="" />
                   </a>
                 </div>

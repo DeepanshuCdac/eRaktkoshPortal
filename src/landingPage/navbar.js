@@ -43,7 +43,7 @@ export default function Navbar() {
                     <span className="d-none d-lg-inline d-xl-inline">
                       Toll Free Number:
                     </span>{" "}
-                    9650816031
+                    +91-9650816031
                   </p>
                 </div>
               </div>
@@ -54,7 +54,7 @@ export default function Navbar() {
             <div className="container">
               <div className="d-flex align-items-center justify-content-between">
                 <div className="d-flex ">
-                  <a href="">
+                  <a href="https://mohfw.gov.in/">
                     <img
                       className="ministry_image"
                       src="assets/landingPage/health&family.svg"
@@ -63,7 +63,7 @@ export default function Navbar() {
                     />
                   </a>
                   <div className="divider"></div>
-                  <a href="#">
+                  <a href="/beta#">
                     <img
                       className="eraktkosh_image"
                       src="assets/landingPage/eraktkosh.svg"
@@ -128,7 +128,7 @@ export default function Navbar() {
               >
                 <ul className="nav__list">
                   <li className="nav__list__li">
-                    <a href="#" className="nav__link">
+                    <a href="/beta#" className="nav__link">
                       Home
                     </a>
                   </li>
@@ -159,18 +159,6 @@ export default function Navbar() {
                     <ul className="dropdown__menu">
                       <li className="dropdown__menu__li">
                         {/* <a href="#" className="dropdown__link">
-                          Notifications
-                        </a> */}
-                        <Link
-                          className="dropdown__link"
-                          to="/publicPages/Notification"
-                        >
-                          Notifications
-                        </Link>
-                      </li>
-
-                      <li className="dropdown__menu__li">
-                        {/* <a href="#" className="dropdown__link">
                           Donor Login
                         </a> */}
                         <Link
@@ -183,26 +171,35 @@ export default function Navbar() {
                       </li>
                       <li className="dropdown__menu__li">
                         {/* <a href="#" className="dropdown__link">
-                          Blood Donation Camps
+                          Blood Availability
                         </a> */}
                         <Link
                           className="dropdown__link"
-                          to="/publicPages/campSchedule"
+                          to="/publicPages/bloodAvailabilitySearch"
                         >
-                          {" "}
-                          Blood Donation Camps
+                          Blood Availability
                         </Link>
                       </li>
 
                       <li className="dropdown__menu__li">
                         {/* <a href="#" className="dropdown__link">
-                          e-Raktkosh Faq's
+                          Blood Center Directory
                         </a> */}
-                        <Link className="dropdown__link" to="/publicPages/FAQs">
-                          eRaktkosh FAQ's
+                        <Link
+                          className="dropdown__link"
+                          to="/publicPages/bloodBankDirectory"
+                        >
+                          Blood Center Directory
                         </Link>
                       </li>
-
+                      <li className="dropdown__menu__li">
+                        <a
+                          href="/BLDAHIMS/bloodbank/portalThalassemiaLogin.cnt"
+                          className="dropdown__link"
+                        >
+                          Thalassemia Request
+                        </a>
+                      </li>
                       <li className="dropdown__menu__li">
                         {/* <a href="#" className="dropdown__link">
                           e-Raktkosh Faq's
@@ -247,17 +244,6 @@ export default function Navbar() {
 
                   <div className="divider"></div>
 
-                  <li className="nav__list__li">
-                    <a
-                      href="/eRaktKosh/hissso/loginLogin"
-                      className="nav__link"
-                    >
-                      e-Raktkosh Login
-                    </a>
-                  </li>
-
-                  <div className="divider"></div>
-
                   {/* dropdown 2 */}
                   <li className="dropdown__item">
                     <div className="nav__link">
@@ -267,38 +253,6 @@ export default function Navbar() {
 
                     <ul className="dropdown__menu">
                       <li className="dropdown__menu__li">
-                        {/* <a href="#" className="dropdown__link">
-                          Blood Availability
-                        </a> */}
-                        <Link
-                          className="dropdown__link"
-                          to="/publicPages/bloodAvailabilitySearch"
-                        >
-                          Blood Availability
-                        </Link>
-                      </li>
-
-                      <li className="dropdown__menu__li">
-                        {/* <a href="#" className="dropdown__link">
-                          Blood Center Directory
-                        </a> */}
-                        <Link
-                          className="dropdown__link"
-                          to="/publicPages/bloodBankDirectory"
-                        >
-                          Blood Center Directory
-                        </Link>
-                      </li>
-
-                      <li className="dropdown__menu__li">
-                        <a
-                          href="/BLDAHIMS/bloodbank/portalThalassemiaLogin.cnt"
-                          className="dropdown__link"
-                        >
-                          Thalassemia Request
-                        </a>
-                      </li>
-                      <li className="dropdown__menu__li">
                         <a
                           href="/BLDAHIMS/bloodbank/donateblood.cnt"
                           className="dropdown__link"
@@ -306,14 +260,17 @@ export default function Navbar() {
                           About Blood Donation
                         </a>
                       </li>
-
                       <li className="dropdown__menu__li">
-                        <a
-                          href="/BLDAHIMS/bloodbank/bbOnboard.cnt?hmode=GETONBOARDFORMESSENTIAL"
+                        {/* <a href="#" className="dropdown__link">
+                          Blood Donation Camps
+                        </a> */}
+                        <Link
                           className="dropdown__link"
+                          to="/publicPages/campSchedule"
                         >
-                          Add Your Blood Center
-                        </a>
+                          {" "}
+                          Blood Donation Camps
+                        </Link>
                       </li>
                       <li className="dropdown__menu__li">
                         <a
@@ -351,6 +308,25 @@ export default function Navbar() {
                           Video Gallery
                         </a>
                       </li>
+                      <li className="dropdown__menu__li">
+                        {/* <a href="#" className="dropdown__link">
+                          Notifications
+                        </a> */}
+                        <Link
+                          className="dropdown__link"
+                          to="/publicPages/Notification"
+                        >
+                          Notifications
+                        </Link>
+                      </li>
+                      <li className="dropdown__menu__li">
+                        {/* <a href="#" className="dropdown__link">
+                          e-Raktkosh Faq's
+                        </a> */}
+                        <Link className="dropdown__link" to="/publicPages/FAQs">
+                          eRaktkosh FAQ's
+                        </Link>
+                      </li>
                     </ul>
                   </li>
 
@@ -363,6 +339,34 @@ export default function Navbar() {
                     >
                       Contact Us
                     </a>
+                  </li>
+
+                  <div className="divider"></div>
+
+                  <li className="dropdown__item">
+                    <div className="nav__link">
+                      e-Raktkosh Login{" "}
+                      <KeyboardArrowDownIcon className="dropdown__arrow" />
+                    </div>
+
+                    <ul className="dropdown__menu">
+                      <li className="dropdown__menu__li">
+                        <a
+                          href="/eRaktKosh/hissso/loginLogin"
+                          className="dropdown__link"
+                        >
+                          e-Raktkosh Login
+                        </a>
+                      </li>
+                      <li className="dropdown__menu__li">
+                        <a
+                          href="/BLDAHIMS/bloodbank/bbOnboard.cnt?hmode=GETONBOARDFORMESSENTIAL"
+                          className="dropdown__link"
+                        >
+                          Add Your Blood Center
+                        </a>
+                      </li>
+                    </ul>
                   </li>
                 </ul>
               </div>

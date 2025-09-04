@@ -2,25 +2,6 @@ import React, { useEffect } from "react";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 
 export default function Footer() {
-  useEffect(() => {
-    const sc_project = 10830880;
-    const sc_invisible = 1;
-    const sc_security = "81667bbc";
-    const scJsHost =
-      document.location.protocol === "https:"
-        ? "https://secure."
-        : "http://www.";
-
-    const script = document.createElement("script");
-    script.type = "text/javascript";
-    script.src = scJsHost + "statcounter.com/counter/counter.js";
-    document.body.appendChild(script);
-
-    return () => {
-      document.body.removeChild(script);
-    };
-  }, []);
-
   return (
     <>
       <section className="footer__section py-4">
@@ -38,7 +19,7 @@ export default function Footer() {
 
               <div className="mb-3">
                 <p className="key mb-0">Contact Number</p>
-                <p className="value mb-0">9650816031</p>
+                <p className="value mb-0">+91-9650816031</p>
               </div>
 
               <div className="mb-3">
@@ -130,14 +111,14 @@ export default function Footer() {
                     >
                       Accessibility Statement
                     </a>
-                    <Link className="value mb-2" to="/publicPages/siteMap">
+                    {/* <Link className="value mb-2" to="/publicPages/siteMap">
                       Site Map
-                    </Link>
+                    </Link> */}
                   </div>
                 </div>
               </div>
             </div>
-            <div className="sub__section" style={{ flex: 1 }}>
+            {/* <div className="sub__section" style={{ flex: 1 }}>
               <div className="mb-3">
                 <p className="key mb-0">Visitors Count</p>
                 <a
@@ -190,7 +171,7 @@ export default function Footer() {
                   </a>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </section>

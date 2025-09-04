@@ -13,23 +13,23 @@ export default function Service() {
 
   const handleBloodSearch = () => {
     console.log("button clicked");
-    window.location.href = "/#/publicPages/bloodAvailabilitySearch";
+    window.location.href = "/beta#/publicPages/bloodAvailabilitySearch";
   };
   const handleBloodDirectory = () => {
     console.log("button clicked");
-    window.location.href = "/#/publicPages/bloodBankDirectory";
+    window.location.href = "/beta#/publicPages/bloodBankDirectory";
   };
   const handleDonationCamps = () => {
     console.log("button clicked");
-    window.location.href = "/#/publicPages/campSchedule";
+    window.location.href = "/beta#/publicPages/campSchedule";
   };
   const handleDonorLogin = () => {
     console.log("button clicked");
-    window.location.href = "/#/pages/portalDonorLogin";
+    window.location.href = "/beta#/pages/portalDonorLogin";
   };
   const handleRegisterCamps = () => {
     console.log("button clicked");
-    window.location.href = "/#/publicPages/campRegistration";
+    window.location.href = "/BLDAHIMS/bloodbank/onlineCampRequestNewBB.cnt";
   };
 
   const text = {

@@ -106,7 +106,7 @@ export default function BodyMan() {
   const handleNearbyCamps = () => {
     setTransitioning(true);
     setTimeout(() => {
-      window.location.href = "/#/publicPages/campSchedule";
+      window.location.href = "/beta#/publicPages/campSchedule";
     }, 300);
   };
 
@@ -127,7 +127,10 @@ export default function BodyMan() {
         <div className="inner__container mt-4 mb-2">
           {allQuestionsAnswered ? (
             <div className={`completion-message w-100 d-flex flex-column align-items-center justify-content-center ${transitioning ? 'fade-out' : 'fade-in'}`}>
-              <h3 className="mb-3 section__heading">Your donation analysis has been done.</h3>
+              <h3 className="mb-2 section__heading">Your donation analysis has been done.</h3>
+              <p className="mb-1 section__overview">
+                According to our analysis your eligibility of donating blood is <strong>{percentageShow}</strong>.
+              </p>
               <p className="mb-3 section__overview">
                 A doctor will re-verify donor eligibility before actual blood donation.
               </p>

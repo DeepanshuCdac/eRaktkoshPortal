@@ -249,6 +249,10 @@ const IndiaMap = () => {
                 </div>
               </div>
             </div>
+
+            <p style={{ fontSize: "13px" }} className="mb-0">
+              *The data represented has been collected post year 2017 on wards.
+            </p>
           </div>
 
           <div className="col-xl-7 col-lg-7 col-12">
