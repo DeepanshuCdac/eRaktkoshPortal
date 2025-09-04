@@ -28,18 +28,18 @@ export default function Footer() {
             <div className="col-12 col-md-4 col-xl-3 mb-3">
               <h5 className="heading">Looking for Blood</h5>
               <div className="d-flex flex-column">
-                {/* <a
+                <a
                   href="/BLDAHIMS/bloodbank/stockAvailability.cnt"
                   className="footer-details mb-2">
                   Blood Availability
-                </a> */}
-                <Link className="footer-details mb-2" to="/publicPages/bloodAvailabilitySearch">Blood Availability</Link>
-                {/* <a
+                </a>
+                {/* <Link className="footer-details mb-2" to="/publicPages/bloodAvailabilitySearch">Blood Availability</Link> */}
+                <a
                   href="/BLDAHIMS/bloodbank/nearbyBBRed.cnt"
                   className="footer-details mb-2">
                   Blood Center Directory
-                </a> */}
-                <Link className="footer-details mb-2" to="/publicPages/bloodBankDirectory">Blood Center Directory</Link>
+                </a>
+                {/* <Link className="footer-details mb-2" to="/publicPages/bloodBankDirectory">Blood Center Directory</Link> */}
                 <a
                   href="/BLDAHIMS/bloodbank/portalThalassemiaLogin.cnt"
                   className="footer-details mb-2">
@@ -51,18 +51,18 @@ export default function Footer() {
               <h5 className="heading mb-0">Want to Donate Blood</h5>
               <h5 className="heading"></h5>
               <div className="d-flex flex-column">
-                {/* <a
+                <a
                   href="/BLDAHIMS/bloodbank/campSchedule.cnt"
                   className="footer-details mb-2">
                   Blood Donation Camp
-                </a> */}
-                <Link className="footer-details mb-2" to="/publicPages/campSchedule">Blood Donation Camp</Link>
-                {/* <a
+                </a>
+                {/* <Link className="footer-details mb-2" to="/publicPages/campSchedule">Blood Donation Camp</Link> */}
+                <a
                   href="/BLDAHIMS/bloodbank/portalDonorLogin.cnt"
                   className="footer-details mb-2">
                   Donor Login
-                </a> */}
-                <Link className="footer-details mb-2" to="/pages/portalDonorLogin"> Donor Login</Link>
+                </a>
+                {/* <Link className="footer-details mb-2" to="/pages/portalDonorLogin"> Donor Login</Link> */}
                 <a
                   href="/BLDAHIMS/bloodbank/donateblood.cnt"
                   className="footer-details mb-2">
@@ -93,24 +93,24 @@ export default function Footer() {
             <div className="col-12 col-md-6 col-xl-2 mb-3">
               <h5 className="heading">About Us</h5>
               <div className="d-flex flex-column">
-                {/* <a
+                <a
                   href="/BLDAHIMS/bloodbank/about.cnt"
                   className="footer-details mb-2">
                   About e-Raktkosh
-                </a> */}
-                <Link className="footer-details mb-2" to="/publicPages/AboutEraktkosh"> About e-Raktkosh</Link>
-                {/* <a
+                </a>
+                {/* <Link className="footer-details mb-2" to="/publicPages/AboutEraktkosh"> About e-Raktkosh</Link> */}
+                <a
                   href="/BLDAHIMS/bloodbank/notification.cnt"
                   className="footer-details mb-2">
                   Notifications
-                </a> */}
-                <Link className="footer-details mb-2" to="/publicPages/Notification">Notifications</Link>
-                {/* <a
+                </a>
+                {/* <Link className="footer-details mb-2" to="/publicPages/Notification">Notifications</Link> */}
+                <a
                   href="/publicPages/FAQs"
                   className="footer-details mb-2">
                   e-Raktkosh FAQs
-                </a> */}
-                <Link className="footer-details mb-2" to="/publicPages/FAQs">e-Raktkosh FAQs</Link>
+                </a>
+                {/* <Link className="footer-details mb-2" to="/publicPages/FAQs">e-Raktkosh FAQs</Link> */}
                 <a
                   href="/BLDAHIMS/bloodbank/transactions/bbpublicindexGallery.html"
                   className="footer-details mb-2">
@@ -213,7 +213,7 @@ export default function Footer() {
             </a>
             |
             <a className="footer-links" href="javascript:void(0)">
-              Last Updated: 13 June 2025
+              Last Updated: 05 Sept 2025
             </a>
             |
             <a

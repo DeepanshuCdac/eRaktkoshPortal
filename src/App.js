@@ -130,7 +130,7 @@ function AppContent() {
 
         <Route path="/">
           <HeroComponent />
-          <DonorCount />
+          {/* <DonorCount /> */}
           <Service />
           <Aboutpage />
           <LearnDonation />

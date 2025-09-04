@@ -5,15 +5,15 @@ export default function HeroComponent() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % 3);
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % 2);
     }, 10000);
 
     return () => clearInterval(interval);
   }, []);
 
   const handleClick = () => {
-    window.location.href = "/beta#/pages/portalDonorLogin";
-    // window.location.href = "/BLDAHIMS/bloodbank/portalDonorLogin.cnt";
+    // window.location.href = "/beta#/pages/portalDonorLogin";
+    window.location.href = "/BLDAHIMS/bloodbank/portalDonorLogin.cnt";
   };
 
   const handleIndicatorClick = (index) => {
@@ -28,7 +28,7 @@ export default function HeroComponent() {
         data-bs-ride="carousel"
       >
         <div className="carousel-indicators">
-          {[0, 1, 2].map((index) => (
+          {[0, 1].map((index) => (
             <button
               key={index}
               type="button"
@@ -72,7 +72,7 @@ export default function HeroComponent() {
           </div>
 
           {/* 3rd Slide */}
-          <div
+          {/* <div
             className={`carousel-item ${currentIndex === 1 ? "active" : ""}`}
           >
             <img
@@ -86,14 +86,10 @@ export default function HeroComponent() {
             >
               <div className="d-flex flex-column text-center">
                 <div>
-                  {/* <h5 className="img-text">Donate Blood, Save Lives</h5>
-                  <p className="img-content">Make a life-changing Impact: Donate blood, save lives. </p>
-                  <p className="img-content mb-5">Together, We can heal communities.</p> */}
-                  {/* <button className="btn imgBtn d-none d-lg-block d-xl-block" onClick={handleClick}>BECOME A DONOR</button> */}
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
 
           {/* 4th Slide */}
           <div
@@ -108,9 +104,6 @@ export default function HeroComponent() {
               className="carousel-caption d-md-block mt-3"
               style={{ left: "7%", bottom: "0" }}
             >
-              {/* <h5 className="img-text">Donate Blood, Save Lives</h5>
-              <p className="img-content">Uniting to save lives: One nation, one blood, one platform.</p>
-              <p className="img-content mb-5">Donate today and be a hero.</p> */}
               <button
                 className="btn imgBtn d-none d-lg-block d-xl-block"
                 onClick={handleClick}
@@ -119,37 +112,8 @@ export default function HeroComponent() {
               </button>
             </div>
           </div>
-
-          {/* 5th Slide */}
-          {/* <div className={`carousel-item ${currentIndex === 3 ? 'active' : ''}`}>
-            <img src="assets/images/header5.png" className="d-block w-100" alt="Fifth Image" />
-            <div className="carousel-caption d-md-block" style={{ left: '8%', bottom: '0' }}>
-              <button className="btn imgBtn d-none d-lg-block d-xl-block" onClick={handleClick}>BECOME A DONOR</button>
-            </div>
-          </div> */}
         </div>
-
-        {/* Navigation Buttons */}
-        {/* <button
-          className="carousel-control-prev"
-          type="button"
-          data-bs-target="#carouselExampleInterval"
-          data-bs-slide="prev"
-          onClick={() => setCurrentIndex((currentIndex - 1 + 5) % 5)}
-        >
-          <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span className="visually-hidden">Previous</span>
-        </button>
-        <button
-          className="carousel-control-next"
-          type="button"
-          data-bs-target="#carouselExampleInterval"
-          data-bs-slide="next"
-          onClick={() => setCurrentIndex((currentIndex + 1) % 5)}
-        >
-          <span className="carousel-control-next-icon" aria-hidden="true"></span>
-          <span className="visually-hidden">Next</span>
-        </button> */}
+     
       </div>
     </section>
   );

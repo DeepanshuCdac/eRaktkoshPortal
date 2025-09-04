@@ -17,29 +17,29 @@ export default function Service() {
       imgSrc: "assets/images/blood-search.png",
       altText: "Blood Availability Search",
       cardText: "Blood Availability Search",
-      url: '#/publicPages/bloodAvailabilitySearch'
-      // url: '/BLDAHIMS/bloodbank/stockAvailability.cnt'
+      // url: '#/publicPages/bloodAvailabilitySearch'
+      url: '/BLDAHIMS/bloodbank/stockAvailability.cnt'
     },
     {
       imgSrc: "assets/images/blood-directory.png",
       altText: "Blood Center Directory",
       cardText: "Blood Center Directory",
-      url: '#/publicPages/bloodBankDirectory'
-      // url: '/BLDAHIMS/bloodbank/nearbyBBRed.cnt'
+      // url: '#/publicPages/bloodBankDirectory'
+      url: '/BLDAHIMS/bloodbank/nearbyBBRed.cnt'
     },
     {
       imgSrc: "assets/images/blood-camp.png",
       altText: "Blood Donation Camps",
       cardText: "Blood Donation Camps",
-      url: '#/publicPages/campSchedule'
-      // url: '/BLDAHIMS/bloodbank/campSchedule.cnt'
+      // url: '#/publicPages/campSchedule'
+      url: '/BLDAHIMS/bloodbank/campSchedule.cnt'
     },
     {
       imgSrc: "assets/images/donor-login.png",
       altText: "Donor Login",
       cardText: "Donor Login",
-      url: '#/pages/portalDonorLogin'
-      // url: '/BLDAHIMS/bloodbank/portalDonorLogin.cnt'
+      // url: '#/pages/portalDonorLogin'
+      url: '/BLDAHIMS/bloodbank/portalDonorLogin.cnt'
     },
     {
       imgSrc: "assets/images/register-camp.png",
