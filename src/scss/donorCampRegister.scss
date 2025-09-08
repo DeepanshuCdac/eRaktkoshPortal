@@ -8,6 +8,20 @@
       background: #7f0210 !important;
     }
   }
+
+  .ant-btn-secondary {
+    font-size: 14px;
+    font-weight: 500;
+    background: #fff;
+    color: #7f0210;
+    border-radius: 5px;
+    border: 1px solid #7f0210;
+    &:hover {
+      color: #7f0210;
+      border: 1px solid #7f0210;
+      background: #fff !important;
+    }
+  }
   .camp_header {
     font-size: 15px;
     font-weight: 500;

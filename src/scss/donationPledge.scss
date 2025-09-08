@@ -1,0 +1,112 @@
+.page_wrapper {
+  .inside_header {
+    .home_link {
+      font-size: 12px;
+      font-weight: 400;
+      color: #000;
+      text-decoration: none;
+    }
+  }
+}
+
+.bg-border {
+  background-color: #fff;
+  border-radius: 5px;
+
+//   .ant-radio-wrapper:active{
+//     border: 1px solid red;
+//     color: red;
+//   }
+  .divider {
+    height: 55px;
+    border-right: 1px solid rgb(194 185 185);
+    margin-top: 10px;
+  }
+  .ant-select {
+    font-weight: 400;
+    .ant-select-selection-item {
+      font-weight: 400;
+    }
+  }
+  .ant-input {
+    font-weight: 400;
+  }
+  .timer {
+    font-size: 13px;
+    color: #837f7f;
+    span {
+      color: #7f0210;
+      font-weight: 500;
+    }
+  }
+  .header_details {
+    font-size: 18px;
+    font-weight: 600;
+  }
+  .heading_pledge {
+    font-weight: 600;
+    font-size: 14px;
+  }
+
+  .content_pledge {
+    padding-left: 20px;
+    font-weight: 400;
+    font-size: 13px;
+  }
+  .form_data {
+    font-weight: 400;
+    color: #000;
+    font-size: 16px;
+  }
+
+  .form_data_name {
+    font-size: 16px;
+    color: #045c9d;
+    font-weight: 500;
+  }
+
+  .pledge_header {
+    font-size: 22px;
+    font-weight: 400;
+    .pledge_name {
+      font-weight: 600;
+      // font-size: 16px;
+    }
+  }
+  .pledge_text {
+    font-size: 17px;
+    font-weight: 400;
+  }
+}
+.ant-modal-content {
+  text-align: center;
+  .ant-modal-close {
+    display: none;
+  }
+  .ant-modal-footer {
+    text-align: center;
+  }
+  .ant-btn-primary {
+    font-size: 14px;
+    font-weight: 500;
+    background: #7f0210;
+    border-radius: 5px;
+    &:hover {
+      background: #7f0210 !important;
+    }
+  }
+
+  .ant-btn-secondary {
+    font-size: 14px;
+    font-weight: 500;
+    background: #fff;
+    color: #7f0210;
+    border-radius: 5px;
+    border: 1px solid #7f0210;
+    &:hover {
+      color: #7f0210;
+      border: 1px solid #7f0210;
+      background: #fff !important;
+    }
+  }
+}

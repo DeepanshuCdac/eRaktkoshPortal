@@ -34,6 +34,7 @@ import GalleryCarousel from "./publicPages/GalleryCarousol.jsx";
 import DonorCampRegister from "./publicPages/donorCampRegister.js";
 import { CampProvider } from "./context/CampContext.js";
 import { initGA, logPageView } from './utils/ga.js';
+import DonationPledge from "./publicPages/DonationPledge.js";
 
 // const MEASUREMENT_ID = "G-SBWWZLM7W6"
 // ReactGA.initialize(MEASUREMENT_ID)
@@ -120,6 +121,10 @@ function AppContent() {
 
         <Route path="/pages/portaldonorRegister">
           <DonorRegister />
+        </Route>
+
+        <Route path="/pages/donationPledge">
+          <DonationPledge />
         </Route>
 
         <Route path="/pages/portaldonorAdmin">

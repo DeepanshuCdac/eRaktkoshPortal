@@ -40,7 +40,7 @@ const Faqs = () => {
     const fetchInitialData = async () => {
       try {
         // fetching faq from api...
-        const faqResponse = await axios.get(`${BaseUrl}/eraktkosh/faq/list`);
+        const faqResponse = await axios.get(`${BaseUrl}/eraktkosh/question/list`);
         if (Array.isArray(faqResponse.data)) {
           const faqsWithType = faqResponse.data.map((faq) => {
             // faq filters...
