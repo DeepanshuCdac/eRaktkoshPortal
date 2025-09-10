@@ -8,6 +8,19 @@
       background: #7f0210 !important;
     }
   }
+  .ant-btn-secondary {
+    font-size: 14px;
+    font-weight: 500;
+    background: #fff;
+    color: #7f0210;
+    border-radius: 5px;
+    border: 1px solid #7f0210;
+    &:hover {
+      color: #7f0210;
+      border: 1px solid #7f0210;
+      background: #fff !important;
+    }
+  }
   .camp_header {
     font-size: 15px;
     font-weight: 500;
@@ -141,7 +154,7 @@
     background-color: #fff;
     border-radius: 5px;
 
-    .ant-checkbox-wrapper{
+    .ant-checkbox-wrapper {
       margin-bottom: 10px;
     }
   }
@@ -152,7 +165,7 @@
     font-weight: 500;
   }
 
-  .abha_txt_key{
+  .abha_txt_key {
     white-space: nowrap;
     color: #3479b5;
     font-size: 15px;
@@ -167,7 +180,7 @@
     }
   }
 
-  .ant-btn-primary:disabled{
+  .ant-btn-primary:disabled {
     color: #fff;
   }
 }

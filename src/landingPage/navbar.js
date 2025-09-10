@@ -253,6 +253,18 @@ export default function Navbar() {
 
                     <ul className="dropdown__menu">
                       <li className="dropdown__menu__li">
+                        {/* <a href="#" className="dropdown__link">
+                          Blood Donation Camps
+                        </a> */}
+                        <Link
+                          className="dropdown__link"
+                          to="/publicPages/donationPledge"
+                        >
+                          {" "}
+                         e-Raktkosh Donor Pledge
+                        </Link>
+                      </li>
+                      <li className="dropdown__menu__li">
                         <a
                           href="/BLDAHIMS/bloodbank/donateblood.cnt"
                           className="dropdown__link"

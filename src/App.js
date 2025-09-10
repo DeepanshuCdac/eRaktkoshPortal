@@ -20,6 +20,7 @@ import ProtectedRoute from "./ProtectedRoute/ProtectedRoute.js";
 import BloodAvailabiltySearch from "./publicPages/bloodAvailabilitySearch.js";
 import CampSchedule from "./publicPages/CampSchedule.js";
 import BloodBankDirectory from "./publicPages/BloodBankDirectory.js";
+import DonationPledge from "./publicPages/DonationPledge.js";
 import CampRegistration from "./publicPages/CampRegistration.js";
 import Faqs from "./publicPages/Faqs.js";
 import Notification from "./publicPages/Notification.js";
@@ -117,6 +118,10 @@ function AppContent() {
 
         <Route path="/publicPages/campRegistration">
           <CampRegistration />
+        </Route>
+
+        <Route path="/publicPages/donationPledge">
+          <DonationPledge />
         </Route>
 
         <Route path="/pages/portalDonorLogin">
