@@ -93,7 +93,7 @@ export default function HeroComponent() {
 
           {/* 4th Slide */}
           <div
-            className={`carousel-item ${currentIndex === 2 ? "active" : ""}`}
+            className={`carousel-item ${currentIndex === 1 ? "active" : ""}`}
           >
             <img
               src="assets/images/header4.png"

@@ -21,6 +21,7 @@ export default function DonationPledgeForm({
   );
 
   const [agree, setAgree] = useState(false);
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     dispatch(getApiData());
@@ -32,6 +33,7 @@ export default function DonationPledgeForm({
       [key]: value,
       ...(key === "state" ? { district: null } : {}),
     }));
+    setErrors((prev) => ({ ...prev, [key]: "" })); // clear error on change
   };
 
   const states = statesWithDistricts;
@@ -41,33 +43,33 @@ export default function DonationPledgeForm({
 
   // Validation
   const isValidEmail = (email) =>
-    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+    !email || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim()); // optional
   const isValidAge = (age) => /^\d{1,2}$/.test(age) && +age >= 18 && +age <= 65;
   const isValidPincode = (pincode) => /^\d{6}$/.test(pincode);
 
-  const isFormValid =
-    formData.name.trim() &&
-    isValidAge(formData.age) &&
-    formData.gender &&
-    // isValidEmail(formData.email) &&
-    formData.state &&
-    formData.district &&
-    isValidPincode(formData.pincode) &&
-    formData.language &&
-    agree;
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!formData.name?.trim()) newErrors.name = "Please enter name.";
+    if (!formData.age || !isValidAge(formData.age))
+      newErrors.age = "Please enter valid age.";
+    if (!formData.gender) newErrors.gender = "Please enter Gender.";
+    if (formData.email && !isValidEmail(formData.email))
+      newErrors.email = "Enter a valid email.";
+    if (!formData.state) newErrors.state = "State is required.";
+    if (!formData.district) newErrors.district = "District is required.";
+    if (!formData.pincode || !isValidPincode(formData.pincode))
+      newErrors.pincode = "Valid 6-digit pincode is required.";
+    if (!formData.language) newErrors.language = "Please select a language.";
+    if (!agree) newErrors.agree = "You must agree to the declaration.";
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleContinue = () => {
-    if (!isFormValid) {
-      //   message.error("Please fill all required fields correctly.");
-      Swal.fire({
-        text: "Please fill all required fields correctly.",
-        icon: "error",
-      });
-      return;
-    }
+    if (!validateForm()) return;
     console.log("Form Submitted:", formData);
-    // message.success("Form submitted successfully!");
-    Swal.fire({ text: "Form submitted successfully!", icon: "success" });
     continueCallBack();
   };
 
@@ -78,7 +80,7 @@ export default function DonationPledgeForm({
 
         <div className="row">
           {/* Name */}
-          <div className="col-4 mb-3">
+          <div className="col-xl-4 col-lg-4 col-md-6 mb-3">
             <div className="input-wrapper-field">
               <label className="form-label mb-0">
                 Name<span className="mandatory">*</span>
@@ -89,11 +91,14 @@ export default function DonationPledgeForm({
                 value={formData.name}
                 onChange={(value) => handleChange("name", value)}
               />
+              {errors.name && (
+                <small className="text-danger">{errors.name}</small>
+              )}
             </div>
           </div>
 
           {/* Age */}
-          <div className="col-4 mb-3">
+          <div className="col-xl-4 col-lg-4 col-md-6 mb-3">
             <div className="input-wrapper-field">
               <label className="form-label mb-0">
                 Age<span className="mandatory">*</span>
@@ -108,11 +113,14 @@ export default function DonationPledgeForm({
                   handleChange("age", e.target.value.replace(/\D/g, ""))
                 }
               />
+              {errors.age && (
+                <small className="text-danger">{errors.age}</small>
+              )}
             </div>
           </div>
 
           {/* Gender */}
-          <div className="col-4 mb-3">
+          <div className="col-xl-4 col-lg-4 col-md-6 mb-3">
             <div className="input-wrapper-field">
               <label className="form-label mb-0">
                 Gender<span className="mandatory">*</span>
@@ -129,26 +137,30 @@ export default function DonationPledgeForm({
                   label: gender.genderName,
                 }))}
               />
+              {errors.gender && (
+                <small className="text-danger">{errors.gender}</small>
+              )}
             </div>
           </div>
 
           {/* Email */}
-          <div className="col-4">
+          <div className="col-xl-4 col-lg-4 col-md-6 mb-3">
             <div className="input-wrapper-field">
-              <label className="form-label mb-0">
-                Email
-              </label>
+              <label className="form-label mb-0">Email</label>
               <AutoComplete
                 style={{ width: "100%" }}
                 placeholder="Enter email address"
                 value={formData.email}
                 onChange={(value) => handleChange("email", value)}
               />
+              {errors.email && (
+                <small className="text-danger">{errors.email}</small>
+              )}
             </div>
           </div>
 
           {/* State */}
-          <div className="col-4">
+          <div className="col-xl-4 col-lg-4 col-md-6 mb-3">
             <div className="input-wrapper-field">
               <label className="form-label mb-0">
                 State<span className="mandatory">*</span>
@@ -160,21 +172,19 @@ export default function DonationPledgeForm({
                 placeholder="Select state"
                 value={formData.state}
                 onChange={(value) => handleChange("state", value)}
-                filterOption={(input, option) =>
-                  (option?.label ?? "")
-                    .toLowerCase()
-                    .includes(input.toLowerCase())
-                }
                 options={states.map((state) => ({
                   value: state.stateCode,
                   label: state.stateName,
                 }))}
               />
+              {errors.state && (
+                <small className="text-danger">{errors.state}</small>
+              )}
             </div>
           </div>
 
           {/* District */}
-          <div className="col-2">
+          <div className="col-xl-2 col-lg-4 col-md-6 mb-3">
             <div className="input-wrapper-field">
               <label className="form-label mb-0">
                 District<span className="mandatory">*</span>
@@ -191,11 +201,14 @@ export default function DonationPledgeForm({
                   label: district.districtName,
                 }))}
               />
+              {errors.district && (
+                <small className="text-danger">{errors.district}</small>
+              )}
             </div>
           </div>
 
           {/* Pincode */}
-          <div className="col-2">
+          <div className="col-xl-2 col-lg-4 col-md-6 mb-3">
             <div className="input-wrapper-field">
               <label className="form-label mb-0">
                 Pincode<span className="mandatory">*</span>
@@ -210,15 +223,21 @@ export default function DonationPledgeForm({
                   handleChange("pincode", e.target.value.replace(/\D/g, ""))
                 }
               />
+              {errors.pincode && (
+                <small className="text-danger">{errors.pincode}</small>
+              )}
             </div>
           </div>
         </div>
 
         {/* Declaration */}
-        <div className="py-4">
+        <div className="pt-2 pb-4">
           <Checkbox
             checked={agree}
-            onChange={(e) => setAgree(e.target.checked)}
+            onChange={(e) => {
+              setAgree(e.target.checked);
+              setErrors((prev) => ({ ...prev, agree: "" }));
+            }}
           >
             <p className="heading_pledge mb-1">
               {text.heading}
@@ -226,6 +245,9 @@ export default function DonationPledgeForm({
             </p>
           </Checkbox>
           <p className="content_pledge mb-0">{text.content}</p>
+          {errors.agree && (
+            <small className="text-danger">{errors.agree}</small>
+          )}
         </div>
 
         {/* Language */}
@@ -242,17 +264,15 @@ export default function DonationPledgeForm({
               { value: "2", label: "Hindi" },
             ]}
           />
+          {errors.language && (
+            <small className="text-danger">{errors.language}</small>
+          )}
         </div>
       </div>
 
       {/* Buttons */}
       <div className="btns d-flex align-items-center justify-content-end gap-3 pt-4">
-        <Button
-          className="px-4"
-          type="primary"
-          onClick={handleContinue}
-          disabled={!isFormValid}
-        >
+        <Button className="px-4" type="primary" onClick={handleContinue}>
           Continue
         </Button>
         <Button className="px-4" type="secondary">

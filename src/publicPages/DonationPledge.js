@@ -2,11 +2,10 @@ import React, { useState, useEffect } from "react";
 import "../scss/donationPledge.scss";
 import { Input, Button } from "antd";
 import Swal from "sweetalert2";
-import { BaseUrlSajal } from "../utils/url";
+import { BaseUrl, BaseUrlSajal } from "../utils/url";
 import axios from "axios";
 import DonationPledgeForm from "./DonationPledgeForm";
 import PledgeForm from "./PledgeForm";
-import SuccessModal from "./SuccessModal";
 import { generatePledgeCertificate } from "../utils/GeneratePledgeCertificate";
 import { useSelector } from "react-redux";
 
@@ -14,18 +13,13 @@ export default function DonationPledge() {
   const [loading, setLoading] = useState(false);
   const [mobileNo, setMobileNo] = useState("");
   const [otpSent, setOtpSent] = useState(false);
-  //   const [captchaImage, setCaptchaImage] = useState("");
-  //   const [captchaText, setCaptchaText] = useState("");
   const [timer, setTimer] = useState(0);
   const [enteredOtp, setEnteredOtp] = useState("");
-  //   const [enteredCaptcha, setEnteredCaptcha] = useState("");
   const [lastOtp, setLastOtp] = useState("");
   const [isValidated, setIsValidated] = useState(false);
   const [showPledgeForm, setShowPledgeForm] = useState(false);
-  //   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [pledgeDetails, setPledgeDetails] = useState(null);
   const [showSuccessScreen, setShowSuccessScreen] = useState(false);
-  //   const [modalVisible, setModalVisible] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     age: "",
@@ -72,10 +66,6 @@ export default function DonationPledge() {
     }
   };
 
-  //   const handleCaptchaChange = (e) => {
-  //     setEnteredCaptcha(e.target.value);
-  //   };
-
   const validateMobileNo = () => {
     if (mobileNo.length !== 10) {
       Swal.fire({ text: "Mobile number must be 10 digits.", icon: "error" });
@@ -105,29 +95,35 @@ export default function DonationPledge() {
       setLoading(true);
 
       const response = await axios.post(
-        `${BaseUrlSajal}/eraktkosh/pledge/check`,
+        `${BaseUrl}/eraktkosh/pledge/check`,
         { pledgerMobile: String(mobileNo) }
       );
 
       console.log("OTP API response:", response?.data);
       const responseData = response.data;
 
-      // Case 1: Already pledged - open success modal
-      if (responseData.details) {
-        setPledgeDetails(responseData.details);
-        setShowSuccessScreen(true);
-        // setShowSuccessModal(true);
-        // setModalVisible(true);
+      if (responseData.OtpData === "OTP Sent") {
+        Swal.fire({
+          title: "Success",
+          text: "OTP Sent Successfully!",
+          icon: "success",
+        });
+        setOtpSent(true);
+        setTimer(300);
         return;
       }
 
-      // Case 2: OTP flow
-      setOtpSent(true);
-      //   setCaptchaImage(responseData.captchaImage || "");
-      //   setCaptchaText(responseData.captchaText || "");
-
       const otpValue =
         responseData.OtpData || responseData.otp || responseData.OTP;
+
+      if (responseData.OtpData === "Try After 5 Minutes") {
+        Swal.fire({
+          //   title: "Try Later",
+          text: `${responseData.OtpData}`,
+          icon: "error",
+        });
+        return;
+      }
 
       if (otpValue) {
         setLastOtp(String(otpValue));
@@ -140,14 +136,6 @@ export default function DonationPledge() {
         });
         return;
       }
-
-      setTimer(300);
-
-      Swal.fire({
-        title: "Success",
-        text: "OTP Sent Successfully!",
-        icon: "success",
-      });
     } catch (error) {
       console.error("Error sending OTP:", error);
       Swal.fire({
@@ -159,52 +147,60 @@ export default function DonationPledge() {
     }
   };
 
-  //   const handleRegenerateCaptcha = async () => {
-  //     try {
-  //       const captchaResponse = await axios.post(
-  //         `${BaseUrlSajal}/eraktkosh/regenerateCaptcha`
-  //       );
-  //       const data = captchaResponse.data;
-  //       setCaptchaImage(data.captchaImage);
-  //       setCaptchaText(data.captchaText);
-  //     } catch (error) {
-  //       console.error("Error fetching captcha:", error);
-  //       Swal.fire({
-  //         text: "Something went wrong while loading captcha.",
-  //         icon: "error",
-  //       });
-  //     }
-  //   };
-
   const handleValidateOtp = async () => {
     if (enteredOtp.length !== 6) {
       Swal.fire({ text: "Please enter a valid 6-digit OTP.", icon: "error" });
       return;
     }
 
-    // if (enteredCaptcha !== captchaText) {
-    //   Swal.fire({ text: "Captcha does not match.", icon: "error" });
-    //   return;
-    // }
-
-    if (enteredOtp !== lastOtp) {
-      Swal.fire({
-        text: `Invalid OTP. Please try again.`,
-        icon: "error",
-      });
-      return;
-    }
-
     try {
       setLoading(true);
 
-      Swal.fire({
-        title: "Success",
-        text: "OTP Validated Successfully!",
-        icon: "success",
-      }).then(() => {
-        setIsValidated(true);
-      });
+      const response = await axios.post(
+        `${BaseUrl}/eraktkosh/pledge/validate`,
+        {
+          pledgerMobile: String(mobileNo),
+          OTP: enteredOtp,
+        }
+      );
+
+      const responseData = response.data;
+      console.log("Validate OTP response:", responseData);
+
+      if (responseData.details === "false") {
+        // New pledge flow
+        Swal.fire({
+          title: "Success",
+          text: "OTP Validated Successfully!",
+          icon: "success",
+        }).then(() => {
+          setIsValidated(true);
+        });
+      } else if (
+        typeof responseData.details === "string" &&
+        responseData.details.toLowerCase().includes("invalid otp")
+      ) {
+        // Invalid OTP
+        Swal.fire({
+          text: "Invalid OTP. Please try again.",
+          icon: "error",
+        });
+      } else if (typeof responseData.details === "object") {
+        // Already pledged
+        Swal.fire({
+          title: "Success",
+          text: "OTP Validated Successfully!",
+          icon: "success",
+        }).then(() => {
+          setPledgeDetails(responseData.details);
+          setShowSuccessScreen(true);
+        });
+      } else {
+        Swal.fire({
+          text: "Unexpected response. Please try again.",
+          icon: "error",
+        });
+      }
     } catch (error) {
       console.error("Error in validation process:", error);
       Swal.fire({
@@ -216,80 +212,39 @@ export default function DonationPledge() {
     }
   };
 
-  const handleDownload = () => {
-    // Case 1: Already pledged → use API data
-    if (pledgeDetails) {
-      generatePledgeCertificate({
-        name: pledgeDetails.pledgerName,
-        state: pledgeDetails.stateEnglish,
-        district: pledgeDetails.distEnglish,
-        date: pledgeDetails.pledgeTime,
-        backgroundImgUrl: "/assets/images/pledge_certi.jpg",
-      });
-    }
-    // Case 2: New pledge → use form data
-    else {
-      generatePledgeCertificate({
-        name: formData.name,
-        state: stateName,
-        district: districtName,
-        date: new Date().toLocaleDateString("en-IN"),
-        backgroundImgUrl: "/assets/images/pledge_certi.jpg",
-      });
-    }
-  };
-
   const getContent = () => {
     // Already pledged flow
     if (pledgeDetails) {
-      // If modal is open, show SuccessModal
-      //   if (modalVisible) {
-      //     return (
-      //       <SuccessModal
-      //         visible={modalVisible}
-      //         onClose={() => {
-      //           setModalVisible(false);
-      //           setShowSuccessScreen(true); // after close, show success screen
-      //         }}
-      //         onDownload={handleDownload}
-      //         title={`Thank you ${pledgeDetails.pledgerName} for taking the pledge!`}
-      //         content={`You have already taken the Blood Donation Pledge from ${pledgeDetails.distEnglish}, ${pledgeDetails.stateEnglish}.`}
-      //       />
-      //     );
-      //   }
-
-      // If modal is closed → show success screen
       if (showSuccessScreen) {
         return (
           <div className="bg-border p-4 text-center">
             <img src="assets/images/success_icon.svg" alt="" />
-            <h2 className="mb-3">
-              Thank you {pledgeDetails.pledgerName}
+            <h2 className="mt-3 mb-2 pledge_header">
+              Thank you{" "}
+              <span className="pledge_name">{pledgeDetails.pledgerName}</span>
             </h2>
-            <p className="mb-4">
-              You have already taken the <strong>Blood Donation Pledge</strong>{" "}
-              from {pledgeDetails.distEnglish}, {pledgeDetails.stateEnglish}.
+            <p className="mb-4 pledge_text">
+              You have already taken the Blood Donation Pledge from{" "}
+              <span className="pledge_name">{pledgeDetails.distEnglish}</span>,{" "}
+              <span className="pledge_name">{pledgeDetails.stateEnglish}</span>.
             </p>
-            <Button
-              type="secondary"
-              onClick={handleDownload}
-              className="px-4 me-3"
-            >
-              Download Certificate
-            </Button>
-            <Button
-              onClick={() => setShowPledgeForm(false)}
-              type="secondary"
-              className="px-4"
-            >
-              Share
-            </Button>
+            <div className="gap-3">
+              <Button
+                type="secondary"
+                onClick={handleDownload}
+                className="px-4 me-3 mb-3"
+              >
+                Download Certificate
+              </Button>
+              <Button onClick={handleShare} type="secondary" className="px-4">
+                Share
+              </Button>
+            </div>
           </div>
         );
       }
     }
 
-    // New pledge flow (normal)
     if (showPledgeForm) {
       return (
         <PledgeForm
@@ -298,9 +253,8 @@ export default function DonationPledge() {
           onBack={() => setShowPledgeForm(false)}
           showSuccessScreen={showSuccessScreen}
           setShowSuccessScreen={setShowSuccessScreen}
-          //   modalVisible={modalVisible}
-          //   setModalVisible={setModalVisible}
           onDownload={handleDownload}
+          onShare={handleShare}
         />
       );
     }
@@ -318,7 +272,7 @@ export default function DonationPledge() {
 
     return (
       <div className="p-3 d-flex flex-wrap bg-border flex-column">
-        <div className="d-flex gap-3">
+        <div className="d-xl-flex d-lg-flex d-md-flex d-block gap-3">
           <div className="input-wrapper-field mb-2">
             <label className="form-label mb-0">Mobile Number</label>
             <Input
@@ -329,7 +283,7 @@ export default function DonationPledge() {
             />
           </div>
           {!otpSent ? (
-            <div className="d-flex align-items-end mb-2">
+            <div className="d-flex align-items-end justify-content-center mb-2">
               <Button
                 className="px-4"
                 key="submit"
@@ -351,9 +305,19 @@ export default function DonationPledge() {
                   maxLength={6}
                 />
               </div>
-              <div className="d-flex align-items-end mb-2 gap-3">
+              <div className="d-flex align-items-end mb-2 gap-3 justify-content-center">
                 <Button
-                  className="px-4"
+                  className="px-5"
+                  key="submit"
+                  type="primary"
+                  loading={loading}
+                  onClick={handleValidateOtp}
+                >
+                  Validate
+                </Button>
+
+                <Button
+                  className="px-2"
                   key="submit"
                   type="secondary"
                   loading={loading}
@@ -362,20 +326,7 @@ export default function DonationPledge() {
                 >
                   Resend OTP
                 </Button>
-
-                 <Button
-                  className="px-4"
-                  key="submit"
-                  type="primary"
-                  loading={loading}
-                  onClick={handleValidateOtp}
-                >
-                  Validate
-                </Button>
               </div>
-              {/* <div className="d-flex align-items-end">
-               
-              </div> */}
             </>
           )}
         </div>
@@ -389,6 +340,49 @@ export default function DonationPledge() {
         )}
       </div>
     );
+  };
+
+  const handleShare = () => {
+    const url = `${BaseUrl}/eraktkosh/pledge/certificate?mobile=${mobileNo}`;
+
+    // const encodedUrl = encodeURIComponent(url);
+
+    // const whatsappUrl = `https://wa.me/?text=${encodedUrl}`;
+    // window.open(whatsappUrl, "_blank");
+
+    const encodedUrl = encodeURIComponent(url);
+
+  const whatsappUrl = `whatsapp://send?text=${encodedUrl}`;
+  window.location.href = whatsappUrl;
+  };
+
+  const handleDownload = () => {
+    if (pledgeDetails) {
+      generatePledgeCertificate({
+        name: pledgeDetails.pledgerName,
+        state: pledgeDetails.stateEnglish,
+        district: pledgeDetails.distEnglish,
+        date: pledgeDetails.pledgeTime,
+        backgroundImgUrl: "/assets/images/pledge_certi.jpg",
+      });
+    } else {
+      const today = new Date();
+      const formattedDate = today
+        .toLocaleDateString("en-GB", {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+        })
+        .replace(/\s+/g, "-");
+
+      generatePledgeCertificate({
+        name: formData.name,
+        state: stateName,
+        district: districtName,
+        date: formattedDate,
+        backgroundImgUrl: "/assets/images/pledge_certi.jpg",
+      });
+    }
   };
 
   return (

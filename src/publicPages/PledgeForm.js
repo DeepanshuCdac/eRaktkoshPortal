@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { Button, Checkbox } from "antd";
 import axios from "axios";
 import Swal from "sweetalert2";
-import { BaseUrlSajal } from "../utils/url";
-import SuccessModal from "./SuccessModal";
+import { BaseUrl, BaseUrlSajal } from "../utils/url";
 import { useSelector } from "react-redux";
 
 export default function PledgeForm({
@@ -12,9 +11,8 @@ export default function PledgeForm({
   mobileNo,
   showSuccessScreen,
   setShowSuccessScreen,
-//   modalVisible,
-//   setModalVisible,
   onDownload,
+  onShare,
 }) {
   const [agreed, setAgreed] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -56,13 +54,12 @@ export default function PledgeForm({
       };
 
       const response = await axios.post(
-        `${BaseUrlSajal}/eraktkosh/pledge`,
+        `${BaseUrl}/eraktkosh/pledge`,
         requestBody
       );
 
       if (response.status === 200) {
-        setShowSuccessScreen(true)
-        // setModalVisible(true); // Show modal
+        setShowSuccessScreen(true);
       }
     } catch (error) {
       console.error("Error submitting pledge:", error);
@@ -80,16 +77,21 @@ export default function PledgeForm({
     return (
       <div className="bg-border p-4 text-center">
         <img src="assets/images/success_icon.svg" alt="" />
-        <h2 className="mt-3 mb-2 pledge_header" >
-          Thank you <span className="pledge_name">{formData.name}</span> for taking the pledge!
+        <h2 className="mt-3 mb-2 pledge_header">
+          Thank you <span className="pledge_name">{formData.name}</span> for
+          taking the pledge!
         </h2>
         <p className="mb-4 pledge_text">
           You have successfully taken the Blood Donation Pledge
         </p>
-        <Button type="secondary" onClick={onDownload} className="px-4 me-3">
+        <Button
+          type="secondary"
+          onClick={onDownload}
+          className="px-4 me-3 mb-3"
+        >
           Download Certificate
         </Button>
-        <Button onClick={onBack} type="secondary" className="px-4">
+        <Button onClick={onShare} type="secondary" className="px-4">
           Share
         </Button>
       </div>
@@ -110,11 +112,11 @@ export default function PledgeForm({
             <Checkbox
               checked={agreed}
               onChange={(e) => setAgreed(e.target.checked)}
-              className="mb-3"
+              className="mb-4"
             >
-              <span className="form_data mb-1">
+              <span className="form_data mb-4">
                 मैं, <strong className="form_data_name">{formData.name}</strong>
-                , निवासी
+                , निवासी{" "}
                 <strong className="form_data_name">
                   {districtName}, {stateName}
                 </strong>
@@ -124,20 +126,20 @@ export default function PledgeForm({
               </span>
             </Checkbox>
 
-            <p className="form_data mb-1">
+            <p className="form_data mb-4 ps-3">
               भारत में रक्त की आवश्यकता को ध्यान में रखते हुए, मैं यह भी संकल्प
               लेता/लेती हूँ कि अपने परिवार के सदस्यों, मित्रों, रिश्तेदारों,
               सहकर्मियों और आम जनता के बीच नियमित, स्वैच्छिक, नि:शुल्क रक्तदान
               की आवश्यकता के बारे में जागरूकता फैलाऊँगा/फैलाऊँगी।
             </p>
 
-            <p className="form_data mb-1">
+            <p className="form_data mb-4 ps-3">
               इसके साथ ही, मैं यह भी संकल्प लेता/लेती हूँ कि जब भी किसी को रक्त
               की आवश्यकता होगी, मैं बिना किसी लालच और भेदभाव के रक्तदान
               करूँगा/करूँगी।
             </p>
 
-            <p className="form_data mb-1">
+            <p className="form_data mb-4 ps-3">
               मैं निरंतर प्रयास करूँगा/करूँगी कि हमारे आसपास रक्त की कमी के कारण
               कोई जीवन न खोए।
             </p>
@@ -202,18 +204,6 @@ export default function PledgeForm({
           Back
         </Button>
       </div>
-
-      {/* Success Modal */}
-      {/* <SuccessModal
-        visible={modalVisible}
-        onClose={() => {
-          setModalVisible(false);
-          setShowSuccessScreen(true);
-        }}
-        onDownload={onDownload}
-        title={`Thank you ${formData.name} for taking the pledge!`}
-        content="You have successfully taken the Blood Donation Pledge"
-      /> */}
     </>
   );
 }
