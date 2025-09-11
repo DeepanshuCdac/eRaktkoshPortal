@@ -33,7 +33,7 @@ export default function Donationworking() {
 
   return (
     <>
-      <section className="donation__working my-4">
+      <section className="donation__working mt-2 mb-5">
         <div className="container">
           <div className="donation-bg-img py-4 px-3">
             <div className="text-center image__container mb-4">

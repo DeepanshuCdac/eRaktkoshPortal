@@ -6,14 +6,14 @@ export default function HeroComponent() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % 4);
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % 5);
     }, 10000);
     return () => clearInterval(interval);
   }, []);
 
   const handleClick = () => {
-    window.location.href = "/beta#/publicPages/bloodAvailabilitySearch";
-    // window.location.href = "/BLDAHIMS/bloodbank/portalDonorLogin.cnt";
+    // window.location.href = "/beta#/publicPages/bloodAvailabilitySearch";
+    window.location.href = "/BLDAHIMS/bloodbank/portalDonorLogin.cnt";
   };
 
   const handleIndicatorClick = (index) => {
@@ -21,14 +21,14 @@ export default function HeroComponent() {
   };
 
   return (
-    <section className="heroComponent page-wrapper">
+    <section className="heroComponent">
       <div
         id="carouselExampleInterval"
         className="carousel slide"
         data-bs-ride="carousel"
       >
         <div className="carousel-indicators">
-          {[0, 1, 2, 3].map((index) => (
+          {[0, 1, 2, 3, 4].map((index) => (
             <button
               key={index}
               type="button"
@@ -47,7 +47,7 @@ export default function HeroComponent() {
             className={`carousel-item ${currentIndex === 0 ? "active" : ""}`}
           >
             <img
-              src="assets/landingPage/Banner-11.jpg"
+              src="assets/landingPage/Banner-5.jpg"
               className="d-block w-100"
               alt="Second Image"
             />
@@ -58,7 +58,7 @@ export default function HeroComponent() {
             className={`carousel-item ${currentIndex === 1 ? "active" : ""}`}
           >
             <img
-              src="assets/landingPage/Banner-21.jpg"
+              src="assets/images/header2.png"
               className="d-block w-100"
               alt="Second Image"
             />
@@ -115,6 +115,15 @@ export default function HeroComponent() {
                 </div>
               </div>
             </div>
+          </div>
+          <div
+            className={`carousel-item ${currentIndex === 4 ? "active" : ""}`}
+          >
+            <img
+              src="assets/landingPage/Banner-21.jpg"
+              className="d-block w-100"
+              alt="Second Image"
+            />
           </div>
         </div>
 

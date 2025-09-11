@@ -34,7 +34,7 @@ export default function Navbar() {
     <>
       <main>
         <header>
-          <section className="top_header p-1">
+          {/* <section className="top_header p-1">
             <div className="container">
               <div className="d-flex align-items-center">
                 <CallSharpIcon style={{ height: "14px" }} />
@@ -48,7 +48,7 @@ export default function Navbar() {
                 </div>
               </div>
             </div>
-          </section>
+          </section> */}
 
           <section className="mid_header p-2">
             <div className="container">
@@ -135,18 +135,74 @@ export default function Navbar() {
 
                   <div className="divider"></div>
 
-                  <li className="nav__list__li">
-                    {/* <a href="#" className="nav__link">
-                      About e-Raktkosh
-                      </a> */}
-                    <Link
-                      className="nav__link"
-                      to="/publicPages/AboutEraktkosh"
-                    >
-                      {" "}
-                      About e-Raktkosh
-                    </Link>
+                  <li className="dropdown__item">
+                    <div className="nav__link">
+                      About e-Raktkosh{" "}
+                      <KeyboardArrowDownIcon className="dropdown__arrow" />
+                    </div>
+
+                    <ul className="dropdown__menu">
+                      <li className="dropdown__menu__li">
+                        <a
+                          href="/BLDAHIMS/bloodbank/about.cnt"
+                          className="dropdown__link"
+                        >
+                          About e-Raktkosh
+                        </a>
+                      </li>
+                      <li className="dropdown__menu__li">
+                        <a
+                          href="/BLDAHIMS/bloodbank/transactions/bbpublicindexGallery.html"
+                          className="dropdown__link"
+                        >
+                          Gallery
+                        </a>
+                      </li>
+                      <li className="dropdown__menu__li">
+                        <a
+                          href="/BLDAHIMS/bloodbank/transactions/video.html"
+                          className="dropdown__link"
+                        >
+                          Video Gallery
+                        </a>
+                      </li>
+                      <li className="dropdown__menu__li">
+                        <a
+                          href="/BLDAHIMS/bloodbank/notification.cnt"
+                          className="dropdown__link"
+                        >
+                          Notifications
+                        </a>
+                        {/* <Link
+                          className="dropdown__link"
+                          to="/publicPages/Notification"
+                        >
+                          Notifications
+                        </Link> */}
+                      </li>
+                      <li className="dropdown__menu__li">
+                        <a
+                          href="/BLDAHIMS/bloodbank/eraktkoshfaq.cnt"
+                          className="dropdown__link"
+                        >
+                          e-Raktkosh Faq's
+                        </a>
+                        {/* <Link className="dropdown__link" to="/publicPages/FAQs">
+                          eRaktkosh FAQ's
+                        </Link> */}
+                      </li>
+                      <li className="dropdown__menu__li">
+                        <a
+                          href="/BLDAHIMS/bloodbank/contact.cnt"
+                          className="dropdown__link"
+                        >
+                          Contact Us
+                        </a>
+                      </li>
+                    </ul>
                   </li>
+
+
                   <div className="divider"></div>
 
                   {/* dropdown 1 */}
@@ -158,39 +214,48 @@ export default function Navbar() {
 
                     <ul className="dropdown__menu">
                       <li className="dropdown__menu__li">
-                        {/* <a href="#" className="dropdown__link">
+                        <a
+                          href="/BLDAHIMS/bloodbank/portalDonorLogin.cnt"
+                          className="dropdown__link"
+                        >
                           Donor Login
-                        </a> */}
-                        <Link
+                        </a>
+                        {/* <Link
                           className="dropdown__link"
                           to="/pages/portalDonorLogin"
                         >
                           {" "}
                           Donor Login
-                        </Link>
+                        </Link> */}
                       </li>
                       <li className="dropdown__menu__li">
-                        {/* <a href="#" className="dropdown__link">
+                        <a
+                          href="/BLDAHIMS/bloodbank/stockAvailability.cnt"
+                          className="dropdown__link"
+                        >
                           Blood Availability
-                        </a> */}
-                        <Link
+                        </a>
+                        {/* <Link
                           className="dropdown__link"
                           to="/publicPages/bloodAvailabilitySearch"
                         >
                           Blood Availability
-                        </Link>
+                        </Link> */}
                       </li>
 
                       <li className="dropdown__menu__li">
-                        {/* <a href="#" className="dropdown__link">
+                        <a
+                          href="/BLDAHIMS/bloodbank/nearbyBBRed.cnt"
+                          className="dropdown__link"
+                        >
                           Blood Center Directory
-                        </a> */}
-                        <Link
+                        </a>
+                        {/* <Link
                           className="dropdown__link"
                           to="/publicPages/bloodBankDirectory"
                         >
                           Blood Center Directory
-                        </Link>
+                        </Link> */}
                       </li>
                       <li className="dropdown__menu__li">
                         <a
@@ -201,9 +266,6 @@ export default function Navbar() {
                         </a>
                       </li>
                       <li className="dropdown__menu__li">
-                        {/* <a href="#" className="dropdown__link">
-                          e-Raktkosh Faq's
-                        </a> */}
                         <a
                           href="/BLDAHIMS/bloodbank/downloadMobile.cnt"
                           className="dropdown__link"
@@ -252,10 +314,7 @@ export default function Navbar() {
                     </div>
 
                     <ul className="dropdown__menu">
-                      <li className="dropdown__menu__li">
-                        {/* <a href="#" className="dropdown__link">
-                          Blood Donation Camps
-                        </a> */}
+                      {/* <li className="dropdown__menu__li">
                         <Link
                           className="dropdown__link"
                           to="/publicPages/donationPledge"
@@ -263,7 +322,7 @@ export default function Navbar() {
                           {" "}
                          e-Raktkosh Donor Pledge
                         </Link>
-                      </li>
+                      </li> */}
                       <li className="dropdown__menu__li">
                         <a
                           href="/BLDAHIMS/bloodbank/donateblood.cnt"
@@ -273,16 +332,19 @@ export default function Navbar() {
                         </a>
                       </li>
                       <li className="dropdown__menu__li">
-                        {/* <a href="#" className="dropdown__link">
+                        <a
+                          href="/BLDAHIMS/bloodbank/campSchedule.cnt"
+                          className="dropdown__link"
+                        >
                           Blood Donation Camps
-                        </a> */}
-                        <Link
+                        </a>
+                        {/* <Link
                           className="dropdown__link"
                           to="/publicPages/campSchedule"
                         >
                           {" "}
                           Blood Donation Camps
-                        </Link>
+                        </Link> */}
                       </li>
                       <li className="dropdown__menu__li">
                         <a
@@ -297,67 +359,24 @@ export default function Navbar() {
 
                   <div className="divider"></div>
 
-                  <li className="dropdown__item">
-                    <div className="nav__link">
-                      Media{" "}
-                      <KeyboardArrowDownIcon className="dropdown__arrow" />
-                    </div>
+                  
 
-                    <ul className="dropdown__menu">
-                      <li className="dropdown__menu__li">
-                        <a
-                          href="/BLDAHIMS/bloodbank/transactions/bbpublicindexGallery.html"
-                          className="dropdown__link"
-                        >
-                          Gallery
-                        </a>
-                      </li>
-                      <li className="dropdown__menu__li">
-                        <a
-                          href="/BLDAHIMS/bloodbank/transactions/video.html"
-                          className="dropdown__link"
-                        >
-                          Video Gallery
-                        </a>
-                      </li>
-                      <li className="dropdown__menu__li">
-                        {/* <a href="#" className="dropdown__link">
-                          Notifications
-                        </a> */}
-                        <Link
-                          className="dropdown__link"
-                          to="/publicPages/Notification"
-                        >
-                          Notifications
-                        </Link>
-                      </li>
-                      <li className="dropdown__menu__li">
-                        {/* <a href="#" className="dropdown__link">
-                          e-Raktkosh Faq's
-                        </a> */}
-                        <Link className="dropdown__link" to="/publicPages/FAQs">
-                          eRaktkosh FAQ's
-                        </Link>
-                      </li>
-                    </ul>
-                  </li>
+                  {/* <div className="divider"></div> */}
 
-                  <div className="divider"></div>
-
-                  <li className="nav__list__li">
+                  {/* <li className="nav__list__li">
                     <a
                       href="/BLDAHIMS/bloodbank/contact.cnt"
                       className="nav__link"
                     >
                       Contact Us
                     </a>
-                  </li>
+                  </li> */}
 
-                  <div className="divider"></div>
+                  {/* <div className="divider"></div> */}
 
                   <li className="dropdown__item">
                     <div className="nav__link">
-                      e-Raktkosh Login{" "}
+                      Blood Centre Login{" "}
                       <KeyboardArrowDownIcon className="dropdown__arrow" />
                     </div>
 

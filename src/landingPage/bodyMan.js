@@ -53,7 +53,7 @@ export default function BodyMan() {
         rawFill + (correctCount === questions.length ? 1 : 0)
       );
       setFillPercentage(calculatedFill);
-      
+
       // Check if all questions have been answered
       if (answers.length === questions.length && questions.length > 0) {
         setAllQuestionsAnswered(true);
@@ -106,8 +106,9 @@ export default function BodyMan() {
   const handleNearbyCamps = () => {
     setTransitioning(true);
     setTimeout(() => {
-      window.location.href = "/beta#/publicPages/campSchedule";
-    }, 300);
+      // window.location.href = "/beta#/publicPages/campSchedule";
+      window.location.href = "/BLDAHIMS/bloodbank/campSchedule.cnt";
+    }, 100);
   };
 
   const handleStartOver = () => {
@@ -122,17 +123,25 @@ export default function BodyMan() {
   };
 
   return (
-    <section className="body__man">
+    <section className="body__man mb-2">
       <div className="container">
-        <div className="inner__container mt-4 mb-2">
+        <div className="inner__container mt-4">
           {allQuestionsAnswered ? (
-            <div className={`completion-message w-100 d-flex flex-column align-items-center justify-content-center ${transitioning ? 'fade-out' : 'fade-in'}`}>
-              <h3 className="mb-2 section__heading">Your donation analysis has been done.</h3>
+            <div
+              className={`completion-message w-100 d-flex flex-column align-items-center justify-content-center ${
+                transitioning ? "fade-out" : "fade-in"
+              }`}
+            >
+              <h3 className="mb-2 section__heading">
+                Your donation analysis has been done.
+              </h3>
               <p className="mb-1 section__overview">
-                According to our analysis your eligibility of donating blood is <strong>{percentageShow}</strong>.
+                According to our analysis your eligibility of donating blood is{" "}
+                <strong>{percentageShow}</strong>.
               </p>
               <p className="mb-3 section__overview">
-                A doctor will re-verify donor eligibility before actual blood donation.
+                A doctor will re-verify donor eligibility before actual blood
+                donation.
               </p>
               <Button className="btn__colored" onClick={handleStartOver}>
                 Start Over
@@ -145,30 +154,51 @@ export default function BodyMan() {
                 <img
                   onMouseEnter={handleMouseEnter}
                   onMouseLeave={handleMouseLeave}
+                  onClick={() => {
+                    const link = document.createElement("a");
+                    link.href = "../assets/pdf/Revised donor selection and referral criteria feb 2025.pdf"; // PDF inside public folder
+                    link.download = "Revised donor selection and referral criteria feb 2025"; 
+                    link.click();
+                  }}
                   src="assets/landingPage/guidelines.svg"
                   alt="Guidelines"
                   className="cursor-pointer"
                 />
               </div>
+
               <div className="left__panel">
                 {/* Step 1 */}
                 {step === 1 && (
-                  <div className={`step-content ${transitioning ? 'slide-out-left' : 'slide-in-right'}`}>
-                    <h3 className="mb-1 section__heading">Who Can Donate</h3>
+                  <div
+                    className={`step-content ${
+                      transitioning ? "slide-out-left" : "slide-in-right"
+                    }`}
+                  >
+                    <h3 className="mb-2 section__heading">Who Can Donate</h3>
                     <p className="mb-2 section__overview">
-                      Donating blood is a simple, safe and life-saving act. But not
-                      everyone may be eligible to donate. To ensure the safety of
-                      both donors and recipients, certain health criteria must be
-                      met.
+                      Donating blood is a simple, safe and life-saving act. But
+                      not everyone may be eligible to donate. To ensure the
+                      safety of both donors and recipients, certain health
+                      criteria must be met.
                     </p>
+                    <p className="mb-3 section__overview">
+                      Down below is a Questionnaire provided to assess the
+                      Health percentage based on general norms.
+                    </p>
+                    {/* <p className="mb-4 section__overview">
+                      Click on the "Check Eligibility" tab to analyse the score.
+                    </p> */}
                     <div>
                       <Button
-                        className="me-3 mb-3 btn__colored"
+                        className="me-3 mb-3 mb-xl-0 mb-lg-1 mb-md-0 btn__colored"
                         onClick={() => handleStepChange(2)}
                       >
                         Check your eligibility
                       </Button>
-                      <Button onClick={handleNearbyCamps} className="btn__outlined">
+                      <Button
+                        onClick={handleNearbyCamps}
+                        className="btn__outlined"
+                      >
                         Find Nearby Camps
                       </Button>
                     </div>
@@ -177,13 +207,18 @@ export default function BodyMan() {
 
                 {/* Step 2 */}
                 {step === 2 && (
-                  <div className={`step-content ${transitioning ? 'slide-out-left' : 'slide-in-right'}`}>
+                  <div
+                    className={`step-content ${
+                      transitioning ? "slide-out-left" : "slide-in-right"
+                    }`}
+                  >
                     <h3 className="mb-1 section__heading">
                       Check Your Eligibility
                     </h3>
                     <p className="mb-2 section__overview">
-                      Your donation changes lives. But not everyone can donate blood
-                      for a few reasons. Check your eligibility to donate today.
+                      Your donation changes lives. But not everyone can donate
+                      blood for a few reasons. Check your eligibility to donate
+                      today.
                     </p>
                     <div>
                       <Button
@@ -192,7 +227,10 @@ export default function BodyMan() {
                       >
                         Yes
                       </Button>
-                      <Button className="btn__outlined" onClick={() => handleStepChange(1)}>
+                      <Button
+                        className="btn__outlined"
+                        onClick={() => handleStepChange(1)}
+                      >
                         Back
                       </Button>
                     </div>
@@ -201,12 +239,20 @@ export default function BodyMan() {
 
                 {/* Step 3 */}
                 {step === 3 && (
-                  <div className={`step-content ${transitioning ? 'slide-out-left' : 'slide-in-right'}`}>
+                  <div
+                    className={`step-content ${
+                      transitioning ? "slide-out-left" : "slide-in-right"
+                    }`}
+                  >
                     <h3 className="mb-0 section__heading">
                       Check Your Eligibility
                     </h3>
                     {currentIndex < questions.length ? (
-                      <div className={`question_block ${transitioning ? 'fade-out' : 'fade-in'}`}>
+                      <div
+                        className={`question_block ${
+                          transitioning ? "fade-out" : "fade-in"
+                        }`}
+                      >
                         <p className="mb-3 section__overview">
                           Question {currentIndex + 1} of {questions.length}
                         </p>
@@ -255,7 +301,11 @@ export default function BodyMan() {
                     />
                   )}
                   {step === 3 && (
-                    <div className={`d-flex align-items-center ${transitioning ? 'fade-out' : 'fade-in'}`}>
+                    <div
+                      className={`d-flex align-items-center ${
+                        transitioning ? "fade-out" : "fade-in"
+                      }`}
+                    >
                       <div>
                         <div className="image__container">
                           <svg
@@ -284,7 +334,9 @@ export default function BodyMan() {
                       </div>
                       <div className="health__percent text-center">
                         <p className="body__percent mb-0">{percentageShow}</p>
-                        <p className="body__percent_text mb-0">Health Percentage</p>
+                        <p className="body__percent_text mb-0">
+                          Health Percentage
+                        </p>
                       </div>
                     </div>
                   )}
@@ -293,7 +345,7 @@ export default function BodyMan() {
             </>
           )}
         </div>
-        <p className="note__text mb-2">
+        <p className="note__text mb-0">
           The answers to these questions are for general guidance only. Please
           consult a doctor before donating blood.
         </p>

@@ -7,6 +7,21 @@ body {
 
 .App {
   font-family: "SourceSans3", sans-serif;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main {
+  flex: 0 0 auto;
+}
+.gradient_style {
+  flex: 1;
+}
+
+.footer__section,
+.black__footer__section {
+  flex-shrink: 0;
 }
 
 .swal2-popup {
@@ -80,11 +95,11 @@ body {
 }
 
 .App .container {
-  max-width: 1440px;
+  max-width: 1650px;
 }
 
 .page-wrapper {
-  margin-top: 136px;
+  margin-top: 110px;
 }
 
 @media screen and (max-width: 991px) {

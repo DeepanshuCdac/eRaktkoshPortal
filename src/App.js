@@ -35,11 +35,13 @@ import ScrollToTop from "./landingPage/scrollToTop.js";
 import Link from "./landingPage/link.js";
 import IndiaMap from "./landingPage/indiaMap.js";
 import FooterCarousel from "./landingPage/footerCarousel.js";
+import Stories from "./landingPage/stories.js";
 import Counter from "./testing/counter.jsx";
 import Card from "./testing/card.jsx";
 import Todo from "./testing/todo.jsx";
-import Stories from "./landingPage/stories.js";
 import ColorPicker from "./testing/colorPicker.jsx";
+import ScrollToTopPage from "./publicPages/ScrollToTopPage.js";
+import MyMarquee from "./landingPage/MyMarque.js";
 
 // const MEASUREMENT_ID = "G-SBWWZLM7W6"
 // ReactGA.initialize(MEASUREMENT_ID)
@@ -47,7 +49,8 @@ import ColorPicker from "./testing/colorPicker.jsx";
 function App() {
   return (
     <div className="App">
-      <Router basename="/">
+      <Router basename="/eraktkoshPortal">
+        <ScrollToTopPage />
         <DonorProvider>
           <CertificateProvider>
             <CampProvider>
@@ -138,18 +141,19 @@ function AppContent() {
           </ProtectedRoute>
         </Route>
 
-        <Route path="/">
+        <Route path="/eraktkoshPortal">
+          <MyMarquee />
           <HeroComponent />
           <Link />
           <Service />
           <BodyMan />
           <Donationworking />
-          <IndiaMap />
+          {/* <IndiaMap /> */}
           {/* <Counter/> */}
           {/* <Card/> */}
           {/* <Todo/> */}
           {/* <ColorPicker/> */}
-          <Stories/>
+          <Stories />
           <FooterCarousel />
           <ScrollToTop />
         </Route>

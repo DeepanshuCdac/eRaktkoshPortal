@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import { Button } from "antd";
+import React, { useRef } from "react";
 
 const gallery = [
   {
@@ -52,127 +53,115 @@ const gallery = [
 ];
 
 export default function Stories() {
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 1040);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const itemsPerPage = 2;
+  const scrollerRef = useRef(null);
 
-  const handleNext = () => {
-    if (currentIndex + itemsPerPage < gallery.length) {
-      setCurrentIndex(currentIndex + itemsPerPage);
+  const scroll = (direction) => {
+    if (scrollerRef.current) {
+      const { scrollLeft, clientWidth } = scrollerRef.current;
+      const scrollAmount = clientWidth * 0.8; 
+      scrollerRef.current.scrollTo({
+        left:
+          direction === "left"
+            ? scrollLeft - scrollAmount
+            : scrollLeft + scrollAmount,
+        behavior: "smooth",
+      });
     }
   };
 
-  const handlePrev = () => {
-    if (currentIndex - itemsPerPage >= 0) {
-      setCurrentIndex(currentIndex - itemsPerPage);
-    }
+  const handleClick = () => {
+    window.location.href =
+      "/BLDAHIMS/bloodbank/transactions/bbpublicindexGallery.html";
   };
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 1040);
-    };
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
 
   return (
-    <section className="stories__section mb-3">
+    <section className="stories__section mb-1">
       <div className="container">
-        {isMobile ? (
-          <div className="bg_img p-4">
-            <div className="">
-              <h4 className="mb-1 heading">Our gallery</h4>
-              <p className="mb-0 section__overview">
-                Lives Saved. Hope Restored. Discover how e-Raktkosh <br /> is
-                making a difference every day.
-              </p>
-            </div>
-
-            <div className="images__section">
-              <a
-                href="/BLDAHIMS/bloodbank/transactions/bbpublicindexGallery.html"
-                className="view_btn mb-3 d-flex justify-content-end"
-              >
-                View All
-              </a>
-
-              <div className="gallery_scroller">
-                {gallery.map((img, index) => (
-                  <div key={index} className="gallery_item">
-                    <img
-                      className="gallery__images"
-                      src={img.src}
-                      alt={img.title}
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
+        <div className="bg_img p-4">
+          <div className="text_section">
+            <h4 className="mb-1 heading">Our gallery</h4>
+            <p className="mb-4 section__overview">
+              Lives Saved. Hope Restored. Discover how e-Raktkosh <br />
+              is making a difference every day.
+            </p>
+            <Button className="px-4 py-3" onClick={handleClick} type="primary">
+              View Our Gallery
+            </Button>
           </div>
-        ) : (
-          <div>
-            <div className="bg_img p-4 d-flex align-items-center">
-              <div>
-                <h4 className="mb-1 heading">Our gallery</h4>
-                <p className="mb-0 section__overview">
-                  Lives Saved. Hope Restored. Discover how e-Raktkosh <br /> is
-                  making a difference every day.
-                </p>
-              </div>
-            </div>
 
-            <div className="row" style={{position: 'relative'}}>
-              <div className="col-6 col-xl-5 col-lg-4 col-md-4 d-flex align-items-baseline mt-4"></div>
-              <div className="col-6 col-xl-7 col-lg-8 col-md-8">
-                <div className="images__section d-flex align-items-center justify-content-center">
-                  <div>
-                    <img
-                      style={{ cursor: "pointer" }}
-                      src="assets/landingPage/back.svg"
-                      alt="Prev"
-                      onClick={handlePrev}
-                    />
-                  </div>
+          <div className="images__section position-relative">
+            {/* <a
+              href="/BLDAHIMS/bloodbank/transactions/bbpublicindexGallery.html"
+              className="view_btn mb-3 d-flex justify-content-end"
+            >
+              View All
+            </a> */}
 
-                  <div>
-                    <a
-                      href="/BLDAHIMS/bloodbank/transactions/bbpublicindexGallery.html"
-                      className="view_btn mb-2 d-flex justify-content-end"
-                    >
-                      View All
-                    </a>
-                    <div className="gallery_container">
-                      {gallery
-                        .slice(currentIndex, currentIndex + itemsPerPage)
-                        .map((images, index) => (
-                          <div key={index} className="gallery_item">
-                            <img
-                              className="gallery__images"
-                              src={images.src}
-                              alt={images.title}
-                            />
-                          </div>
-                        ))}
-                    </div>
-                  </div>
+            {/* Left button */}
+            <button
+              className="scroll-btn left-btn"
+              onClick={() => scroll("left")}
+            >
+              &#8249;
+            </button>
 
-                  <div>
-                    <img
-                      style={{ transform: "rotate(180deg)", cursor: "pointer" }}
-                      src="assets/landingPage/back.svg"
-                      alt="Next"
-                      onClick={handleNext}
-                    />
-                  </div>
+            <div
+              className="gallery_scroller d-flex overflow-auto"
+              ref={scrollerRef}
+            >
+              {gallery.map((img, index) => (
+                <div key={index} className="gallery_item me-2">
+                  <img
+                    className="gallery__images"
+                    src={img.src}
+                    alt={img.title}
+                  />
                 </div>
-              </div>
+              ))}
             </div>
+
+            {/* Right button */}
+            <button
+              className="scroll-btn right-btn"
+              onClick={() => scroll("right")}
+            >
+              &#8250;
+            </button>
           </div>
-        )}
+        </div>
       </div>
+
+      {/* Styles */}
+      <style jsx>{`
+        .images__section {
+          position: relative;
+        }
+        .gallery_scroller {
+          scroll-behavior: smooth;
+          white-space: nowrap;
+        }
+        .gallery_item {
+          flex: 0 0 auto;
+        }
+        .scroll-btn {
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          background: rgba(0, 0, 0, 0.5);
+          border: none;
+          color: white;
+          font-size: 24px;
+          padding: 8px 12px;
+          cursor: pointer;
+          z-index: 2;
+        }
+        .left-btn {
+          left: 0;
+        }
+        .right-btn {
+          right: 0;
+        }
+      `}</style>
     </section>
   );
 }

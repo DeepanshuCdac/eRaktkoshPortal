@@ -82,8 +82,8 @@ const Notification = () => {
         }, 300);
     };
 
-    if (loading) return <p className="page-wrapper">Loading notifications...</p>;
-    if (error) return <p className="page-wrapper" style={{ color: "red" }}>Error: {error}</p>
+    if (loading) return <p className="gradient_style page-wrapper">Loading notifications...</p>;
+    if (error) return <p className="gradient_style page-wrapper" style={{ color: "red" }}>Error: {error}</p>
 
     const filteredNotification = notifications.filter(notification =>
         notification.title.toLowerCase().includes(searchTerm.toLowerCase()) ||

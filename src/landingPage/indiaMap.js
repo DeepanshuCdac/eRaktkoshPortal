@@ -129,6 +129,57 @@ const IndiaMap = () => {
     return () => clearTimeout(timeout);
   }, [hoveredState]);
 
+
+   useEffect(() => {
+    if (window.AmCharts) {
+      const map = new window.AmCharts.AmMap();
+      map.panEventsEnabled = true;
+      map.backgroundColor = "#666666";
+      map.backgroundAlpha = 1;
+
+      map.zoomControl.panControlEnabled = true;
+      map.zoomControl.zoomControlEnabled = true;
+
+      const dataProvider = {
+        map: "indiaLow",
+        getAreasFromMap: true,
+      };
+
+      map.dataProvider = dataProvider;
+
+      map.areasSettings = {
+        autoZoom: false,
+        color: "#CDCDCD",
+        colorSolid: "#5EB7DE",
+        selectedColor: "#5EB7DE",
+        outlineColor: "#666666",
+        rollOverColor: "#88CAE7",
+        rollOverOutlineColor: "#FFFFFF",
+        selectable: true,
+      };
+
+      map.addListener("clickMapObject", function (event) {
+        map.selectedObject = map.dataProvider;
+
+        event.mapObject.showAsSelected = !event.mapObject.showAsSelected;
+        map.returnInitialColor(event.mapObject);
+
+        const states = [];
+        for (let area of map.dataProvider.areas) {
+          if (area.showAsSelected) {
+            states.push(area.title);
+          }
+        }
+
+        console.log("Selected States:", states);
+      });
+
+      map.export = { enabled: true };
+
+      map.write("chartdiv");
+    }
+  }, []);
+
   const mapData = {};
   states.forEach((state) => {
     mapData[state.stateName] = {
@@ -251,7 +302,7 @@ const IndiaMap = () => {
             </div>
 
             <p style={{ fontSize: "13px" }} className="mb-0">
-              *The data represented has been collected post year 2017 on wards.
+              <span className="mandatory">*</span>The data represented has been collected post year 2017 on wards.
             </p>
           </div>
 
@@ -275,7 +326,7 @@ const IndiaMap = () => {
                 }
 
                 return (
-                  <div>
+                  <div className="state_name" >
                     <div>{value.name}</div>
                   </div>
                 );
