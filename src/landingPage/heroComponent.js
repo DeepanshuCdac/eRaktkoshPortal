@@ -5,7 +5,7 @@ export default function HeroComponent() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % 2);
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % 3);
     }, 10000);
 
     return () => clearInterval(interval);
@@ -28,7 +28,7 @@ export default function HeroComponent() {
         data-bs-ride="carousel"
       >
         <div className="carousel-indicators">
-          {[0, 1].map((index) => (
+          {[0, 1, 2].map((index) => (
             <button
               key={index}
               type="button"
@@ -65,6 +65,15 @@ export default function HeroComponent() {
             className={`carousel-item ${currentIndex === 0 ? "active" : ""}`}
           >
             <img
+              src="assets/images/Banner-5.jpg"
+              className="d-block w-100"
+              alt="Second Image"
+            />
+          </div>
+          <div
+            className={`carousel-item ${currentIndex === 1 ? "active" : ""}`}
+          >
+            <img
               src="assets/images/header2.png"
               className="d-block w-100"
               alt="Second Image"
@@ -93,7 +102,7 @@ export default function HeroComponent() {
 
           {/* 4th Slide */}
           <div
-            className={`carousel-item ${currentIndex === 1 ? "active" : ""}`}
+            className={`carousel-item ${currentIndex === 2 ? "active" : ""}`}
           >
             <img
               src="assets/images/header4.png"
