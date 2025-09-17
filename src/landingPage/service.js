@@ -194,7 +194,7 @@ export default function Service() {
             style={{ width: "30px", height: "30px", objectFit: "contain" }}
           />
           <span className="tab__header__text">Blood Availability Search</span>
-        </div>
+                          </div>
       ),
       children: (
         <div className="d-flex flex-column align-items-center">
@@ -203,9 +203,9 @@ export default function Service() {
             <Button className="btn__outlined" onClick={handleBloodSearch}>
               {btnLink.blood_availability}
             </Button>
-          </div>
+                        </div>
           <img src={content_image.blood_availability} alt="" />
-        </div>
+                      </div>
       ),
       style: panelStyle,
     },
@@ -219,7 +219,7 @@ export default function Service() {
             style={{ width: "30px", height: "30px", objectFit: "contain" }}
           />
           <span className="tab__header__text">Blood Center Directory</span>
-        </div>
+                  </div>
       ),
       children: (
         <div className="d-flex flex-column align-items-center">
@@ -244,7 +244,7 @@ export default function Service() {
             style={{ width: "30px", height: "30px", objectFit: "contain" }}
           />
           <span className="tab__header__text">Blood Donation Camps</span>
-        </div>
+                        </div>
       ),
       children: (
         <div className="d-flex flex-column align-items-center">
@@ -253,9 +253,9 @@ export default function Service() {
             <Button className="btn__outlined" onClick={handleDonationCamps}>
               {btnLink.blood_donation_camps}
             </Button>
-          </div>
+                      </div>
           <img src={content_image.blood_donation_camps} alt="" />
-        </div>
+                    </div>
       ),
       style: panelStyle,
     },
@@ -307,7 +307,7 @@ export default function Service() {
             </Button>
           </div>
           <img src={content_image.register_voluntary_camp} alt="" />
-        </div>
+                </div>
       ),
       style: panelStyle,
     },
@@ -336,7 +336,7 @@ export default function Service() {
                 style={{ background: token.colorBgContainer }}
                 items={getItems(panelStyle)}
               />
-            </div>
+              </div>
             <div className="tab__view">
               <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
             </div>

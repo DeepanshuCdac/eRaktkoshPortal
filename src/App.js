@@ -20,7 +20,6 @@ import ProtectedRoute from "./ProtectedRoute/ProtectedRoute.js";
 import BloodAvailabiltySearch from "./publicPages/bloodAvailabilitySearch.js";
 import CampSchedule from "./publicPages/CampSchedule.js";
 import BloodBankDirectory from "./publicPages/BloodBankDirectory.js";
-import DonationPledge from "./publicPages/DonationPledge.js";
 import CampRegistration from "./publicPages/CampRegistration.js";
 import Faqs from "./publicPages/Faqs.js";
 import Notification from "./publicPages/Notification.js";
@@ -29,7 +28,7 @@ import AboutEraktkosh from "./publicPages/AboutEraktkosh.js";
 import GalleryCarousel from "./publicPages/GalleryCarousol.jsx";
 import DonorCampRegister from "./publicPages/donorCampRegister.js";
 import { CampProvider } from "./context/CampContext.js";
-import { initGA, logPageView } from "./utils/ga.js";
+// import { initGA, logPageView } from "./utils/ga.js";
 import BodyMan from "./landingPage/bodyMan.js";
 import ScrollToTop from "./landingPage/scrollToTop.js";
 import Link from "./landingPage/link.js";
@@ -38,7 +37,8 @@ import FooterCarousel from "./landingPage/footerCarousel.js";
 import Stories from "./landingPage/stories.js";
 import ScrollToTopPage from "./publicPages/ScrollToTopPage.js";
 import MyMarquee from "./landingPage/MyMarque.js";
-
+import DonationPledge from "./publicPages/DonationPledge.js";
+import NewReq from "./landingPage/newReq.js";
 
 function App() {
   return (
@@ -60,13 +60,13 @@ function App() {
 function AppContent() {
   const location = useLocation();
 
-  useEffect(() => {
-    initGA();
-  }, []);
+  // useEffect(() => {
+  //   initGA(); // initialize once on load
+  // }, []);
 
-  useEffect(() => {
-    logPageView(location.pathname + location.search);
-  }, [location]);
+  // useEffect(() => {
+  //   logPageView(location.pathname + location.search); // log on route change
+  // }, [location]);
 
   const hideNavbarPaths = ["/pages/portaldonorAdmin"];
   const hideFooterPaths = [
@@ -129,6 +129,10 @@ function AppContent() {
           <DonorRegister />
         </Route>
 
+        <Route path="/pages/donationPledge">
+          <DonationPledge />
+        </Route>
+
         <Route path="/pages/portaldonorAdmin">
           <ProtectedRoute>
             <DonorAdmin />
@@ -138,7 +142,8 @@ function AppContent() {
         <Route path="/">
           <MyMarquee />
           <HeroComponent />
-          <Link />
+          <Link /> 
+           <NewReq/> 
           <Service />
           <BodyMan />
           <Donationworking />

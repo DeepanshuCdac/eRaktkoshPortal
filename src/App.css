@@ -105,7 +105,7 @@ body {
 @media screen and (max-width: 991px) {
   .page-wrapper {
     margin-top: 96px;
-}
+  }
 }
 
 @media (min-width: 768px) {

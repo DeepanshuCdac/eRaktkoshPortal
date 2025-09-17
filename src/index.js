@@ -5,6 +5,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import { Provider } from "react-redux";
 import store from "./redux/store";
 import App from './App';
+import { analytics } from './analytics/firebase';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
