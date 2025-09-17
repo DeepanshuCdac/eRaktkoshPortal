@@ -1,5 +1,5 @@
 import "./App.css";
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import {
   HashRouter as Router,
   Switch,
@@ -33,8 +33,9 @@ import AboutEraktkosh from "./publicPages/AboutEraktkosh.js";
 import GalleryCarousel from "./publicPages/GalleryCarousol.jsx";
 import DonorCampRegister from "./publicPages/donorCampRegister.js";
 import { CampProvider } from "./context/CampContext.js";
-import { initGA, logPageView } from './utils/ga.js';
+// import { initGA, logPageView } from "./utils/ga.js";
 import DonationPledge from "./publicPages/DonationPledge.js";
+import NewReq from "./landingPage/newReq.js";
 
 // const MEASUREMENT_ID = "G-SBWWZLM7W6"
 // ReactGA.initialize(MEASUREMENT_ID)
@@ -58,13 +59,13 @@ function App() {
 function AppContent() {
   const location = useLocation();
 
-   useEffect(() => {
-    initGA(); // initialize once on load
-  }, []);
+  // useEffect(() => {
+  //   initGA(); // initialize once on load
+  // }, []);
 
-  useEffect(() => {
-    logPageView(location.pathname + location.search); // log on route change
-  }, [location]);
+  // useEffect(() => {
+  //   logPageView(location.pathname + location.search); // log on route change
+  // }, [location]);
 
   const hideNavbarPaths = ["/pages/portaldonorAdmin"];
   const hideFooterPaths = [
@@ -135,6 +136,7 @@ function AppContent() {
 
         <Route path="/">
           <HeroComponent />
+          <NewReq/> 
           {/* <DonorCount /> */}
           <Service />
           <Aboutpage />

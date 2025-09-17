@@ -127,12 +127,10 @@ export default function Navbar() {
                       alt="" />
                   </a>
                   <ul className="ps-0">
-                    <li>
+                    {/* <li>
                       <Link className="links" to="/pages/donationPledge">Donor Pledge</Link>
-                      {/* <a href="">
-                        Donor Pledge
-                      </a> */}
-                    </li>
+                      
+                    </li> */}
                     <li>
                       {/* <Link className="links" to="/publicPages/campSchedule"> Blood Donation Camps</Link> */}
                       <a href="/BLDAHIMS/bloodbank/campSchedule.cnt">

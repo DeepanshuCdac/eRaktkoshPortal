@@ -142,9 +142,9 @@ export default function DonationType() {
                 <h3 className="section-heading mb-3">Types of Donation</h3>
                 <p className="sectionTxt mb-0">
                   The average human body contains about five litres of blood,
-                  which is made of several cellular and non-cellular components
+                  which is made of several cellular and non-cellular components <br/>
                   such as
-                  <span>Red blood cell, Platelet, and Plasma.</span>
+                  <span> Red blood cell, Platelet, and Plasma.</span>
                 </p>
               </div>
               <div className="row">

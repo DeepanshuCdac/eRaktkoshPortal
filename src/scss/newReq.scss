@@ -1,0 +1,47 @@
+.newReq {
+  .headerers {
+    background-color: transparent;
+    color: #000;
+    font-weight: 600;
+    font-size: 26px;
+  }
+  // .box_container {
+    .numbering {
+      font-size: 35px;
+      font-weight: 700;
+    //   color: #000;
+    }
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    .box {
+      color: #7f0210;
+      font-weight: 400;
+      text-align: center;
+      flex: 1;
+      height: 100px;
+      //   background-color: #fff1f1;
+      //   display: flex;
+      justify-content: center;
+      //   font-weight: bold;
+      border-radius: 8px;
+    }
+    .box-1 {
+      //   background: linear-gradient(135deg, #d5b82c, #f3e27c);
+      background: linear-gradient(135deg, #f1dccf, #fff5dd);
+    }
+
+    .box-2 {
+      background: linear-gradient(135deg, #f1dccf, #fff5dd);
+    }
+
+    .box-3 {
+      background: linear-gradient(135deg, #f1dccf, #fff5dd);
+    }
+  // }
+  .since_date {
+    font-weight: 400;
+    font-size: 13px;
+    color: #000;
+  }
+}

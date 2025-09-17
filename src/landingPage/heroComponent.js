@@ -5,7 +5,7 @@ export default function HeroComponent() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % 3);
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % 5);
     }, 10000);
 
     return () => clearInterval(interval);
@@ -14,6 +14,12 @@ export default function HeroComponent() {
   const handleClick = () => {
     // window.location.href = "/beta#/pages/portalDonorLogin";
     window.location.href = "/BLDAHIMS/bloodbank/portalDonorLogin.cnt";
+  };
+
+  const handleClickPledge = () => {
+    // window.location.href = "/beta#/pages/portalDonorLogin";
+    window.location.href =
+      "http://eraktkosh.mohfw.gov.in/Blood_Bank/service/pledge";
   };
 
   const handleIndicatorClick = (index) => {
@@ -28,7 +34,7 @@ export default function HeroComponent() {
         data-bs-ride="carousel"
       >
         <div className="carousel-indicators">
-          {[0, 1, 2].map((index) => (
+          {[0, 1, 2, 3, 4].map((index) => (
             <button
               key={index}
               type="button"
@@ -74,7 +80,45 @@ export default function HeroComponent() {
             className={`carousel-item ${currentIndex === 1 ? "active" : ""}`}
           >
             <img
-              src="assets/images/header2.png"
+              src="assets/images/Banner_test.jpg"
+              className="d-block w-100"
+              alt="Second Image"
+            />
+          </div>
+          {/* <div
+            className={`carousel-item ${currentIndex === 2 ? "active" : ""}`}
+          >
+            <img
+              src="assets/images/Banner_test2.jpg"
+              className="d-block w-100"
+              alt="Second Image"
+            />
+          </div> */}
+          <div
+            className={`carousel-item ${currentIndex === 2 ? "active" : ""}`}
+          >
+            <img
+              src="assets/images/Banner_test2.jpg"
+              className="d-block w-100"
+              alt="Fourth Image"
+            />
+            <div
+              className="carousel-caption d-md-block mt-3"
+              style={{ left: "46%", bottom: "0" }}
+            >
+              <button
+                className="btn imgBtn d-none d-lg-block d-xl-block"
+                onClick={handleClickPledge}
+              >
+                Take Pledge
+              </button>
+            </div>
+          </div>
+          <div
+            className={`carousel-item ${currentIndex === 3 ? "active" : ""}`}
+          >
+            <img
+              src="assets/images/header2.jpg"
               className="d-block w-100"
               alt="Second Image"
             />
@@ -102,7 +146,7 @@ export default function HeroComponent() {
 
           {/* 4th Slide */}
           <div
-            className={`carousel-item ${currentIndex === 2 ? "active" : ""}`}
+            className={`carousel-item ${currentIndex === 4 ? "active" : ""}`}
           >
             <img
               src="assets/images/header4.png"
@@ -122,7 +166,6 @@ export default function HeroComponent() {
             </div>
           </div>
         </div>
-     
       </div>
     </section>
   );
