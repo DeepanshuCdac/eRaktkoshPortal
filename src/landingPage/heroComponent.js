@@ -85,15 +85,6 @@ export default function HeroComponent() {
               alt="Second Image"
             />
           </div>
-          {/* <div
-            className={`carousel-item ${currentIndex === 2 ? "active" : ""}`}
-          >
-            <img
-              src="assets/images/Banner_test2.jpg"
-              className="d-block w-100"
-              alt="Second Image"
-            />
-          </div> */}
           <div
             className={`carousel-item ${currentIndex === 2 ? "active" : ""}`}
           >
@@ -123,28 +114,6 @@ export default function HeroComponent() {
               alt="Second Image"
             />
           </div>
-
-          {/* 3rd Slide */}
-          {/* <div
-            className={`carousel-item ${currentIndex === 1 ? "active" : ""}`}
-          >
-            <img
-              src="assets/images/header3.png"
-              className="d-block w-100"
-              alt=""
-            />
-            <div
-              className="carousel-caption d-md-block"
-              style={{ left: "46%", bottom: "0" }}
-            >
-              <div className="d-flex flex-column text-center">
-                <div>
-                </div>
-              </div>
-            </div>
-          </div> */}
-
-          {/* 4th Slide */}
           <div
             className={`carousel-item ${currentIndex === 4 ? "active" : ""}`}
           >
