@@ -143,7 +143,7 @@ function AppContent() {
           <MyMarquee />
           <HeroComponent />
           <Link /> 
-           <NewReq/> 
+           {/* <NewReq/>  */}
           <Service />
           <BodyMan />
           <Donationworking />
