@@ -98,7 +98,7 @@ export default function HeroComponent() {
               style={{ left: "46%", bottom: "0" }}
             >
               <button
-                className="btn imgBtn d-none d-lg-block d-xl-block"
+                className="btn imgBtn d-none d-lg-block d-xl-block mb-3"
                 onClick={handleClickPledge}
               >
                 Take Pledge

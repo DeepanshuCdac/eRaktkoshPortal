@@ -352,3 +352,15 @@ body {
   font-size: 15px;
   font-weight: 600;
 }
+
+.heroComponent .carousel-inner .carousel-caption .imgBtn {
+  border-radius: 4px;
+  background: #c0222b;
+  box-shadow: 0px 4px 24px 0px rgba(192, 34, 43, 0.5);
+  padding: 14.413px 21.619px;
+  color: #fff;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  border: none;
+}
