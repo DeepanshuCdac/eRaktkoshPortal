@@ -136,7 +136,7 @@ function AppContent() {
 
         <Route path="/">
           <HeroComponent />
-          <NewReq/> 
+          {/* <NewReq/>  */}
           {/* <DonorCount /> */}
           <Service />
           <Aboutpage />

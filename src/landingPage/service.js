@@ -51,7 +51,7 @@ export default function Service() {
 
   return (
     <>
-      <section className="service">
+      <section className="service mt-3">
         <div className="bg-img">
           <div className="container">
             <h3 className="section-heading text-center pb-3">
