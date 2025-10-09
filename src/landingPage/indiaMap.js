@@ -1,8 +1,10 @@
+// New map code...
+
+
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { getApiData } from "../redux/slices/dataSlice";
-import DatamapsIndia from "react-datamaps-india";
 import { Select } from "antd";
 import { BaseUrl } from "../utils/url";
 
@@ -27,14 +29,12 @@ const IndiaMap = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    console.log("Dispatching getApiData...");
     dispatch(getApiData());
 
     const fetchMapData = async () => {
       try {
         setIsLoading(true);
         const response = await axios.get(`${BaseUrl}/eraktkosh/stateData`);
-        console.log("Complete state stats", response.data);
         setAllStateData(response.data);
       } catch (error) {
         console.error("Error in fetchMapData:", error);
@@ -49,9 +49,6 @@ const IndiaMap = () => {
   const states = statesWithDistricts || [];
 
   const handleStateChange = (stateCode, stateName) => {
-    console.log("Selected stateCode:", stateCode);
-    console.log("All state data:", allStateData);
-
     if (!stateCode || !allStateData.bloodCollectionSummary.length) return;
 
     setSelectedState(stateCode);
@@ -60,27 +57,15 @@ const IndiaMap = () => {
     const bloodData = allStateData.bloodCollectionSummary.find(
       (item) => item.stateCode?.toString() === stateCode?.toString()
     );
-
-    console.log("All blood data:", allStateData.bloodCollectionSummary);
-    console.log("Matched blood data:", bloodData);
-
     const centerData = allStateData.totalBloodCenters.find(
       (item) => item.stateCode?.toString() === stateCode?.toString()
     );
-    console.log("All center data:", allStateData.totalBloodCenters);
-    console.log("Matched center data:", centerData);
-
     const donorData = allStateData.donorRegistered.find(
       (item) => item.stateCode?.toString() === stateCode?.toString()
     );
-    console.log("All donor data:", allStateData.donorRegistered);
-    console.log("Matched donor data:", donorData);
-
     const campsData = allStateData.campsOrganised.find(
       (item) => item.stateCode?.toString() === stateCode?.toString()
     );
-    console.log("All camp data: ", allStateData.campsOrganised);
-    console.log("Matched camp data: ", campsData);
 
     setStateStats({
       bloodCollectionSummary: {
@@ -100,6 +85,7 @@ const IndiaMap = () => {
       },
     });
   };
+
   useEffect(() => {
     if (
       statesWithDistricts?.length > 0 &&
@@ -116,25 +102,12 @@ const IndiaMap = () => {
     }
   }, [statesWithDistricts, allStateData]);
 
+  // ✅ Initialize AmCharts Map once
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      if (
-        hoveredState?.stateCode &&
-        hoveredState?.stateCode !== selectedState
-      ) {
-        handleStateChange(hoveredState.stateCode, hoveredState.stateName);
-      }
-    }, 300);
-
-    return () => clearTimeout(timeout);
-  }, [hoveredState]);
-
-
-   useEffect(() => {
     if (window.AmCharts) {
       const map = new window.AmCharts.AmMap();
       map.panEventsEnabled = true;
-      map.backgroundColor = "#666666";
+      map.backgroundColor = "#fff";
       map.backgroundAlpha = 1;
 
       map.zoomControl.panControlEnabled = true;
@@ -151,9 +124,9 @@ const IndiaMap = () => {
         autoZoom: false,
         color: "#CDCDCD",
         colorSolid: "#5EB7DE",
-        selectedColor: "#5EB7DE",
-        outlineColor: "#666666",
-        rollOverColor: "#88CAE7",
+        selectedColor: "#7f0210",
+        outlineColor: "#f7f3f3ff",
+        rollOverColor: "rgba(127, 2, 16, 0.3)",
         rollOverOutlineColor: "#FFFFFF",
         selectable: true,
       };
@@ -164,34 +137,26 @@ const IndiaMap = () => {
         event.mapObject.showAsSelected = !event.mapObject.showAsSelected;
         map.returnInitialColor(event.mapObject);
 
-        const states = [];
-        for (let area of map.dataProvider.areas) {
-          if (area.showAsSelected) {
-            states.push(area.title);
-          }
+        // Find clicked state
+        const clickedState = states.find(
+          (s) => s.stateName.toLowerCase() === event.mapObject.title.toLowerCase()
+        );
+        if (clickedState) {
+          handleStateChange(clickedState.stateCode, clickedState.stateName);
         }
-
-        console.log("Selected States:", states);
       });
 
       map.export = { enabled: true };
 
       map.write("chartdiv");
     }
-  }, []);
-
-  const mapData = {};
-  states.forEach((state) => {
-    mapData[state.stateName] = {
-      value: state.totalCollection,
-      title: state.stateName,
-    };
-  });
+  }, [states, allStateData]);
 
   return (
     <section className="map__india">
       <div className="container">
         <div className="row align-items-center">
+          {/* Left Panel */}
           <div className="col-xl-5 col-lg-5 col-12">
             <h3 className="section__heading mb-2">
               Nationwide Presence.
@@ -209,7 +174,6 @@ const IndiaMap = () => {
                 style={{ width: "100%" }}
                 value={selectedStateName}
                 onChange={(value, option) => {
-                  console.log("Dropdown selection changed");
                   handleStateChange(value, option.label);
                 }}
                 placeholder="Select"
@@ -225,72 +189,46 @@ const IndiaMap = () => {
               />
             </div>
 
+            {/* Stats Cards */}
             <div>
               <div className="row">
-                <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6 pe-0 mb-2 pe-2">
+                <div className="col-6 mb-2">
                   <div className="map__data_container p-3 h-100 d-flex align-items-baseline">
+                    <img className="me-2" src="assets/landingPage/registration.svg" alt="" />
                     <div>
-                      <img
-                        className="me-2"
-                        src="assets/landingPage/registration.svg"
-                        alt=""
-                      />
-                    </div>
-                    <div className="d-flex flex-column">
                       <p className="mb-0 key">Donor Registration</p>
                       <p className="mb-0 value">
-                        {stateStats?.donorRegistered?.hnumDonorRegistered ||
-                          "N/A"}
+                        {stateStats?.donorRegistered?.hnumDonorRegistered || "N/A"}
                       </p>
                     </div>
                   </div>
                 </div>
-                <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6 ps-0 mb-2">
-                  <div className="map__data_container p-3 h-100 d-flex align-items-baseline ">
+                <div className="col-6 mb-2">
+                  <div className="map__data_container p-3 h-100 d-flex align-items-baseline">
+                    <img className="me-2" src="assets/landingPage/units.svg" alt="" />
                     <div>
-                      <img
-                        className="me-2"
-                        src="assets/landingPage/units.svg"
-                        alt=""
-                      />
-                    </div>
-                    <div className="d-flex flex-column">
                       <p className="mb-0 key">Blood Units Collected</p>
                       <p className="mb-0 value">
-                        {stateStats?.bloodCollectionSummary?.totalCollection ||
-                          "N/A"}
+                        {stateStats?.bloodCollectionSummary?.totalCollection || "N/A"}
                       </p>
                     </div>
                   </div>
                 </div>
-                <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6 pe-0 pe-2 mb-2">
-                  <div className="map__data_container d-flex p-3 h-100 align-items-baseline ">
+                <div className="col-6 mb-2">
+                  <div className="map__data_container p-3 h-100 d-flex align-items-baseline">
+                    <img className="me-2" src="assets/landingPage/center.svg" alt="" />
                     <div>
-                      <img
-                        className="me-2"
-                        src="assets/landingPage/center.svg"
-                        alt=""
-                      />
-                    </div>
-                    <div className="d-flex flex-column">
                       <p className="mb-0 key">Blood Centers</p>
                       <p className="mb-0 value">
-                        {stateStats?.totalBloodCenters?.[0]
-                          ?.hnumTotalBloodCentres || "N/A"}
+                        {stateStats?.totalBloodCenters?.[0]?.hnumTotalBloodCentres || "N/A"}
                       </p>
                     </div>
                   </div>
                 </div>
-                <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6 ps-0 mb-2">
-                  <div className="map__data_container d-flex p-3 h-100 align-items-baseline">
+                <div className="col-6 mb-2">
+                  <div className="map__data_container p-3 h-100 d-flex align-items-baseline">
+                    <img className="me-2" src="assets/landingPage/camps.svg" alt="" />
                     <div>
-                      <img
-                        className="me-2"
-                        src="assets/landingPage/camps.svg"
-                        alt=""
-                      />
-                    </div>
-                    <div className="d-flex flex-column">
                       <p className="mb-0 key">Camps Organised</p>
                       <p className="mb-0 value">
                         {stateStats?.campsOrganised?.finalCount}
@@ -302,47 +240,14 @@ const IndiaMap = () => {
             </div>
 
             <p style={{ fontSize: "13px" }} className="mb-0">
-              <span className="mandatory">*</span>The data represented has been collected post year 2017 on wards.
+              <span className="mandatory">*</span>The data represented has been
+              collected post year 2017 onwards.
             </p>
           </div>
 
+          {/* Right Panel - AmCharts Map */}
           <div className="col-xl-7 col-lg-7 col-12">
-            <DatamapsIndia
-              hoverComponent={({ value }) => {
-                const matchedState = states.find(
-                  (state) =>
-                    state.stateName.toLowerCase() === value.name.toLowerCase()
-                );
-
-                if (
-                  matchedState &&
-                  (hoveredState?.stateCode !== matchedState.stateCode ||
-                    hoveredState?.stateName !== matchedState.stateName)
-                ) {
-                  setHoveredState({
-                    stateCode: matchedState.stateCode,
-                    stateName: matchedState.stateName,
-                  });
-                }
-
-                return (
-                  <div className="state_name" >
-                    <div>{value.name}</div>
-                  </div>
-                );
-              }}
-              mapLayout={{
-                title: "",
-                legendTitle: "",
-                startColor: "#e6e6e6",
-                endColor: "#e6e6e6",
-                hoverTitle: "",
-                borderColor: "#fff",
-                hoverColor: "#7f0210",
-                hoverBorderColor: "#7f0210",
-              }}
-              regionData={mapData}
-            />
+            <div id="chartdiv" style={{ width: "100%", height: "500px" }}></div>
           </div>
         </div>
       </div>

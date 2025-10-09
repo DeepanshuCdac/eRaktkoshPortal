@@ -147,7 +147,7 @@ function AppContent() {
           <Service />
           <BodyMan />
           <Donationworking />
-          {/* <IndiaMap /> */}
+          <IndiaMap />
           <Stories />
           <FooterCarousel />
           <ScrollToTop />
