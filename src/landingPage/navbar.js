@@ -62,10 +62,10 @@ export default function Navbar() {
                       {/* <Link className="links" to="/publicPages/FAQs">eRaktkosh FAQ's</Link> */}
                     </li>
                     <li>
-                      {/* <a href="/BLDAHIMS/bloodbank/transactions/bbpublicindexGallery.html">
+                      <a href="/BLDAHIMS/bloodbank/transactions/bbpublicindexGallery.html">
                         Gallery
-                      </a> */}
-                      <Link className="links" to="/publicPages/gallery">Gallery</Link>
+                      </a>
+                      {/* <Link className="links" to="/publicPages/gallery">Gallery</Link> */}
                     </li>
                     <li>
                       <a href="/BLDAHIMS/bloodbank/transactions/video.html">
