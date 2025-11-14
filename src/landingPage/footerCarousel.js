@@ -2,38 +2,38 @@ import React, { useEffect, useState } from "react";
 
 const initialImages = [
   {
-    img: "assets/landingPage/ministry.png",
+    img: `${process.env.PUBLIC_URL}/assets/landingPage/ministry.png`,
     src: "https://mohfw.gov.in/",
     id: 1,
   },
   // { img: "assets/landingPage/electronics.png", id: 2 },
   {
-    img: "assets/landingPage/cdac.png",
+    img: `${process.env.PUBLIC_URL}/assets/landingPage/cdac.png`,
     src: "https://cdac.in/index.aspx?id=ND",
     id: 2,
   },
   {
-    img: "assets/landingPage/digitalindia.png",
+    img: `${process.env.PUBLIC_URL}/assets/landingPage/digitalindia.png`,
     src: "https://dic.gov.in/",
     id: 3,
   },
   {
-    img: "assets/landingPage/indiagov.png",
+    img: `${process.env.PUBLIC_URL}/assets/landingPage/indiagov.png`,
     src: "https://v2.india.gov.in/services/details/e-raktkosh-blood-doner-login",
     id: 4,
   },
   {
-    img: "assets/landingPage/mygov.png",
+    img: `${process.env.PUBLIC_URL}/assets/landingPage/mygov.png`,
     src: "https://pledge.mygov.in/world-blood-donorday-2023/",
     id: 5,
   },
   {
-    img: "assets/landingPage/nhm.jpg",
+    img: `${process.env.PUBLIC_URL}/assets/landingPage/nhm.jpg`,
     src: "https://nhm.gov.in/index1.php?lang=1&level=2&sublinkid=1214&lid=498",
     id: 6,
   },
   {
-    img: "assets/landingPage/india-portal-logo.png",
+    img: `${process.env.PUBLIC_URL}/assets/landingPage/india-portal-logo.png`,
     src: " https://services.india.gov.in/service/detail/e-raktkosh-blood-stock-availability-1",
     id: 7,
   },
@@ -94,7 +94,7 @@ export default function FooterCarousel() {
           <img
             onClick={() => handleScroll("left")}
             className="scroll__left"
-            src="assets/landingPage/arrow__left.svg"
+            src={`${process.env.PUBLIC_URL}/assets/landingPage/arrow__left.svg`}
             alt=""
             style={{ cursor: "pointer" }}
           />
@@ -128,7 +128,7 @@ export default function FooterCarousel() {
           <img
             onClick={() => handleScroll("right")}
             className="scroll__right"
-            src="assets/landingPage/arrow__right.svg"
+            src={`${process.env.PUBLIC_URL}/assets/landingPage/arrow__right.svg`}
             alt=""
             style={{ cursor: "pointer" }}
           />

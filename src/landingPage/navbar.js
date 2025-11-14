@@ -57,16 +57,16 @@ export default function Navbar() {
                   <a href="https://mohfw.gov.in/">
                     <img
                       className="ministry_image"
-                      src="assets/landingPage/health&family.svg"
+                      src={`${process.env.PUBLIC_URL}/assets/landingPage/health&family.svg`}
                       alt=""
                       style={{ cursor: "pointer" }}
                     />
                   </a>
                   <div className="divider"></div>
-                  <a href="/beta#">
+                  <a href="/#">
                     <img
                       className="eraktkosh_image"
-                      src="assets/landingPage/eraktkosh.svg"
+                      src={`${process.env.PUBLIC_URL}/assets/landingPage/eraktkosh.svg`}
                       alt=""
                       style={{ cursor: "pointer" }}
                     />
@@ -128,7 +128,7 @@ export default function Navbar() {
               >
                 <ul className="nav__list">
                   <li className="nav__list__li">
-                    <a href="/beta#" className="nav__link">
+                    <a href="/#" className="nav__link">
                       Home
                     </a>
                   </li>
@@ -149,6 +149,12 @@ export default function Navbar() {
                         >
                           About e-Raktkosh
                         </a>
+                        {/* <Link
+                          className="dropdown__link"
+                          to="/publicPages/AboutEraktkosh"
+                        >
+                           About e-Raktkosh
+                        </Link> */}
                       </li>
                       <li className="dropdown__menu__li">
                         <a
@@ -157,6 +163,12 @@ export default function Navbar() {
                         >
                           Gallery
                         </a>
+                        {/* <Link
+                          className="dropdown__link"
+                          to="/publicPages/gallery"
+                        >
+                           Gallery
+                        </Link> */}
                       </li>
                       <li className="dropdown__menu__li">
                         <a
@@ -165,31 +177,37 @@ export default function Navbar() {
                         >
                           Video Gallery
                         </a>
+                        {/* <Link
+                          className="dropdown__link"
+                          to="/publicPages/gallery"
+                        >
+                          Video Gallery
+                        </Link> */}
                       </li>
                       <li className="dropdown__menu__li">
-                        {/* <a
+                        <a
                           href="/BLDAHIMS/bloodbank/notification.cnt"
                           className="dropdown__link"
                         >
                           Notifications
-                        </a> */}
-                        <Link
+                        </a>
+                        {/* <Link
                           className="dropdown__link"
                           to="/publicPages/Notification"
                         >
                           Notifications
-                        </Link>
+                        </Link> */}
                       </li>
                       <li className="dropdown__menu__li">
-                        {/* <a
+                        <a
                           href="/BLDAHIMS/bloodbank/eraktkoshfaq.cnt"
                           className="dropdown__link"
                         >
                           e-Raktkosh Faq's
-                        </a> */}
-                        <Link className="dropdown__link" to="/publicPages/FAQs">
+                        </a>
+                        {/* <Link className="dropdown__link" to="/publicPages/FAQs">
                           eRaktkosh FAQ's
-                        </Link>
+                        </Link> */}
                       </li>
                       <li className="dropdown__menu__li">
                         <a
@@ -202,7 +220,6 @@ export default function Navbar() {
                     </ul>
                   </li>
 
-
                   <div className="divider"></div>
 
                   {/* dropdown 1 */}
@@ -214,48 +231,48 @@ export default function Navbar() {
 
                     <ul className="dropdown__menu">
                       <li className="dropdown__menu__li">
-                        {/* <a
+                        <a
                           href="/BLDAHIMS/bloodbank/portalDonorLogin.cnt"
                           className="dropdown__link"
                         >
                           Donor Login
-                        </a> */}
-                        <Link
+                        </a>
+                        {/* <Link
                           className="dropdown__link"
                           to="/pages/portalDonorLogin"
                         >
                           {" "}
                           Donor Login
-                        </Link>
+                        </Link> */}
                       </li>
                       <li className="dropdown__menu__li">
-                        {/* <a
+                        <a
                           href="/BLDAHIMS/bloodbank/stockAvailability.cnt"
                           className="dropdown__link"
                         >
                           Blood Availability
-                        </a> */}
-                        <Link
+                        </a>
+                        {/* <Link
                           className="dropdown__link"
                           to="/publicPages/bloodAvailabilitySearch"
                         >
                           Blood Availability
-                        </Link>
+                        </Link> */}
                       </li>
 
                       <li className="dropdown__menu__li">
-                        {/* <a
+                        <a
                           href="/BLDAHIMS/bloodbank/nearbyBBRed.cnt"
                           className="dropdown__link"
                         >
                           Blood Center Directory
-                        </a> */}
-                        <Link
+                        </a>
+                        {/* <Link
                           className="dropdown__link"
                           to="/publicPages/bloodBankDirectory"
                         >
                           Blood Center Directory
-                        </Link>
+                        </Link> */}
                       </li>
                       <li className="dropdown__menu__li">
                         <a
@@ -273,34 +290,6 @@ export default function Navbar() {
                           Mobile App
                         </a>
                       </li>
-
-                      {/* dropdown submenu */}
-                      {/* <li className="dropdown__subitem dropdown__menu__li">
-                        <div className="dropdown__link">
-                          Mobile Apps
-                          <KeyboardArrowDownIcon className="dropdown__add" />
-                        </div>
-
-                        <ul className="dropdown__submenu">
-                          <li className="dropdown__submenu__li">
-                            <a href="#" className="dropdown__sublink">
-                              Test
-                            </a>
-                          </li>
-
-                          <li className="dropdown__submenu__li">
-                            <a href="#" className="dropdown__sublink">
-                              Blood Donation Test
-                            </a>
-                          </li>
-
-                          <li className="dropdown__submenu__li">
-                            <a href="#" className="dropdown__sublink">
-                              Test
-                            </a>
-                          </li>
-                        </ul>
-                      </li> */}
                     </ul>
                   </li>
 
@@ -323,14 +312,7 @@ export default function Navbar() {
                          e-Raktkosh Donor Pledge
                         </Link>
                       </li> */}
-                      <li className="dropdown__menu__li">
-                        <a
-                          href="/BLDAHIMS/bloodbank/donateblood.cnt"
-                          className="dropdown__link"
-                        >
-                          About Blood Donation
-                        </a>
-                      </li>
+
                       <li className="dropdown__menu__li">
                         <a
                           href="/BLDAHIMS/bloodbank/campSchedule.cnt"
@@ -354,25 +336,26 @@ export default function Navbar() {
                           Register VBD Camp
                         </a>
                       </li>
+                      <li className="dropdown__menu__li">
+                        <a
+                          href="/BLDAHIMS/bloodbank/onlineDonationRequest_epass.cnt"
+                          className="dropdown__link"
+                        >
+                          Appointment for Blood Bank
+                        </a>
+                      </li>
+                      <li className="dropdown__menu__li">
+                        <a
+                          href="/BLDAHIMS/bloodbank/donateblood.cnt"
+                          className="dropdown__link"
+                        >
+                          About Blood Donation
+                        </a>
+                      </li>
                     </ul>
                   </li>
 
                   <div className="divider"></div>
-
-                  
-
-                  {/* <div className="divider"></div> */}
-
-                  {/* <li className="nav__list__li">
-                    <a
-                      href="/BLDAHIMS/bloodbank/contact.cnt"
-                      className="nav__link"
-                    >
-                      Contact Us
-                    </a>
-                  </li> */}
-
-                  {/* <div className="divider"></div> */}
 
                   <li className="dropdown__item">
                     <div className="nav__link">

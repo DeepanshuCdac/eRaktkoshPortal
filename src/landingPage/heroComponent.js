@@ -19,7 +19,7 @@ export default function HeroComponent() {
   const handleClickPledge = () => {
     // window.location.href = "/beta#/pages/portalDonorLogin";
     window.location.href =
-      "http://eraktkosh.mohfw.gov.in/Blood_Bank/service/pledge";
+      "https://pledge.mygov.in/voluntary-blood-donation/";
   };
 
   const handleIndicatorClick = (index) => {
@@ -71,7 +71,7 @@ export default function HeroComponent() {
             className={`carousel-item ${currentIndex === 0 ? "active" : ""}`}
           >
             <img
-              src="assets/images/Banner-5.jpg"
+              src={`${process.env.PUBLIC_URL}/assets/images/Banner-5.jpg`}
               className="d-block w-100"
               alt="Second Image"
             />
@@ -79,17 +79,17 @@ export default function HeroComponent() {
           <div
             className={`carousel-item ${currentIndex === 1 ? "active" : ""}`}
           >
-            <img
-              src="assets/images/Banner_test.jpg"
-              className="d-block w-100"
-              alt="Second Image"
-            />
+              <img
+                src={`${process.env.PUBLIC_URL}/assets/images/Banner_test.jpg`}
+                className="d-block w-100"
+                alt="Second Image"
+              />
           </div>
           <div
             className={`carousel-item ${currentIndex === 2 ? "active" : ""}`}
           >
             <img
-              src="assets/images/Banner_test2.jpg"
+              src={`${process.env.PUBLIC_URL}/assets/images/Banner_test2.jpg`}
               className="d-block w-100"
               alt="Fourth Image"
             />
@@ -109,7 +109,7 @@ export default function HeroComponent() {
             className={`carousel-item ${currentIndex === 3 ? "active" : ""}`}
           >
             <img
-              src="assets/images/header2.jpg"
+              src={`${process.env.PUBLIC_URL}/assets/images/header2.jpg`}
               className="d-block w-100"
               alt="Second Image"
             />
@@ -118,7 +118,7 @@ export default function HeroComponent() {
             className={`carousel-item ${currentIndex === 4 ? "active" : ""}`}
           >
             <img
-              src="assets/images/header4.png"
+              src={`${process.env.PUBLIC_URL}/assets/images/header4.png`}
               className="d-block w-100"
               alt="Fourth Image"
             />

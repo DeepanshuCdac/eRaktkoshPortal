@@ -343,6 +343,9 @@ main {
         }
       }
     }
+    .btn__outlined{
+      background-color: $white;
+    }
   }
 }
 
@@ -1446,6 +1449,16 @@ main {
   }
 }
 
+.amcharts-map-area.selected {
+  fill: #7f0210 !important;  /* Your selectedColor—!important overrides AmCharts */
+  fill-opacity: 1 !important;
+  stroke: #FFFFFF !important;
+  stroke-width: 2 !important;
+}
+.amcharts-map-area:not(.selected) {
+  fill: #5EB7DE !important;  /* Default colorSolid */
+  stroke: #f7f3f3ff !important;
+}
 
 // .HoverInfo{
 //   display: block !important;

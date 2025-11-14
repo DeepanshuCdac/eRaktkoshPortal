@@ -555,7 +555,7 @@ export default function DonorRegister() {
                     <div className="d-flex align-items-center justify-content-center mb-3">
                       <img
                         style={{ width: "82px", height: "82px" }}
-                        src="assets/images/eraktkosh.png"
+                        src={`${process.env.PUBLIC_URL}/assets/images/eraktkosh.png`}
                         alt=""
                       />
                     </div>
@@ -612,13 +612,13 @@ export default function DonorRegister() {
                     <div className="d-flex align-items-center justify-content-center mb-3">
                       <img
                         style={{ width: "82px", height: "82px" }}
-                        src="assets/images/eraktkosh.png"
+                        src={`${process.env.PUBLIC_URL}/assets/images/eraktkosh.png`}
                         alt=""
                       />
                     </div>
                     <div className="mb-2">
                       <div className="text-center">
-                        <img src="assets/images/success.png" alt="" />
+                        <img src={`${process.env.PUBLIC_URL}/assets/images/success.png`} alt="" />
                         <p className="otpExpiry mt-3">
                           You have been successfully registered
                         </p>

@@ -71,7 +71,7 @@ export default function DonorAdminHome({ onViewAllClick }) {
       render: (_, record) => (
         <>
           <div className="downlaod_box">
-            <img src="assets/images/download.svg" alt="" />
+            <img src={`${process.env.PUBLIC_URL}/assets/images/download.svg`} alt="" />
             <Button
               type="link"
               className="ms-1"
@@ -93,7 +93,7 @@ export default function DonorAdminHome({ onViewAllClick }) {
             <div className="col-6">
               <div className="abha_widget p-3">
                 <div className="d-flex align-items-center">
-                  <img src="assets/images/abha.svg" alt="" />
+                  <img src={`${process.env.PUBLIC_URL}/assets/images/abha.svg`} alt="" />
                   <div className="d-flex align-items-center justify-content-between w-100">
                     <div className="ms-3">
                       <p className=" mb-0 abha_text">Generate/Verify ABHA</p>
@@ -166,13 +166,13 @@ export default function DonorAdminHome({ onViewAllClick }) {
                 </p>
               </div>
               <div className="d-flex align-items-center">
-                <img src="assets/images/male.png" alt="" />
+                <img src={`${process.env.PUBLIC_URL}/assets/images/male.png`} alt="" />
                 <div className="ms-2">
                   <p className="mb-0 name">CDAC</p>
                   <p className="mb-0 designation">Noida</p>
                 </div>
               </div>
-              <img src="assets/images/doc.svg" alt="" />
+              <img src={`${process.env.PUBLIC_URL}/assets/images/doc.svg`} alt="" />
             </div>
           </div>
         </div>

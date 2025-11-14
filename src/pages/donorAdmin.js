@@ -69,7 +69,7 @@ export default function DonorAdmin() {
           <div className="d-flex align-items-center justify-content-between">
             <a href="javascript:void(0)">
               <img
-                src="assets/images/main-icon1.png"
+                src={`${process.env.PUBLIC_URL}/assets/images/main-icon1.png`}
                 className="img-fluid"
                 alt="mainIcon"
               />
@@ -98,14 +98,14 @@ export default function DonorAdmin() {
                         <img
                           style={{ width: "45px", height: "45px" }}
                           className="img-fluid"
-                          src="assets/images/male.png"
+                          src={`${process.env.PUBLIC_URL}/assets/images/male.png`}
                           alt="user-img"
                         />
                       ) : (
                         <img
                           style={{ width: "45px", height: "45px" }}
                           className="img-fluid"
-                          src="assets/images/female.png"
+                          src={`${process.env.PUBLIC_URL}/assets/images/female.png`}
                           alt="user-img"
                         />
                       )}
@@ -227,7 +227,7 @@ export default function DonorAdmin() {
                         </p>
                         <p className="mb-0 text">Rakt Score</p>
                       </div>
-                      <img src="assets/images/menu_icon.svg" alt="" />
+                      <img src={`${process.env.PUBLIC_URL}/assets/images/menu_icon.svg`} alt="" />
                     </div>
                   </div>
                   <div className="col-xl-3">
@@ -238,7 +238,7 @@ export default function DonorAdmin() {
                         </p>
                         <p className="mb-0 text">Blood Group</p>
                       </div>
-                      <img src="assets/images/menu_icon.svg" alt="" />
+                      <img src={`${process.env.PUBLIC_URL}/assets/images/menu_icon.svg`} alt="" />
                     </div>
                   </div>
                   <div className="col-xl-3">
@@ -249,7 +249,7 @@ export default function DonorAdmin() {
                         </p>
                         <p className="mb-0 text">Total Donations</p>
                       </div>
-                      <img src="assets/images/menu_icon.svg" alt="" />
+                      <img src={`${process.env.PUBLIC_URL}/assets/images/menu_icon.svg`} alt="" />
                     </div>
                   </div>
                   <div className="col-xl-3">
@@ -260,7 +260,7 @@ export default function DonorAdmin() {
                         </p>
                         <p className="mb-0 text">Total Issues</p>
                       </div>
-                      <img src="assets/images/menu_icon.svg" alt="" />
+                      <img src={`${process.env.PUBLIC_URL}/assets/images/menu_icon.svg`} alt="" />
                     </div>
                   </div>
                 </div>

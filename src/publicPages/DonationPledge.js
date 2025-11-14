@@ -218,7 +218,7 @@ export default function DonationPledge() {
       if (showSuccessScreen) {
         return (
           <div className="bg-border p-4 text-center">
-            <img src="assets/images/success_icon.svg" alt="" />
+            <img src={`${process.env.PUBLIC_URL}/assets/images/success_icon.svg`} alt="" />
             <h2 className="mt-3 mb-2 pledge_header">
               Thank you{" "}
               <span className="pledge_name">{pledgeDetails.pledgerName}</span>
@@ -363,7 +363,7 @@ export default function DonationPledge() {
         state: pledgeDetails.stateEnglish,
         district: pledgeDetails.distEnglish,
         date: pledgeDetails.pledgeTime,
-        backgroundImgUrl: "/assets/images/pledge_certi.jpg",
+        backgroundImgUrl: `${process.env.PUBLIC_URL}/assets/images/pledge_certi.jpg`,
       });
     } else {
       const today = new Date();
@@ -380,7 +380,7 @@ export default function DonationPledge() {
         state: stateName,
         district: districtName,
         date: formattedDate,
-        backgroundImgUrl: "/assets/images/pledge_certi.jpg",
+        backgroundImgUrl: `${process.env.PUBLIC_URL}/assets/images/pledge_certi.jpg`,
       });
     }
   };

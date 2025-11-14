@@ -141,7 +141,7 @@ const Notification = () => {
                                             <p className="mb-0 batch px-1">Latest Upload</p>
                                         )}
                                         <div className="d-flex align-items-start h-100">
-                                            <img className="me-2" src="assets/images/pdf.png" alt="pdf" />
+                                            <img className="me-2" src={`${process.env.PUBLIC_URL}/assets/images/pdf.png`} alt="pdf" />
                                             <div className="w-100 h-100 d-flex flex-column justify-content-between">
                                                 <h5 className="notification_title mb-1">{notification.title}</h5>
                                                 <div className="d-flex justify-content-between">
@@ -171,7 +171,7 @@ const Notification = () => {
                                 style={{ ...modalStyles, top: `${modalTop + 15}px`, position: 'absolute', zIndex: 20 }} >
                                 <div className="d-flex align-items-start justify-content-between">
                                     <h4 className="notification_title_modal">{modalTitle}</h4>
-                                    <img onClick={closeModal} src="assets/images/close.png" style={{ cursor: "pointer" }} />
+                                    <img onClick={closeModal} src={`${process.env.PUBLIC_URL}/assets/images/close.png`} style={{ cursor: "pointer" }} />
                                 </div>
                                 {modalLoading ? (
                                     <p>Loading...</p>

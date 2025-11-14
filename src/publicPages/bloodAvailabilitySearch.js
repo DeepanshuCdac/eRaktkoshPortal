@@ -21,7 +21,7 @@ import { BaseUrl } from "../utils/url";
 import { logSearch } from "../components/logService";
 import NestedBloodAvailabilityTable from "../components/NestedBloodAvailabilityTable";
 
-const { Option } = Select;
+// const { Option } = Select;
 
 const BloodAvailabiltySearch = ({ fromDonorAdmin }) => {
   const dispatch = useDispatch();
@@ -62,7 +62,7 @@ const BloodAvailabiltySearch = ({ fromDonorAdmin }) => {
     dispatch(getApiData());
   }, [dispatch]);
 
-  const location = useLocation();
+  // const location = useLocation();
 
   const handlePageChange = (page, size) => {
     setCurrentPage(page);
@@ -226,12 +226,14 @@ const BloodAvailabiltySearch = ({ fromDonorAdmin }) => {
     {
       title: "Blood Center",
       key: "bloodBank",
+       width: 400,
       render: (_, record) => (
-        <div style={{ maxWidth: "300px" }}>
+        <div>
           <Tooltip title={record.hospitalname}>
             <p className="camp-name mb-0">{record.hospitalname}</p>
           </Tooltip>
-          <p className="camp-venue mb-0">{record.hospitaladd}</p>
+          <p className="camp-venue mb-0">{record.hospitaladd}, {record.hospitalcontact}</p>
+          {/* <p className="camp-venue mb-0"></p> */}
         </div>
       ),
     },
@@ -282,6 +284,7 @@ const BloodAvailabiltySearch = ({ fromDonorAdmin }) => {
       title: "Availability",
       key: "available_WithQty",
       dataIndex: "available_WithQty",
+       width: 300,
       render: (availableQty) => (
         <span
           style={{
@@ -296,7 +299,7 @@ const BloodAvailabiltySearch = ({ fromDonorAdmin }) => {
     { title: "Last Updated", dataIndex: "entrydate", key: "entrydate" },
     { title: "Type", dataIndex: "type", key: "type" },
     {
-      title: "Details",
+      title: "",
       key: "details",
       render: (_, record) => (
         <a
@@ -304,7 +307,7 @@ const BloodAvailabiltySearch = ({ fromDonorAdmin }) => {
           style={{ color: "#1A6093" }}
           onClick={() => showModal(record)}
         >
-          View
+          Share
         </a>
       ),
     },
@@ -864,7 +867,7 @@ const BloodAvailabiltySearch = ({ fromDonorAdmin }) => {
                 }}
                 type="primary"
               >
-                <img src="assets/images/whatsapp-logo.svg" />
+                <img src={`${process.env.PUBLIC_URL}/assets/images/whatsapp-logo.svg`} />
                 Whatsapp
               </Button>
             </div>

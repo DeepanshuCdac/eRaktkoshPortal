@@ -95,12 +95,12 @@ const ABHA = () => {
                             Generate/Verify ABHA
                         </Button>
                     </div>
-                    <img src="assets/images/abha-img.png" alt="Abha-img" />
+                    <img src={`${process.env.PUBLIC_URL}/assets/images/abha-img.png`} alt="Abha-img" />
                 </div>
             </div>
             <Modal title={<div style={{ display: 'flex', justifyContent: 'space-between' }}><span>ABHA Creation/ Verification</span>
                 <span className="me-4">
-                    <Button className={isRotating ? "rotate-refresh" : ""} onClick={handleRefresh} style={{ background: "#fff", border: "none" }}><img style={{ width: "18px" }} src="assets/images/refresh.png" /> </Button>
+                    <Button className={isRotating ? "rotate-refresh" : ""} onClick={handleRefresh} style={{ background: "#fff", border: "none" }}><img style={{ width: "18px" }} src={`${process.env.PUBLIC_URL}/assets/images/refresh.png`} /> </Button>
                 </span> </div>}
                 open={isModalOpen} onCancel={handleCancel} footer={null}>
                 <div className="body mb-4 align-items-center py-2">

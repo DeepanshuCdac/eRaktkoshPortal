@@ -88,7 +88,7 @@ const DonationCertificate = ({ onBack }) => {
       render: (_, record) => (
         <>
           <div className="downlaod_box">
-            <img src="assets/images/download.svg" alt="" />
+            <img src={`${process.env.PUBLIC_URL}/assets/images/download.svg`} alt="" />
             <Button type="link" className="ms-1" onClick={() => generateCertificate(record)}>
               Download
             </Button>
@@ -102,7 +102,7 @@ const DonationCertificate = ({ onBack }) => {
     <>
       <div className="back mb-1">
         <button className="back_btn p-0" onClick={onBack}>
-          <img src="assets/images/backBtn.png" alt="" />
+          <img src={`${process.env.PUBLIC_URL}/assets/images/backBtn.png`} alt="" />
           Back
         </button>
       </div>
@@ -115,7 +115,7 @@ const DonationCertificate = ({ onBack }) => {
               <img
                 className="img-fluid me-2"
                 style={{ height: "14px", width: "14px" }}
-                src="assets/images/search.png"
+                src={`${process.env.PUBLIC_URL}/assets/images/search.png`}
                 alt=""
               />
               <Input

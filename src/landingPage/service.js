@@ -50,12 +50,12 @@ export default function Service() {
   };
 
   const content_image = {
-    blood_availability: "assets/landingPage/blood_availability_content.png",
-    blood_center_directory: "assets/landingPage/blood_availability_content.png",
-    blood_donation_camps: "assets/landingPage/blood_availability_content.png",
-    donor_login: "assets/landingPage/blood_availability_content.png",
+    blood_availability: "eraktkoshPortal/assets/landingPage/blood_availability_content.png",
+    blood_center_directory: "eraktkoshPortal/assets/landingPage/blood_availability_content.png",
+    blood_donation_camps: "eraktkoshPortal/assets/landingPage/blood_availability_content.png",
+    donor_login: "eraktkoshPortal/assets/landingPage/blood_availability_content.png",
     register_voluntary_camp:
-      "assets/landingPage/blood_availability_content.png",
+      "eraktkoshPortal/assets/landingPage/blood_availability_content.png",
   };
 
   const items = [
@@ -63,7 +63,7 @@ export default function Service() {
       key: "1",
       label: (
         <div className="text-center">
-          <img src="assets/landingPage/blood_availability_search.png" alt="" />
+          <img src={`${process.env.PUBLIC_URL}/assets/landingPage/blood_availability_search.png`} alt="" />
           <p className="mb-0 mt-2 tab__header__text">
             Blood Availability Search
           </p>
@@ -87,7 +87,7 @@ export default function Service() {
       key: "2",
       label: (
         <div className="text-center">
-          <img src="assets/landingPage/blood_center_directory.png" alt="" />
+          <img src={`${process.env.PUBLIC_URL}/assets/landingPage/blood_center_directory.png`} alt="" />
           <p className="mb-0 mt-2 tab__header__text">Blood Center Directory</p>
         </div>
       ),
@@ -109,7 +109,7 @@ export default function Service() {
       key: "3",
       label: (
         <div className="text-center">
-          <img src="assets/landingPage/blood_donation_camp.png" alt="" />
+          <img src={`${process.env.PUBLIC_URL}/assets/landingPage/blood_donation_camp.png`} alt="" />
           <p className="mb-0 mt-2 tab__header__text">Blood Donation Camps</p>
         </div>
       ),
@@ -131,7 +131,7 @@ export default function Service() {
       key: "4",
       label: (
         <div className="text-center">
-          <img src="assets/landingPage/donor_login.png" alt="" />
+          <img src={`${process.env.PUBLIC_URL}/assets/landingPage/donor_login.png`} alt="" />
           <p className="mb-0 mt-2 tab__header__text">Donor Login</p>
         </div>
       ),
@@ -153,7 +153,7 @@ export default function Service() {
       key: "5",
       label: (
         <div className="text-center">
-          <img src="assets/landingPage/register_voluntary.png" alt="" />
+          <img src={`${process.env.PUBLIC_URL}/assets/landingPage/register_voluntary.png`} alt="" />
           <p className="mb-0 mt-2 tab__header__text">
             Register Voluntary Blood Camps
           </p>
@@ -189,7 +189,7 @@ export default function Service() {
       label: (
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
           <img
-            src="assets/landingPage/blood_availability_search.png"
+            src={`${process.env.PUBLIC_URL}/assets/landingPage/blood_availability_search.png`}
             alt="Blood Availability"
             style={{ width: "30px", height: "30px", objectFit: "contain" }}
           />
@@ -214,7 +214,7 @@ export default function Service() {
       label: (
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
           <img
-            src="assets/landingPage/blood_center_directory.png"
+            src={`${process.env.PUBLIC_URL}/assets/landingPage/blood_center_directory.png`}
             alt="Blood Center Directory"
             style={{ width: "30px", height: "30px", objectFit: "contain" }}
           />
@@ -239,7 +239,7 @@ export default function Service() {
       label: (
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
           <img
-            src="assets/landingPage/blood_donation_camp.png"
+            src={`${process.env.PUBLIC_URL}/assets/landingPage/blood_donation_camp.png`}
             alt="Blood Donation Camp"
             style={{ width: "30px", height: "30px", objectFit: "contain" }}
           />
@@ -264,7 +264,7 @@ export default function Service() {
       label: (
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
           <img
-            src="assets/landingPage/donor_login.png"
+            src={`${process.env.PUBLIC_URL}/assets/landingPage/donor_login.png`}
             alt="Donor Login"
             style={{ width: "30px", height: "30px", objectFit: "contain" }}
           />
@@ -289,7 +289,7 @@ export default function Service() {
       label: (
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
           <img
-            src="assets/landingPage/register_voluntary.png"
+            src={`${process.env.PUBLIC_URL}/assets/landingPage/register_voluntary.png`}
             alt="Register Voluntary Blood Camp"
             style={{ width: "30px", height: "30px", objectFit: "contain" }}
           />

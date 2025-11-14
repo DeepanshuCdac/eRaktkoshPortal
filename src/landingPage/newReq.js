@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import "../scss/newReq.scss";
-// import RefreshIcon from "@mui/icons-material/Refresh";
 import IconButton from "@mui/material/IconButton";
 import { BaseUrl } from "../utils/url";
 
@@ -185,7 +184,7 @@ export default function NewReq() {
             }}
             size="small"
           >
-            <img src="assets/images/refresh.png" style={{width: '15px', height: '15px'}} alt="" />
+            <img src={`${process.env.PUBLIC_URL}/assets/images/refresh.png`} style={{width: '15px', height: '15px'}} alt="" />
             {/* <RefreshIcon fontSize="small" sx={{ paddingBottom: "3px" }} /> */}
           </IconButton>
         </p>

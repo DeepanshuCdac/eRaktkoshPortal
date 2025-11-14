@@ -1,6 +1,6 @@
 // MobileDonorRegistration.js
 import React, { useState, useEffect } from "react";
-import { Input, Button, message, Select } from "antd";
+import { Input, Button, Select } from "antd";
 import axios from "axios";
 import { BaseUrl } from "../../utils/url";
 import Swal from "sweetalert2";
@@ -66,7 +66,10 @@ const MobileDonorRegistration = ({ selectedCamp, onSuccess }) => {
 
   const handleGenerateOTP = async () => {
     if (!mobileNo || mobileNo.length !== 10) {
-      message.error("Please enter a valid 10-digit mobile number");
+      Swal.fire({
+        text: "Please enter a valid 10-digit mobile number.",
+        icon: "question",
+      });
       return;
     }
 
@@ -77,17 +80,35 @@ const MobileDonorRegistration = ({ selectedCamp, onSuccess }) => {
       });
 
       if (response.data) {
-        message.success("OTP and CAPTCHA generated successfully");
+        Swal.fire({
+          text: "OTP has been generated Successfully!",
+          icon: "success",
+        });
         setOtpSent(true);
         setTimer(300);
         setCaptchaImage(response.data.captchaImage);
         setOtp("");
         setUserCaptchaInput("");
         setIsValidated(false);
+
+        // ✅ Check if OTP field is present
+        if (response.data.otp) {
+          try {
+            await axios.post(`${BaseUrl}/eraktkosh/otp/otp_log/insert`, {
+              mobileNo: mobileNo,
+            });
+            console.log(response.data);
+          } catch (logError) {
+            console.error("Error inserting OTP log:", logError);
+          }
+        }
       }
     } catch (error) {
       console.error("Error generating OTP:", error);
-      message.error(error.response?.data || "Failed to generate OTP");
+      Swal.fire({
+        text: error.response?.data || "Failed to generate OTP",
+        icon: "error",
+      });
     } finally {
       setIsGenerating(false);
     }
@@ -105,17 +126,26 @@ const MobileDonorRegistration = ({ selectedCamp, onSuccess }) => {
       if (response.status === 200) {
         setCaptchaImage(response.data);
         setUserCaptchaInput("");
-        message.success("CAPTCHA refreshed");
+        Swal.fire({
+          text: "CAPTCHA refreshed successfully!",
+          icon: "success",
+        });
       }
     } catch (error) {
       console.error("Refresh CAPTCHA error:", error);
-      message.error(error.response?.data || "Failed to refresh CAPTCHA");
+      Swal.fire({
+        text: error.response?.data || "Failed to REFRESH CAPTCHA!",
+        icon: "error",
+      });
     }
   };
 
   const handleValidateOTP = async () => {
     if (!otp || !userCaptchaInput) {
-      message.error("Please enter both OTP and CAPTCHA");
+      Swal.fire({
+        text: "Please enter both OTP and CAPTCHA",
+        icon: "question",
+      });
       return;
     }
 
@@ -127,13 +157,91 @@ const MobileDonorRegistration = ({ selectedCamp, onSuccess }) => {
         captcha: userCaptchaInput,
       });
 
-      if (response.status === 200) {
-        message.success("OTP and CAPTCHA validated successfully");
+      if (response.data === "OTP validated successfully") {
+        Swal.fire({
+          text: response.data,
+          icon: "success",
+        });
         setIsValidated(true);
+
+        // ✅ Now fetch donor details after OTP validation
+        try {
+          const donorResponse = await axios.get(
+            `${BaseUrl}/eraktkosh/get/details/${mobileNo}`
+          );
+
+          if (
+            !donorResponse.data ||
+            (Array.isArray(donorResponse.data) &&
+              donorResponse.data.length === 0)
+          ) {
+            // message.info("New Donor — please fill in your details");
+            // Swal.fire({
+            //     text: "New Donor — please fill in your details",
+            //     icon: "error",
+            //   })
+            // Reset form
+            setFormData({
+              name: "",
+              age: "",
+              // genderCode: "",
+              fatherName: "",
+              email: "",
+              address: "",
+              // stateCode: "",
+              // districtCode: "",
+              pincode: "",
+            });
+            setSelectedGender(null);
+            setSelectedState(null);
+            setSelectedDistrict(null);
+          } else {
+            // ✅ Existing donor, prefill form fields
+            const donor = Array.isArray(donorResponse.data)
+              ? donorResponse.data[0]
+              : donorResponse.data;
+
+            // message.success("Existing donor details loaded successfully");
+            // Swal.fire({
+            //     text: "Existing donor details loaded successfully",
+            //     icon: "error",
+            //   })
+
+            setFormData({
+              ...formData,
+              name: donor.name || donor.username || "",
+              age: donor.age || "",
+              // genderCode: donor.genderCode || donor.gendercode || "",
+              fatherName: donor.fatherName || donor.fathername || "",
+              email: donor.email || "",
+              address: donor.address || "",
+              pincode: donor.pinCode || donor.pincode || "",
+            });
+
+            // setSelectedGender(
+            //   donor.genderCode || donor.gendercode || null
+            // );
+            // setSelectedState(
+            //   donor.stateCode || donor.statecode || null
+            // );
+            // setSelectedDistrict(
+            //   donor.districtCode || donor.districtcode || null
+            // );
+          }
+        } catch (fetchError) {
+          console.error("Error fetching donor details:", fetchError);
+          Swal.fire({
+            text: "Failed to fetch donor details",
+            icon: "error",
+          });
+        }
       }
     } catch (error) {
       console.error("Validation error:", error);
-      message.error(error.response?.data || "Validation failed");
+      Swal.fire({
+        text: error.response?.data || "Validation failed",
+        icon: "error",
+      });
     } finally {
       setIsValidating(false);
     }
@@ -141,7 +249,10 @@ const MobileDonorRegistration = ({ selectedCamp, onSuccess }) => {
 
   const handleResendOTP = async () => {
     if (timer > 0) {
-      message.warning(`Please wait ${formatTime(timer)} before resending`);
+      Swal.fire({
+        text: `Please wait ${formatTime(timer)} before resending`,
+        icon: "warning",
+      });
       return;
     }
 
@@ -151,13 +262,19 @@ const MobileDonorRegistration = ({ selectedCamp, onSuccess }) => {
       });
 
       if (response.status === 200) {
-        message.success("OTP resent successfully");
+        Swal.fire({
+          text: "OTP resent Successfully!",
+          icon: "success",
+        });
         setTimer(50);
         setOtp("");
       }
     } catch (error) {
       console.error("Resend OTP error:", error);
-      message.error(error.response?.data || "Failed to resend OTP");
+      Swal.fire({
+        text: error.response?.data || "Failed to resend OTP",
+        icon: "error",
+      });
     }
   };
 
@@ -234,7 +351,10 @@ const MobileDonorRegistration = ({ selectedCamp, onSuccess }) => {
       !selectedState ||
       !selectedDistrict
     ) {
-      message.error("Please fill all mandatory fields.");
+      Swal.fire({
+        text: "Please fill all mandatory fields.",
+        icon: "warning",
+      });
       return;
     }
 
@@ -284,7 +404,10 @@ const MobileDonorRegistration = ({ selectedCamp, onSuccess }) => {
       }
     } catch (error) {
       console.error("Registration error :", error);
-      message.error(error.response?.data || "registration failed!");
+      Swal.fire({
+        text: error.response?.data || "registration failed!",
+        icon: "error",
+      });
     } finally {
       setLoading(false);
     }
@@ -365,7 +488,7 @@ const MobileDonorRegistration = ({ selectedCamp, onSuccess }) => {
                       onClick={handleRefreshCaptcha}
                       icon={
                         <img
-                          src="assets/images/refresh.png"
+                          src={`${process.env.PUBLIC_URL}/assets/images/refresh.png`}
                           alt="Refresh"
                           style={{ height: "16px" }}
                         />
@@ -518,28 +641,34 @@ const MobileDonorRegistration = ({ selectedCamp, onSuccess }) => {
                 </div>
               </div>
               <div className="col-4">
-  <div className="mb-3 form-inputs">
-    <label htmlFor="exampleInputEmail1" className="form-label mb-1">
-      Email
-    </label>
-    <Input
-      placeholder="Enter your email"
-      value={formData.email}
-      onChange={(e) =>
-        setFormData({
-          ...formData,
-          email: e.target.value,
-        })
-      }
-      onBlur={() => {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (formData.email && !emailRegex.test(formData.email)) {
-          message.error("Invalid email address"); // or use message.error() if using antd
-        }
-      }}
-    />
-  </div>
-</div>
+                <div className="mb-3 form-inputs">
+                  <label
+                    htmlFor="exampleInputEmail1"
+                    className="form-label mb-1"
+                  >
+                    Email
+                  </label>
+                  <Input
+                    placeholder="Enter your email"
+                    value={formData.email}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        email: e.target.value,
+                      })
+                    }
+                    onBlur={() => {
+                      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                      if (formData.email && !emailRegex.test(formData.email)) {
+                        Swal.fire({
+                          text: "Invalid email address",
+                          icon: "error",
+                        });
+                      }
+                    }}
+                  />
+                </div>
+              </div>
 
               <div className="col-4">
                 <div className="mb-3 form-inputs">
@@ -634,7 +763,7 @@ const MobileDonorRegistration = ({ selectedCamp, onSuccess }) => {
               </div>
             </div>
           </div>
-          <div className="d-flex align-items-center justify-content-end mt-3">
+          <div className="d-flex align-items-center justify-content-end my-3">
             <Button
               className="px-5 py-3"
               type="primary"

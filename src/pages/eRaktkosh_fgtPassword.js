@@ -18,7 +18,7 @@ export default function ERaktkosh_fgtPassword({ showModal, closeModal }) {
                         <div className="modal-content p-4">
                             <div className="row">
                                 <div className="col-xl-6 d-none d-lg-block d-xl-block d-md-block col-lg-6 col-md-6 d-xl-flex d-lg-flex d-md-flex align-items-center justify-content-center">
-                                    <img className='img-fluid' src="assets/images/fgt-password-img.png" alt="" />
+                                    <img className='img-fluid' src={`${process.env.PUBLIC_URL}/assets/images/fgt-password-img.png`} alt="" />
                                 </div>
                                 <div className="col-xl-6 col-lg-6 col-md-6">
                                     <div className="modal-header pb-2 p-0">
@@ -34,7 +34,7 @@ export default function ERaktkosh_fgtPassword({ showModal, closeModal }) {
                                                     </label>
                                                     <div className="input-group mb-1">
                                                         <span className="input-group-text p-0" id="basic-addon1">
-                                                            <img src="assets/images/inputPerson.png" alt="" />
+                                                            <img src={`${process.env.PUBLIC_URL}/assets/images/inputPerson.png`} alt="" />
                                                         </span>
                                                         <input
                                                             type="username"
@@ -52,7 +52,7 @@ export default function ERaktkosh_fgtPassword({ showModal, closeModal }) {
                                                     </label>
                                                     <div className="input-group mb-1">
                                                         <span className="input-group-text p-0" id="basic-addon1">
-                                                            <img src="assets/images/password.png" alt="" />
+                                                            <img src={`${process.env.PUBLIC_URL}/assets/images/password.png`} alt="" />
                                                         </span>
                                                         <input
                                                             type="number"
@@ -65,7 +65,7 @@ export default function ERaktkosh_fgtPassword({ showModal, closeModal }) {
                                                 </div>
 
                                                 <div className='d-flex align-items-center mb-3 captcha-box'>
-                                                    <img onClick={handleClick} src="assets/images/refresh.png" width="24px" height="24px" className={`refresh-img img-fluid me-2 ${isRotated ? 'rotate' : ''}`} alt="" />
+                                                    <img onClick={handleClick} src={`${process.env.PUBLIC_URL}/assets/images/refresh.png`} width="24px" height="24px" className={`refresh-img img-fluid me-2 ${isRotated ? 'rotate' : ''}`} alt="" />
                                                     <div className='captcha-container d-xl-flex d-lg-flex d-md-flex align-items-center justify-content-center me-xl-4 me-lg-4 mme-md-4'>
                                                         <div className="input-group me-2 mb-3 mb-xl-0 mb-lg-0 mb-md-0">
                                                             <input

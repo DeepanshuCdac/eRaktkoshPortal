@@ -413,7 +413,7 @@ const CampSchedule = ({ fromDonorAdmin }) => {
               style={{ flex: 1 }}
             >
               <img
-                src="assets/images/donorImg.png"
+                src={`${process.env.PUBLIC_URL}/assets/images/donorImg.png`}
                 style={{ width: "53px", height: "53px" }}
               />
               <div className="ms-3 d-flex flex-column">

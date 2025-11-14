@@ -60,14 +60,6 @@ function App() {
 function AppContent() {
   const location = useLocation();
 
-  // useEffect(() => {
-  //   initGA(); // initialize once on load
-  // }, []);
-
-  // useEffect(() => {
-  //   logPageView(location.pathname + location.search); // log on route change
-  // }, [location]);
-
   const hideNavbarPaths = ["/pages/portaldonorAdmin"];
   const hideFooterPaths = [
     "/pages/portalDonorLogin",

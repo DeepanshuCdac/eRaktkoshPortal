@@ -287,7 +287,7 @@ const Faqs = () => {
                         }}
                         className=""
                         onClick={fetchCaptcha}
-                        src="assets/images/refresh.png"
+                        src={`${process.env.PUBLIC_URL}/assets/images/refresh.png`}
                       />
                     </div>
                   )}

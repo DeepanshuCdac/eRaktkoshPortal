@@ -157,7 +157,7 @@ const ERaktkoshLogin = () => {
           <div className="row">
             <div className="col-xl-8 d-none d-lg-block d-xl-block d-md-block col-lg-8 col-md-8">
               <div className="loginImg">
-                <img className="img-fluid" src="assets/images/loginImg.png" alt="" />
+                <img className="img-fluid" src={`${process.env.PUBLIC_URL}/assets/images/loginImg.png`} alt="" />
               </div>
             </div>
 
@@ -174,7 +174,7 @@ const ERaktkoshLogin = () => {
                     </label>
                     <div className="input-group mb-1">
                       <span className="input-group-text p-0" id="basic-addon1">
-                        <img src="assets/images/inputPerson.png" alt="" />
+                        <img src={`${process.env.PUBLIC_URL}/assets/images/inputPerson.png`} alt="" />
                       </span>
                       <input
                         type="text"
@@ -195,7 +195,7 @@ const ERaktkoshLogin = () => {
                     </label>
                     <div className="input-group mb-1">
                       <span className="input-group-text p-0" id="basic-addon1">
-                        <img src="assets/images/password.png" alt="" />
+                        <img src={`${process.env.PUBLIC_URL}/assets/images/password.png`} alt="" />
                       </span>
                       <input
                         type="password"
@@ -248,7 +248,7 @@ const ERaktkoshLogin = () => {
                           className="me-1"
                           height="16px"
                           width="16px"
-                          src="assets/images/error.png"
+                          src={`${process.env.PUBLIC_URL}/assets/images/error.png`}
                           alt=""
                         />
                         <p className="form-text my-0">{error}</p>

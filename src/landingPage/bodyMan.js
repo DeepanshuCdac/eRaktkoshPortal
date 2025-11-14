@@ -160,7 +160,7 @@ export default function BodyMan() {
                     link.download = "Revised donor selection and referral criteria feb 2025"; 
                     link.click();
                   }}
-                  src="assets/landingPage/guidelines.svg"
+                  src={`${process.env.PUBLIC_URL}/assets/landingPage/guidelines.svg`}
                   alt="Guidelines"
                   className="cursor-pointer"
                 />
@@ -296,7 +296,7 @@ export default function BodyMan() {
                 <div className="image__wrapper">
                   {step !== 3 && (
                     <img
-                      src="assets/landingPage/person_initial.png"
+                      src={`${process.env.PUBLIC_URL}/assets/landingPage/person_initial.png`}
                       alt="raw person"
                     />
                   )}

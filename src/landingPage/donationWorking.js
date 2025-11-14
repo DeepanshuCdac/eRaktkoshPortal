@@ -15,17 +15,17 @@ export default function Donationworking() {
 
   const donationCards = [
     {
-      imgSrc: "assets/landingPage/register__process.svg",
+      imgSrc: `${process.env.PUBLIC_URL}/assets/landingPage/register__process.svg`,
       cardText: "Registration Process",
       altText: "Sign up and schedule your first  with ease",
     },
     {
-      imgSrc: "assets/landingPage/health.svg",
+      imgSrc: `${process.env.PUBLIC_URL}/assets/landingPage/health.svg`,
       cardText: "Health Screening",
       altText: "A simple check-up to ensure you’re ready to donate",
     },
     {
-      imgSrc: "assets/landingPage/donation.svg",
+      imgSrc: `${process.env.PUBLIC_URL}/assets/landingPage/donation.svg`,
       cardText: "Donation Day",
       altText: "Relax as our professional staff guide you through",
     },
@@ -44,9 +44,9 @@ export default function Donationworking() {
                   process to help save lives.
                 </p>
                 {isMobile ? (
-                  <img src="assets/landingPage/section__center__r.svg" alt="" />
+                  <img src={`${process.env.PUBLIC_URL}/assets/landingPage/section__center__r.svg`} alt="" />
                 ) : (
-                  <img src="assets/landingPage/section__center.svg" alt="" />
+                  <img src={`${process.env.PUBLIC_URL}/assets/landingPage/section__center.svg`} alt="" />
                 )}
               </div>
             </div>

@@ -427,7 +427,7 @@ export default function DonorLogin() {
                   <div className="d-flex align-items-center">
                     <img
                       style={{ width: "206px", height: "287px" }}
-                      src="assets/images/donor-img.png"
+                      src={`${process.env.PUBLIC_URL}/assets/images/donor-img.png`}
                       alt=""
                     />
                     <CarouselContent />
@@ -483,7 +483,7 @@ export default function DonorLogin() {
                             <img
                               className=""
                               style={{ cursor: "pointer" }}
-                              src="assets/images/refresh.png"
+                              src={`${process.env.PUBLIC_URL}/assets/images/refresh.png`}
                               alt=""
                               onClick={handleRefreshCaptcha}
                             />
@@ -589,12 +589,12 @@ export default function DonorLogin() {
             <div className="building_track">
               <img
                 className="building_img"
-                src="assets/images/Building.png"
+                src={`${process.env.PUBLIC_URL}/assets/images/Building.png`}
                 alt=""
               />
               <img
                 className="building_img"
-                src="assets/images/Building.png"
+                src={`${process.env.PUBLIC_URL}/assets/images/Building.png`}
                 alt=""
               />
             </div>
@@ -608,7 +608,7 @@ export default function DonorLogin() {
             className={`truck_img ${loginStage >= 1 ? "stage-1" : ""} ${
               loginStage >= 2 ? "stage-2" : ""
             }`}
-            src="assets/images/truck.svg"
+            src={`${process.env.PUBLIC_URL}/assets/images/truck.svg`}
             alt=""
           />
         </div>

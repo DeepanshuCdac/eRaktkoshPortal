@@ -3,51 +3,51 @@ import React, { useRef } from "react";
 
 const gallery = [
   {
-    src: "assets/gallery/bihar_state_training_1.jpg",
+    src: `${process.env.PUBLIC_URL}/assets/gallery/bihar_state_training_1.jpg`,
     title: "J&K Initiate Barcoding",
   },
   {
-    src: "assets/gallery/bihar_state_training.jpg",
+    src: `${process.env.PUBLIC_URL}/assets/gallery/bihar_state_training.jpg`,
     title: "Bihar State Training At Patna 18-Jan-21 to 18-Jan-21",
   },
   {
-    src: "assets/gallery/Cuttak_training.jpg",
+    src: `${process.env.PUBLIC_URL}/assets/gallery/Cuttak_training.jpg`,
     title: "IRCS Cuttak Training At Cuttak 19-Feb-21 to 21-Feb-21",
   },
   {
-    src: "assets/gallery/UPT3.jpg",
+    src: `${process.env.PUBLIC_URL}/assets/gallery/UPT3.jpg`,
     title: "Uttar Pradesh Training At NIB Noida 16-Sep-19 to 22-Sep-19",
   },
   {
-    src: "assets/gallery/UPT2.jpg",
+    src: `${process.env.PUBLIC_URL}/assets/gallery/UPT2.jpg`,
     title: "Uttar Pradesh Training At NIB Noida 16-Sep-19 to 22-Sep-19",
   },
   {
-    src: "assets/gallery/UPT1.jpg",
+    src: `${process.env.PUBLIC_URL}/assets/gallery/UPT1.jpg`,
     title: "Uttar Pradesh Training At NIB Noida 16-Sep-19 to 22-Sep-19",
   },
   {
-    src: "assets/gallery/GEMS_AWARD.jpg",
+    src: `${process.env.PUBLIC_URL}/assets/gallery/GEMS_AWARD.jpg`,
     title: "Gems of Digital India 2019 Awards",
   },
   {
-    src: "assets/gallery/GEMS_PIC.jpg",
+    src: `${process.env.PUBLIC_URL}/assets/gallery/GEMS_PIC.jpg`,
     title: "Gems of Digital India 2019 Awards",
   },
   {
-    src: "assets/gallery/11_org.jpg",
+    src: `${process.env.PUBLIC_URL}/assets/gallery/11_org.jpg`,
     title: "MP State Training At NIB June 2019",
   },
   {
-    src: "assets/gallery/12_org.jpg",
+    src: `${process.env.PUBLIC_URL}/assets/gallery/12_org.jpg`,
     title: "MP State Training At NIB June 2019",
   },
   {
-    src: "assets/gallery/13_org.jpg",
+    src: `${process.env.PUBLIC_URL}/assets/gallery/13_org.jpg`,
     title: "MP State Training At NIB June 2019",
   },
   {
-    src: "assets/gallery/7_org.jpg",
+    src: `${process.env.PUBLIC_URL}/assets/gallery/7_org.jpg`,
     title: "eRaktKosh Launch at World Health Day 2016",
   },
 ];

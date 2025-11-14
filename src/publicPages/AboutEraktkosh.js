@@ -51,14 +51,14 @@ const AboutEraktkosh = () => {
             <div className="col-12 col-xl-4 col-lg-4 col-md-4 col-sm-4">
               <div className="d-flex flex-column align-items-center mb-3">
                 <img
-                  src="assets/images/pdf-icon.png"
+                  src={`${process.env.PUBLIC_URL}/assets/images/pdf-icon.png`}
                   alt="PDF Icon"
                   style={{ height: "165px" }}
                 />
                 <div className="d-flex align-items-center">
                   <img
                     className="me-1"
-                    src="assets/images/download_pdf.svg"
+                    src={`${process.env.PUBLIC_URL}/assets/images/download_pdf.svg`}
                     alt=""
                   />
                   <a
@@ -82,7 +82,7 @@ const AboutEraktkosh = () => {
                     <div className="mb-3 text-center">
                       <img
                         style={{ width: "26px", height: "26px" }}
-                        src="assets/images/supplies.jpg"
+                        src={`${process.env.PUBLIC_URL}/assets/images/supplies.jpg`}
                         alt="eRaktkosh"
                         className="img-fluid"
                       />
@@ -95,7 +95,7 @@ const AboutEraktkosh = () => {
                     <div className="mb-3 text-center">
                       <img
                         style={{ width: "26px", height: "26px" }}
-                        src="assets/images/turnaround.jpg"
+                        src={`${process.env.PUBLIC_URL}/assets/images/turnaround.jpg`}
                         alt="eRaktkosh"
                         className="img-fluid"
                       />
@@ -108,7 +108,7 @@ const AboutEraktkosh = () => {
                     <div className="mb-3 text-center">
                       <img
                         style={{ width: "26px", height: "26px" }}
-                        src="assets/images/wastage.jpg"
+                        src={`${process.env.PUBLIC_URL}/assets/images/wastage.jpg`}
                         alt="eRaktkosh"
                         className="img-fluid"
                       />
@@ -123,7 +123,7 @@ const AboutEraktkosh = () => {
                     <div className="mb-3 text-center">
                       <img
                         style={{ width: "26px", height: "26px" }}
-                        src="assets/images/donors.jpg"
+                        src={`${process.env.PUBLIC_URL}/assets/images/donors.jpg`}
                         alt="eRaktkosh"
                         className="img-fluid"
                       />
@@ -149,7 +149,7 @@ const AboutEraktkosh = () => {
                     <div className="mb-3 text-center">
                       <img
                         style={{ width: "26px", height: "26px" }}
-                        src="assets/images/DonorRepository.jpg"
+                        src={`${process.env.PUBLIC_URL}/assets/images/DonorRepository.jpg`}
                         alt="eRaktkosh"
                         className="img-fluid"
                       />
@@ -167,7 +167,7 @@ const AboutEraktkosh = () => {
                     <div className="mb-3 text-center">
                       <img
                         style={{ width: "26px", height: "26px" }}
-                        src="assets/images/web.jpg"
+                        src={`${process.env.PUBLIC_URL}/assets/images/web.jpg`}
                         alt="eRaktkosh"
                         className="img-fluid"
                       />
@@ -181,7 +181,7 @@ const AboutEraktkosh = () => {
                     <div className="mb-3 text-center">
                       <img
                         style={{ width: "26px", height: "26px" }}
-                        src="assets/images/aadhar.jpg"
+                        src={`${process.env.PUBLIC_URL}/assets/images/aadhar.jpg`}
                         alt="eRaktkosh"
                         className="img-fluid"
                       />
@@ -192,7 +192,7 @@ const AboutEraktkosh = () => {
                     <div className="mb-3 text-center">
                       <img
                         style={{ width: "26px", height: "26px" }}
-                        src="assets/images/support.jpg"
+                        src={`${process.env.PUBLIC_URL}/assets/images/support.jpg`}
                         alt="eRaktkosh"
                         className="img-fluid"
                       />
@@ -205,7 +205,7 @@ const AboutEraktkosh = () => {
                     <div className="mb-3 text-center">
                       <img
                         style={{ width: "26px", height: "26px" }}
-                        src="assets/images/guidelines.jpg"
+                        src={`${process.env.PUBLIC_URL}/assets/images/guidelines.jpg`}
                         alt="eRaktkosh"
                         className="img-fluid"
                       />
@@ -216,7 +216,7 @@ const AboutEraktkosh = () => {
                     <div className="mb-3 text-center">
                       <img
                         style={{ width: "26px", height: "26px" }}
-                        src="assets/images/dashboard.jpg"
+                        src={`${process.env.PUBLIC_URL}/assets/images/dashboard.jpg`}
                         alt="eRaktkosh"
                         className="img-fluid"
                       />
@@ -227,7 +227,7 @@ const AboutEraktkosh = () => {
                     <div className="mb-3 text-center">
                       <img
                         style={{ width: "26px", height: "26px" }}
-                        src="assets/images/reports.jpg"
+                        src={`${process.env.PUBLIC_URL}/assets/images/reports.jpg`}
                         alt="eRaktkosh"
                         className="img-fluid"
                       />
@@ -276,7 +276,7 @@ const AboutEraktkosh = () => {
 
                 <div style={{ position: "absolute", right: "0", bottom: "0" }}>
                   <img
-                    src="assets/images/about_eraktkosh.svg"
+                    src={`${process.env.PUBLIC_URL}/assets/images/about_eraktkosh.svg`}
                     alt=""
                     style={{ height: "245px" }}
                   />

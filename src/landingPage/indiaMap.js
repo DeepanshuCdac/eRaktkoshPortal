@@ -1,6 +1,3 @@
-// New map code...
-
-
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,21 +8,25 @@ import { BaseUrl } from "../utils/url";
 const IndiaMap = () => {
   const dispatch = useDispatch();
   const { statesWithDistricts } = useSelector((state) => state.data);
-  const [hoveredState, setHoveredState] = useState(null);
-  const [selectedState, setSelectedState] = useState(null);
-  const [selectedStateName, setSelectedStateName] = useState(null);
+
+  const [selectedState, setSelectedState] = useState("ALL");
+  const [selectedStateName, setSelectedStateName] = useState("All");
   const [stateStats, setStateStats] = useState({
-    bloodCollectionSummary: { totalCollection: "N/A", stateName: "" },
+    bloodCollectionSummary: { totalCollection: "N/A", stateName: "All" },
     donorRegistered: { hnumDonorRegistered: "N/A" },
     totalBloodCenters: [{ hnumTotalBloodCentres: "N/A" }],
     campsOrganised: { finalCount: "N/A" },
+    upcomingCamps: [{ totalUpcomingCamps: "N/A" }],
   });
+
   const [allStateData, setAllStateData] = useState({
     bloodCollectionSummary: [],
     totalBloodCenters: [],
     donorRegistered: [],
     campsOrganised: [],
+    upcomingCamps: [],
   });
+
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -46,13 +47,53 @@ const IndiaMap = () => {
     fetchMapData();
   }, [dispatch]);
 
-  const states = statesWithDistricts || [];
+  const states = [
+    { stateCode: "ALL", stateName: "All" }, 
+    ...(statesWithDistricts || []),
+  ];
 
   const handleStateChange = (stateCode, stateName) => {
     if (!stateCode || !allStateData.bloodCollectionSummary.length) return;
 
     setSelectedState(stateCode);
     setSelectedStateName(stateName);
+
+    if (stateCode === "ALL") {
+      const sumValues = (arr, key) =>
+        arr.reduce((sum, item) => sum + (Number(item?.[key]) || 0), 0);
+
+      const totalCollection = sumValues(
+        allStateData.bloodCollectionSummary,
+        "totalCollection"
+      );
+      const totalCenters = sumValues(
+        allStateData.totalBloodCenters,
+        "hnumTotalBloodCentres"
+      );
+      const totalDonors = sumValues(
+        allStateData.donorRegistered,
+        "hnumDonorRegistered"
+      );
+      const totalCamps = sumValues(allStateData.campsOrganised, "finalCount");
+      const totalUpcomingCamps = sumValues(
+        allStateData.upcomingCamps,
+        "totalUpcomingCamps"
+      );
+
+      setStateStats({
+        bloodCollectionSummary: {
+          totalCollection: totalCollection || "0",
+          stateName: "All",
+        },
+        donorRegistered: {
+          hnumDonorRegistered: totalDonors || "0",
+        },
+        totalBloodCenters: [{ hnumTotalBloodCentres: totalCenters || "0" }],
+        campsOrganised: { finalCount: totalCamps || "0" },
+        upcomingCamps: [{ totalUpcomingCamps: totalUpcomingCamps || "0" }],
+      });
+      return;
+    }
 
     const bloodData = allStateData.bloodCollectionSummary.find(
       (item) => item.stateCode?.toString() === stateCode?.toString()
@@ -66,58 +107,45 @@ const IndiaMap = () => {
     const campsData = allStateData.campsOrganised.find(
       (item) => item.stateCode?.toString() === stateCode?.toString()
     );
+    const upcomingCamps = allStateData.upcomingCamps.find(
+      (item) => item.stateCode?.toString() === stateCode?.toString()
+    );
 
     setStateStats({
       bloodCollectionSummary: {
-        totalCollection: bloodData?.totalCollection ?? "N/A",
-        stateName: stateName,
+        totalCollection: bloodData?.totalCollection ?? "0",
+        stateName,
       },
       donorRegistered: {
-        hnumDonorRegistered: donorData?.hnumDonorRegistered ?? "N/A",
+        hnumDonorRegistered: donorData?.hnumDonorRegistered ?? "0",
       },
       totalBloodCenters: [
-        {
-          hnumTotalBloodCentres: centerData?.hnumTotalBloodCentres ?? "N/A",
-        },
+        { hnumTotalBloodCentres: centerData?.hnumTotalBloodCentres ?? "0" },
       ],
-      campsOrganised: {
-        finalCount: campsData?.finalCount ?? "N/A",
-      },
+      campsOrganised: { finalCount: campsData?.finalCount ?? "0" },
+      upcomingCamps: [
+        { totalUpcomingCamps: upcomingCamps?.totalUpcomingCamps ?? "0" },
+      ],
     });
   };
 
   useEffect(() => {
-    if (
-      statesWithDistricts?.length > 0 &&
-      allStateData?.bloodCollectionSummary?.length > 0
-    ) {
-      const defaultState =
-        allStateData.bloodCollectionSummary.find((state) =>
-          statesWithDistricts.some((s) => s.stateCode === state.stateCode)
-        ) || allStateData.bloodCollectionSummary[26];
-
-      if (defaultState) {
-        handleStateChange(defaultState.stateCode, defaultState.stateName);
-      }
+    if (allStateData?.bloodCollectionSummary?.length > 0) {
+      handleStateChange("ALL", "All");
     }
-  }, [statesWithDistricts, allStateData]);
+  }, [allStateData]);
 
-  // ✅ Initialize AmCharts Map once
   useEffect(() => {
     if (window.AmCharts) {
       const map = new window.AmCharts.AmMap();
       map.panEventsEnabled = true;
       map.backgroundColor = "#fff";
       map.backgroundAlpha = 1;
+      map.zoomControl.panControlEnabled = false;
+      map.zoomControl.zoomControlEnabled = false;
+      map.zoomControl.homeButtonEnabled = false;
 
-      map.zoomControl.panControlEnabled = true;
-      map.zoomControl.zoomControlEnabled = true;
-
-      const dataProvider = {
-        map: "indiaLow",
-        getAreasFromMap: true,
-      };
-
+      const dataProvider = { map: "indiaLow", getAreasFromMap: true };
       map.dataProvider = dataProvider;
 
       map.areasSettings = {
@@ -126,29 +154,59 @@ const IndiaMap = () => {
         colorSolid: "#5EB7DE",
         selectedColor: "#7f0210",
         outlineColor: "#f7f3f3ff",
-        rollOverColor: "rgba(127, 2, 16, 0.3)",
+        rollOverColor: "rgba(163, 6, 27, 0.3)",
         rollOverOutlineColor: "#FFFFFF",
         selectable: true,
       };
 
-      map.addListener("clickMapObject", function (event) {
-        map.selectedObject = map.dataProvider;
+      map.balloon = { enabled: true };
 
-        event.mapObject.showAsSelected = !event.mapObject.showAsSelected;
-        map.returnInitialColor(event.mapObject);
-
-        // Find clicked state
-        const clickedState = states.find(
-          (s) => s.stateName.toLowerCase() === event.mapObject.title.toLowerCase()
-        );
-        if (clickedState) {
-          handleStateChange(clickedState.stateCode, clickedState.stateName);
-        }
+     map.addListener("clickMapObject", function (event) {
+      
+      map.dataProvider.areas.forEach((area) => {
+        area.showAsSelected = false;
       });
 
-      map.export = { enabled: true };
+      event.mapObject.showAsSelected = true;
+      map.validateNow();
 
-      map.write("chartdiv");
+      const normalizeName = (name) =>
+        name
+          ?.toLowerCase()
+          .replace(/&/g, "and")            
+          .replace(/\bisland\b/g, "islands")
+          .replace(/\s+/g, " ")            
+          .trim();
+
+      const clickedState = states.find(
+        (s) => normalizeName(s.stateName) === normalizeName(event.mapObject.title)
+      );
+
+      if (clickedState) {
+        handleStateChange(clickedState.stateCode, clickedState.stateName);
+      }
+    });
+
+     map.export = { enabled: true };
+
+    map.write("chartdiv");
+
+        const removeCredits = () => {
+      const links = document.querySelectorAll("#chartdiv a[href*='amcharts.com']");
+      links.forEach((el) => el.remove());
+    };
+
+      setTimeout(removeCredits, 500);
+
+      const observer = new MutationObserver(removeCredits);
+    const chartDiv = document.getElementById("chartdiv");
+       if (chartDiv) {
+      observer.observe(chartDiv, {
+        childList: true,
+        subtree: true,
+      });
+    }
+      return () => observer.disconnect();
     }
   }, [states, allStateData]);
 
@@ -173,9 +231,9 @@ const IndiaMap = () => {
               <Select
                 style={{ width: "100%" }}
                 value={selectedStateName}
-                onChange={(value, option) => {
-                  handleStateChange(value, option.label);
-                }}
+                onChange={(value, option) =>
+                  handleStateChange(value, option.label)
+                }
                 placeholder="Select"
                 filterOption={(input, option) =>
                   (option?.label ?? "")
@@ -189,51 +247,71 @@ const IndiaMap = () => {
               />
             </div>
 
-            {/* Stats Cards */}
-            <div>
-              <div className="row">
-                <div className="col-6 mb-2">
-                  <div className="map__data_container p-3 h-100 d-flex align-items-baseline">
-                    <img className="me-2" src="assets/landingPage/registration.svg" alt="" />
-                    <div>
-                      <p className="mb-0 key">Donor Registration</p>
-                      <p className="mb-0 value">
-                        {stateStats?.donorRegistered?.hnumDonorRegistered || "N/A"}
-                      </p>
-                    </div>
+            <div className="row">
+              <div className="col-6 mb-2">
+                <div className="map__data_container p-3 d-flex align-items-baseline">
+                  <img
+                    className="me-2"
+                    style={{ height: "23px", width: "20px" }}
+                    src={`${process.env.PUBLIC_URL}/assets/landingPage/registration.svg`}
+                    alt=""
+                  />
+                  <div>
+                    <p className="mb-0 key">Total Donor Registration</p>
+                    <p className="mb-0 value">
+                      {stateStats?.donorRegistered?.hnumDonorRegistered ||
+                        "N/A"}
+                    </p>
                   </div>
                 </div>
-                <div className="col-6 mb-2">
-                  <div className="map__data_container p-3 h-100 d-flex align-items-baseline">
-                    <img className="me-2" src="assets/landingPage/units.svg" alt="" />
-                    <div>
-                      <p className="mb-0 key">Blood Units Collected</p>
-                      <p className="mb-0 value">
-                        {stateStats?.bloodCollectionSummary?.totalCollection || "N/A"}
-                      </p>
-                    </div>
+              </div>
+
+              <div className="col-6 mb-2">
+                <div className="map__data_container p-3 d-flex align-items-baseline">
+                  <img
+                    className="me-2"
+                    src={`${process.env.PUBLIC_URL}/assets/landingPage/units.svg`}
+                    alt=""
+                  />
+                  <div>
+                    <p className="mb-0 key">Total Blood Centers</p>
+                    <p className="mb-0 value">
+                      {stateStats?.totalBloodCenters?.[0]
+                        ?.hnumTotalBloodCentres || "N/A"}
+                    </p>
                   </div>
                 </div>
-                <div className="col-6 mb-2">
-                  <div className="map__data_container p-3 h-100 d-flex align-items-baseline">
-                    <img className="me-2" src="assets/landingPage/center.svg" alt="" />
-                    <div>
-                      <p className="mb-0 key">Blood Centers</p>
-                      <p className="mb-0 value">
-                        {stateStats?.totalBloodCenters?.[0]?.hnumTotalBloodCentres || "N/A"}
-                      </p>
-                    </div>
+              </div>
+
+              <div className="col-6 mb-2">
+                <div className="map__data_container p-3 d-flex align-items-baseline">
+                  <img
+                    className="me-2"
+                    src={`${process.env.PUBLIC_URL}/assets/landingPage/center.svg`}
+                    alt=""
+                  />
+                  <div>
+                    <p className="mb-0 key">Total Upcoming Camps</p>
+                    <p className="mb-0 value">
+                      {stateStats?.upcomingCamps?.[0]?.totalUpcomingCamps ||
+                        "0"}
+                    </p>
                   </div>
                 </div>
-                <div className="col-6 mb-2">
-                  <div className="map__data_container p-3 h-100 d-flex align-items-baseline">
-                    <img className="me-2" src="assets/landingPage/camps.svg" alt="" />
-                    <div>
-                      <p className="mb-0 key">Camps Organised</p>
-                      <p className="mb-0 value">
-                        {stateStats?.campsOrganised?.finalCount}
-                      </p>
-                    </div>
+              </div>
+
+              <div className="col-6 mb-2">
+                <div className="map__data_container p-3 d-flex align-items-baseline">
+                  <img
+                    className="me-2"
+                    src={`${process.env.PUBLIC_URL}/assets/landingPage/camps.svg`}
+                    alt=""
+                  />
+                  <div>
+                    <p className="mb-0 key">Camps Organised</p>
+                    <p className="mb-0 value">
+                      {stateStats?.campsOrganised?.finalCount}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -245,7 +323,7 @@ const IndiaMap = () => {
             </p>
           </div>
 
-          {/* Right Panel - AmCharts Map */}
+          {/* Right Panel */}
           <div className="col-xl-7 col-lg-7 col-12">
             <div id="chartdiv" style={{ width: "100%", height: "500px" }}></div>
           </div>

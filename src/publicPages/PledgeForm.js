@@ -76,7 +76,7 @@ export default function PledgeForm({
   if (showSuccessScreen) {
     return (
       <div className="bg-border p-4 text-center">
-        <img src="assets/images/success_icon.svg" alt="" />
+        <img src={`${process.env.PUBLIC_URL}/assets/images/success_icon.svg`} alt="" />
         <h2 className="mt-3 mb-2 pledge_header">
           Thank you <span className="pledge_name">{formData.name}</span> for
           taking the pledge!
