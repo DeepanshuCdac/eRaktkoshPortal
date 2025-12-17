@@ -97,9 +97,9 @@ const BloodAvailabiltySearch = ({ fromDonorAdmin }) => {
 
   const handleServiceChange = (value) => {
     const urlMap = {
-      service1: "/beta#/publicPages/bloodAvailabilitySearch",
-      service2: "/beta#/publicPages/campSchedule",
-      service3: "/beta#/publicPages/bloodBankDirectory",
+      service1: "/eraktkoshPortal/#/publicPages/bloodAvailabilitySearch",
+      service2: "/eraktkoshPortal/#/publicPages/campSchedule",
+      service3: "/eraktkoshPortal/#/publicPages/bloodBankDirectory",
     };
     if (urlMap[value]) window.location.href = urlMap[value];
   };
@@ -725,8 +725,8 @@ const BloodAvailabiltySearch = ({ fromDonorAdmin }) => {
           scroll={{ x: 1000 }}
           loading={loading}
         />
-        <div className="d-flex align-items-center justify-content-between">
-          <div className="px-2 py-1 notify_box d-flex align-items-center">
+        <div className="d-flex align-items-center mb-3 justify-content-end">
+          {/* <div className="px-2 py-1 notify_box d-flex align-items-center">
             <p className="notify_text mb-0">
               Can't find your Blood Group/Component
             </p>
@@ -739,7 +739,7 @@ const BloodAvailabiltySearch = ({ fromDonorAdmin }) => {
                 Notify Me
               </p>
             </div>
-          </div>
+          </div> */}
           <Pagination
             current={currentPage}
             pageSize={pageSize}

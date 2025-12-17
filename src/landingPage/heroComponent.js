@@ -12,8 +12,8 @@ export default function HeroComponent() {
   }, []);
 
   const handleClick = () => {
-    // window.location.href = "/beta#/pages/portalDonorLogin";
-    window.location.href = "/BLDAHIMS/bloodbank/portalDonorLogin.cnt";
+    window.location.href = "/eraktkoshPortal/#/pages/portalDonorLogin";
+    // window.location.href = "/BLDAHIMS/bloodbank/portalDonorLogin.cnt";
   };
 
   const handleClickPledge = () => {

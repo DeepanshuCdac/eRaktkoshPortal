@@ -1,27 +1,26 @@
-  .ant-btn-primary {
-    font-size: 14px;
-    font-weight: 500;
-    background: #7f0210;
-    border-radius: 5px;
-    &:hover {
-      background: #7f0210 !important;
-    }
+.ant-btn-primary {
+  font-size: 14px;
+  font-weight: 500;
+  background: #7f0210;
+  border-radius: 5px;
+  &:hover {
+    background: #7f0210 !important;
   }
-  .ant-btn-secondary {
-    font-size: 14px;
-    font-weight: 500;
-    background: #fff;
+}
+.ant-btn-secondary {
+  font-size: 14px;
+  font-weight: 500;
+  background: #fff;
+  color: #7f0210;
+  border-radius: 5px;
+  border: 1px solid #7f0210;
+  &:hover {
     color: #7f0210;
-    border-radius: 5px;
     border: 1px solid #7f0210;
-    &:hover {
-      color: #7f0210;
-      border: 1px solid #7f0210;
-      background: #fff !important;
-    }
+    background: #fff !important;
   }
+}
 .page_wrapper {
-
   .camp_header {
     font-size: 15px;
     font-weight: 500;
@@ -115,11 +114,14 @@
   }
 
   .ant-radio-wrapper {
-    border: 1px solid #000;
+    border: 1px solid #e1dfdf;
     border-radius: 5px;
     padding: 5px;
     background: #fff;
     font-weight: 500;
+  }
+  .custom-radio-group .ant-radio-wrapper:first-child {
+    margin-bottom: 10px;
   }
 
   .otp_generated {

@@ -216,7 +216,7 @@ export default function DonorRegister() {
   };
 
   const handleRedirectButton = () => {
-    window.location.href = "/beta#/pages/portalDonorLogin";
+    window.location.href = "/eraktkoshPortal/#/pages/portalDonorLogin";
   };
 
   const states = statesWithDistricts || [];

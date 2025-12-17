@@ -3,17 +3,17 @@ import { Button, Input, Table, message } from "antd";
 import axios from "axios";
 import { BaseUrl } from "../../utils/url";
 
-const AbhaSearchViaMobile = ({ 
-  mobileNumber, 
+const AbhaSearchViaMobile = ({
+  mobileNumber,
   abhaData,
-  setMobileNumber, 
-  setFlowType, 
-  setOtpSent, 
-  setLoading, 
+  setMobileNumber,
+  setFlowType,
+  setOtpSent,
+  setLoading,
   selectedCamp,
   setAbhaData,
   setSelectedAbhaRecord,
-  setsearchViaMobTaxId
+  setsearchViaMobTaxId,
 }) => {
   const [searchLoading, setSearchLoading] = useState(false);
 
@@ -113,28 +113,29 @@ const AbhaSearchViaMobile = ({
       title: "ABHA Number",
       dataIndex: "ABHA",
       key: "ABHA",
+      responsive: ["xs", "sm", "md", "lg", "xl"],
       render: (abha) => abha?.ABHANumber || "N/A",
     },
     {
       title: "Name",
       dataIndex: "ABHA",
       key: "name",
+      responsive: ["sm", "md", "lg", "xl"],
       render: (abha) => abha?.name || "N/A",
     },
     {
       title: "Gender",
       dataIndex: "ABHA",
       key: "gender",
+      responsive: ["md", "lg", "xl"],
       render: (abha) => abha?.gender || "N/A",
     },
     {
       title: "Action",
       key: "action",
+      responsive: ["md", "lg", "xl"],
       render: (_, record) => (
-        <Button
-          type="primary"
-          onClick={() => handleUseExistingAbha(record)}
-        >
+        <Button type="primary" onClick={() => handleUseExistingAbha(record)}>
           Use This ABHA
         </Button>
       ),
@@ -142,28 +143,30 @@ const AbhaSearchViaMobile = ({
   ];
 
   return (
-    <div className="d-flex align-items-end gap-3">
-          <div className="form-inputs">
-            <Input
-              placeholder="Enter mobile number"
-              value={mobileNumber}
-              onChange={(e) => {
-                const value = e.target.value;
-                if (/^\d{0,10}$/.test(value)) {
-                  setMobileNumber(value);
-                }
-              }}
-              maxLength={10}
-            />
-          </div>
-        <div className="">
-          <Button
-            onClick={handleSearch}
-            loading={searchLoading}
-          >
-            Verify
-          </Button>
-        </div>
+    <div className="w-100 d-xl-flex d-lg-flex d-md-flex d-block align-items-end gap-3">
+      <div className="form-inputs w-100 mb-3">
+        <Input
+          className="w-100"
+          placeholder="Enter mobile number"
+          value={mobileNumber}
+          onChange={(e) => {
+            const value = e.target.value;
+            if (/^\d{0,10}$/.test(value)) {
+              setMobileNumber(value);
+            }
+          }}
+          maxLength={10}
+        />
+      </div>
+      <div className="w-100">
+        <Button
+          className="w-100 mb-3"
+          onClick={handleSearch}
+          loading={searchLoading}
+        >
+          Verify
+        </Button>
+      </div>
 
       {abhaData && (
         <div className="mt-3">
@@ -172,6 +175,7 @@ const AbhaSearchViaMobile = ({
             dataSource={abhaData}
             rowKey={(record) => record.ABHA?.ABHANumber || Math.random()}
             pagination={false}
+            scroll={{ x: "max-content" }}
           />
         </div>
       )}

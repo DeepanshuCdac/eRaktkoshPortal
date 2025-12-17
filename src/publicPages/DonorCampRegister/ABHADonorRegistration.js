@@ -18,7 +18,7 @@ const ABHADonorRegistration = ({ selectedCamp }) => {
   const [showWidget, setShowWidget] = useState(false);
   const [showCreateAbha, setShowCreateAbha] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [verificationMethod, setVerificationMethod] = useState("mobile");
+  const [verificationMethod, setVerificationMethod] = useState("Select Option");
   const [mobileNumber, setMobileNumber] = useState("");
   const [otp, setOtp] = useState("");
   const [txnId, setTxnId] = useState("");
@@ -410,6 +410,7 @@ const ABHADonorRegistration = ({ selectedCamp }) => {
   };
 
   const handleCheckboxChange = (key) => {
+
     const newCheckboxes = {
       ...checkboxes,
       [key]: !checkboxes[key],
@@ -429,14 +430,20 @@ const ABHADonorRegistration = ({ selectedCamp }) => {
   const handleVerificationMethodChange = (value) => {
     setSelectedVerificationMethod(value);
     setVerificationMethod(value);
-    setAbhaData(null); 
+    setAbhaData(null);
   };
 
   const handleMobileNumberChange = (e) => {
-    const value = e.target.value;
-    if (/^\d{0,10}$/.test(value)) {
-      setMobileNumber(value);
-    }
+    let value = e.target.value.replace(/\D/g, "");
+    const limit = verificationMethod === "mobile" ? 10 : 12;
+
+    if (value.length > limit) return;
+
+    setMobileNumber(value);
+  };
+
+  const formatAadhaar = (value) => {
+    return value.replace(/(\d{4})(?=\d)/g, "$1 ");
   };
 
   const handleCreateNewAbha = async () => {
@@ -724,7 +731,7 @@ const ABHADonorRegistration = ({ selectedCamp }) => {
           setSelectedGender(profileData.gender);
         }
 
-        if (profileData.yearOfBirth) {
+        if (profileData.yearOfBirth) { 
           const currentYear = new Date().getFullYear();
           const age = currentYear - parseInt(profileData.yearOfBirth);
           setFormData((prev) => ({
@@ -738,7 +745,7 @@ const ABHADonorRegistration = ({ selectedCamp }) => {
 
         if (profileData.ABHANumber) {
           setAbhaNumber(profileData.ABHANumber);
-        }
+        } 
         setSelectedState(stateCode);
         setSelectedDistrict(districtCode);
         setUsingExistingAbha(true);
@@ -757,18 +764,21 @@ const ABHADonorRegistration = ({ selectedCamp }) => {
       title: "ABHA Number",
       dataIndex: "ABHA",
       key: "ABHA",
+      responsive: ["xs", "sm", "md", "lg", "xl"],
       render: (abha) => abha?.ABHANumber || "N/A",
     },
     {
       title: "Name",
       dataIndex: "ABHA",
       key: "name",
+      responsive: ["xs", "sm", "md", "lg", "xl"],
       render: (abha) => abha?.name || "N/A",
     },
     {
       title: "Gender",
       dataIndex: "ABHA",
       key: "gender",
+      responsive: ["xs", "sm", "md", "lg", "xl"],
       render: (abha) => {
         const gender = abha?.gender;
         return gender
@@ -779,6 +789,7 @@ const ABHADonorRegistration = ({ selectedCamp }) => {
     {
       title: "Action",
       key: "action",
+      responsive: ["xs", "sm", "md", "lg", "xl"],
       render: (_, record) => (
         <Button
           type="primary"
@@ -855,7 +866,7 @@ const ABHADonorRegistration = ({ selectedCamp }) => {
                       type="primary"
                       loading={loading}
                     >
-                      Verify OTP
+                      Verify OTP 
                     </Button>
                   </div>
                 </div>
@@ -863,6 +874,7 @@ const ABHADonorRegistration = ({ selectedCamp }) => {
                 <>
                   <h4>Existing ABHA Numbers Found</h4>
                   <Table
+                  scroll={{ x: "max-content" }}
                     columns={abhaColumns}
                     dataSource={abhaData}
                     rowKey={(record) =>
@@ -888,11 +900,17 @@ const ABHADonorRegistration = ({ selectedCamp }) => {
                 <h3 className="abha-header">Create your ABHA through</h3>
               )}
               <div className="row pb-3">
-                <div className={`col-${otpSent ? "12" : "6"}`}>
+                <div
+                  className={`${
+                    otpSent
+                      ? "col-12"
+                      : "col-xl-7 col-lg-10 col-md-12 col-sm-12 col-12"
+                  }`}
+                >
                   <div className="widget p-3">
                     {!showCreateAbha ? (
-                      <div className="d-flex align-items-end gap-3">
-                        <div className="form-inputs" style={{ width: "40%" }}>
+                      <div className="d-xl-flex d-lg-flex d-md-flex d-block align-items-end gap-3">
+                        <div className="form-inputs mb-3 w-100">
                           <label className="form-label mb-1">Verify via</label>
                           <Select
                             className="w-100"
@@ -925,7 +943,6 @@ const ABHADonorRegistration = ({ selectedCamp }) => {
 
                         {selectedVerificationMethod ===
                         "abhaSearchViaMobile" ? (
-                          <div>
                             <AbhaSearchViaMobile
                               mobileNumber={mobileNumber}
                               setMobileNumber={setMobileNumber}
@@ -937,12 +954,11 @@ const ABHADonorRegistration = ({ selectedCamp }) => {
                               setSelectedAbhaRecord={setSelectedAbhaRecord}
                               setsearchViaMobTaxId={setsearchViaMobTaxId}
                             />
-                          </div>
                         ) : (
                           <>
-                            <div style={{ width: "40%" }}>
+                            <div className="mb-3 w-100">
                               <label className="form-label mb-1">
-                                ABHA Number/ ABHA Address
+                                ABHA Number
                                 <span
                                   className="mendate"
                                   style={{ color: "red" }}
@@ -961,16 +977,23 @@ const ABHADonorRegistration = ({ selectedCamp }) => {
                                 }
                               />
                             </div>
-                            <Button>Verify</Button>
+                            <Button className="mb-3 text-center w-100">
+                              Verify
+                            </Button>
                           </>
                         )}
 
-                        <p className="mb-0">Or</p>
-                        <Button onClick={handleCreateAbha}>Create ABHA</Button>
+                        <p className="mb-3 text-center">Or</p>
+                        <Button
+                          className="mb-3 w-100"
+                          onClick={handleCreateAbha}
+                        >
+                          Create ABHA
+                        </Button>
                       </div>
                     ) : (
                       <div className="row align-items-end">
-                        <div className={`col-${otpSent ? "2" : "4"}`}>
+                        <div className={`${otpSent ? "col-xl-2 col-lg-2 col-md-3 col-sm-6 col-12" : "col-12 col-xl-4 col-lg-4 col-md-4 col-sm-6"}`}>
                           <div className="form-inputs">
                             <label className="form-label mb-1">
                               Generate via
@@ -994,9 +1017,10 @@ const ABHADonorRegistration = ({ selectedCamp }) => {
                             />
                           </div>
                         </div>
-                        <div className={`col-${otpSent ? "2" : "4"}`}>
+                        <div className={`${otpSent ? "col-xl-2 col-lg-2 col-md-3 col-sm-6 col-12" : "mt-3 mt-xl-0 mt-lg-0 mt-md-0 col-12 col-xl-4 col-lg-4 col-md-4 col-sm-6"}`}>
                           <div className="form-inputs">
                             <Input
+                              type="text"
                               placeholder={
                                 verificationMethod === "mobile"
                                   ? "Enter mobile"
@@ -1004,17 +1028,21 @@ const ABHADonorRegistration = ({ selectedCamp }) => {
                                   ? "Enter Aadhaar number"
                                   : "Select method first"
                               }
-                              value={mobileNumber}
+                              value={ 
+                                verificationMethod === "Aadhaar"
+                                  ? formatAadhaar(mobileNumber)
+                                  : mobileNumber
+                              }
                               onChange={handleMobileNumberChange}
                               disabled={!verificationMethod}
                               maxLength={
-                                verificationMethod === "mobile" ? 10 : 12
+                                verificationMethod === "mobile" ? 10 : 14
                               }
                             />
                           </div>
                         </div>
                         {otpSent && (
-                          <div className="col-3">
+                          <div className="col-xl-3 col-lg-2 col-md-3 col-sm-6 col-12">
                             <div className="form-inputs">
                               <Input
                                 placeholder="Enter OTP"
@@ -1025,11 +1053,11 @@ const ABHADonorRegistration = ({ selectedCamp }) => {
                             </div>
                           </div>
                         )}
-                        <div className={`col-${otpSent ? "2" : "4"}`}>
+                        <div className={`${otpSent ? "mt-3 mt-xl-0 mt-lg-0 mt-md-0 col-xl-2 col-lg-2 col-md-3 col-sm-6 col-12" : "mt-3 mt-xl-0 mt-lg-0 mt-md-0 col-12 col-xl-4 col-lg-4 col-md-4"}`}>
                           {!otpSent ? (
                             <Button
                               onClick={handleMobileSubmit}
-                              className="px-5 py-3"
+                              className="w-100 px-5 py-3"
                               type="primary"
                               loading={loading}
                             >
@@ -1038,7 +1066,7 @@ const ABHADonorRegistration = ({ selectedCamp }) => {
                           ) : (
                             <Button
                               onClick={handleVerifyOtp}
-                              className="px-5 py-3"
+                              className="W-100 px-5 py-3"
                               type="primary"
                               loading={loading}
                             >
@@ -1052,7 +1080,7 @@ const ABHADonorRegistration = ({ selectedCamp }) => {
                 </div>
               </div>
 
-              <div className="checkbox_modal">
+              <div className="checkbox_modal mb-3">
                 <Checkbox onChange={handleCheckAllChange} checked={checkAll}>
                   I hereby declare that{" "}
                   <span className="mendate" style={{ color: "#7f0210" }}>

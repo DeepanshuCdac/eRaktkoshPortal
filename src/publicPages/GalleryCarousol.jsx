@@ -85,7 +85,7 @@ const GalleryCarousel = () => {
               <div className="inside_header">
                 <h4 className="header-page mb-1">Gallery</h4>
                 <div className="d-flex">
-                  <a className="home_link me-2" href="/beta#/">
+                  <a className="home_link me-2" href="/eraktkoshPortal/#/">
                     Home
                   </a>
                   <span className="home_link">&gt;</span>

@@ -12,7 +12,7 @@ const ConsentCheckboxes = ({
   if (!showAll) return null;
 
   return (
-    <div className="widget_ABHA p-3">
+    <div className="widget_ABHA p-3 mb-4">
       
       {checkboxContents.map((item) => (
         <Checkbox

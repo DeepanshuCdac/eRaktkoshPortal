@@ -24,11 +24,9 @@ import CampRegistration from "./publicPages/CampRegistration.js";
 import Faqs from "./publicPages/Faqs.js";
 import Notification from "./publicPages/Notification.js";
 import AboutEraktkosh from "./publicPages/AboutEraktkosh.js";
-// import Gallery from "./publicPages/gallery.js";
 import GalleryCarousel from "./publicPages/GalleryCarousol.jsx";
 import DonorCampRegister from "./publicPages/donorCampRegister.js";
 import { CampProvider } from "./context/CampContext.js";
-// import { initGA, logPageView } from "./utils/ga.js";
 import BodyMan from "./landingPage/bodyMan.js";
 import ScrollToTop from "./landingPage/scrollToTop.js";
 import Link from "./landingPage/link.js";
@@ -39,6 +37,7 @@ import ScrollToTopPage from "./publicPages/ScrollToTopPage.js";
 import MyMarquee from "./landingPage/MyMarque.js";
 import DonationPledge from "./publicPages/DonationPledge.js";
 import NewReq from "./landingPage/newReq.js";
+import AddBloodBank from "./publicPages/AddBloodBank.js";
 
 function App() {
   return (
@@ -111,6 +110,10 @@ function AppContent() {
 
         <Route path="/publicPages/donationPledge">
           <DonationPledge />
+        </Route>
+
+        <Route path="/publicPages/addBloodBank">
+          <AddBloodBank />
         </Route>
 
         <Route path="/pages/portalDonorLogin">

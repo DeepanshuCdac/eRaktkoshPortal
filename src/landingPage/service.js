@@ -13,23 +13,23 @@ export default function Service() {
 
   const handleBloodSearch = () => {
     console.log("button clicked");
-    // window.location.href = "/beta#/publicPages/bloodAvailabilitySearch";
-    window.location.href = "/BLDAHIMS/bloodbank/stockAvailability.cnt";
+    window.location.href = "/eraktkoshPortal/#/publicPages/bloodAvailabilitySearch";
+    // window.location.href = "/BLDAHIMS/bloodbank/stockAvailability.cnt";
   };
   const handleBloodDirectory = () => {
     console.log("button clicked");
-    window.location.href = "/BLDAHIMS/bloodbank/nearbyBBRed.cnt";
-    // window.location.href = "/beta#/publicPages/bloodBankDirectory";
+    // window.location.href = "/BLDAHIMS/bloodbank/nearbyBBRed.cnt";
+    window.location.href = "/eraktkoshPortal/#/publicPages/bloodBankDirectory";
   };
   const handleDonationCamps = () => {
     console.log("button clicked");
-    window.location.href = "/BLDAHIMS/bloodbank/campSchedule.cnt";
-    // window.location.href = "/beta#/publicPages/campSchedule";
+    // window.location.href = "/BLDAHIMS/bloodbank/campSchedule.cnt";
+    window.location.href = "/eraktkoshPortal/#/publicPages/campSchedule";
   };
   const handleDonorLogin = () => {
     console.log("button clicked");
-    window.location.href = "/BLDAHIMS/bloodbank/portalDonorLogin.cnt";
-    // window.location.href = "/beta#/pages/portalDonorLogin";
+    // window.location.href = "/BLDAHIMS/bloodbank/portalDonorLogin.cnt";
+    window.location.href = "/eraktkoshPortal/#/pages/portalDonorLogin";
   };
   const handleRegisterCamps = () => {
     console.log("button clicked");

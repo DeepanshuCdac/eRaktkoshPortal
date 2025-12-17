@@ -32,7 +32,8 @@ export default function DonorAdmin() {
     if (!isTokenValid(token)) {
       sessionStorage.clear();
       alert("Session expired. Please log in again.");
-      window.location.href = "/beta#/pages/portalDonorLogin";
+      // window.location.href = "/beta#/pages/portalDonorLogin";
+      window.location.href = "/eraktkoshPortal/#/pages/portalDonorLogin";
     } else {
       fetchDonorData();
       fetchCertificateData();
@@ -59,12 +60,12 @@ export default function DonorAdmin() {
     sessionStorage.clear();
     setActiveTab(0);
     localStorage.removeItem("ActiveTab");
-    window.location.href = "/beta#/pages/portalDonorLogin";
+    window.location.href = "/eraktkoshPortal/#/pages/portalDonorLogin";
   };
 
   return (
     <>
-      <header className="header">
+      <header className="header" style={{background: "#7f0210", padding: '0.3rem'}}>
         <div className="container">
           <div className="d-flex align-items-center justify-content-between">
             <a href="javascript:void(0)">

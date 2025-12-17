@@ -353,7 +353,7 @@ export default function DonorLogin() {
           setIsInputDisabled(false);
           setLoading(false);
 
-          const newTabUrl = `${window.location.origin}/beta#/pages/portaldonorAdmin`;
+          const newTabUrl = `${window.location.origin}/eraktkoshPortal/#/pages/portaldonorAdmin`;
           window.location.assign(newTabUrl);
         } else {
           Swal.fire({

@@ -116,9 +116,9 @@ const BloodBankDirectory = () => {
 
   const handleServiceChange = (value) => {
     const urlMap = {
-      service1: "/beta#/publicPages/bloodAvailabilitySearch",
-      service2: "/beta#/publicPages/campSchedule",
-      service3: "/beta#/publicPages/bloodBankDirectory",
+      service1: "/eraktkoshPortal/#/publicPages/bloodAvailabilitySearch",
+      service2: "/eraktkoshPortal/#/publicPages/campSchedule",
+      service3: "/eraktkoshPortal/#/publicPages/bloodBankDirectory",
     };
     if (urlMap[value]) {
       window.location.href = urlMap[value];

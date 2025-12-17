@@ -392,7 +392,7 @@ export default function DonationPledge() {
           <div className="inside_header pt-3">
             <h4 className="header-page mb-1">Take the Blood Donation Pledge</h4>
             <div className="d-flex mb-2">
-              <a className="home_link me-2" href="/beta#/">
+              <a className="home_link me-2" href="/eraktkoshPortal/#/">
                 Home
               </a>
               <span className="home_link">&gt;</span>

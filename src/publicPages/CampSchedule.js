@@ -70,9 +70,9 @@ const CampSchedule = ({ fromDonorAdmin }) => {
 
   const handleServiceChange = (value) => {
     const urlMap = {
-      service1: "/beta#/publicPages/bloodAvailabilitySearch",
-      service2: "/beta#/publicPages/campSchedule",
-      service3: "/beta#/publicPages/bloodBankDirectory",
+      service1: "/eraktkoshPortal/#/publicPages/bloodAvailabilitySearch",
+      service2: "/eraktkoshPortal/#/publicPages/campSchedule",
+      service3: "/eraktkoshPortal/#/publicPages/bloodBankDirectory",
     };
 
     if (urlMap[value]) {
@@ -303,8 +303,8 @@ const CampSchedule = ({ fromDonorAdmin }) => {
           <button
             className="action"
             onClick={() => {
-              updateSelectedCamp(record); // Save camp data to context
-              history.push("/publicPages/donorCampRegister"); // Changed from navigate
+              updateSelectedCamp(record); 
+              history.push("/publicPages/donorCampRegister"); 
             }}
           >
             Register as Voluntary Donor

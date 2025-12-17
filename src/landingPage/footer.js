@@ -40,33 +40,33 @@ export default function Footer() {
                 <div className="col-xl-6 col-lg-6 col-md-6 col-12 ">
                   <div className="d-flex flex-column">
                     <h3 className="section__header mb-3">Important Links</h3>
-                    <a
+                    {/* <a
                       href="/BLDAHIMS/bloodbank/stockAvailability.cnt"
                       className="value mb-2"
                     >
                       Search Blood Availability
-                    </a>
-                    {/* <Link
+                    </a> */}
+                    <Link
                       className="value mb-2"
                       to="/publicPages/bloodAvailabilitySearch"
                     >
                       Search Blood Availability
-                    </Link> */}
-                    <a href="/BLDAHIMS/bloodbank/nearbyBBRed.cnt" className="value mb-2">
+                    </Link>
+                    {/* <a href="/BLDAHIMS/bloodbank/nearbyBBRed.cnt" className="value mb-2">
                           Search Blood Center Directory
-                        </a>
-                    {/* <Link
+                        </a> */}
+                    <Link
                       className="value mb-2"
                       to="/publicPages/bloodBankDirectory"
                     >
                       Search Blood Center Directory
-                    </Link> */}
-                    <a href="/BLDAHIMS/bloodbank/campSchedule.cnt" className="value mb-2">
+                    </Link>
+                    {/* <a href="/BLDAHIMS/bloodbank/campSchedule.cnt" className="value mb-2">
                           Search Blood Donation Camps
-                        </a>
-                    {/* <Link className="value mb-2" to="/publicPages/campSchedule">
+                        </a> */}
+                    <Link className="value mb-2" to="/publicPages/campSchedule">
                       Search Blood Donation Camp
-                    </Link> */}
+                    </Link>
                     {/* <Link
                     className="value mb-2"
                     to="/publicPages/campSchedule"
@@ -79,15 +79,15 @@ export default function Footer() {
                     >
                       Blood Center Login
                     </a>
-                     <a
+                     {/* <a
                       href="/BLDAHIMS/bloodbank/portalDonorLogin.cnt"
                       className="value mb-2"
                     >
                       Donor Login
-                    </a>
-                    {/* <Link className="value mb-2" to="/pages/portalDonorLogin">
+                    </a> */}
+                    <Link className="value mb-2" to="/pages/portalDonorLogin">
                       Donor Login
-                    </Link> */}
+                    </Link>
                   </div>
                 </div>
                 <div className="col-xl-6 col-lg-6 col-md-6 col-12 ">

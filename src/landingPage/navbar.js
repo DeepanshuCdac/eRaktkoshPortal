@@ -63,7 +63,7 @@ export default function Navbar() {
                     />
                   </a>
                   <div className="divider"></div>
-                  <a href="/#">
+                  <a href="/eraktkoshPortal/#">
                     <img
                       className="eraktkosh_image"
                       src={`${process.env.PUBLIC_URL}/assets/landingPage/eraktkosh.svg`}
@@ -128,7 +128,7 @@ export default function Navbar() {
               >
                 <ul className="nav__list">
                   <li className="nav__list__li">
-                    <a href="/#" className="nav__link">
+                    <a href="/eraktkoshPortal/#" className="nav__link">
                       Home
                     </a>
                   </li>
@@ -143,18 +143,18 @@ export default function Navbar() {
 
                     <ul className="dropdown__menu">
                       <li className="dropdown__menu__li">
-                        <a
+                        {/* <a
                           href="/BLDAHIMS/bloodbank/about.cnt"
                           className="dropdown__link"
                         >
                           About e-Raktkosh
-                        </a>
-                        {/* <Link
+                        </a> */}
+                        <Link
                           className="dropdown__link"
                           to="/publicPages/AboutEraktkosh"
                         >
                            About e-Raktkosh
-                        </Link> */}
+                        </Link>
                       </li>
                       <li className="dropdown__menu__li">
                         <a
@@ -185,29 +185,29 @@ export default function Navbar() {
                         </Link> */}
                       </li>
                       <li className="dropdown__menu__li">
-                        <a
+                        {/* <a
                           href="/BLDAHIMS/bloodbank/notification.cnt"
                           className="dropdown__link"
                         >
                           Notifications
-                        </a>
-                        {/* <Link
+                        </a> */}
+                        <Link
                           className="dropdown__link"
                           to="/publicPages/Notification"
                         >
                           Notifications
-                        </Link> */}
+                        </Link>
                       </li>
                       <li className="dropdown__menu__li">
-                        <a
+                        {/* <a
                           href="/BLDAHIMS/bloodbank/eraktkoshfaq.cnt"
                           className="dropdown__link"
                         >
                           e-Raktkosh Faq's
-                        </a>
-                        {/* <Link className="dropdown__link" to="/publicPages/FAQs">
+                        </a> */}
+                        <Link className="dropdown__link" to="/publicPages/FAQs">
                           eRaktkosh FAQ's
-                        </Link> */}
+                        </Link>
                       </li>
                       <li className="dropdown__menu__li">
                         <a
@@ -231,48 +231,48 @@ export default function Navbar() {
 
                     <ul className="dropdown__menu">
                       <li className="dropdown__menu__li">
-                        <a
+                        {/* <a
                           href="/BLDAHIMS/bloodbank/portalDonorLogin.cnt"
                           className="dropdown__link"
                         >
                           Donor Login
-                        </a>
-                        {/* <Link
+                        </a> */}
+                        <Link
                           className="dropdown__link"
                           to="/pages/portalDonorLogin"
                         >
                           {" "}
                           Donor Login
-                        </Link> */}
+                        </Link>
                       </li>
                       <li className="dropdown__menu__li">
-                        <a
+                        {/* <a
                           href="/BLDAHIMS/bloodbank/stockAvailability.cnt"
                           className="dropdown__link"
                         >
                           Blood Availability
-                        </a>
-                        {/* <Link
+                        </a> */}
+                        <Link
                           className="dropdown__link"
                           to="/publicPages/bloodAvailabilitySearch"
                         >
                           Blood Availability
-                        </Link> */}
+                        </Link>
                       </li>
 
                       <li className="dropdown__menu__li">
-                        <a
+                        {/* <a
                           href="/BLDAHIMS/bloodbank/nearbyBBRed.cnt"
                           className="dropdown__link"
                         >
                           Blood Center Directory
-                        </a>
-                        {/* <Link
+                        </a> */}
+                        <Link
                           className="dropdown__link"
                           to="/publicPages/bloodBankDirectory"
                         >
                           Blood Center Directory
-                        </Link> */}
+                        </Link>
                       </li>
                       <li className="dropdown__menu__li">
                         <a
@@ -314,19 +314,19 @@ export default function Navbar() {
                       </li> */}
 
                       <li className="dropdown__menu__li">
-                        <a
+                        {/* <a
                           href="/BLDAHIMS/bloodbank/campSchedule.cnt"
                           className="dropdown__link"
                         >
                           Blood Donation Camps
-                        </a>
-                        {/* <Link
+                        </a> */}
+                        <Link
                           className="dropdown__link"
                           to="/publicPages/campSchedule"
                         >
                           {" "}
                           Blood Donation Camps
-                        </Link> */}
+                        </Link>
                       </li>
                       <li className="dropdown__menu__li">
                         <a
@@ -373,12 +373,19 @@ export default function Navbar() {
                         </a>
                       </li>
                       <li className="dropdown__menu__li">
-                        <a
+                        {/* <a
                           href="/BLDAHIMS/bloodbank/bbOnboard.cnt?hmode=GETONBOARDFORMESSENTIAL"
                           className="dropdown__link"
                         >
                           Add Your Blood Center
-                        </a>
+                        </a> */}
+                        <Link
+                          className="dropdown__link"
+                          to="/publicPages/addBloodBank"
+                        >
+                          {" "}
+                          Add Your Blood Center
+                        </Link>
                       </li>
                     </ul>
                   </li>

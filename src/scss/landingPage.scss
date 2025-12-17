@@ -1290,16 +1290,22 @@ main {
 @media (max-width: 768px) {
   .mid_header {
     .ministry_image {
-      width: 28%;
+      width: 75%;
     }
     .eraktkosh_image {
-      width: 42%;
+      width: 90%;
     }
-
     .anticon-search {
       font-size: 15px !important;
     }
+    .divider{
+      height: 45px;
+    }
   }
+
+    .page-wrapper {
+        margin-top: 70px;
+    }
 
   .heroComponent {
     .carousel-indicators [data-bs-target] {
@@ -1350,6 +1356,16 @@ main {
 }
 
 @media screen and (max-width: 576px) {
+  main {
+    .mid_header{
+      .divider{
+        height: 40px;
+      }
+    }
+  }
+  .page-wrapper {
+        margin-top: 56px;
+    }
   .heroComponent {
     .carousel-indicators [data-bs-target] {
       border-top: 3px solid transparent;
@@ -1450,17 +1466,12 @@ main {
 }
 
 .amcharts-map-area.selected {
-  fill: #7f0210 !important;  /* Your selectedColor—!important overrides AmCharts */
+  fill: #7f0210 !important;  
   fill-opacity: 1 !important;
   stroke: #FFFFFF !important;
   stroke-width: 2 !important;
 }
 .amcharts-map-area:not(.selected) {
-  fill: #5EB7DE !important;  /* Default colorSolid */
+  fill: #5EB7DE !important; 
   stroke: #f7f3f3ff !important;
 }
-
-// .HoverInfo{
-//   display: block !important;
-//   top: 270px !important;
-// }

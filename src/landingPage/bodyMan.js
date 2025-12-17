@@ -106,8 +106,8 @@ export default function BodyMan() {
   const handleNearbyCamps = () => {
     setTransitioning(true);
     setTimeout(() => {
-      // window.location.href = "/beta#/publicPages/campSchedule";
-      window.location.href = "/BLDAHIMS/bloodbank/campSchedule.cnt";
+      window.location.href = "/eraktkoshPortal/#/publicPages/campSchedule";
+      // window.location.href = "/BLDAHIMS/bloodbank/campSchedule.cnt";
     }, 100);
   };
 

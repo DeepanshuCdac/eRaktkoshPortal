@@ -4,10 +4,12 @@ import { Collapse, Input, theme, Button, message } from "antd";
 import { SearchOutlined, PlusOutlined, MinusOutlined } from "@ant-design/icons";
 import axios from "axios";
 import { BaseUrl } from "../utils/url";
+import Swal from "sweetalert2";
 
 const { TextArea } = Input;
 
 const Faqs = () => {
+  const [isLoaded, setIsLoaded] = useState()
   const [faqItems, setFaqItems] = useState([]);
   const [captchaImage, setCaptchaImage] = useState("");
   const [captchaText, setCaptchaText] = useState("");
@@ -25,6 +27,11 @@ const Faqs = () => {
     borderRadius: token.borderRadiusLG,
   };
 
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setIsLoaded(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
+
   const filteredFaqs = faqItems.filter((faq) => {
     const matchesSearch =
       faq.faqQuestion.toLowerCase().includes(searchText.toLowerCase()) ||
@@ -36,61 +43,65 @@ const Faqs = () => {
     return matchesSearch && matchesFilter;
   });
 
- useEffect(() => {
-  const fetchInitialData = async () => {
-    try {
-      // fetching faq from api...
-      const faqResponse = await axios.get(`${BaseUrl}/eraktkosh/question/list`);
+  useEffect(() => {
+    const fetchInitialData = async () => {
+      try {
+        // fetching faq from api...
+        const faqResponse = await axios.get(
+          `${BaseUrl}/eraktkosh/question/list`
+        );
 
-      if (Array.isArray(faqResponse.data)) {
-        const faqsWithType = faqResponse.data
-          .filter((faq) => faq.quesType?.toLowerCase() === "faq question") // ✅ Only take matching quesType
-          .map((faq) => {
-            // faq filters...
-            if (
-              faq.faqQuestion?.toLowerCase().includes("blood availability") ||
-              faq.faqAnswer?.toLowerCase().includes("general")
-            ) {
-              return { ...faq, faqType: "General & Blood Availability" };
-            } else if (
-              faq.faqQuestion?.toLowerCase().includes("donation") ||
-              faq.faqAnswer?.toLowerCase().includes("camp")
-            ) {
-              return { ...faq, faqType: "Blood Donation & Camps" };
-            } else if (
-              faq.faqQuestion?.toLowerCase().includes("app") ||
-              faq.faqAnswer?.toLowerCase().includes("app")
-            ) {
-              return {
-                ...faq,
-                faqType: "Blood Center Registration & App Usage",
-              };
-            } else {
-              return { ...faq, faqType: "General & Blood Availability" };
-            }
-          });
+        if (Array.isArray(faqResponse.data)) {
+          const faqsWithType = faqResponse.data
+            .filter((faq) => faq.quesType?.toLowerCase() === "faq question") // ✅ Only take matching quesType
+            .map((faq) => {
+              // faq filters...
+              if (
+                faq.faqQuestion?.toLowerCase().includes("blood availability") ||
+                faq.faqAnswer?.toLowerCase().includes("general")
+              ) {
+                return { ...faq, faqType: "General & Blood Availability" };
+              } else if (
+                faq.faqQuestion?.toLowerCase().includes("donation") ||
+                faq.faqAnswer?.toLowerCase().includes("camp")
+              ) {
+                return { ...faq, faqType: "Blood Donation & Camps" };
+              } else if (
+                faq.faqQuestion?.toLowerCase().includes("app") ||
+                faq.faqAnswer?.toLowerCase().includes("app")
+              ) {
+                return {
+                  ...faq,
+                  faqType: "Blood Center Registration & App Usage",
+                };
+              } else {
+                return { ...faq, faqType: "General & Blood Availability" };
+              }
+            });
 
-        setFaqItems(faqsWithType);
+          setFaqItems(faqsWithType);
+        }
+
+        // captcha api....
+        const captchaResponse = await axios.post(
+          `${BaseUrl}/eraktkosh/regenerateCaptcha`
+        );
+        const data = captchaResponse.data;
+        setCaptchaImage(data.captchaImage);
+        setCaptchaText(data.captchaText);
+        console.log("CAPTCHA fetched:", data);
+      } catch (error) {
+        Swal.fire({
+          title: "Error!",
+          text: "Something went wrong while loading the page.",
+          icon: "error",
+          confirmButtonText: "OK",
+        });
       }
+    };
 
-      // captcha api....
-      const captchaResponse = await axios.post(
-        `${BaseUrl}/eraktkosh/regenerateCaptcha`
-      );
-      const data = captchaResponse.data;
-      setCaptchaImage(data.captchaImage);
-      setCaptchaText(data.captchaText);
-      console.log("CAPTCHA fetched:", data);
-
-    } catch (error) {
-      console.error("Error fetching initial data:", error);
-      message.error("Something went wrong while loading the page.");
-    }
-  };
-
-  fetchInitialData();
-}, []);
-
+    fetchInitialData();
+  }, []);
 
   const fetchCaptcha = async () => {
     try {
@@ -109,12 +120,22 @@ const Faqs = () => {
 
   const handleSubmit = async () => {
     if (!userQuestion || !userEmail || !userCaptchaInput) {
-      message.warning("Please fill all fields.");
+      Swal.fire({
+        title: "Please fill all fields!",
+        icon: "warning",
+        confirmButtonText: "OK",
+      });
       return;
     }
 
     if (userCaptchaInput !== captchaText) {
-      message.error("Invalid CAPTCHA. Please try again.");
+      Swal.fire({
+        title: "Error!",
+        text: "Invalid CAPTCHA. Please try again.",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+
       fetchCaptcha();
       return;
     }
@@ -129,14 +150,23 @@ const Faqs = () => {
 
       await axios.post(`${BaseUrl}/eraktkosh/faq/submit-question`, payload);
 
-      message.success("Your question has been submitted successfully.");
+      Swal.fire({
+        title: "Success!",
+        text: "Your question has been submitted successfully.",
+        icon: "success",
+        confirmButtonText: "OK",
+      });
       setUserEmail("");
       setUserQuestion("");
       setUserCaptchaInput("");
       fetchCaptcha();
     } catch (error) {
-      console.error("Error submitting question:", error);
-      message.error("Failed to submit question.");
+      Swal.fire({
+        title: "Error!",
+        text: "Failed to submit question.",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -151,7 +181,7 @@ const Faqs = () => {
               <div className="inside_header">
                 <h4 className="header-page mb-1">FAQ</h4>
                 <div className="d-flex">
-                  <a className="home_link me-2" href="/beta#/">
+                  <a className="home_link me-2" href="/eraktkoshPortal/#/">
                     Home
                   </a>
                   <span className="home_link">&gt;</span>
@@ -173,140 +203,148 @@ const Faqs = () => {
         </div>
       </div>
 
-      <div className="body_wrapper py-3">
-        <div className="container">
-          <p className="mb-2 searchResult">Question Related to</p>
-          <div className="mb-2 d-flex gap-2 flex-wrap">
-            <p
-              className={`mb-0 filters ${
-                activeFilter === "All" ? "active" : ""
-              }`}
-              onClick={() => setActiveFilter("All")}
-            >
-              {" "}
-              All{" "}
-            </p>
-            <p
-              className={`mb-0 filters ${
-                activeFilter === "General & Blood Availability" ? "active" : ""
-              }`}
-              onClick={() => setActiveFilter("General & Blood Availability")}
-            >
-              {" "}
-              General & Blood Availability{" "}
-            </p>
-            <p
-              className={`mb-0 filters ${
-                activeFilter === "Blood Donation & Camps" ? "active" : ""
-              }`}
-              onClick={() => setActiveFilter("Blood Donation & Camps")}
-            >
-              {" "}
-              Blood Donation & Camps{" "}
-            </p>
-            <p
-              className={`mb-0 filters ${
-                activeFilter === "Blood Center Registration & App Usage"
-                  ? "active"
-                  : ""
-              }`}
-              onClick={() =>
-                setActiveFilter("Blood Center Registration & App Usage")
-              }
-            >
-              {" "}
-              Blood Center Registration & App Usage{" "}
-            </p>
-          </div>
-          <div className="row">
-            <div className="col-9">
-              {filteredFaqs.length > 0 ? (
-                <Collapse
-                  bordered={false}
-                  defaultActiveKey={["1"]}
-                  expandIcon={({ isActive }) =>
-                    isActive ? <MinusOutlined /> : <PlusOutlined />
-                  }
-                  items={filteredFaqs.map((faq, index) => ({
-                    key: `${index + 1}`,
-                    label: faq.faqQuestion,
-                    children: (
-                      <div
-                        dangerouslySetInnerHTML={{ __html: faq.faqAnswer }}
-                      />
-                    ),
-                    style: panelStyle,
-                  }))}
-                />
-              ) : (
-                <div className="no-faq-found">
-                  <p>No FAQs found for your search.</p>
-                </div>
-              )}
+      <div className={`fade-in${isLoaded ? " loaded" : ""}`}>
+        <div className="body_wrapper py-3">
+          <div className="container">
+            <p className="mb-2 searchResult">Question Related to</p>
+            <div className="mb-2 d-flex gap-2 flex-wrap">
+              <p
+                className={`mb-0 filters ${
+                  activeFilter === "All" ? "active" : ""
+                }`}
+                onClick={() => setActiveFilter("All")}
+              >
+                {" "}
+                All{" "}
+              </p>
+              <p
+                className={`mb-0 filters ${
+                  activeFilter === "General & Blood Availability"
+                    ? "active"
+                    : ""
+                }`}
+                onClick={() => setActiveFilter("General & Blood Availability")}
+              >
+                {" "}
+                General & Blood Availability{" "}
+              </p>
+              <p
+                className={`mb-0 filters ${
+                  activeFilter === "Blood Donation & Camps" ? "active" : ""
+                }`}
+                onClick={() => setActiveFilter("Blood Donation & Camps")}
+              >
+                {" "}
+                Blood Donation & Camps{" "}
+              </p>
+              <p
+                className={`mb-0 filters ${
+                  activeFilter === "Blood Center Registration & App Usage"
+                    ? "active"
+                    : ""
+                }`}
+                onClick={() =>
+                  setActiveFilter("Blood Center Registration & App Usage")
+                }
+              >
+                {" "}
+                Blood Center Registration & App Usage{" "}
+              </p>
             </div>
-
-            <div className="col-3">
-              <p className="mb-1 searchResult">Could not find your question?</p>
-              <div className="faq_query p-2">
-                <TextArea
-                  className="mb-2"
-                  placeholder="Type your Question Here"
-                  autoSize={{ minRows: 5 }}
-                  value={userQuestion}
-                  onChange={(e) => setUserQuestion(e.target.value)}
-                />
-                <Input
-                  placeholder="Email ID"
-                  className="mb-2 p-2"
-                  value={userEmail}
-                  onChange={(e) => setUserEmail(e.target.value)}
-                  onBlur={() => {
-                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                    if (userEmail && !emailRegex.test(userEmail)) {
-                      setEmailError("Invalid email address");
-                    } else {
-                      setEmailError("");
+            <div className="row">
+              <div className="col-9">
+                {filteredFaqs.length > 0 ? (
+                  <Collapse
+                    bordered={false}
+                    defaultActiveKey={["1"]}
+                    expandIcon={({ isActive }) =>
+                      isActive ? <MinusOutlined /> : <PlusOutlined />
                     }
-                  }}
-                />
-                {emailError && <div style={{ color: "#7F0210" }}>{emailError}</div>}
-
-                <div className="d-flex mb-2 align-items-center gap-2">
-                  {captchaImage && (
-                    <div className="d-flex align-items-center">
-                      <img
-                        src={captchaImage}
-                        alt="CAPTCHA"
-                        style={{ height: "38px" }}
-                      />
-                      <img
-                        style={{
-                          cursor: "pointer",
-                          width: "20px",
-                          height: "20px",
-                        }}
-                        className=""
-                        onClick={fetchCaptcha}
-                        src={`${process.env.PUBLIC_URL}/assets/images/refresh.png`}
-                      />
-                    </div>
-                  )}
-                  <Input
-                    placeholder="Captcha"
-                    className="p-2"
-                    value={userCaptchaInput}
-                    onChange={(e) => setUserCaptchaInput(e.target.value)}
+                    items={filteredFaqs.map((faq, index) => ({
+                      key: `${index + 1}`,
+                      label: faq.faqQuestion,
+                      children: (
+                        <div
+                          dangerouslySetInnerHTML={{ __html: faq.faqAnswer }}
+                        />
+                      ),
+                      style: panelStyle,
+                    }))}
                   />
-                </div>
-                <div>
-                  <Button
-                    className="w-100 p-3"
-                    type="primary"
-                    onClick={handleSubmit}
-                    loading={isSubmitting}
-                  >
-                    Submit
-                  </Button>
+                ) : (
+                  <div className="no-faq-found">
+                    <p>No FAQs found for your search.</p>
+                  </div>
+                )}
+              </div>
+
+              <div className="col-3">
+                <p className="mb-1 searchResult">
+                  Could not find your question?
+                </p>
+                <div className="faq_query p-2">
+                  <TextArea
+                    className="mb-2"
+                    placeholder="Type your Question Here"
+                    autoSize={{ minRows: 5 }}
+                    value={userQuestion}
+                    onChange={(e) => setUserQuestion(e.target.value)}
+                  />
+                  <Input
+                    placeholder="Email ID"
+                    className="mb-2 p-2"
+                    value={userEmail}
+                    onChange={(e) => setUserEmail(e.target.value)}
+                    onBlur={() => {
+                      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                      if (userEmail && !emailRegex.test(userEmail)) {
+                        setEmailError("Invalid email address");
+                      } else {
+                        setEmailError("");
+                      }
+                    }}
+                  />
+                  {emailError && (
+                    <div style={{ color: "#7F0210" }}>{emailError}</div>
+                  )}
+
+                  <div className="d-flex mb-2 align-items-center gap-2">
+                    {captchaImage && (
+                      <div className="d-flex align-items-center">
+                        <img
+                          src={captchaImage}
+                          alt="CAPTCHA"
+                          style={{ height: "38px" }}
+                        />
+                        <img
+                          style={{
+                            cursor: "pointer",
+                            width: "20px",
+                            height: "20px",
+                          }}
+                          className=""
+                          onClick={fetchCaptcha}
+                          src={`${process.env.PUBLIC_URL}/assets/images/refresh.png`}
+                        />
+                      </div>
+                    )}
+                    <Input
+                      placeholder="Captcha"
+                      className="p-2"
+                      value={userCaptchaInput}
+                      onChange={(e) => setUserCaptchaInput(e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <Button
+                      className="w-100 p-3"
+                      type="primary"
+                      onClick={handleSubmit}
+                      loading={isSubmitting}
+                    >
+                      Submit
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>

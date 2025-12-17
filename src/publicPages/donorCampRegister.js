@@ -1,4 +1,3 @@
-// DonorCampRegister.js
 import React, { useState, useEffect } from "react";
 import "../scss/donorCampRegister.scss";
 import { Radio } from "antd";
@@ -11,7 +10,7 @@ import ABHADonorRegistration from "./DonorCampRegister/ABHADonorRegistration";
 export default function DonorCampRegister() {
   const dispatch = useDispatch();
   const { selectedCamp } = useCampContext();
-  const [value, setValue] = useState(1); // Default to Mobile option
+  const [value, setValue] = useState(1); 
 
   useEffect(() => {
     dispatch(getApiData());
@@ -22,7 +21,7 @@ export default function DonorCampRegister() {
   };
 
   const handleMobileSuccess = () => {
-    setValue(2); // Reset to Mobile option after successful registration
+    setValue(2); 
   };
 
   return (
@@ -33,9 +32,9 @@ export default function DonorCampRegister() {
             Pre Registration for Blood Donation Camp
           </h2>
           <div className="d-flex flex-wrap mt-3 container-style">
-            <div className="widget px-3 pb-0 w-100">
+            <div className="widget px-3 w-100 py-xl-0 py-3">
               <div className="row align-items-center">
-                <div className="col-3">
+                <div className="col-6 col-xl-3 col-lg-6 col-md-6 mb-xl-0 mb-3">
                   <div className="d-flex align-items-start">
                     <img src={`${process.env.PUBLIC_URL}/assets/images/campName.svg`} alt="" />
                     <div className="ms-1">
@@ -44,7 +43,7 @@ export default function DonorCampRegister() {
                     </div>
                   </div>
                 </div>
-                <div className="col-3">
+                <div className="col-6 col-xl-3 col-lg-6 col-md-6 mb-xl-0 mb-3">
                   <div className="d-flex align-items-start">
                     <img src={`${process.env.PUBLIC_URL}/assets/images/campLocation.svg`} alt="" />
                     <div className="ms-1">
@@ -53,7 +52,7 @@ export default function DonorCampRegister() {
                     </div>
                   </div>
                 </div>
-                <div className="col-2">
+                <div className="col-6 col-xl-2 col-lg-6 col-md-6">
                   <div className="d-flex align-items-start">
                     <img src={`${process.env.PUBLIC_URL}/assets/images/campDate.svg`} alt="" />
                     <div className="ms-1">
@@ -62,7 +61,7 @@ export default function DonorCampRegister() {
                     </div>
                   </div>
                 </div>
-                <div className="col-2">
+                <div className="col-6 col-xl-2 col-lg-6 col-md-6">
                   <div className="d-flex align-items-start">
                     <img src={`${process.env.PUBLIC_URL}/assets/images/campTime.svg`} alt="" />
                     <div className="ms-1">
@@ -71,7 +70,7 @@ export default function DonorCampRegister() {
                     </div>
                   </div>
                 </div>
-                <div className="col-2 justify-content-right">
+                <div className="col-xl-2 d-none d-xl-block justify-content-right">
                   <div className="header_bg p-2">
                     <div>
                       <p className="mb-0">
@@ -87,9 +86,10 @@ export default function DonorCampRegister() {
             </div>
           </div>
           
-          <div className="d-flex mb-3 mt-3">
+          <div className="d-xl-flex d-lg-flex d-md-flex d-sm-flex d-block mb-1 mt-3">
             <div>
               <Radio.Group
+               className="custom-radio-group"
                 onChange={onChange}
                 value={value}
                 options={[

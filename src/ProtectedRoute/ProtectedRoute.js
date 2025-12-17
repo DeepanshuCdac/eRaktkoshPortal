@@ -18,7 +18,7 @@ const ProtectedRoute = ({children}) => {
     };
      
     if (!isTokenValid(token)) {
-        window.location.href = "/beta#/pages/portalDonorLogin"; 
+        window.location.href = "/eraktkoshPortal/#/pages/portalDonorLogin"; 
         return null;
     }
 

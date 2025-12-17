@@ -91,7 +91,7 @@ const MobileDonorRegistration = ({ selectedCamp, onSuccess }) => {
         setUserCaptchaInput("");
         setIsValidated(false);
 
-        // ✅ Check if OTP field is present
+        //  Check if OTP field is present
         if (response.data.otp) {
           try {
             await axios.post(`${BaseUrl}/eraktkosh/otp/otp_log/insert`, {
@@ -405,7 +405,7 @@ const MobileDonorRegistration = ({ selectedCamp, onSuccess }) => {
     } catch (error) {
       console.error("Registration error :", error);
       Swal.fire({
-        text: error.response?.data || "registration failed!",
+        text: "Registration failed!",
         icon: "error",
       });
     } finally {
@@ -416,7 +416,13 @@ const MobileDonorRegistration = ({ selectedCamp, onSuccess }) => {
   return (
     <>
       <div className="row pb-3">
-        <div className={`col-${isValidated ? "12" : "4"}`}>
+        <div
+          className={`${
+            isValidated
+              ? "col-12"
+              : "col-xl-4 col-lg-6 col-md-6 col-sm-8 col-12 mb-2 mb-xl-0"
+          }`}
+        >
           <div className="widget p-3">
             <div className="d-flex align-items-end">
               <div className="me-2">
@@ -455,84 +461,92 @@ const MobileDonorRegistration = ({ selectedCamp, onSuccess }) => {
         </div>
 
         {otpSent && !isValidated && (
-          <div className="col-8">
+          <div className="col-xl-8 col-12">
             <div className="p-3 widget h-100">
-              <div className="d-flex align-items-center">
-                <Input
-                  placeholder="Enter OTP"
-                  value={otp}
-                  maxLength={6}
-                  onChange={handleOtpChange}
-                  style={{
-                    marginRight: "10px",
-                    letterSpacing: "0.5rem",
-                  }}
-                />
-
-                {captchaImage && (
-                  <div
-                    className="d-flex align-items-center px-1"
+              <div className="row">
+                <div className="col-xl-3 col-lg-3 col-md-3 col-sm-6 col-12">
+                  <Input
+                    placeholder="Enter OTP"
+                    value={otp}
+                    maxLength={6}
+                    onChange={handleOtpChange}
                     style={{
                       marginRight: "10px",
-                      border: "1px solid #e5e5e5",
-                      borderRadius: "5px",
+                      letterSpacing: "0.5rem",
                     }}
-                  >
-                    <img
-                      src={captchaImage}
-                      alt="CAPTCHA"
-                      style={{ height: "30px" }}
-                    />
+                  />
+
+                  {otpSent && timer > 0 && (
+                    <p className="mb-0 otpExpire mt-1">
+                      OTP expire's in{" "}
+                      <span className="timer">{formatTime(timer)}</span>
+                    </p>
+                  )}
+
+                  {otpSent && (
                     <Button
-                      type="text"
-                      onClick={handleRefreshCaptcha}
-                      icon={
-                        <img
-                          src={`${process.env.PUBLIC_URL}/assets/images/refresh.png`}
-                          alt="Refresh"
-                          style={{ height: "16px" }}
-                        />
-                      }
-                    />
-                  </div>
-                )}
+                      className="small_btn px-1 mb-3 mb-xl-0 mb-lg-0 mb-md-0 mt-2"
+                      onClick={handleResendOTP}
+                      disabled={timer > 0}
+                      style={{ height: "20px" }}
+                    >
+                      Resend OTP
+                    </Button>
+                  )}
+                </div>
 
-                <Input
-                  placeholder="Enter CAPTCHA"
-                  value={userCaptchaInput}
-                  onChange={(e) => setUserCaptchaInput(e.target.value)}
-                  style={{
-                    marginRight: "10px",
-                    letterSpacing: "0.5rem",
-                  }}
-                />
+                <div className="col-xl-3 col-lg-3 col-md-3 col-sm-6 col-12 mb-2 mb-xl-0 mb-lg-0 mb-md-0 mb-sm-0">
+                  {captchaImage && (
+                    <div
+                      className="d-flex align-items-center justify-content-between"
+                      style={{
+                        border: "1px solid #e5e5e5",
+                        borderRadius: "5px",
+                      }}
+                    >
+                      <img
+                        src={captchaImage}
+                        alt="CAPTCHA"
+                        style={{ height: "30px" }}
+                      />
+                      <Button
+                        type="text"
+                        onClick={handleRefreshCaptcha}
+                        icon={
+                          <img
+                            src={`${process.env.PUBLIC_URL}/assets/images/refresh.png`}
+                            alt="Refresh"
+                            style={{ height: "16px" }}
+                          />
+                        }
+                      />
+                    </div>
+                  )}
+                </div>
 
-                <Button
-                  type="primary"
-                  onClick={handleValidateOTP}
-                  loading={isValidating}
-                >
-                  Validate
-                </Button>
+                <div className="col-xl-3 col-lg-3 col-md-3 col-sm-6 col-12 mb-2 mb-xl-0 mb-lg-0 mb-md-0 mb-sm-0">
+                  <Input
+                    placeholder="Enter CAPTCHA"
+                    value={userCaptchaInput}
+                    onChange={(e) => setUserCaptchaInput(e.target.value)}
+                    style={{
+                      marginRight: "10px",
+                      letterSpacing: "0.5rem",
+                    }}
+                  />
+                </div>
+
+                <div className="col-xl-3 col-lg-3 col-md-3 col-sm-6 col-12 mb-2 mb-xl-0 mb-lg-0 mb-md-0 mb-sm-0">
+                  <Button
+                    className="w-100"
+                    type="primary"
+                    onClick={handleValidateOTP}
+                    loading={isValidating}
+                  >
+                    Validate
+                  </Button>
+                </div>
               </div>
-
-              {otpSent && timer > 0 && (
-                <p className="mb-0 otpExpire mt-1">
-                  Your OTP will expire in{" "}
-                  <span className="timer">{formatTime(timer)}</span>
-                </p>
-              )}
-
-              {otpSent && (
-                <Button
-                  className="small_btn px-1"
-                  onClick={handleResendOTP}
-                  disabled={timer > 0}
-                  style={{ height: "20px", marginTop: "8px" }}
-                >
-                  Resend OTP
-                </Button>
-              )}
             </div>
           </div>
         )}
@@ -543,7 +557,7 @@ const MobileDonorRegistration = ({ selectedCamp, onSuccess }) => {
           <h3 className="mb-1 camp_header">Camp Pre Registration</h3>
           <div className="widget p-3">
             <div className="row">
-              <div className="col-4">
+              <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                 <div className="mb-3 form-inputs">
                   <label
                     htmlFor="exampleInputEmail1"
@@ -560,7 +574,7 @@ const MobileDonorRegistration = ({ selectedCamp, onSuccess }) => {
                   />
                 </div>
               </div>
-              <div className="col-4">
+              <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                 <div className="mb-3 form-inputs">
                   <label
                     htmlFor="exampleInputEmail1"
@@ -581,7 +595,7 @@ const MobileDonorRegistration = ({ selectedCamp, onSuccess }) => {
                   />
                 </div>
               </div>
-              <div className="col-4">
+              <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                 <div className="mb-3 form-inputs">
                   <label className="form-label mb-1">
                     Gender<span className="mendate">*</span>
@@ -605,7 +619,7 @@ const MobileDonorRegistration = ({ selectedCamp, onSuccess }) => {
                   />
                 </div>
               </div>
-              <div className="col-4">
+              <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                 <div className="mb-3 form-inputs">
                   <label
                     htmlFor="exampleInputEmail1"
@@ -625,7 +639,7 @@ const MobileDonorRegistration = ({ selectedCamp, onSuccess }) => {
                   />
                 </div>
               </div>
-              <div className="col-4">
+              <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                 <div className="mb-3 form-inputs">
                   <label
                     htmlFor="exampleInputEmail1"
@@ -640,7 +654,7 @@ const MobileDonorRegistration = ({ selectedCamp, onSuccess }) => {
                   />
                 </div>
               </div>
-              <div className="col-4">
+              <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                 <div className="mb-3 form-inputs">
                   <label
                     htmlFor="exampleInputEmail1"
@@ -669,8 +683,7 @@ const MobileDonorRegistration = ({ selectedCamp, onSuccess }) => {
                   />
                 </div>
               </div>
-
-              <div className="col-4">
+              <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                 <div className="mb-3 form-inputs">
                   <label
                     htmlFor="exampleInputEmail1"
@@ -690,7 +703,7 @@ const MobileDonorRegistration = ({ selectedCamp, onSuccess }) => {
                   />
                 </div>
               </div>
-              <div className="col-4">
+              <div className="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                 <div className="mb-3 form-inputs">
                   <label className="form-label mb-1">
                     State<span className="mendate">*</span>
@@ -714,7 +727,7 @@ const MobileDonorRegistration = ({ selectedCamp, onSuccess }) => {
                   />
                 </div>
               </div>
-              <div className="col-4 d-flex" style={{ gap: "18px" }}>
+              <div className="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12 d-flex" style={{ gap: "18px" }}>
                 <div className="mb-3 form-inputs" style={{ width: "48%" }}>
                   <label className="form-label mb-1">
                     District<span className="mendate">*</span>
