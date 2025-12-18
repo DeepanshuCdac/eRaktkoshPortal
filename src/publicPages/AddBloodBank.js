@@ -165,17 +165,17 @@ export default function AddBloodBank() {
     return null;
   };
 
-const validateEmail = (email) => {
-  if (!email) return "Email is required";
+  const validateEmail = (email) => {
+    if (!email) return "Email is required";
 
-  const trimmedEmail = email.trim();
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const trimmedEmail = email.trim();
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  if (!emailRegex.test(trimmedEmail)) {
-    return "Please enter a valid email address";
-  }
-  return null;
-};
+    if (!emailRegex.test(trimmedEmail)) {
+      return "Please enter a valid email address";
+    }
+    return null;
+  };
 
   const validatePhone = (phone) => {
     if (!phone) return "Contact Number is required";
@@ -324,14 +324,14 @@ const validateEmail = (email) => {
     }
 
     // name validations
-    const bankNameError = validateName(
-      formValues.bldbankName,
-      "Blood Bank Name"
-    );
-    if (bankNameError && !newFieldErrors.bldbankName) {
-      newFieldErrors.bldbankName = bankNameError;
-      isValid = false;
-    }
+    // const bankNameError = validateName(
+    //   formValues.bldbankName,
+    //   "Blood Bank Name"
+    // );
+    // if (bankNameError && !newFieldErrors.bldbankName) {
+    //   newFieldErrors.bldbankName = bankNameError;
+    //   isValid = false;
+    // }
 
     const contactPersonError = validateName(
       formValues.contactPerson,
@@ -1242,14 +1242,19 @@ const validateEmail = (email) => {
                 <Input
                   id="hospLatitude"
                   name="hospLatitude"
-                  maxLength={2}
                   placeholder="Enter latitude"
                   value={formValues.hospLatitude}
                   onChange={(e) => {
                     let value = e.target.value;
+
+                    // allow only digits, dot, minus
                     value = value.replace(/[^0-9.-]/g, "");
-                    if ((value.match(/\./g) || []).length > 1) return;
-                    if (value.includes("-") && value.indexOf("-") !== 0) return;
+
+                    // regex: max 2 digits before dot, max 6 after dot
+                    const regex = /^-?\d{0,2}(\.\d{0,6})?$/;
+
+                    if (!regex.test(value)) return;
+
                     handleInputChange("hospLatitude", value);
                   }}
                   inputMode="decimal"
@@ -1272,7 +1277,7 @@ const validateEmail = (email) => {
                 <Input
                   id="hospLongitude"
                   name="hospLongitude"
-                  maxLength={2}
+                  // maxLength={2}
                   placeholder="Enter longitude"
                   value={formValues.hospLongitude}
                   onChange={(e) => {
@@ -1280,8 +1285,9 @@ const validateEmail = (email) => {
 
                     value = value.replace(/[^0-9.-]/g, "");
 
-                    if ((value.match(/\./g) || []).length > 1) return;
-                    if (value.includes("-") && value.indexOf("-") !== 0) return;
+                     const regex = /^-?\d{0,2}(\.\d{0,6})?$/;
+
+                    if (!regex.test(value)) return;
 
                     handleInputChange("hospLongitude", value);
                   }}

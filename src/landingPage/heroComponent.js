@@ -17,7 +17,6 @@ export default function HeroComponent() {
   };
 
   const handleClickPledge = () => {
-    // window.location.href = "/beta#/pages/portalDonorLogin";
     window.location.href =
       "https://pledge.mygov.in/voluntary-blood-donation/";
   };

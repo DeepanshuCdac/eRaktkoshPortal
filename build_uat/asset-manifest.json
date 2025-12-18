@@ -1,0 +1,33 @@
+{
+  "files": {
+    "main.css": "/eraktkoshPortal/static/css/main.3197f4c0.css",
+    "main.js": "/eraktkoshPortal/static/js/main.d22da862.js",
+    "static/js/239.5c5b3944.chunk.js": "/eraktkoshPortal/static/js/239.5c5b3944.chunk.js",
+    "static/js/977.4389489b.chunk.js": "/eraktkoshPortal/static/js/977.4389489b.chunk.js",
+    "static/js/667.8a607935.chunk.js": "/eraktkoshPortal/static/js/667.8a607935.chunk.js",
+    "static/media/login_bg.jpg": "/eraktkoshPortal/static/media/login_bg.8a423e29ed64df5dba8a.jpg",
+    "static/media/SourceSans3-Regular.ttf": "/eraktkoshPortal/static/media/SourceSans3-Regular.d5f259bc2699f6304f9a.ttf",
+    "static/media/SourceSans3-SemiBold.ttf": "/eraktkoshPortal/static/media/SourceSans3-SemiBold.d40d72085d560e4061c3.ttf",
+    "static/media/SourceSans3-Bold.ttf": "/eraktkoshPortal/static/media/SourceSans3-Bold.82c3c9bec7b83d9d5846.ttf",
+    "static/media/SourceSans3-Medium.ttf": "/eraktkoshPortal/static/media/SourceSans3-Medium.be9ce6ac3e64725356ae.ttf",
+    "static/media/SourceSans3-Light.ttf": "/eraktkoshPortal/static/media/SourceSans3-Light.ce7a0eaafe8f8174fea3.ttf",
+    "static/media/section__bg_r.png": "/eraktkoshPortal/static/media/section__bg_r.0e61e281c3cd68d79b06.png",
+    "static/media/section__bg1.jpg": "/eraktkoshPortal/static/media/section__bg1.02523a42a681551232b9.jpg",
+    "static/media/PlayfairDisplay-MediumItalic.ttf": "/eraktkoshPortal/static/media/PlayfairDisplay-MediumItalic.8a8a4356b4d001468b59.ttf",
+    "static/media/campHeader.svg": "/eraktkoshPortal/static/media/campHeader.be455cf028d9c2ac0b84.svg",
+    "static/media/stories_bg.jpg": "/eraktkoshPortal/static/media/stories_bg.3835425340f7ca653db5.jpg",
+    "static/media/Background.jpg": "/eraktkoshPortal/static/media/Background.0d4d6f5402292d68338d.jpg",
+    "static/media/bg_body.png": "/eraktkoshPortal/static/media/bg_body.8e2275a377ef9ef25784.png",
+    "index.html": "/eraktkoshPortal/index.html",
+    "static/media/calendar.svg": "/eraktkoshPortal/static/media/calendar.721af743b1e45a36369b.svg",
+    "main.3197f4c0.css.map": "/eraktkoshPortal/static/css/main.3197f4c0.css.map",
+    "main.d22da862.js.map": "/eraktkoshPortal/static/js/main.d22da862.js.map",
+    "239.5c5b3944.chunk.js.map": "/eraktkoshPortal/static/js/239.5c5b3944.chunk.js.map",
+    "977.4389489b.chunk.js.map": "/eraktkoshPortal/static/js/977.4389489b.chunk.js.map",
+    "667.8a607935.chunk.js.map": "/eraktkoshPortal/static/js/667.8a607935.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.3197f4c0.css",
+    "static/js/main.d22da862.js"
+  ]
+}

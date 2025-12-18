@@ -73,12 +73,12 @@ export default function Navbar() {
                   </a>
                 </div>
                 <div className="d-flex">
-                  <Button
+                  {/* <Button
                     onClick={openDashboard}
                     className="d-none d-xl-block d-lg-block"
                   >
                     e-Raktkosh Dashboard
-                  </Button>
+                  </Button> */}
                   <div className="d-none d-xl-block d-lg-block">
                     <Input
                       className="ms-3"
